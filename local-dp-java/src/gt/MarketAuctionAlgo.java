@@ -6,16 +6,23 @@
 
 package gt;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
+
+////
+// NOTE: pick one value or all values in D_i for j_selected --> similar results
+//
 public class MarketAuctionAlgo {
 
 	static final int n = 3;
 	static final int m = 3;
 	
-	static double eps = 0.1;
+	static double eps = 0.02;	// 0.1 (49 rounds), 0.02 (266->10k rounds), 0.01 (>10k rounds)
 	
-	static double[][] a = {{1,2,3}, {4,5,6},{7,8,9}};	// (n x m)
-	static double[][] v = {{1,2,3}, {1,2,3},{1,2,3}};
+	static double[][] a = {{1,2,3}, {4,5,6}, {7,8,9}};	// (n x m)
+	static double[][] v = {{1,2,3}, {3,2,1}, {1,2,3}};
 	
 	static double[] p = new double[m];
 	static double[] sum_a = new double[m];
@@ -58,6 +65,8 @@ public class MarketAuctionAlgo {
 	
 	////
 	static void outbid(int i, int j, int k){
+		System.out.println("outbid : i = " + i + " j = " + j + " k = " + k);
+		
 		double t = y[k][j];
 		if (t > r[i]/p[j])
 			t = r[i]/p[j];
@@ -71,6 +80,8 @@ public class MarketAuctionAlgo {
 	
 	////
 	static void assign(double sum_x, int i, int j){
+		System.out.println("assigned : i = " + i + " j = " +j);
+		
 		double t = sum_a[j] - sum_x;
 		if (t > r[i]/p[j])
 			t = r[i]/p[j];
@@ -81,17 +92,28 @@ public class MarketAuctionAlgo {
 	
 	////
 	static void raisePrice(int j){
+		System.out.println("raisePrice : j = " +j);
+		
 		for (int k = 0; k < n; k++){
 			y[k][j] = h[k][j];
 			h[k][j] = 0.0;
 		}
 		
-		for (int i = 0; i < n; i++){
+		for (int i = 0; i < n; i++)
 			r[i] += eps*a[i][j]*p[j];
-		}
 		
 		p[j] = (1+eps)*p[j];
 	}		
+	
+	//// 
+	static void print_x(){
+		System.out.println("x[i][j] :");	
+		for (int i = 0; i < n; i++){
+			for (int j = 0; j < m; j++)
+				System.out.print(x[i][j] + " ");
+			System.out.println();
+		}
+	}
 	
 	////
 	public static void main(String[] args) {
@@ -99,51 +121,63 @@ public class MarketAuctionAlgo {
 		init();
 		System.out.println("Init - DONE");
 		
+		Random random = new Random();
 		//
 		int round = 0;
 		while (true){
 			System.out.println("round " + (round++));
 			
 			
-			// pick i
-			int i = 0;
-			for(i = 0; i < n; i++)
+			// pick i (random)
+			List<Integer> list_i = new ArrayList<Integer>();
+			for(int i = 0; i < n; i++)
 				if(r[i] > 0)
-					break;
+					list_i.add(i);
+			int i = list_i.get(random.nextInt(list_i.size()) );
 			
-			//
+			// alpha[i] and demand set D_i
 			alpha[i] = 0.0;
-			int j_selected = -1;
 			for(int j = 0; j < m; j++)
-				if (alpha[i] < v[i][j]/p[j]){
+				if (alpha[i] < v[i][j]/p[j])
 					alpha[i] = v[i][j]/p[j];
-					j_selected = j;
-				}
 			
-			// demand set D_i
+			List<Integer> D_i = new ArrayList<Integer>();
+			for(int j = 0; j < m; j++)
+				if (v[i][j]/p[j] == alpha[i])
+					D_i.add(j);
 			
 			//
-			double sum_x = 0.0;
-			for (int l = 0; l < m; l++)
-				sum_x += x[l][j_selected];
+			for (int j_selected : D_i){
+//			int j_selected = D_i.get(random.nextInt(D_i.size()) );
 			
-			if (sum_x < sum_a[j_selected])
-				assign(sum_x, i, j_selected);
-			else{
-				boolean found = false;
-				int k = -1;
-				for (k = 0; k < n; k++)
-					if (y[k][j_selected] > 0){
-						found = true;
-						break;
-					}
+				double sum_x = 0.0;
+				for (int l = 0; l < m; l++)
+					sum_x += x[l][j_selected];
 				
-				if (found)
-					outbid(i, j_selected, k);
+				if (sum_x < sum_a[j_selected])
+					assign(sum_x, i, j_selected);
 				else{
-					raisePrice(j_selected);
+					boolean found = false;
+					int k = -1;
+					for (k = 0; k < n; k++)
+						if (y[k][j_selected] > 0){
+							found = true;
+							break;
+						}
+					
+					if (found)
+						outbid(i, j_selected, k);
+					else{
+						raisePrice(j_selected);
+					}
 				}
-			}
+				
+				for (int ii = 0; ii < n; ii++)
+					for (int jj = 0; jj < m; jj++)
+						x[ii][jj] = y[ii][jj] + h[ii][jj];
+						
+				print_x();
+			}	// end for j_selected
 			
 			// check 2 stop conditions
 			boolean stop1 = true;
@@ -155,7 +189,8 @@ public class MarketAuctionAlgo {
 			
 			boolean stop2 = true;
 			for (int j = 0; j < m ; j++){
-				sum_x = 0.0;
+				double sum_x = 0.0;
+//				sum_x = 0.0;
 				for (i = 0; i < n; i++)
 					sum_x += x[i][j];
 					
@@ -167,20 +202,29 @@ public class MarketAuctionAlgo {
 			
 			if (stop1 || stop2)
 				break;
+			
+			if (round == 10000)
+				break;
 		}
 		
 		System.out.println("Loop terminated");
+		
+//		System.out.println("sum_a ");
+//		for (int j = 0; j < m; j++)
+//			System.out.print(sum_a[j] + " ");
+//		System.out.println();
+//		
+//		System.out.println("a_min = " + a_min);
+		
+		
+		
+		
 		System.out.println("Prices :");
 		for (int j = 0; j < m; j++)
 			System.out.print(p[j] + " ");
 		System.out.println();
 		
-		System.out.println("x[i][j] :");
-		for (int i = 0; i < n; i++){
-			for (int j = 0; j < m; j++)
-				System.out.print(p[j] + " ");
-			System.out.println();
-		}
+		
 		
 	}
 
