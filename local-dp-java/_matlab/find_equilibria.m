@@ -6,10 +6,25 @@
 % nA = 4;
 % nB = 4;
 
-A = [-4 -1; -5 -2];
-B = [-4 -5; -1 -2];
-nA = 2;
-nB = 2;
+% A = [-4 -1; -5 -2];
+% B = [-4 -5; -1 -2];
+% nA = 2;
+% nB = 2;
+
+% examples of link disclosure (zero-sum)
+% strategies
+sA = [5 2 3 1];
+sB = [4 2 2];
+nA = length(sA);
+nB = length(sB);
+A = zeros(nA, nB);
+for i=1:nA
+    for j=1:nB
+        A(i,j) = sA(i) - sB(j);
+    end
+end
+A = -A;     % to find max-row, min-col
+B = -A;     % zero-sum game
 
 % cell (i,j)
 for i=1:nA
