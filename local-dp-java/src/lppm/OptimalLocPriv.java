@@ -15,8 +15,9 @@ import java.util.Random;
 
 public class OptimalLocPriv {
 
-	static int W = 20;	// width
-	static int H = 15;	// height
+	static int W = 2;	// width	20	
+	static int H = 2;	// height	15
+	static int N = 4;	// N = W * H
 	
 	////
 	public static void generateTraces(int width, int height, int numTraces){
@@ -74,7 +75,7 @@ public class OptimalLocPriv {
 	}
 	
 	//// generate .MPS file
-	public static void userProgram(double maxQLoss, String mpsFilename) throws IOException{
+	public static void userProgram(double maxQloss, double[] phi, double[][] dP, double[][] dQ, String mpsFilename) throws IOException{
 		
 		File file = new File(mpsFilename);
 		BufferedWriter bw = new BufferedWriter(new FileWriter(file));
@@ -83,14 +84,94 @@ public class OptimalLocPriv {
 		bw.write("ROWS\n");
 		bw.write(" N  COST\n");
 		
+		// C1: constraints (r^,r') == (r3,r2)
+		for (int r3 = 0; r3 < N; r3++)
+			for (int r2 = 0; r2 < N; r2++){
+				bw.write(" L  CXF" + (r3*N+r2) + "\n");
+			}
+		// C2: constraint with Q_loss^max
+		bw.write(" L  QLOSS\n");
+		
+		// C3: constraints f(r',r)
+		for (int r1 = 0; r1 < N; r1++)
+			bw.write(" E  CF" + r1 + "\n");
+		
+		// COLUMNS
+		bw.write("COLUMNS\n");
+		
 		// variables x_r'
+		for (int r2 = 0; r2 < N; r2++){
+			bw.write("    " + String.format("%-10s", "X"+r2) + String.format("%-10s", "COST") + String.format("%12s",1) + "\n");
+			
+			for (int r3 = 0; r3 < N; r3++)
+				bw.write("    " + String.format("%-10s", "X"+r2) + String.format("%-10s", "CXF"+(r3*N+r2)) + String.format("%12s",1) + "\n");
+		}
+		
+		// variables f_r'_r (each variable MUST BE CONSECUTIVE in .mps)
+		
+//		for (int r3 = 0; r3 < N; r3++)		// for C1
+//			for (int r2 = 0; r2 < N; r2++){
+//				for (int r1 = 0; r1 < N; r1++){
+//					bw.write("    " + String.format("%-10s", "F"+(r2*N+r1)) + String.format("%-10s", "CXF"+(r3*N+r2)) + 
+//							String.format("%12s", String.format("%.2f", -phi[r1] * dP[r3][r1])) + "\n");
+//				}
+//			}
+//					
+//		for (int r2 = 0; r2 < N; r2++)		// for C2
+//			for (int r1 = 0; r1 < N; r1++)
+//				bw.write("    " + String.format("%-10s", "F"+(r2*N+r1)) + String.format("%-10s", "QLOSS") + 
+//						String.format("%12s", String.format("%.2f", phi[r1] * dQ[r2][r1])) + "\n");
+//					
+//		for (int r1 = 0; r1 < N; r1++)		// for C3
+//			for (int r2 = 0; r2 < N; r2++)
+//				bw.write("    " + String.format("%-10s", "F"+(r2*N+r1)) + String.format("%-10s", "CF"+r1) + 
+//					String.format("%12s", "1") + "\n");
 		
 		
 		
-		// variables f_r'r
+		for (int r2 = 0; r2 < N; r2++){
+			for (int r1 = 0; r1 < N; r1++){
+				// for C1
+				for (int r3 = 0; r3 < N; r3++)		
+					bw.write("    " + String.format("%-10s", "F"+(r2*N+r1)) + String.format("%-10s", "CXF"+(r3*N+r2)) + 
+						String.format("%12s", String.format("%.2f", -phi[r1] * dP[r3][r1])) + "\n");
+				
+				// for C2
+				bw.write("    " + String.format("%-10s", "F"+(r2*N+r1)) + String.format("%-10s", "QLOSS") + 
+						String.format("%12s", String.format("%.2f", phi[r1] * dQ[r2][r1])) + "\n");
+				
+				// for C3
+				bw.write("    " + String.format("%-10s", "F"+(r2*N+r1)) + String.format("%-10s", "CF"+r1) + 
+						String.format("%12s", "1") + "\n");
+			}
+		}
 		
 		
+		// RHS
+		bw.write("RHS\n");
+		for (int r3 = 0; r3 < N; r3++)		// for C1
+			for (int r2 = 0; r2 < N; r2++){
+				bw.write("    " + String.format("%-10s", "RHS1") + String.format("%-10s", "CXF"+(r3*N+r2)) + 
+						String.format("%12s", "0") + "\n");
+			}
 		
+											// for C2
+		bw.write("    " + String.format("%-10s", "RHS1") + String.format("%-10s", "QLOSS") + 
+				String.format("%12s", String.format("%.2f", maxQloss)) + "\n");
+		
+		for (int r1 = 0; r1 < N; r1++)		// for C3
+			bw.write("    " + String.format("%-10s", "RHS1") + String.format("%-10s", "CF"+r1) + 
+				String.format("%12s", "1") + "\n");
+		
+		
+		// BOUNDS
+		bw.write("BOUNDS\n");
+		for (int r1 = 0; r1 < N; r1++)		// for C3
+			for (int r2 = 0; r2 < N; r2++)
+				bw.write(" LO " + String.format("%-10s", "BND1") + String.format("%-10s", "F"+(r2*N+r1)) + 
+						String.format("%12s", "0") + "\n");
+		
+		bw.write("ENDATA\n");
 		
 		bw.close();
 	}
@@ -107,9 +188,17 @@ public class OptimalLocPriv {
 	public static void main(String[] args) throws Exception{
 		
 		
-		generateProfile(20);
-
-		userProgram(0.8, "sample.mps");
+//		generateProfile(20);
+//
+		double maxQloss = 80; // 0.8 --> infeasible;
+		double[] phi = {0.2, 0.2, 0.3, 0.3};
+		double[][] dP = {{1,2,3,4}, {4,1,2,3}, {4,3,1,2}, {2,3,4,1}};
+		double[][] dQ = {{1,2,3,4}, {4,1,2,3}, {4,3,1,2}, {2,3,4,1}};
+		
+		userProgram(maxQloss, phi, dP, dQ, "sample.mps");
+		
+//		System.out.println(String.format("%10s%-30s%10s", "x153", "xy", "-4"));
+//		System.out.println(String.format("%10s%-30s%10s", "x15", "x", "-4"));
 	}
 
 }
