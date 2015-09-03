@@ -1,0 +1,72 @@
+(100*n_nodes, sample_freq=5000)
+#nodes = 6474
+#edges = 12572
+build_dendrogram - DONE, elapsed 61
+logLK = 100341.9706377792
+dU = 17.16480445959123
+i = 0 n_accept = 1 time : 3
+i = 74740 n_accept = 74631 time : 15811
+i = 149480 n_accept = 149290 time : 36674
+i = 224220 n_accept = 223956 time : 60430
+i = 298960 n_accept = 298599 time : 82533
+i = 373700 n_accept = 373263 time : 104850
+i = 448440 n_accept = 447932 time : 128056
+i = 523180 n_accept = 522597 time : 152798
+i = 597920 n_accept = 597238 time : 177170
+i = 672660 n_accept = 671868 time : 203864
+dendrogram_fitting - DONE, elapsed 234031
+logLK = 102528.58687613327
+logLK = 102494.28429413696
+logLK = 102453.52541194925
+logLK = 102440.15332915704
+logLK = 102391.57511419176
+logLK = 102316.11646270091
+logLK = 102287.72674377824
+logLK = 102267.12522311723
+logLK = 102324.15476342471
+logLK = 102326.82207164443
+logLK = 102375.97400044516
+logLK = 102308.75764893851
+logLK = 102387.84512796484
+logLK = 102402.50374461054
+logLK = 102464.4253622363
+logLK = 102464.66599062015
+logLK = 102503.62702575518
+logLK = 102467.4100096546
+logLK = 102427.87164760825
+logLK = 102431.95729320087
+writeInternalNodes - DONE
+
+(10*n_nodes, sample_freq=1000)
+#nodes = 6474
+#edges = 12572
+build_dendrogram - DONE, elapsed 40
+logLK = 100341.9706377792
+dU = 17.16480445959123
+#steps = 74740
+i = 0 n_accept = 1 time : 3
+i = 7474 n_accept = 7464 time : 1435
+i = 14948 n_accept = 14924 time : 2875
+i = 22422 n_accept = 22390 time : 4383
+i = 29896 n_accept = 29857 time : 5869
+i = 37370 n_accept = 37316 time : 7294
+i = 44844 n_accept = 44780 time : 8921
+i = 52318 n_accept = 52245 time : 10728
+i = 59792 n_accept = 59706 time : 12357
+i = 67266 n_accept = 67169 time : 14239
+dendrogram_fitting - DONE, elapsed 15989
+logLK = 101676.19780246024
+logLK = 101643.47269377035
+logLK = 101653.69388287142
+logLK = 101704.34550304787
+logLK = 101719.19389385036
+logLK = 101724.55374384542
+logLK = 101721.25182094029
+logLK = 101705.88182619837
+logLK = 101672.18084926643
+logLK = 101659.84678264664
+writeInternalNodes - DONE
+
+
+
+

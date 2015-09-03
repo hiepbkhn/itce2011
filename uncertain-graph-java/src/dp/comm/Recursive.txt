@@ -1,0 +1,68 @@
+
+CommunityFit
+dataname = polbooks
+burn_factor = 20 sample_freq = 100 n_samples = 20
+#nodes = 105
+#edges = 441
+logLK = -1397.0103583658615 mincut = 0.028838710402734145 edgeVar = 386.90862716639634
+recursiveLK - DONE, elapsed 316
+buildDendrogram - DONE, elapsed 4
+D.logLK = -1021.0365647006628
+
+
+
+CommunityFit
+dataname = polblogs
+burn_factor = 20 sample_freq = 100 n_samples = 20
+#nodes = 1224
+#edges = 16715
+logLK = -74986.38622881456 mincut = 0.02427515824154908 edgeVar = 16142.085871857169
+recursiveLK - DONE, elapsed 8570
+buildDendrogram - DONE, elapsed 36
+D.logLK = -57263.283888326216
+
+
+CommunityFit
+dataname = as20graph
+burn_factor = 20 sample_freq = 100 n_samples = 20
+#nodes = 6474
+#edges = 12572
+logLK = -102679.00738319261 mincut = 2.4131008594522765 edgeVar = 12560.900607047304
+recursiveLK - DONE, elapsed 120967
+buildDendrogram - DONE, elapsed 394
+D.logLK = -75319.07394039015
+
+
+CommunityFit
+dataname = wiki-Vote
+burn_factor = 20 sample_freq = 100 n_samples = 20
+#nodes = 7115
+#edges = 100762
+logLK = -637501.2409476888 mincut = 0.11611709678994518 edgeVar = 100187.545222408
+recursiveLK - DONE, elapsed 141287
+buildDendrogram - DONE, elapsed 524
+D.logLK = -454564.89215198805
+
+
+CommunityFit
+dataname = ca-HepPh
+burn_factor = 20 sample_freq = 100 n_samples = 20
+#nodes = 12006
+#edges = 118489
+logLK = -877945.1456478077 mincut = 1.0050523031204672 edgeVar = 118294.11069514221
+recursiveLK - DONE, elapsed 442854
+buildDendrogram - DONE, elapsed 1342
+D.logLK = -406278.40208607796
+
+
+CommunityFit
+dataname = ca-AstroPh
+burn_factor = 20 sample_freq = 100 n_samples = 20
+#nodes = 18771
+#edges = 198050
+logLK = -1542791.1896343804 mincut = 0.9820011977588573 edgeVar = 197827.26164953553
+recursiveLK - DONE, elapsed 773753
+buildDendrogram - DONE, elapsed 3082
+D.logLK = -995349.4219661928
+
+

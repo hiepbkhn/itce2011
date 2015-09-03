@@ -1,0 +1,26 @@
+graph class=grph.in_memory.InMemoryGrph
+# edges (e = simple edge, a = simple arc, E = hyperedge, A = directed hyperedge)
+e0 0 1
+e1 0 4
+e2 4 5
+e3 4 8
+e4 8 9
+e5 8 12
+e6 12 13
+e7 1 2
+e8 1 5
+e9 5 6
+e10 5 9
+e11 9 10
+e12 9 13
+e13 13 14
+e14 2 3
+e15 2 6
+e16 6 7
+e17 6 10
+e18 10 11
+e19 10 14
+e20 14 15
+e21 3 7
+e22 7 11
+e23 11 15

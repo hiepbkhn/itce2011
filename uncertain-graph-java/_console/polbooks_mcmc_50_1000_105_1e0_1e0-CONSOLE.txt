@@ -1,0 +1,74 @@
+MCMCInference
+dataname = polbooks
+burn_factor = 105 sample_freq = 1000 n_samples = 50
+#nodes = 105
+#edges = 441
+build_dendrogram - DONE, elapsed 2
+logLK = -1248.6556626369315
+dU = 8.921354187835687
+#steps = 61025
+i = 0 n_accept = 1 logLK = -1251.570777710421 n_accept_positive = 0 n_config2 = 1 time : 5
+i = 6102 n_accept = 5937 logLK = -1432.4118640686004 n_accept_positive = 2181 n_config2 = 3030 time : 293
+i = 12204 n_accept = 11893 logLK = -1443.9321690762044 n_accept_positive = 4313 n_config2 = 6089 time : 507
+i = 18306 n_accept = 17884 logLK = -1442.8260598254744 n_accept_positive = 6445 n_config2 = 9121 time : 680
+i = 24408 n_accept = 23891 logLK = -1460.2951686901497 n_accept_positive = 8517 n_config2 = 12133 time : 894
+i = 30510 n_accept = 29923 logLK = -1468.1707511864295 n_accept_positive = 10523 n_config2 = 15252 time : 1076
+i = 36612 n_accept = 35938 logLK = -1462.5941818664985 n_accept_positive = 12633 n_config2 = 18340 time : 1249
+i = 42714 n_accept = 41932 logLK = -1476.805066832836 n_accept_positive = 14769 n_config2 = 21346 time : 1424
+i = 48816 n_accept = 47941 logLK = -1461.0496403269603 n_accept_positive = 16897 n_config2 = 24430 time : 1635
+i = 54918 n_accept = 53965 logLK = -1483.9010551039364 n_accept_positive = 19078 n_config2 = 27450 time : 1838
+i = 61020 n_accept = 59988 logLK = -1451.7315562416904 n_accept_positive = 21094 n_config2 = 30513 time : 2058
+dendrogramFitting - DONE, elapsed 2058
+logLK = -1429.4398698504413
+logLK = -1412.2284469572157
+logLK = -1455.9506913998384
+logLK = -1475.0731348082438
+logLK = -1446.9427401586727
+logLK = -1462.7376696303595
+logLK = -1444.503622190477
+logLK = -1468.198676386785
+logLK = -1463.4496425409234
+logLK = -1468.2154559609878
+logLK = -1447.4378696142956
+logLK = -1451.764555692131
+logLK = -1467.0853676041124
+logLK = -1439.3005460304253
+logLK = -1454.4924271161806
+logLK = -1472.2030138173086
+logLK = -1475.3970559926584
+logLK = -1468.4738760514244
+logLK = -1472.081343263613
+logLK = -1463.5191535494555
+logLK = -1480.2861914176242
+logLK = -1487.6672655965406
+logLK = -1468.8010233257426
+logLK = -1479.9423255846407
+logLK = -1489.6217627139488
+logLK = -1469.485458173654
+logLK = -1433.9322566182886
+logLK = -1456.790108689906
+logLK = -1475.3160548735063
+logLK = -1464.5218351050714
+logLK = -1450.017678071609
+logLK = -1472.2533306313114
+logLK = -1436.9002258045743
+logLK = -1473.12058701127
+logLK = -1446.6113165924255
+logLK = -1471.3020063284775
+logLK = -1467.1640782820682
+logLK = -1472.8812423382321
+logLK = -1474.5356522571597
+logLK = -1465.9590908405241
+logLK = -1457.0812671245365
+logLK = -1452.6669671779334
+logLK = -1440.9992538252861
+logLK = -1471.6933956224645
+logLK = -1460.6876194056551
+logLK = -1465.448092354931
+logLK = -1467.3832664988888
+logLK = -1452.4252307761749
+logLK = -1464.238628743664
+logLK = -1466.2952949175346
+writeInternalNodes - DONE
+addLaplaceNoise - DONE, elapsed 4
+generateSanitizedSample - DONE, elapsed 152

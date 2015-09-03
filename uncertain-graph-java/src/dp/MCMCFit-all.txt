@@ -1,0 +1,166 @@
+MCMCFit
+#nodes = 105
+#edges = 441
+build_dendrogram - DONE, elapsed 3
+logLK = -1248.6556626369315
+burn_factor = 105 sample_freq = 1000
+#steps = 61025
+i = 0 n_accept = 0 logLK = -1248.6556626369315 n_accept_positive = 0 n_config2 = 1 time : 5
+i = 6102 n_accept = 3772 logLK = -975.614057512537 n_accept_positive = 1208 n_config2 = 3019 time : 331
+i = 12204 n_accept = 7223 logLK = -884.2315999172902 n_accept_positive = 2313 n_config2 = 6042 time : 584
+i = 18306 n_accept = 10653 logLK = -874.4754077499739 n_accept_positive = 3407 n_config2 = 9042 time : 848
+i = 24408 n_accept = 13887 logLK = -859.9526540805068 n_accept_positive = 4462 n_config2 = 12185 time : 1079
+i = 30510 n_accept = 17166 logLK = -837.876084966982 n_accept_positive = 5578 n_config2 = 15263 time : 1350
+i = 36612 n_accept = 20357 logLK = -810.0585201189381 n_accept_positive = 6690 n_config2 = 18266 time : 1609
+i = 42714 n_accept = 23461 logLK = -777.9932967111066 n_accept_positive = 7776 n_config2 = 21291 time : 1854
+i = 48816 n_accept = 26315 logLK = -796.1446897247541 n_accept_positive = 8664 n_config2 = 24302 time : 2146
+i = 54918 n_accept = 29322 logLK = -807.4967475257386 n_accept_positive = 9628 n_config2 = 27279 time : 2425
+i = 61020 n_accept = 32442 logLK = -799.5703892774643 n_accept_positive = 10630 n_config2 = 30399 time : 2668
+best_logLT = -772.1240327319192
+dendrogramFitting - DONE, elapsed 2668
+logLK = -880.8129376403961
+logLK = -881.1809678071661
+logLK = -877.0598528269435
+logLK = -870.1347589553733
+logLK = -891.1052373058329
+logLK = -889.0298907495766
+logLK = -882.4008310379116
+logLK = -885.2447620880439
+logLK = -875.1500417372728
+logLK = -863.8072798255956
+
+=======================================================================
+MCMCFitDegree
+#nodes = 105
+#edges = 441
+build_dendrogram - DONE, elapsed 2
+logLK = -1248.6556626369315
+degDiffL1 = 386.99695901582714
+burn_factor = 105 sample_freq = 1000
+#steps = 61025
+i = 0 n_accept = 1 n_accept_positive = 0 time : 2
+i = 6102 n_accept = 4317 n_accept_positive = 1454 time : 497
+i = 12204 n_accept = 8759 n_accept_positive = 2853 time : 885
+i = 18306 n_accept = 13195 n_accept_positive = 4255 time : 1245
+i = 24408 n_accept = 17748 n_accept_positive = 5648 time : 1622
+i = 30510 n_accept = 22265 n_accept_positive = 7053 time : 2015
+i = 36612 n_accept = 26686 n_accept_positive = 8423 time : 2445
+i = 42714 n_accept = 31265 n_accept_positive = 9854 time : 2835
+i = 48816 n_accept = 35737 n_accept_positive = 11341 time : 3246
+i = 54918 n_accept = 40239 n_accept_positive = 12753 time : 3656
+i = 61020 n_accept = 44866 n_accept_positive = 14209 time : 4081
+best_degDiffL1 = 119.49613252048812
+dendrogramFitting - DONE, elapsed 4081
+logLK = -1303.2630225938146 degDiffL1 = 156.18983862741374
+logLK = -1307.6418844680036 degDiffL1 = 171.02574153100585
+logLK = -1298.182421951193 degDiffL1 = 157.41804245527194
+logLK = -1294.539025189294 degDiffL1 = 159.6216692042307
+logLK = -1297.8503583211975 degDiffL1 = 156.53727647676348
+logLK = -1310.0574065950661 degDiffL1 = 162.33167568958015
+logLK = -1324.9585442019484 degDiffL1 = 169.34118148767126
+logLK = -1345.9454941532676 degDiffL1 = 170.85977404623173
+logLK = -1338.5079014269888 degDiffL1 = 165.15318140973088
+logLK = -1324.2740286412404 degDiffL1 = 154.29070846798686
+
+
+=======================================================================
+MCMCFitEdgeVar
+#nodes = 105
+#edges = 441
+build_dendrogram - DONE, elapsed 2
+logLK = -1248.6556626369315
+degDiffL1 = 386.99695901582714
+edgeVar = 340.7146140445436
+burn_factor = 105 sample_freq = 1000
+#steps = 61025
+i = 0 n_accept = 0 n_accept_positive = 0 time : 6
+i = 6102 n_accept = 5238 n_accept_positive = 1913 time : 291
+i = 12204 n_accept = 10607 n_accept_positive = 3914 time : 501
+i = 18306 n_accept = 15983 n_accept_positive = 6036 time : 719
+i = 24408 n_accept = 21320 n_accept_positive = 8131 time : 909
+i = 30510 n_accept = 26693 n_accept_positive = 10160 time : 1113
+i = 36612 n_accept = 32107 n_accept_positive = 12122 time : 1324
+i = 42714 n_accept = 37534 n_accept_positive = 14070 time : 1502
+i = 48816 n_accept = 42854 n_accept_positive = 16012 time : 1693
+i = 54918 n_accept = 48232 n_accept_positive = 17948 time : 1893
+i = 61020 n_accept = 53549 n_accept_positive = 19888 time : 2094
+best_edgeVar = 324.0909638173381
+dendrogramFitting - DONE, elapsed 2094
+logLK = -1285.824825561476 degDiffL1 = 299.24574878537175 edgeVar = 349.605956406424
+logLK = -1291.7572701376412 degDiffL1 = 300.4023108535997 edgeVar = 350.50113776693996
+logLK = -1262.4733495255625 degDiffL1 = 268.3256014716625 edgeVar = 343.7424156745084
+logLK = -1260.8061262618362 degDiffL1 = 284.4870079529377 edgeVar = 341.13045457511794
+logLK = -1250.5206964055951 degDiffL1 = 277.87979747216326 edgeVar = 341.17761116511747
+logLK = -1256.5308824823223 degDiffL1 = 267.6921264554416 edgeVar = 341.0435426685491
+logLK = -1255.5455366817966 degDiffL1 = 280.9800027139909 edgeVar = 339.251820944618
+logLK = -1262.34203665592 degDiffL1 = 288.41808086193714 edgeVar = 340.29051788631807
+logLK = -1273.310879359257 degDiffL1 = 296.74963474875716 edgeVar = 344.8188760513404
+logLK = -1252.8743773603992 degDiffL1 = 283.5114053281317 edgeVar = 334.01992746948883
+
+
+=======================================================================
+MCMCFitEdgeVar (exp(edgeVar^2-edgeVar2^2))
+#nodes = 105
+#edges = 441
+build_dendrogram - DONE, elapsed 3
+logLK = -1248.6556626369315
+degDiffL1 = 386.99695901582714
+edgeVar = 340.7146140445436
+burn_factor = 105 sample_freq = 1000
+#steps = 61025
+i = 0 n_accept = 1 n_accept_positive = 0 time : 1
+i = 6102 n_accept = 1452 n_accept_positive = 238 time : 375
+i = 12204 n_accept = 2681 n_accept_positive = 261 time : 629
+i = 18306 n_accept = 3963 n_accept_positive = 293 time : 854
+i = 24408 n_accept = 5249 n_accept_positive = 318 time : 1080
+i = 30510 n_accept = 6475 n_accept_positive = 341 time : 1316
+i = 36612 n_accept = 7768 n_accept_positive = 375 time : 1531
+i = 42714 n_accept = 9033 n_accept_positive = 400 time : 1759
+i = 48816 n_accept = 10298 n_accept_positive = 421 time : 1987
+i = 54918 n_accept = 11542 n_accept_positive = 448 time : 2244
+i = 61020 n_accept = 12801 n_accept_positive = 468 time : 2488
+best_edgeVar = 268.82578660262783
+dendrogramFitting - DONE, elapsed 2489
+logLK = -981.3215460296586 degDiffL1 = 286.83884522071594 edgeVar = 268.82816755500886
+logLK = -981.3215460296586 degDiffL1 = 286.83884522071594 edgeVar = 268.8281675550088
+logLK = -981.271525175464 degDiffL1 = 286.8959880778588 edgeVar = 268.8257866026279
+logLK = -981.271525175464 degDiffL1 = 286.8959880778588 edgeVar = 268.82578660262783
+logLK = -981.271525175464 degDiffL1 = 286.8959880778588 edgeVar = 268.8257866026279
+logLK = -981.3215460296586 degDiffL1 = 286.83884522071594 edgeVar = 268.8281675550088
+logLK = -981.3215460296586 degDiffL1 = 286.83884522071594 edgeVar = 268.8281675550088
+logLK = -981.3215460296586 degDiffL1 = 286.83884522071594 edgeVar = 268.8281675550088
+logLK = -981.271525175464 degDiffL1 = 286.8959880778588 edgeVar = 268.82578660262783
+logLK = -982.5575266445297 degDiffL1 = 286.80920619407556 edgeVar = 268.83308697030117
+
+
+=============================POLBLOGS (50samples)==========================================
+MCMCFit
+#nodes = 1224
+#edges = 16715
+build_dendrogram - DONE, elapsed 46
+logLK = -74316.88612020494
+burn_factor = 1224 sample_freq = 1000
+#steps = 1548176
+i = 0 n_accept = 1 logLK = -74316.88612020494 n_accept_positive = 0 n_config2 = 0 time : 8
+i = 154817 n_accept = 110472 logLK = -62754.76267783085 n_accept_positive = 33875 n_config2 = 76949 time : 135218
+i = 309634 n_accept = 213728 logLK = -60945.9893246865 n_accept_positive = 71823 n_config2 = 154371 time : 325532
+i = 464451 n_accept = 315160 logLK = -59690.48671760361 n_accept_positive = 109906 n_config2 = 232074 time : 537304
+i = 619268 n_accept = 415561 logLK = -59358.40519570637 n_accept_positive = 148297 n_config2 = 309450 time : 752514
+i = 774085 n_accept = 515665 logLK = -59055.33551316556 n_accept_positive = 186730 n_config2 = 386685 time : 971910
+i = 928902 n_accept = 615324 logLK = -58774.05800152163 n_accept_positive = 224957 n_config2 = 464020 time : 1192864
+i = 1083719 n_accept = 715260 logLK = -58361.51251995906 n_accept_positive = 262945 n_config2 = 541475 time : 1413916
+i = 1238536 n_accept = 816070 logLK = -57849.72361473012 n_accept_positive = 301127 n_config2 = 619158 time : 1638295
+i = 1393353 n_accept = 917015 logLK = -57619.66674276856 n_accept_positive = 339405 n_config2 = 696541 time : 1866413
+i = 1548170 n_accept = 1017086 logLK = -57342.13602134567 n_accept_positive = 377233 n_config2 = 774089 time : 2093341
+best_logLT = -57333.57844802923
+dendrogramFitting - DONE, elapsed 2093353
+logLK = -57416.37511854438
+logLK = -57418.36689688339
+logLK = -57407.12830852572
+logLK = -57418.30536714821
+logLK = -57432.655412564854
+logLK = -57433.91213106776
+
+
+
+

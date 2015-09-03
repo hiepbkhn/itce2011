@@ -1,0 +1,94 @@
+CommunityFit
+dataname = polblogs
+burn_factor = 20 sample_freq = 100 n_samples = 20
+#nodes = 1224
+#edges = 16715
+logLK = -74986.38622881456 mincut = 0.02427515824154908 edgeVar = 16142.085871857169
+Node.partitionLK called
+#steps = 26480
+i = 0 n_accept = 1 logLK = -74933.06655389916 mincut = 0.023582378385634314 edgeVar = 16140.243281275438 n_accept_positive = 1 time : 0
+i = 2648 n_accept = 319 logLK = -71352.41580597372 mincut = 0.01588381523620787 edgeVar = 15679.74478823677 n_accept_positive = 277 time : 380
+i = 5296 n_accept = 425 logLK = -70255.70013790941 mincut = 0.03622260158542857 edgeVar = 15214.502800299839 n_accept_positive = 365 time : 714
+i = 7944 n_accept = 502 logLK = -69380.58001878267 mincut = 0.2514860518190793 edgeVar = 15160.073394113393 n_accept_positive = 431 time : 1069
+i = 10592 n_accept = 622 logLK = -66018.91110196014 mincut = 1.0908593918268619 edgeVar = 15117.928606456473 n_accept_positive = 536 time : 1432
+i = 13240 n_accept = 707 logLK = -63816.98631123602 mincut = 1.4948297247094735 edgeVar = 15063.124913292451 n_accept_positive = 605 time : 1794
+i = 15888 n_accept = 758 logLK = -63411.562642798 mincut = 1.4627738200461935 edgeVar = 15070.15125070439 n_accept_positive = 642 time : 2117
+i = 18536 n_accept = 784 logLK = -63280.83141190473 mincut = 1.4153811703491843 edgeVar = 15080.03992443331 n_accept_positive = 661 time : 2420
+i = 21184 n_accept = 820 logLK = -63265.09585528405 mincut = 1.5256730919292065 edgeVar = 15102.740011753145 n_accept_positive = 682 time : 2757
+i = 23832 n_accept = 851 logLK = -63268.954678189475 mincut = 1.4400480023833926 edgeVar = 15093.67425471521 n_accept_positive = 695 time : 3089
+Node.partition - DONE, elapsed 3436
+logLK = -63267.60470713751 mincut = 1.5325440869024776
+S.size + T.size = 1224
+
+
+CommunityFit
+dataname = polblogs
+burn_factor = 20 sample_freq = 100 n_samples = 20
+#nodes = 1224
+#edges = 16715
+logLK = -74986.38622881456 mincut = 0.02427515824154908 edgeVar = 16142.085871857169
+Node.partitionEV called
+#steps = 26480
+i = 0 n_accept = 0 logLK = -74986.38622881456 mincut = 0.02427515824154908 edgeVar = 16142.085871857169 n_accept_positive = 0 time : 1
+i = 2648 n_accept = 1204 logLK = -73517.0916146319 mincut = 0.16001306352209663 edgeVar = 15707.448637463274 n_accept_positive = 703 time : 337
+i = 5296 n_accept = 1382 logLK = -71743.35775533349 mincut = 0.16520695055956372 edgeVar = 14921.089748332786 n_accept_positive = 841 time : 677
+i = 7944 n_accept = 1422 logLK = -71743.35775533349 mincut = 0.16520695055956372 edgeVar = 14921.089748332786 n_accept_positive = 862 time : 1033
+i = 10592 n_accept = 1452 logLK = -71646.16409424422 mincut = 0.1656154870998655 edgeVar = 14899.976759427997 n_accept_positive = 877 time : 1406
+i = 13240 n_accept = 1480 logLK = -71651.15417793431 mincut = 0.16360679599212213 edgeVar = 14897.731565149672 n_accept_positive = 891 time : 1791
+i = 15888 n_accept = 1513 logLK = -71691.8509089154 mincut = 0.16513232673625275 edgeVar = 14901.40888687655 n_accept_positive = 907 time : 2148
+i = 18536 n_accept = 1538 logLK = -71676.43159017037 mincut = 0.162416087880022 edgeVar = 14901.419493754664 n_accept_positive = 919 time : 2518
+i = 21184 n_accept = 1565 logLK = -71686.2912671493 mincut = 0.1682020328145046 edgeVar = 14905.310091026528 n_accept_positive = 934 time : 2893
+i = 23832 n_accept = 1593 logLK = -71696.25331239846 mincut = 0.16714879585399076 edgeVar = 14905.788618300572 n_accept_positive = 949 time : 3252
+Node.partition - DONE, elapsed 3608
+logLK = -71703.15543926426 mincut = 0.16829257720060742
+S.size + T.size = 1224
+
+============================
+CommunityPriv
+dataname = polblogs
+burn_factor = 20 sample_freq = 100 n_samples = 20
+#nodes = 1224
+#edges = 16715
+logLK = -74986.38622881456 mincut = 0.02427515824154908 edgeVar = 16142.085871857169
+NodePriv.partitionLK called
+dU = 13.833463230057646
+eps1 = 1.0
+#steps = 26480
+i = 0 n_accept = 0 logLK = -74986.38622881456 mincut = 0.02427515824154908 edgeVar = 16142.085871857169 n_accept_positive = 0 time : 1
+i = 2648 n_accept = 1830 logLK = -79482.19286779285 mincut = 0.5701586690810629 edgeVar = 16312.79947741194 n_accept_positive = 749 time : 270
+i = 5296 n_accept = 3733 logLK = -75609.61866189778 mincut = 1.1935110838372014 edgeVar = 16123.870134096089 n_accept_positive = 1784 time : 478
+i = 7944 n_accept = 5095 logLK = -71021.72503875697 mincut = 1.3681842791083068 edgeVar = 15803.067128896653 n_accept_positive = 2527 time : 735
+i = 10592 n_accept = 6083 logLK = -68576.5083437832 mincut = 1.5279377881830778 edgeVar = 15533.390930408556 n_accept_positive = 3055 time : 1027
+i = 13240 n_accept = 6802 logLK = -68688.49410359444 mincut = 1.7228097632384205 edgeVar = 15417.2859779244 n_accept_positive = 3412 time : 1364
+i = 15888 n_accept = 7300 logLK = -69437.37094203773 mincut = 1.8505972423768486 edgeVar = 15481.379963152149 n_accept_positive = 3652 time : 1721
+i = 18536 n_accept = 7829 logLK = -69874.50544383595 mincut = 1.7492632132462886 edgeVar = 15518.139640963875 n_accept_positive = 3918 time : 2071
+i = 21184 n_accept = 8299 logLK = -70212.5087488316 mincut = 1.8395740868995387 edgeVar = 15498.86290968744 n_accept_positive = 4150 time : 2452
+i = 23832 n_accept = 8745 logLK = -69556.51125902204 mincut = 1.8821226522056387 edgeVar = 15483.463078876495 n_accept_positive = 4379 time : 2799
+NodePriv.partition - DONE, elapsed 3141
+logLK = -69590.3353610923 mincut = 1.6812295233148131
+S.size + T.size = 1224
+
+
+CommunityPriv
+dataname = polblogs
+burn_factor = 20 sample_freq = 100 n_samples = 20
+#nodes = 1224
+#edges = 16715
+logLK = -74986.38622881456 mincut = 0.02427515824154908 edgeVar = 16142.085871857169
+NodePriv.partitionEV called
+dU = 2.0
+eps1 = 1.0
+#steps = 26480
+i = 0 n_accept = 1 logLK = -74993.04808077544 mincut = 0.02437439759247037 edgeVar = 16142.278710377515 n_accept_positive = 0 time : 1
+i = 2648 n_accept = 2541 logLK = -79806.86173703855 mincut = 1.0101777254016362 edgeVar = 16330.116190922601 n_accept_positive = 1165 time : 284
+i = 5296 n_accept = 5126 logLK = -79901.29694038432 mincut = 1.0256744984673205 edgeVar = 16334.324918476716 n_accept_positive = 2447 time : 447
+i = 7944 n_accept = 7710 logLK = -80052.81899098452 mincut = 0.9907067016129779 edgeVar = 16340.842601386292 n_accept_positive = 3728 time : 607
+i = 10592 n_accept = 10331 logLK = -79865.39118083697 mincut = 1.0282864383658537 edgeVar = 16332.646526473041 n_accept_positive = 5034 time : 760
+i = 13240 n_accept = 12930 logLK = -80004.98395888966 mincut = 0.9825147077941447 edgeVar = 16338.723868023244 n_accept_positive = 6337 time : 897
+i = 15888 n_accept = 15551 logLK = -80071.22789715475 mincut = 0.9648204591398005 edgeVar = 16341.64588467771 n_accept_positive = 7601 time : 1036
+i = 18536 n_accept = 18182 logLK = -80072.77900862525 mincut = 1.016158961832797 edgeVar = 16341.713902275653 n_accept_positive = 8924 time : 1167
+i = 21184 n_accept = 20812 logLK = -79909.60728190019 mincut = 1.0848242830459243 edgeVar = 16334.807676194054 n_accept_positive = 10276 time : 1301
+i = 23832 n_accept = 23389 logLK = -80050.32868030568 mincut = 1.0324206499457407 edgeVar = 16340.745274958534 n_accept_positive = 11563 time : 1464
+NodePriv.partition - DONE, elapsed 1618
+logLK = -80072.88408491899 mincut = 1.0012753217890789
+S.size + T.size = 1224
