@@ -1,0 +1,95 @@
+min,max (X,Y) 281 3935 23854 30851
+dx, dy : 23573 26916
+map.area 634490868
+total_map_len = 1301688.0234
+Elapsed  0.140654377358
+6105
+7035
+Load Map : DONE
+Load Query : DONE
+max_speed =  1009.0
+elapsed :  5.03138509813
+--------->>
+TIMESTAMP :  0
+self.num_user =  10000
+expanding_list - elapsed :  30.481482836
+directed_edges.len = 317279
+num_edges= 151715
+list_edges NEW - elapsed :  5.40266205376
+5196
+add_to_mc_set - elapsed :  1.26011691971
+find_cloaking_sets - elapsed :  22.0591031523
+len(S) = 4945
+len(U) = 9284
+Sorting - elapsed : 0.00312505142894
+find_max_uncovered - elapsed : 7.4127953393
+len(R) = 0
+Cover.len:  1040
+Total elements in C_0 = 15209
+Success rate = 0.9284
+compute cover_set - elapsed :  7.4297865493
+total_mesh_length = 6240090.14042
+average_mesh_query = 410.28931162
+Compute CLOAKING MBR - elapsed :  2.91585364739
+Compute user_mc_set - elapsed :  0.00935613700489
+write_results_to_files - elapsed :  0.0503347224483
+Total time elapsed : 69.95567035
+--------->>
+TIMESTAMP :  1
+self.num_user =  10000
+expanding_list - elapsed :  33.7743120407
+directed_edges.len = 376763
+num_edges= 181762
+list_edges NEW - elapsed :  6.89132098795
+10263
+add_to_mc_set - elapsed :  1.90887430491
+find_cloaking_sets - elapsed :  52.2644111683
+len(S) = 9982
+len(U) = 9444
+Computing W - elapsed : 9.58670362846
+i =  2914
+Sorting - elapsed : 0.0242349658329
+find_next_cover - elapsed : 3.8749818513
+len(R) = 1522
+Cover.len:  866
+checking_pairs.len:  866
+Total elements in C_0 = 15209
+Total weight =  0
+Success rate = 0.7922
+compute cover_set - elapsed :  13.5107635987
+total_mesh_length = 5741644.95504
+average_mesh_query = 433.56074568
+Compute CLOAKING MBR - elapsed :  2.82657080006
+Compute user_mc_set - elapsed :  0.0194429764972
+write_results_to_files - elapsed :  0.0481382263825
+Total time elapsed : 111.663369972
+--------->>
+TIMESTAMP :  2
+self.num_user =  9990
+expanding_list - elapsed :  35.9192460379
+directed_edges.len = 414759
+num_edges= 200530
+list_edges NEW - elapsed :  7.81994144871
+10354
+add_to_mc_set - elapsed :  2.60523523829
+find_cloaking_sets - elapsed :  57.0547185717
+len(S) = 10088
+len(U) = 9484
+Computing W - elapsed : 8.82395884953
+i =  3546
+Sorting - elapsed : 0.0244953563089
+find_next_cover - elapsed : 5.4434596093
+len(R) = 755
+Cover.len:  932
+checking_pairs.len:  932
+Total elements in C_0 = 13243
+Total weight =  0
+Success rate = 0.873773773774
+compute cover_set - elapsed :  14.3194848511
+total_mesh_length = 6362377.92914
+average_mesh_query = 421.23794552
+Compute CLOAKING MBR - elapsed :  3.47407304465
+Compute user_mc_set - elapsed :  0.0352587721785
+write_results_to_files - elapsed :  0.0557787851248
+Total time elapsed : 121.756724346
+graph.run_timestamps - DONE

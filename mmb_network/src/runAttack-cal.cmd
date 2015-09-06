@@ -1,0 +1,1 @@
+pythonw graph_naiveclique_network.py cal_mod_10k_0.5_2_5_0005_002_2_10_20_80_10_20_events.txt 40 15000 > ../out/attack_cal_10000_15000_2_5.txt

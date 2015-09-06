@@ -1,0 +1,504 @@
+3198
+0
+59
+66
+134
+169
+227
+255
+274
+276
+249
+197
+204
+188
+139
+113
+93
+74
+91
+63
+48
+34
+36
+39
+21
+20
+24
+21
+11
+8
+7
+10
+10
+8
+11
+5
+11
+2
+1
+3781
+0
+46
+69
+149
+169
+243
+267
+302
+348
+281
+270
+245
+224
+178
+123
+121
+92
+111
+93
+69
+48
+63
+64
+44
+34
+13
+11
+17
+15
+15
+15
+16
+18
+8
+min,max (X,Y) 281 3935 23854 30851
+map.area 634490868
+total_map_len = 1301688.0234
+Elapsed  0.11
+6105
+7035
+Load Map : DONE
+Load Query : DONE
+max_speed =  201.0
+elapsed :  1.44
+Starting pp with 4 workers
+--------->>
+TIMESTAMP :  0
+START - Now:  2013-03-04 18:19:49.487292
+len(query_group) = 1250
+len(query_group) = 1250
+len(query_group) = 1250
+len(query_group) = 1250
+Submit jobs: DONE! - elapsed :  0.39
+DONE one query group !
+DONE one query group !
+DONE one query group !
+DONE one query group !
+Job execution statistics:
+ job count | % of all jobs | job time sum | time per job | job server
+         4 |        100.00 |      24.1385 |     6.034620 | local
+Time elapsed since server creation 6.95108699799
+0 active tasks, 4 cores
+
+expanding_list - elapsed :  1.19
+expanding_list - Now:  2013-03-04 18:19:56.438371
+directed_edges.len = 97766
+num_edges= 45788
+list_edges NEW - elapsed :  2.13
+list_edges - Now:  2013-03-04 18:19:59.241106
+3139
+add_to_mc_set - elapsed :  0.04
+add_to_mc_set - Now:  2013-03-04 18:19:59.414800
+len(clique_groups) = 785
+len(clique_groups) = 785
+len(clique_groups) = 785
+len(clique_groups) = 784
+Submit jobs: DONE! - elapsed :  0.07
+START mapped_mem_find - Now:  2013-03-04 18:19:59.441378
+START find_positive_negative - Now:  2013-03-04 18:20:00.432011
+END find_positive_negative - Now:  2013-03-04 18:20:02.610421
+<type 'tuple'>
+DONE one clique_group !
+START mapped_mem_find - Now:  2013-03-04 18:19:59.447050
+START find_positive_negative - Now:  2013-03-04 18:20:00.458814
+END find_positive_negative - Now:  2013-03-04 18:20:02.597203
+<type 'tuple'>
+DONE one clique_group !
+START mapped_mem_find - Now:  2013-03-04 18:19:59.448217
+START find_positive_negative - Now:  2013-03-04 18:20:00.422237
+END find_positive_negative - Now:  2013-03-04 18:20:02.490353
+<type 'tuple'>
+DONE one clique_group !
+START mapped_mem_find - Now:  2013-03-04 18:19:59.448927
+START find_positive_negative - Now:  2013-03-04 18:20:00.458652
+END find_positive_negative - Now:  2013-03-04 18:20:02.595244
+<type 'tuple'>
+DONE one clique_group !
+sub-positive = 709 sub-negative = 59
+sub-positive = 699 sub-negative = 73
+sub-positive = 700 sub-negative = 65
+sub-positive = 711 sub-negative = 60
+num_positive = 2819
+num_negative = 257
+Job execution statistics:
+ job count | % of all jobs | job time sum | time per job | job server
+         8 |        100.00 |      36.8792 |     4.609896 | local
+Time elapsed since server creation 13.1882917881
+0 active tasks, 4 cores
+
+find positive/negative cliques - elapsed :  0.09
+len(positive_mc_set_1) = 2854
+find positive/negative cliques - Now:  2013-03-04 18:20:02.675563
+len(S) = 2854
+len(U) = 4636
+Sorting - elapsed : 0.0
+find_max_uncovered - elapsed : 1.86
+len(R) = 0
+Cover.len:  739
+Total elements in C_0 = 6751
+Success rate = 0.9272
+compute cover_set - elapsed :  1.87
+cover_set - Now:  2013-03-04 18:20:04.545617
+Compute user_mc_set - elapsed :  0.0
+user_mc_set - Now:  2013-03-04 18:20:04.550204
+total_mesh_length = 5612414.45105
+average_mesh_query = 831.345645246
+Compute CLOAKING MBR - elapsed :  1.76
+CLOAKING MBR - Now:  2013-03-04 18:20:06.306887
+END - Now:  2013-03-04 18:20:06.306923
+--------->>
+TIMESTAMP :  1
+START - Now:  2013-03-04 18:20:06.306935
+len(query_group) = 1250
+len(query_group) = 1250
+len(query_group) = 1250
+len(query_group) = 1250
+Submit jobs: DONE! - elapsed :  0.4
+DONE one query group !
+DONE one query group !
+DONE one query group !
+DONE one query group !
+Job execution statistics:
+ job count | % of all jobs | job time sum | time per job | job server
+        12 |        100.00 |      62.0589 |     5.171577 | local
+Time elapsed since server creation 24.419495821
+0 active tasks, 4 cores
+
+expanding_list - elapsed :  1.21
+expanding_list - Now:  2013-03-04 18:20:13.906767
+directed_edges.len = 101141
+num_edges= 47405
+list_edges NEW - elapsed :  2.38
+list_edges - Now:  2013-03-04 18:20:16.985640
+3735
+add_to_mc_set - elapsed :  0.06
+add_to_mc_set - Now:  2013-03-04 18:20:17.178279
+len(clique_groups) = 934
+len(clique_groups) = 934
+len(clique_groups) = 934
+len(clique_groups) = 933
+Submit jobs: DONE! - elapsed :  0.094048
+0
+43
+69
+120
+187
+214
+284
+310
+314
+340
+300
+281
+289
+200
+149
+147
+126
+137
+96
+82
+75
+60
+64
+45
+32
+21
+10
+9
+9
+6
+9
+1
+9
+5
+3
+2
+
+START mapped_mem_find - Now:  2013-03-04 18:20:17.210979
+START find_positive_negative - Now:  2013-03-04 18:20:18.238198
+END find_positive_negative - Now:  2013-03-04 18:20:21.095059
+<type 'tuple'>
+DONE one clique_group !
+START mapped_mem_find - Now:  2013-03-04 18:20:17.205925
+START find_positive_negative - Now:  2013-03-04 18:20:18.232676
+END find_positive_negative - Now:  2013-03-04 18:20:20.946457
+<type 'tuple'>
+DONE one clique_group !
+START mapped_mem_find - Now:  2013-03-04 18:20:17.215038
+START find_positive_negative - Now:  2013-03-04 18:20:18.204768
+END find_positive_negative - Now:  2013-03-04 18:20:20.917739
+<type 'tuple'>
+DONE one clique_group !
+START mapped_mem_find - Now:  2013-03-04 18:20:17.212709
+START find_positive_negative - Now:  2013-03-04 18:20:18.217806
+END find_positive_negative - Now:  2013-03-04 18:20:20.921395
+<type 'tuple'>
+DONE one clique_group !
+sub-positive = 860 sub-negative = 59
+sub-positive = 841 sub-negative = 75
+sub-positive = 850 sub-negative = 66
+sub-positive = 847 sub-negative = 73
+num_positive = 3398
+num_negative = 273
+Job execution statistics:
+ job count | % of all jobs | job time sum | time per job | job server
+        16 |        100.00 |      77.3826 |     4.836415 | local
+Time elapsed since server creation 31.6925868988
+0 active tasks, 4 cores
+
+find positive/negative cliques - elapsed :  0.1
+len(positive_mc_set_1) = 3435
+find positive/negative cliques - Now:  2013-03-04 18:20:21.179860
+len(S) = 3435
+len(U) = 4673
+Computing W - elapsed : 1.41
+i =  1645
+Sorting - elapsed : 0.01
+find_next_cover - elapsed : 0.96
+len(R) = 456
+Cover.len:  672
+Total elements in C_0 = 6751
+Total weight =  0
+Success rate = 0.8434
+compute cover_set - elapsed :  2.39
+cover_set - Now:  2013-03-04 18:20:23.561867
+Compute user_mc_set - elapsed :  0.0
+user_mc_set - Now:  2013-03-04 18:20:23.566698
+total_mesh_length = 5262184.14546
+average_mesh_query = 788.814892139
+Compute CLOAKING MBR - elapsed :  1.88
+CLOAKING MBR - Now:  2013-03-04 18:20:25.444918
+END - Now:  2013-03-04 18:20:25.444953
+--------->>
+TIMESTAMP :  2
+START - Now:  2013-03-04 18:20:25.444965
+len(query_group) = 1250
+len(query_group) = 1250
+len(query_group) = 1250
+len(query_group) = 1250
+Submit jobs: DONE! - elapsed :  0.42
+DONE one query group !
+DONE one query group !
+DONE one query group !
+DONE one query group !
+Job execution statistics:
+ job count | % of all jobs | job time sum | time per job | job server
+        20 |        100.00 |     103.2376 |     5.161878 | local
+Time elapsed since server creation 43.8132669926
+0 active tasks, 4 cores
+
+expanding_list - elapsed :  1.35
+expanding_list - Now:  2013-03-04 18:20:33.300545
+directed_edges.len = 105794
+num_edges= 49748
+list_edges NEW - elapsed :  2.51
+list_edges - Now:  2013-03-04 18:20:36.539741
+4005
+add_to_mc_set - elapsed :  0.07
+add_to_mc_set - Now:  2013-03-04 18:20:36.752215
+len(clique_groups) = 1002
+len(clique_groups) = 1001
+len(clique_groups) = 1001
+len(clique_groups) = 1001
+Submit jobs: DONE! - elapsed :  0.1
+START mapped_mem_find - Now:  2013-03-04 18:20:36.787126
+START find_positive_negative - Now:  2013-03-04 18:20:37.890691
+END find_positive_negative - Now:  2013-03-04 18:20:40.890812
+<type 'tuple'>
+DONE one clique_group !
+START mapped_mem_find - Now:  2013-03-04 18:20:36.781222
+START find_positive_negative - Now:  2013-03-04 18:20:37.828651
+END find_positive_negative - Now:  2013-03-04 18:20:40.732283
+<type 'tuple'>
+DONE one clique_group !
+START mapped_mem_find - Now:  2013-03-04 18:20:36.787677
+START find_positive_negative - Now:  2013-03-04 18:20:37.822109
+END find_positive_negative - Now:  2013-03-04 18:20:40.622734
+<type 'tuple'>
+DONE one clique_group !
+START mapped_mem_find - Now:  2013-03-04 18:20:36.789236
+START find_positive_negative - Now:  2013-03-04 18:20:37.786741
+END find_positive_negative - Now:  2013-03-04 18:20:40.679791
+<type 'tuple'>
+DONE one clique_group !
+sub-positive = 922 sub-negative = 64
+sub-positive = 919 sub-negative = 63
+sub-positive = 914 sub-negative = 69
+sub-positive = 921 sub-negative = 66
+num_positive = 3676
+num_negative = 262
+Job execution statisti4319
+0
+36
+72
+115
+203
+220
+291
+296
+294
+313
+297
+305
+247
+257
+180
+195
+155
+147
+150
+115
+94
+69
+65
+59
+34
+17
+19
+17
+13
+8
+12
+12
+4
+5
+2
+1
+cs:
+ job count | % of all jobs | job time sum | time per job | job server
+        24 |        100.00 |     119.3310 |     4.972124 | local
+Time elapsed since server creation 51.4945018291
+0 active tasks, 4 cores
+
+find positive/negative cliques - elapsed :  0.13
+len(positive_mc_set_1) = 3719
+find positive/negative cliques - Now:  2013-03-04 18:20:40.981776
+len(S) = 3719
+len(U) = 4668
+Computing W - elapsed : 1.45
+i =  2005
+Sorting - elapsed : 0.0
+find_next_cover - elapsed : 1.29
+len(R) = 188
+Cover.len:  725
+Total elements in C_0 = 6671
+Total weight =  0
+Success rate = 0.896
+compute cover_set - elapsed :  2.75
+cover_set - Now:  2013-03-04 18:20:43.733745
+Compute user_mc_set - elapsed :  0.0
+user_mc_set - Now:  2013-03-04 18:20:43.739094
+total_mesh_length = 5760666.70754
+average_mesh_query = 795.232842013
+Compute CLOAKING MBR - elapsed :  2.07
+CLOAKING MBR - Now:  2013-03-04 18:20:45.807472
+END - Now:  2013-03-04 18:20:45.807508
+--------->>
+TIMESTAMP :  3
+START - Now:  2013-03-04 18:20:45.807520
+len(query_group) = 1250
+len(query_group) = 1250
+len(query_group) = 1250
+len(query_group) = 1250
+Submit jobs: DONE! - elapsed :  0.33
+DONE one query group !
+DONE one query group !
+DONE one query group !
+DONE one query group !
+Job execution statistics:
+ job count | % of all jobs | job time sum | time per job | job server
+        28 |        100.00 |     145.4135 |     5.193341 | local
+Time elapsed since server creation 64.0512290001
+0 active tasks, 4 cores
+
+expanding_list - elapsed :  1.24
+expanding_list - Now:  2013-03-04 18:20:53.538500
+directed_edges.len = 110561
+num_edges= 52179
+list_edges NEW - elapsed :  2.63
+list_edges - Now:  2013-03-04 18:20:56.919130
+4283
+add_to_mc_set - elapsed :  0.07
+add_to_mc_set - Now:  2013-03-04 18:20:57.159187
+len(clique_groups) = 1071
+len(clique_groups) = 1071
+len(clique_groups) = 1071
+len(clique_groups) = 1070
+Submit jobs: DONE! - elapsed :  0.11
+START mapped_mem_find - Now:  2013-03-04 18:20:57.185340
+START find_positive_negative - Now:  2013-03-04 18:20:58.292191
+END find_positive_negative - Now:  2013-03-04 18:21:01.648242
+<type 'tuple'>
+DONE one clique_group !
+START mapped_mem_find - Now:  2013-03-04 18:20:57.191857
+START find_positive_negative - Now:  2013-03-04 18:20:58.208921
+END find_positive_negative - Now:  2013-03-04 18:21:01.484883
+<type 'tuple'>
+DONE one clique_group !
+START mapped_mem_find - Now:  2013-03-04 18:20:57.199988
+START find_positive_negative - Now:  2013-03-04 18:20:58.249085
+END find_positive_negative - Now:  2013-03-04 18:21:01.440297
+<type 'tuple'>
+DONE one clique_group !
+START mapped_mem_find - Now:  2013-03-04 18:20:57.199467
+START find_positive_negative - Now:  2013-03-04 18:20:58.258900
+END find_positive_negative - Now:  2013-03-04 18:21:01.513195
+<type 'tuple'>
+DONE one clique_group !
+sub-positive = 970 sub-negative = 83
+sub-positive = 986 sub-negative = 67
+sub-positive = 996 sub-negative = 57
+sub-positive = 989 sub-negative = 66
+num_positive = 3941
+num_negative = 273
+Job execution statistics:
+ job count | % of all jobs | job time sum | time per job | job server
+        32 |        100.00 |     163.0319 |     5.094745 | local
+Time elapsed since server creation 72.2550528049
+0 active tasks, 4 cores
+
+find positive/negative cliques - elapsed :  0.14
+len(positive_mc_set_1) = 3979
+find positive/negative cliques - Now:  2013-03-04 18:21:01.742327
+len(S) = 3979
+len(U) = 4686
+Computing W - elapsed : 1.69
+i =  1872
+Sorting - elapsed : 0.01
+find_next_cover - elapsed : 1.18
+len(R) = 292
+Cover.len:  693
+Total elements in C_0 = 7244
+Total weight =  0
+Success rate = 0.8788
+compute cover_set - elapsed :  2.9
+cover_set - Now:  2013-03-04 18:21:04.641752
+Compute user_mc_set - elapsed :  0.0
+user_mc_set - Now:  2013-03-04 18:21:04.647073
+total_mesh_length = 5650302.51618
+average_mesh_query = 794.474482028
+Compute CLOAKING MBR - elapsed :  2.08
+CLOAKING MBR - Now:  2013-03-04 18:21:06.728705
+END - Now:  2013-03-04 18:21:06.728741

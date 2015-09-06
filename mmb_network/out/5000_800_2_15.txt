@@ -1,0 +1,176 @@
+min,max (X,Y) 281 3935 23854 30851
+dx, dy : 23573 26916
+map.area 634490868
+total_map_len = 1301688.0234
+Elapsed  0.089363709673
+6105
+7035
+Load Map : DONE
+Load Query : DONE
+max_speed =  201.0
+elapsed :  2.44233999484
+--------->>
+TIMESTAMP :  0
+self.num_user =  5000
+expanding_list - elapsed :  18.9669312619
+directed_edges.len = 97341
+num_edges= 45439
+list_edges NEW - elapsed :  1.54783907781
+3178
+add_to_mc_set - elapsed :  0.259369908553
+find_cloaking_sets - elapsed :  15.336797026
+len(S) = 1279
+len(U) = 2437
+Sorting - elapsed : 0.0010550895729
+find_max_uncovered - elapsed : 0.45323283468
+len(R) = 0
+Cover.len:  361
+Total elements in C_0 = 4077
+Success rate = 0.4874
+compute cover_set - elapsed :  0.458250818746
+total_mesh_length = 3276537.65641
+average_mesh_query = 803.66388433
+Compute CLOAKING MBR - elapsed :  1.09064920009
+Compute user_mc_set - elapsed :  0.00275018148638
+Total time elapsed : 37.7773980431
+--------->>
+TIMESTAMP :  1
+self.num_user =  5000
+expanding_list - elapsed :  19.5866583284
+directed_edges.len = 101215
+num_edges= 47480
+list_edges NEW - elapsed :  1.74685420564
+3915
+add_to_mc_set - elapsed :  0.278665430548
+find_cloaking_sets - elapsed :  20.6329564634
+len(S) = 1631
+len(U) = 2476
+Computing W - elapsed : 0.553468904115
+i =  904
+Sorting - elapsed : 0.00201363022127
+find_next_cover - elapsed : 0.274648410143
+len(R) = 367
+Cover.len:  307
+checking_pairs.len:  307
+Total elements in C_0 = 4077
+Total weight =  0
+Success rate = 0.4218
+compute cover_set - elapsed :  0.834764561425
+total_mesh_length = 2842660.15625
+average_mesh_query = 776.470952267
+Compute CLOAKING MBR - elapsed :  1.01020419732
+Compute user_mc_set - elapsed :  0.0059348331331
+Total time elapsed : 44.2191349728
+--------->>
+TIMESTAMP :  2
+self.num_user =  5000
+expanding_list - elapsed :  19.9333812421
+directed_edges.len = 105617
+num_edges= 49646
+list_edges NEW - elapsed :  1.89687002284
+4045
+add_to_mc_set - elapsed :  0.302787301622
+find_cloaking_sets - elapsed :  23.3299607039
+len(S) = 1748
+len(U) = 2661
+Computing W - elapsed : 0.416896793223
+i =  983
+Sorting - elapsed : 0.00284307325467
+find_next_cover - elapsed : 0.33358092281
+len(R) = 274
+Cover.len:  336
+checking_pairs.len:  336
+Total elements in C_0 = 3661
+Total weight =  0
+Success rate = 0.4774
+compute cover_set - elapsed :  0.75804656657
+total_mesh_length = 3043746.91595
+average_mesh_query = 717.526382826
+Compute CLOAKING MBR - elapsed :  1.14041541638
+Compute user_mc_set - elapsed :  0.0087702263597
+Total time elapsed : 47.5010775811
+--------->>
+TIMESTAMP :  3
+self.num_user =  5000
+expanding_list - elapsed :  20.3946854206
+directed_edges.len = 110112
+num_edges= 51928
+list_edges NEW - elapsed :  1.98197643694
+4309
+add_to_mc_set - elapsed :  0.313735364518
+find_cloaking_sets - elapsed :  25.0810575764
+len(S) = 2071
+len(U) = 2853
+Computing W - elapsed : 0.556191656929
+i =  1253
+Sorting - elapsed : 0.0034947784952
+find_next_cover - elapsed : 0.553879237044
+len(R) = 195
+Cover.len:  372
+checking_pairs.len:  372
+Total elements in C_0 = 4242
+Total weight =  0
+Success rate = 0.5316
+compute cover_set - elapsed :  1.11925949901
+total_mesh_length = 3567486.33674
+average_mesh_query = 761.144940632
+Compute CLOAKING MBR - elapsed :  1.29031310743
+Compute user_mc_set - elapsed :  0.0109853658893
+Total time elapsed : 50.3248629938
+--------->>
+TIMESTAMP :  4
+self.num_user =  4999
+expanding_list - elapsed :  21.0344690632
+directed_edges.len = 113935
+num_edges= 53883
+list_edges NEW - elapsed :  2.15309477703
+4465
+add_to_mc_set - elapsed :  0.335990257336
+find_cloaking_sets - elapsed :  27.1165155347
+len(S) = 2237
+len(U) = 3022
+Computing W - elapsed : 0.669270196188
+i =  1154
+Sorting - elapsed : 0.00390108855254
+find_next_cover - elapsed : 0.453990597451
+len(R) = 267
+Cover.len:  375
+checking_pairs.len:  375
+Total elements in C_0 = 4687
+Total weight =  0
+Success rate = 0.551110222044
+compute cover_set - elapsed :  1.13347047669
+total_mesh_length = 3591871.00784
+average_mesh_query = 736.642946645
+Compute CLOAKING MBR - elapsed :  1.34798572978
+Compute user_mc_set - elapsed :  0.0109784172925
+Total time elapsed : 53.2691184242
+--------->>
+TIMESTAMP :  5
+self.num_user =  4998
+expanding_list - elapsed :  21.2882588828
+directed_edges.len = 117466
+num_edges= 55673
+list_edges NEW - elapsed :  2.01535457044
+4412
+add_to_mc_set - elapsed :  0.340560605479
+find_cloaking_sets - elapsed :  25.3744602495
+len(S) = 2198
+len(U) = 3113
+Computing W - elapsed : 0.676904144107
+i =  1261
+Sorting - elapsed : 0.00274323288954
+find_next_cover - elapsed : 0.529084449223
+len(R) = 243
+Cover.len:  401
+checking_pairs.len:  401
+Total elements in C_0 = 4876
+Total weight =  0
+Success rate = 0.574229691877
+compute cover_set - elapsed :  1.21426912647
+total_mesh_length = 3832879.15596
+average_mesh_query = 737.659575821
+Compute CLOAKING MBR - elapsed :  1.43741599969
+Compute user_mc_set - elapsed :  0.0142768064981
+Total time elapsed : 51.826708212
+graph.run_timestamps - DONE
