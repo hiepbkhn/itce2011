@@ -33,6 +33,9 @@ public class TmFPart {
 		int m = edgelist[0].length;
 		int m_noisy = m + DPUtil.geometricMechanism(Math.exp(-1));
 
+		if (m_noisy <= 0)
+			return new int[2][0];
+		
 		int[][] result = new int[2][m_noisy];
 		
 		//
@@ -99,6 +102,11 @@ public class TmFPart {
 		int N2 = nodelist2.length;
 		int m = edgelist[0].length;
 		int m_noisy = m + DPUtil.geometricMechanism(Math.exp(-1));
+		
+		if (m_noisy <= 0)
+			return new int[2][0];
+//		if (m_noisy > N1*N2)
+//			m_noisy = N1*N2;
 
 		int[][] result = new int[2][m_noisy];
 		
@@ -265,13 +273,13 @@ public class TmFPart {
 	////
 	public static void main(String[] args) throws Exception{
 		// load graph
-		String dataname = "polbooks";		// (105, 441)		
+//		String dataname = "polbooks";		// (105, 441)		
 																
 		
 //		String dataname = "polblogs";		// (1224,16715) 	
 																
 		
-//		String dataname = "as20graph";		// (6474,12572)		
+		String dataname = "as20graph";		// (6474,12572)		
 																		
 //		String dataname = "wiki-Vote";		// (7115,100762)
 //		String dataname = "ca-HepPh";		// (12006,118489) 	
@@ -285,8 +293,8 @@ public class TmFPart {
 		// COMMAND-LINE <prefix> <dataname> <n_samples> <eps>
 		String prefix = "";
 	    int n_samples = 1;
-	    double eps = 1.0;
-	    int numpart = 5;
+	    double eps = 4.0;
+	    int numpart = 10;
 		
 		if(args.length >= 4){
 			prefix = args[0];
@@ -298,9 +306,10 @@ public class TmFPart {
 		
 		System.out.println("n_samples = " + n_samples);
 		System.out.println("eps_c = " + eps);
+		System.out.println("numpart = " + numpart);
 		
 		String filename = prefix + "_data/" + dataname + ".gr";
-		String sample_file = prefix + "_sample/" + dataname + "_tmfpart_" + String.format("%.1f", eps);
+		String sample_file = prefix + "_sample/" + dataname + "_tmfpart_" + numpart + "_" + String.format("%.1f", eps);
 		System.out.println("sample_file = " + sample_file);
 
 		
