@@ -1,0 +1,19 @@
+file_name = com_amazon_ungraph
+n_samples = 5
+start_id = 0
+t = 3
+M = 10
+p = 0.6
+file_name = com_amazon_ungraph
+#nodes : 334863
+#edges : 925872
+#components : 1
+min-deg = 1
+max-deg = 549
+num_failed = 4875
+sample 0
+sample 1
+sample 2
+sample 3
+sample 4
+random_walk_replace for 5 samples DONE, elapsed : 16.585356297

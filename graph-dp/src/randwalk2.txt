@@ -1,0 +1,150 @@
+----------------------------------------------------------------------------
+TEST selfloop_multiedge
+file_name = com_dblp_ungraph
+n_nodes = 317080
+BEFORE n_edges = 1049866.0
+n_selfloops = 158540.0
+n_multiedges = 32906.0
+AFTER n_edges = 1049866.0
+elapsed  31.0146805386
+
+TEST selfloop_multiedge
+file_name = com_amazon_ungraph
+n_nodes = 334863
+BEFORE n_edges = 925872.0
+n_selfloops = 167431.5
+n_multiedges = 54600.0
+AFTER n_edges = 925872.000004
+elapsed  18.3381057964
+
+----------------------------------------------------------------------------
+TEST random_walk_transform_multigraph
+file_name = ../randwalk/com_dblp_ungraph_randwalk_keep_2_10_0.5_sample.0
+#nodes : 294847
+#edges : 1049269
+#self-loops : 158277
+===remove multi edges
+#nodes : 294847
+#edges : 881149
+#self-loops : 101736
+===remove (single) selfloops
+#self-loops : 101736
+#nodes : 294847
+#edges : 779413
+#self-loops : 0
+
+
+TEST random_walk_transform_multigraph
+file_name = ../randwalk/com_dblp_ungraph_randwalk_keep_3_10_0.5_sample.0
+#nodes : 296963
+#edges : 1050890
+#self-loops : 47117
+===remove multi edges
+#nodes : 296963
+#edges : 927714
+#self-loops : 39078
+===remove (single) selfloops
+#nodes : 296963
+#edges : 888636
+#self-loops : 0
+
+
+TEST random_walk_transform_multigraph
+file_name = ../randwalk/com_dblp_ungraph_randwalk_keep_5_10_0.5_sample.0
+#nodes : 296441
+#edges : 1048152
+#self-loops : 38379
+===remove multi edges
+#nodes : 296441
+#edges : 973111
+#self-loops : 32197
+===remove (single) selfloops
+#nodes : 296441
+#edges : 940914
+#self-loops : 0
+
+
+TEST random_walk_transform_multigraph
+file_name = ../randwalk/com_dblp_ungraph_randwalk_keep_10_10_0.5_sample.0
+#nodes : 296486
+#edges : 1049818
+#self-loops : 22634
+===remove multi edges
+#nodes : 296486
+#edges : 1014712
+#self-loops : 19818
+===remove (single) selfloops
+#nodes : 296486
+#edges : 994894
+#self-loops : 0
+
+========================== DETERMINISTIC WALK (17/7/2014) ================
+file_name = com_dblp_ungraph
+#nodes : 317080
+#edges : 1049866
+#self-loops : 0
+#components : 1
+min-deg = 1
+max-deg = 343
+TEST deterministic_walk_transform_multigraph
+t = 2
+M = 10
+alpha = 0.5
+elapsed 11.1516001683
+#nodes : 298243
+#edges : 1050117
+#self-loops : 158818
+
+
+file_name = com_dblp_ungraph
+#nodes : 317080
+#edges : 1049866
+#self-loops : 0
+#components : 1
+min-deg = 1
+max-deg = 343
+TEST deterministic_walk_transform_multigraph
+t = 3
+M = 10
+alpha = 0.5
+elapsed 14.5815195637
+#nodes : 301267
+#edges : 1050485
+#self-loops : 47334
+
+
+file_name = com_dblp_ungraph
+#nodes : 317080
+#edges : 1049866
+#self-loops : 0
+#components : 1
+min-deg = 1
+max-deg = 343
+TEST deterministic_walk_transform_multigraph
+t = 5
+M = 10
+alpha = 0.5
+elapsed 15.7034322915
+#nodes : 301550
+#edges : 1050291
+#self-loops : 32745
+
+
+file_name = com_dblp_ungraph
+#nodes : 317080
+#edges : 1049866
+#self-loops : 0
+#components : 1
+min-deg = 1
+max-deg = 343
+TEST deterministic_walk_transform_multigraph
+t = 10
+M = 10
+alpha = 0.5
+elapsed 17.7084414773
+#nodes : 299060
+#edges : 1049928
+#self-loops : 56742
+
+
+

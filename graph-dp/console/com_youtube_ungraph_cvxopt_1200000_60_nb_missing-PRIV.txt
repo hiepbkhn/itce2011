@@ -1,0 +1,60 @@
+before_file = ../data/com_youtube_ungraph.gr
+after_file = ../out/com_youtube_ungraph_cvxopt_1200000_60_nb_missing.out
+n_samples = 20
+read bG: DONE, elapsed : 1.6482412303
+count = 0
+count = 1
+count = 2
+count = 3
+count = 4
+count = 5
+count = 6
+count = 7
+count = 8
+count = 9
+count = 10
+count = 11
+count = 12
+count = 13
+count = 14
+count = 15
+count = 16
+count = 17
+count = 18
+count = 19
+compute score_H1, score_H2: DONE, elapsed : 837.774306341
+score_H1 = 84.2064714501
+score_H2 = 1419.22653132
+elapsed : 859.139574092
+compare sample 0  DONE
+compare sample 1  DONE
+compare sample 2  DONE
+compare sample 3  DONE
+compare sample 4  DONE
+compare sample 5  DONE
+compare sample 6  DONE
+compare sample 7  DONE
+compare sample 8  DONE
+compare sample 9  DONE
+compare sample 10  DONE
+compare sample 11  DONE
+compare sample 12  DONE
+compare sample 13  DONE
+compare sample 14  DONE
+compare sample 15  DONE
+compare sample 16  DONE
+compare sample 17  DONE
+compare sample 18  DONE
+compare sample 19  DONE
+[392742, 393165, 393785, 393793, 393031, 392791, 393025, 393929, 393019, 393373, 392961, 393401, 393420, 393972, 392790, 392681, 393594, 392544, 393555, 393147]
+[393760, 392796, 392991, 392818, 393135, 393158, 393032, 392512, 393697, 393269, 393306, 392465, 392659, 393406, 392400, 392685, 392463, 393255, 392595, 392669]
+compare_edges_diff_from_file: DONE, elapsed : 139.379839315
+n_nodes = 0
+read bG - DONE
+read aG - DONE
+max_deg_G2 = 31263
+check X...
+check Y...
+len(ent) = 31264
+eps_arr = [0.00045114504489421884, 0.0005692181621126277, 0.0009859986430402947]
+elapsed : 238.691848455

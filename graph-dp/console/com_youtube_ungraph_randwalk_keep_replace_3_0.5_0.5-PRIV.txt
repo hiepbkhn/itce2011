@@ -1,0 +1,116 @@
+before_file = ../data/com_youtube_ungraph.gr
+after_file = ../randwalk/com_youtube_ungraph_randwalk_keep_replace3_0.5_0.5.out
+n_samples = 20
+algo_type = 2
+sample_file = ../randwalk/com_youtube_ungraph_randwalk_keep_replace3_0.5_0.5_sample.
+read bG: DONE, elapsed : 23.8751679137
+count = 0
+count = 1
+count = 2
+count = 3
+count = 4
+count = 5
+count = 6
+count = 7
+count = 8
+count = 9
+count = 10
+count = 11
+count = 12
+count = 13
+count = 14
+count = 15
+count = 16
+count = 17
+count = 18
+count = 19
+compute score_H1, score_H2: DONE, elapsed : 1808.30690123
+score_H1 = 27.882283463
+score_H2 = 61.5842053872
+elapsed : 1875.98972564
+compare sample 0  DONE
+compare sample 1  DONE
+compare sample 2  DONE
+compare sample 3  DONE
+compare sample 4  DONE
+compare sample 5  DONE
+compare sample 6  DONE
+compare sample 7  DONE
+compare sample 8  DONE
+compare sample 9  DONE
+compare sample 10  DONE
+compare sample 11  DONE
+compare sample 12  DONE
+compare sample 13  DONE
+compare sample 14  DONE
+compare sample 15  DONE
+compare sample 16  DONE
+compare sample 17  DONE
+compare sample 18  DONE
+compare sample 19  DONE
+[1233559, 1233627, 1232530, 1230959, 1233260, 1231478, 1232398, 1231375, 1234035, 1231915, 1231044, 1232775, 1230484, 1231663, 1232223, 1233943, 1232610, 1233922, 1233493, 1232670]
+[1232552, 1231634, 1233719, 1234037, 1232743, 1233678, 1232314, 1232029, 1232709, 1233677, 1235433, 1234296, 1232221, 1234196, 1233338, 1233085, 1233054, 1232993, 1232600, 1232566]
+compare_edges_diff_from_file: DONE, elapsed : 1004.91412932
+read bG - DONE
+read sample 0  DONE
+max_deg = 53166
+len(ent) = 53167
+read sample 1  DONE
+max_deg = 52843
+len(ent) = 52844
+read sample 2  DONE
+max_deg = 53224
+len(ent) = 53225
+read sample 3  DONE
+max_deg = 52880
+len(ent) = 52881
+read sample 4  DONE
+max_deg = 52669
+len(ent) = 52670
+read sample 5  DONE
+max_deg = 52476
+len(ent) = 52477
+read sample 6  DONE
+max_deg = 52615
+len(ent) = 52616
+read sample 7  DONE
+max_deg = 53030
+len(ent) = 53031
+read sample 8  DONE
+max_deg = 52612
+len(ent) = 52613
+read sample 9  DONE
+max_deg = 52919
+len(ent) = 52920
+read sample 10  DONE
+max_deg = 52849
+len(ent) = 52850
+read sample 11  DONE
+max_deg = 52908
+len(ent) = 52909
+read sample 12  DONE
+max_deg = 52578
+len(ent) = 52579
+read sample 13  DONE
+max_deg = 52830
+len(ent) = 52831
+read sample 14  DONE
+max_deg = 52919
+len(ent) = 52920
+read sample 15  DONE
+max_deg = 52419
+len(ent) = 52420
+read sample 16  DONE
+max_deg = 52644
+len(ent) = 52645
+read sample 17  DONE
+max_deg = 52772
+len(ent) = 52773
+read sample 18  DONE
+max_deg = 52969
+len(ent) = 52970
+read sample 19  DONE
+max_deg = 52837
+len(ent) = 52838
+eps_arr = [0.0015673765739410872, 0.002265241565261831, 0.003532456890095075]
+elapsed : 1252.7929619

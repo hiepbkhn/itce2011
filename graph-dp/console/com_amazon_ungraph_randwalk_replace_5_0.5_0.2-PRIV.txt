@@ -1,0 +1,5 @@
+before_file = ../data/com_amazon_ungraph.gr
+after_file = ../randwalk/com_amazon_ungraph_randwalk_replace5_0.5_0.2.out
+n_samples = 20
+algo_type = 2
+sample_file = ../randwalk/com_amazon_ungraph_randwalk_replace5_0.5_0.2_sample.

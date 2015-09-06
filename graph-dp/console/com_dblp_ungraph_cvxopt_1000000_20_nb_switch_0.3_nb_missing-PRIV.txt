@@ -1,0 +1,38 @@
+before_file = ../data/com_dblp_ungraph.gr
+after_file = ../out/com_dblp_ungraph_cvxopt_1000000_20_nb_switch_0.3_nb_missing.out
+n_samples = 5
+algo_type = 0
+sample_file = ../sample/com_dblp_ungraph_cvxopt_1000000_20_nb_switch_0.3_nb_missing_sample.
+read bG: DONE, elapsed : 0.573762479948
+aG.#edges = 1028582
+count = 0
+aG.#edges = 1027841
+count = 1
+aG.#edges = 1028796
+count = 2
+aG.#edges = 1028131
+count = 3
+aG.#edges = 1028116
+count = 4
+compute score_H1, score_H2: DONE, elapsed : 74.6352911842
+score_H1 = 25.5372118472
+score_H2 = 91.6449745178
+elapsed : 82.1440912195
+compare sample 0  DONE
+compare sample 1  DONE
+compare sample 2  DONE
+compare sample 3  DONE
+compare sample 4  DONE
+[485466, 485846, 484719, 485767, 485331]
+[464182, 463821, 463649, 464032, 463581]
+compare_edges_diff_from_file: DONE, elapsed : 13.805310389
+n_nodes = 0
+read bG - DONE
+sum_p = 1028497.61747
+read aG - DONE
+max_deg_G2 = 421
+check X...
+check Y...
+len(ent) = 422
+eps_arr = [0.00014192002018418066, 0.0002617635927841554, 0.0005897565283209284]
+elapsed : 32.4712024642

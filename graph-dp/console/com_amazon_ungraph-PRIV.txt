@@ -1,0 +1,21 @@
+before_file = ../data/com_amazon_ungraph.gr
+after_file = ../data/com_amazon_ungraph.gr
+n_samples = 5
+bG#nodes = 334863
+bG#edges = 925872
+aG#nodes = 334863
+aG#edges = 925872
+sum_re_prob H1 = 153.0
+sum_re_prob H2 (open) = 113338.0
+elapsed : 20.3452531708
+diff_b = 0
+diff_a = 0
+elapsed : 1.74125822407
+n_nodes = 334863
+read bG - DONE
+max_deg_G2 = 549
+check X...
+check Y...
+len(ent) = 550
+eps_arr = [0.001511065719413611, 0.002182982294251679, 0.004563060117122525]
+elapsed : 11.3768646883

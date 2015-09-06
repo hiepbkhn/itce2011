@@ -1,0 +1,4 @@
+data_name = com_youtube_ungraph_cvxopt_1800000_20_rw_missing
+n_nodes = 1134890
+n_samples = 20
+start_id = 0

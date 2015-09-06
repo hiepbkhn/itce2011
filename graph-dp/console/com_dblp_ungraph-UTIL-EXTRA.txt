@@ -1,0 +1,15 @@
+filename = ../data/com_dblp_ungraph.gr
+n_samples = 20
+eps = 0.01
+#nodes = 317080
+#edges = 1049866
+min-deg = 1
+max-deg = 343
+#components = 1
+cc_size = [317080]
+Read graph - Elapsed  0.82207489086
+m_time = 80
+dd = 0.0098265529971
+m_time = 80
+assortativity = 0.266520830866
+mixing_time_and_assortativity_one - Elapsed  92.8930146098

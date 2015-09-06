@@ -1,0 +1,83 @@
+before_file = ../data/com_amazon_ungraph.gr
+after_file = ../out/com_amazon_ungraph_cvxopt_800000_20_rw_missing.out
+n_samples = 20
+algo_type = 0
+sample_file = ../sample/com_amazon_ungraph_cvxopt_800000_20_rw_missing_sample.
+read bG: DONE, elapsed : 0.694232885785
+aG.#edges = 926426
+count = 0
+aG.#edges = 925027
+count = 1
+aG.#edges = 925375
+count = 2
+aG.#edges = 925693
+count = 3
+aG.#edges = 925087
+count = 4
+aG.#edges = 926294
+count = 5
+aG.#edges = 926128
+count = 6
+aG.#edges = 925443
+count = 7
+aG.#edges = 925552
+count = 8
+aG.#edges = 924759
+count = 9
+aG.#edges = 926338
+count = 10
+aG.#edges = 926358
+count = 11
+aG.#edges = 925989
+count = 12
+aG.#edges = 926014
+count = 13
+aG.#edges = 925875
+count = 14
+aG.#edges = 926433
+count = 15
+aG.#edges = 925237
+count = 16
+aG.#edges = 926204
+count = 17
+aG.#edges = 925666
+count = 18
+aG.#edges = 925667
+count = 19
+compute score_H1, score_H2: DONE, elapsed : 318.978247443
+score_H1 = 17.063853694
+score_H2 = 95.0446219169
+elapsed : 328.37823881
+compare sample 0  DONE
+compare sample 1  DONE
+compare sample 2  DONE
+compare sample 3  DONE
+compare sample 4  DONE
+compare sample 5  DONE
+compare sample 6  DONE
+compare sample 7  DONE
+compare sample 8  DONE
+compare sample 9  DONE
+compare sample 10  DONE
+compare sample 11  DONE
+compare sample 12  DONE
+compare sample 13  DONE
+compare sample 14  DONE
+compare sample 15  DONE
+compare sample 16  DONE
+compare sample 17  DONE
+compare sample 18  DONE
+compare sample 19  DONE
+[306781, 307816, 306842, 307254, 307653, 306697, 306976, 307266, 307532, 307590, 306284, 306678, 306630, 307312, 307920, 306651, 307491, 306307, 307416, 307207]
+[307335, 306971, 306345, 307075, 306868, 307119, 307232, 306837, 307212, 306477, 306750, 307164, 306747, 307454, 307923, 307212, 306856, 306639, 307210, 307002]
+compare_edges_diff_from_file: DONE, elapsed : 47.5022015182
+n_nodes = 0
+read bG - DONE
+sum_p = 925872.000019
+read aG - DONE
+max_deg_G2 = 711
+check X...
+check Y...
+len(ent) = 712
+eps_arr = [0.0001493147944084596, 0.00023293107927719695, 0.0004658621585543939]
+elapsed : 24.1220962631

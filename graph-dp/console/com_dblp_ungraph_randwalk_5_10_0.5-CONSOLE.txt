@@ -1,0 +1,53 @@
+file_name = com_dblp_ungraph
+n_samples = 20
+start_id = 0
+t = 5
+M = 10
+p = 0.8
+file_name = com_dblp_ungraph
+#nodes : 317080
+#edges : 1049866
+#components : 1
+min-deg = 1
+max-deg = 343
+sample 0
+num_failed = 1259
+sample 1
+num_failed = 1221
+sample 2
+num_failed = 1221
+sample 3
+num_failed = 1200
+sample 4
+num_failed = 1235
+sample 5
+num_failed = 1225
+sample 6
+num_failed = 1216
+sample 7
+num_failed = 1213
+sample 8
+num_failed = 1247
+sample 9
+num_failed = 1196
+sample 10
+num_failed = 1297
+sample 11
+num_failed = 1216
+sample 12
+num_failed = 1262
+sample 13
+num_failed = 1208
+sample 14
+num_failed = 1227
+sample 15
+num_failed = 1314
+sample 16
+num_failed = 1220
+sample 17
+num_failed = 1190
+sample 18
+num_failed = 1239
+sample 19
+num_failed = 1203
+random_walk_transform for 20 samples DONE, elapsed : 338.560709857

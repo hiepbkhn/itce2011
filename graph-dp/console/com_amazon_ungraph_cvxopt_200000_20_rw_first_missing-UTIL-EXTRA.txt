@@ -1,0 +1,86 @@
+filename = ../out/com_amazon_ungraph_cvxopt_200000_20_rw_first_missing.out
+n_samples = 20
+eps = 0.02
+sample i = 0
+read sample - DONE, elapsed : 1.15926910684
+m_time = 108
+dd = 0.0219394239114
+sample i = 1
+read sample - DONE, elapsed : 1.49341627439
+m_time = 109
+dd = 0.0217722257252
+sample i = 2
+read sample - DONE, elapsed : 1.02693924076
+m_time = 108
+dd = 0.0219510028679
+sample i = 3
+read sample - DONE, elapsed : 0.82444364349
+m_time = 108
+dd = 0.022039184564
+sample i = 4
+read sample - DONE, elapsed : 1.8046809957
+m_time = 109
+dd = 0.0218630346768
+sample i = 5
+read sample - DONE, elapsed : 1.44756776468
+m_time = 109
+dd = 0.0218229608446
+sample i = 6
+read sample - DONE, elapsed : 1.54910324284
+m_time = 109
+dd = 0.0218766676354
+sample i = 7
+read sample - DONE, elapsed : 1.21841155017
+m_time = 109
+dd = 0.0219261398139
+sample i = 8
+read sample - DONE, elapsed : 0.970845355198
+m_time = 108
+dd = 0.0218995388299
+sample i = 9
+read sample - DONE, elapsed : 0.886972434083
+m_time = 109
+dd = 0.0220133047703
+sample i = 10
+read sample - DONE, elapsed : 1.05904433646
+m_time = 109
+dd = 0.0218995746111
+sample i = 11
+read sample - DONE, elapsed : 0.949152869822
+m_time = 108
+dd = 0.0221080338928
+sample i = 12
+read sample - DONE, elapsed : 1.52500366769
+m_time = 109
+dd = 0.0220344141855
+sample i = 13
+read sample - DONE, elapsed : 1.64129955076
+m_time = 108
+dd = 0.0220089226332
+sample i = 14
+read sample - DONE, elapsed : 1.38582654585
+m_time = 109
+dd = 0.0220650886002
+sample i = 15
+read sample - DONE, elapsed : 2.25515393119
+m_time = 109
+dd = 0.0220140575361
+sample i = 16
+read sample - DONE, elapsed : 1.26768685736
+m_time = 108
+dd = 0.0221375251576
+sample i = 17
+read sample - DONE, elapsed : 1.40125226627
+m_time = 109
+dd = 0.0219564401791
+sample i = 18
+read sample - DONE, elapsed : 1.59177973106
+m_time = 110
+dd = 0.0217181309335
+sample i = 19
+read sample - DONE, elapsed : 1.23594762482
+m_time = 109
+dd = 0.0219109905454
+m_time = 108.7
+assortativity = -0.043868267504
+mixing_time_and_assortativity - Elapsed  2295.93886433

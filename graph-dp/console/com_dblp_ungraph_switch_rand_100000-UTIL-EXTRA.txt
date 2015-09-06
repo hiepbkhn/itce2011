@@ -1,0 +1,86 @@
+filename = ../switch/com_dblp_ungraph_switch_rand_100000.out
+n_samples = 20
+eps = 0.01
+sample i = 0
+read sample - DONE, elapsed : 1.08160891644
+m_time = 30
+dd = 0.00955343537454
+sample i = 1
+read sample - DONE, elapsed : 0.946736120293
+m_time = 30
+dd = 0.00949256989941
+sample i = 2
+read sample - DONE, elapsed : 1.08767433591
+m_time = 30
+dd = 0.00945403936537
+sample i = 3
+read sample - DONE, elapsed : 1.12596408866
+m_time = 30
+dd = 0.00949774375097
+sample i = 4
+read sample - DONE, elapsed : 1.14244000539
+m_time = 30
+dd = 0.00956366827925
+sample i = 5
+read sample - DONE, elapsed : 1.04241024127
+m_time = 29
+dd = 0.00994713510936
+sample i = 6
+read sample - DONE, elapsed : 1.16267477361
+m_time = 30
+dd = 0.00975924687252
+sample i = 7
+read sample - DONE, elapsed : 0.908736160139
+m_time = 30
+dd = 0.00958793845915
+sample i = 8
+read sample - DONE, elapsed : 0.856363996409
+m_time = 30
+dd = 0.00949770581492
+sample i = 9
+read sample - DONE, elapsed : 1.09946557415
+m_time = 30
+dd = 0.00964988713913
+sample i = 10
+read sample - DONE, elapsed : 0.870677939599
+m_time = 30
+dd = 0.0095555657268
+sample i = 11
+read sample - DONE, elapsed : 1.0544867441
+m_time = 29
+dd = 0.00994540401801
+sample i = 12
+read sample - DONE, elapsed : 1.27932263395
+m_time = 29
+dd = 0.00980624004809
+sample i = 13
+read sample - DONE, elapsed : 0.942848673324
+m_time = 29
+dd = 0.00993720065946
+sample i = 14
+read sample - DONE, elapsed : 1.04433555085
+m_time = 30
+dd = 0.0095675170415
+sample i = 15
+read sample - DONE, elapsed : 0.969617962794
+m_time = 30
+dd = 0.00961315821153
+sample i = 16
+read sample - DONE, elapsed : 0.952236444197
+m_time = 30
+dd = 0.00968664130092
+sample i = 17
+read sample - DONE, elapsed : 1.11735936154
+m_time = 29
+dd = 0.00998245842237
+sample i = 18
+read sample - DONE, elapsed : 0.946519983313
+m_time = 30
+dd = 0.00950191516337
+sample i = 19
+read sample - DONE, elapsed : 1.29764145048
+m_time = 30
+dd = 0.00955765801141
+m_time = 29.75
+assortativity = 0.261466806444
+mixing_time_and_assortativity - Elapsed  880.420970841

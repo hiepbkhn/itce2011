@@ -1,0 +1,60 @@
+before_file = ../data/com_youtube_ungraph.gr
+after_file = ../out/com_youtube_ungraph_entropy_001_2_001.out
+n_samples = 20
+read bG: DONE, elapsed : 1.71638444343
+count = 0
+count = 1
+count = 2
+count = 3
+count = 4
+count = 5
+count = 6
+count = 7
+count = 8
+count = 9
+count = 10
+count = 11
+count = 12
+count = 13
+count = 14
+count = 15
+count = 16
+count = 17
+count = 18
+count = 19
+compute score_H1, score_H2: DONE, elapsed : 870.268856834
+score_H1 = 80.0491418634
+score_H2 = 22361.6961459
+elapsed : 893.019620338
+compare sample 0  DONE
+compare sample 1  DONE
+compare sample 2  DONE
+compare sample 3  DONE
+compare sample 4  DONE
+compare sample 5  DONE
+compare sample 6  DONE
+compare sample 7  DONE
+compare sample 8  DONE
+compare sample 9  DONE
+compare sample 10  DONE
+compare sample 11  DONE
+compare sample 12  DONE
+compare sample 13  DONE
+compare sample 14  DONE
+compare sample 15  DONE
+compare sample 16  DONE
+compare sample 17  DONE
+compare sample 18  DONE
+compare sample 19  DONE
+[62553, 62029, 62122, 62379, 62098, 62261, 61876, 62395, 62233, 62284, 62167, 62094, 62110, 62401, 62224, 61986, 62349, 62457, 62139, 62414]
+[14905, 14948, 14768, 14945, 14903, 14891, 14974, 14887, 14907, 14896, 14984, 14974, 14984, 15004, 14816, 15025, 14898, 14922, 14747, 14907]
+compare_edges_diff_from_file: DONE, elapsed : 145.105080622
+n_nodes = 0
+read bG - DONE
+read aG - DONE
+max_deg_G2 = 28754
+check X...
+check Y...
+len(ent) = 28755
+eps_arr = [0.0005956524420868982, 0.001045916344315308, 0.0023209297817409617]
+elapsed : 236.843935961

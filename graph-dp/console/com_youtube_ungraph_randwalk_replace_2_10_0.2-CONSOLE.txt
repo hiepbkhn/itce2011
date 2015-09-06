@@ -1,0 +1,33 @@
+file_name = com_youtube_ungraph
+n_samples = 20
+start_id = 0
+t = 2
+M = 10
+p = 0.2
+file_name = com_youtube_ungraph
+#nodes : 1134890
+#edges : 2987624
+#components : 1
+min-deg = 1
+max-deg = 28754
+sample 0
+sample 1
+sample 2
+sample 3
+sample 4
+sample 5
+sample 6
+sample 7
+sample 8
+sample 9
+sample 10
+sample 11
+sample 12
+sample 13
+sample 14
+sample 15
+sample 16
+sample 17
+sample 18
+sample 19
+random_walk_replace for 20 samples DONE, elapsed : 123.024013845

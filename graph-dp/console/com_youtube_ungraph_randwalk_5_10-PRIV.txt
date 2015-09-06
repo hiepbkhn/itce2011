@@ -1,0 +1,176 @@
+before_file = ../data/com_youtube_ungraph.gr
+after_file = ../randwalk/com_youtube_ungraph_randwalk_5_10.out
+n_samples = 20
+algo_type = 2
+sample_file = ../randwalk/com_youtube_ungraph_randwalk_5_10_sample.
+read bG: DONE, elapsed : 1.93721432034
+aG.#edges = 2987272
+count = 0
+aG.#edges = 2987826
+count = 1
+aG.#edges = 2986145
+count = 2
+aG.#edges = 2984444
+count = 3
+aG.#edges = 2987754
+count = 4
+aG.#edges = 2986040
+count = 5
+aG.#edges = 2986128
+count = 6
+aG.#edges = 2985527
+count = 7
+aG.#edges = 2984824
+count = 8
+aG.#edges = 2984827
+count = 9
+aG.#edges = 2983936
+count = 10
+aG.#edges = 2985718
+count = 11
+aG.#edges = 2986561
+count = 12
+aG.#edges = 2985683
+count = 13
+aG.#edges = 2987103
+count = 14
+aG.#edges = 2985010
+count = 15
+aG.#edges = 2987449
+count = 16
+aG.#edges = 2986124
+count = 17
+aG.#edges = 2984973
+count = 18
+aG.#edges = 2985989
+count = 19
+compute score_H1, score_H2: DONE, elapsed : 935.463687176
+score_H1 = 24.6274342081
+score_H2 = 8.37126686819
+elapsed : 958.763419058
+compare sample 0  DONE
+compare sample 1  DONE
+compare sample 2  DONE
+compare sample 3  DONE
+compare sample 4  DONE
+compare sample 5  DONE
+compare sample 6  DONE
+compare sample 7  DONE
+compare sample 8  DONE
+compare sample 9  DONE
+compare sample 10  DONE
+compare sample 11  DONE
+compare sample 12  DONE
+compare sample 13  DONE
+compare sample 14  DONE
+compare sample 15  DONE
+compare sample 16  DONE
+compare sample 17  DONE
+compare sample 18  DONE
+compare sample 19  DONE
+[2467569, 2467130, 2468390, 2468557, 2468026, 2467627, 2469354, 2468086, 2468084, 2467421, 2469090, 2467337, 2468199, 2468226, 2468862, 2469057, 2467200, 2467640, 2468426, 2467091]
+[2467217, 2467332, 2466911, 2465377, 2468156, 2466043, 2467858, 2465989, 2465284, 2464624, 2465402, 2465431, 2467136, 2466285, 2468341, 2466443, 2467025, 2466140, 2465775, 2465456]
+compare_edges_diff_from_file: DONE, elapsed : 161.724261738
+read bG - DONE
+read sample 0  DONE
+max_deg_G2 = 25826
+check X...
+check Y...
+len(ent) = 25827
+read sample 1  DONE
+max_deg_G2 = 25915
+check X...
+check Y...
+len(ent) = 25916
+read sample 2  DONE
+max_deg_G2 = 26089
+check X...
+check Y...
+len(ent) = 26090
+read sample 3  DONE
+max_deg_G2 = 25896
+check X...
+check Y...
+len(ent) = 25897
+read sample 4  DONE
+max_deg_G2 = 26035
+check X...
+check Y...
+len(ent) = 26036
+read sample 5  DONE
+max_deg_G2 = 25941
+check X...
+check Y...
+len(ent) = 25942
+read sample 6  DONE
+max_deg_G2 = 26111
+check X...
+check Y...
+len(ent) = 26112
+read sample 7  DONE
+max_deg_G2 = 26023
+check X...
+check Y...
+len(ent) = 26024
+read sample 8  DONE
+max_deg_G2 = 25924
+check X...
+check Y...
+len(ent) = 25925
+read sample 9  DONE
+max_deg_G2 = 26129
+check X...
+check Y...
+len(ent) = 26130
+read sample 10  DONE
+max_deg_G2 = 25911
+check X...
+check Y...
+len(ent) = 25912
+read sample 11  DONE
+max_deg_G2 = 26017
+check X...
+check Y...
+len(ent) = 26018
+read sample 12  DONE
+max_deg_G2 = 26310
+check X...
+check Y...
+len(ent) = 26311
+read sample 13  DONE
+max_deg_G2 = 26187
+check X...
+check Y...
+len(ent) = 26188
+read sample 14  DONE
+max_deg_G2 = 25912
+check X...
+check Y...
+len(ent) = 25913
+read sample 15  DONE
+max_deg_G2 = 25873
+check X...
+check Y...
+len(ent) = 25874
+read sample 16  DONE
+max_deg_G2 = 26148
+check X...
+check Y...
+len(ent) = 26149
+read sample 17  DONE
+max_deg_G2 = 26006
+check X...
+check Y...
+len(ent) = 26007
+read sample 18  DONE
+max_deg_G2 = 26046
+check X...
+check Y...
+len(ent) = 26047
+read sample 19  DONE
+max_deg_G2 = 26074
+check X...
+check Y...
+len(ent) = 26075
+eps_arr = [0.0030410436253733844, 0.00408083602816132, 0.005980183101445956]
+elapsed : 3524.97918474

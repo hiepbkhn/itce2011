@@ -1,0 +1,371 @@
+
+MOSEK Version 7.0.0.111 (Build date: 2014-3-31 22:24:02)
+Copyright (c) 1998-2014 MOSEK ApS, Denmark. WWW: http://mosek.com
+
+Open file '../lp/com_dblp_ungraph_600000_nb_only_org.mps'
+Using 'COST' as objective vector
+Read 1000002 number of A nonzeros in 0.69 seconds.
+Read 2000001 number of A nonzeros in 1.23 seconds.
+Read 3000000 number of A nonzeros in 1.61 seconds.
+Read 4000000 number of A nonzeros in 2.54 seconds.
+Read 4349598 number of A nonzeros in 2.79 seconds.
+Using 'RHS1' as rhs vector
+Using 'BND1' as bound vector
+
+Read summary
+  Type             : LO (linear optimization problem)
+  Objective sense  : min
+  Constraints      : 317080      
+  Scalar variables : 1649866     
+  Matrix variables : 0           
+  Time             : 4.1     
+
+Computer
+  Platform               : Windows/64-X86  
+  Cores                  : 4               
+
+Problem
+  Name                   : TESTPROB        
+  Objective sense        : min             
+  Type                   : LO (linear optimization problem)
+  Constraints            : 317080          
+  Cones                  : 0               
+  Scalar variables       : 1649866         
+  Matrix variables       : 0               
+  Integer variables      : 0               
+
+Optimizer started.
+Interior-point optimizer started.
+Presolve started.
+Linear dependency checker started.
+Linear dependency checker terminated.
+Eliminator started.
+Total number of eliminations : 5234
+Eliminator terminated.
+Eliminator started.
+Total number of eliminations : 5422
+Eliminator terminated.
+Eliminator started.
+Total number of eliminations : 5447
+Eliminator terminated.
+Eliminator - tries                  : 3                 time                   : 0.00            
+Eliminator - elim's                 : 5447            
+Lin. dep.  - tries                  : 1                 time                   : 0.33            
+Lin. dep.  - number                 : 0               
+Presolve terminated. Time: 14.87   
+GP based matrix reordering started.
+GP based matrix reordering terminated.
+Optimizer  - threads                : 4               
+Optimizer  - solved problem         : the primal      
+Optimizer  - Constraints            : 238288
+Optimizer  - Cones                  : 0
+Optimizer  - Scalar variables       : 1450345           conic                  : 0               
+Optimizer  - Semi-definite variables: 0                 scalarized             : 0               
+Factor     - setup time             : 83.31             dense det. time        : 0.00            
+Factor     - ML order time          : 4.73              GP order time          : 44.91           
+Factor     - nonzeros before factor : 1.67e+006         after factor           : 5.93e+008       
+Factor     - dense dim.             : 0                 flops                  : 1.01e+013       
+Factor     - GP saved nzs           : 8.82e+007         GP saved flops         : 5.86e+012       
+ITE PFEAS    DFEAS    GFEAS    PRSTATUS   POBJ              DOBJ              MU       TIME  
+0   1.3e+002 3.2e+000 2.4e+005 1.00e+000  8.815908040e+005  3.409385000e+005  1.0e+000 99.40 
+1   1.1e+002 3.9e+000 4.4e+003 0.00e+000  6.663951402e+005  6.648854638e+005  3.6e+000 230.65
+2   8.2e+000 2.8e-001 3.1e+002 8.06e-001  5.983940827e+005  5.982742721e+005  2.6e-001 370.36
+3   5.0e+000 1.7e-001 1.9e+002 9.92e-001  5.956546698e+005  5.955818731e+005  1.6e-001 502.57
+4   5.5e-001 1.9e-002 2.1e+001 9.97e-001  5.919362102e+005  5.919281248e+005  1.7e-002 640.65
+5   8.6e-002 2.9e-003 3.3e+000 1.00e+000  5.915183706e+005  5.915171155e+005  2.7e-003 778.52
+6   6.1e-003 2.1e-004 2.4e-001 1.00e+000  5.914404620e+005  5.914403722e+005  1.9e-004 908.08
+7   1.3e-006 4.5e-008 5.0e-005 1.00e+000  5.914345013e+005  5.914345012e+005  4.1e-008 1046.58
+Basis identification started.
+Primal basis identification phase started.
+ITER      TIME
+2500      0.23    
+5000      0.25    
+7500      0.25    
+10000     0.27    
+12500     0.30    
+15000     0.31    
+17500     0.33    
+20000     0.34    
+22500     0.38    
+25000     0.39    
+27500     0.42    
+30000     0.45    
+32500     0.48    
+35000     0.52    
+37500     0.55    
+40000     0.58    
+42500     0.61    
+45000     0.66    
+47500     0.70    
+50000     0.73    
+52500     0.80    
+55000     0.83    
+57500     0.89    
+60000     0.95    
+62500     1.01    
+65000     1.11    
+67500     1.17    
+70000     1.25    
+72500     1.33    
+75000     1.44    
+77500     1.51    
+80000     1.62    
+82500     1.69    
+85000     1.79    
+87500     1.87    
+90000     1.98    
+92500     2.06    
+95000     2.17    
+97500     2.26    
+100000    2.37    
+102500    2.46    
+105000    2.56    
+107500    2.64    
+110000    2.75    
+112500    2.81    
+115000    2.93    
+117500    3.01    
+120000    3.12    
+122500    3.20    
+125000    3.31    
+127500    3.38    
+130000    3.51    
+132500    3.59    
+135000    3.71    
+137500    3.81    
+140000    3.93    
+142500    4.01    
+145000    4.13    
+147500    4.23    
+150000    4.35    
+152500    4.45    
+155000    4.57    
+157500    4.65    
+160000    4.79    
+162500    4.88    
+165000    4.98    
+167500    5.10    
+170000    5.20    
+172500    5.34    
+175000    5.43    
+177500    5.57    
+180000    5.68    
+182500    5.82    
+185000    5.91    
+187500    6.05    
+190000    6.16    
+192500    6.30    
+195000    6.41    
+197500    6.55    
+200000    6.66    
+202500    6.80    
+205000    6.91    
+207500    7.07    
+210000    7.16    
+212500    7.32    
+215000    7.43    
+217500    7.58    
+220000    7.69    
+222500    7.85    
+225000    7.97    
+227500    8.13    
+230000    8.24    
+232500    8.41    
+235000    8.52    
+237500    8.69    
+240000    8.80    
+242500    8.97    
+245000    9.08    
+247500    9.20    
+250000    9.38    
+252500    9.48    
+255000    9.67    
+257500    9.78    
+260000    9.95    
+262500    10.08   
+265000    10.27   
+267500    10.39   
+270000    10.56   
+272500    10.69   
+275000    10.86   
+277500    10.98   
+280000    11.17   
+282500    11.30   
+285000    11.48   
+287500    11.61   
+290000    11.79   
+292500    11.92   
+295000    12.11   
+297500    12.25   
+300000    12.43   
+302500    12.57   
+305000    12.76   
+307500    12.90   
+310000    13.10   
+312500    13.23   
+315000    13.43   
+317500    13.57   
+320000    13.76   
+322500    13.90   
+325000    14.09   
+327500    14.23   
+330000    14.43   
+332500    14.57   
+335000    14.77   
+337500    14.91   
+340000    15.12   
+342500    15.26   
+345000    15.46   
+347500    15.60   
+350000    15.82   
+352500    15.96   
+355000    16.10   
+357500    16.30   
+360000    16.46   
+362500    16.66   
+365000    16.82   
+367500    17.02   
+370000    17.18   
+372500    17.39   
+375000    17.54   
+377500    17.77   
+380000    17.93   
+382500    18.13   
+385000    18.28   
+387500    18.50   
+390000    18.64   
+392500    18.86   
+395000    19.02   
+397500    19.23   
+400000    19.39   
+402500    19.63   
+405000    19.78   
+407500    20.00   
+410000    20.16   
+412500    20.37   
+415000    20.53   
+417500    20.76   
+420000    20.92   
+422500    21.17   
+425000    21.32   
+427500    21.56   
+430000    21.72   
+432500    21.95   
+435000    22.12   
+437500    22.36   
+440000    22.51   
+442500    22.76   
+445000    22.92   
+447500    23.17   
+450000    23.34   
+452500    23.57   
+455000    23.74   
+457500    23.98   
+460000    24.15   
+462500    24.31   
+465000    24.57   
+467500    24.73   
+470000    24.98   
+472500    25.15   
+475000    25.40   
+477500    25.57   
+480000    25.83   
+482500    26.01   
+485000    26.25   
+487500    26.43   
+490000    26.69   
+492500    26.86   
+495000    27.13   
+497500    27.30   
+500000    27.57   
+502500    27.74   
+505000    28.00   
+507500    28.17   
+510000    28.44   
+512500    28.63   
+515000    28.89   
+517500    29.06   
+520000    29.34   
+522500    29.53   
+525000    29.80   
+527500    29.98   
+530000    30.25   
+532500    30.44   
+535000    30.62   
+537500    30.90   
+540000    31.09   
+542500    31.37   
+545000    31.56   
+547500    31.84   
+550000    32.03   
+552500    32.31   
+555000    32.49   
+557500    32.79   
+560000    32.98   
+562500    33.26   
+565000    33.46   
+567500    33.76   
+568929    33.96   
+Primal basis identification phase terminated. Time: 33.96
+Dual basis identification phase started.
+ITER      TIME
+2500      0.30    
+5000      0.36    
+7500      0.42    
+8360      0.69    
+Dual basis identification phase terminated. Time: 0.69
+Basis identification terminated. Time: 37.25
+Interior-point optimizer terminated. Time: 1084.92. 
+
+Optimizer terminated. Time: 1084.97 
+
+Interior-point solution summary
+  Problem status  : PRIMAL_AND_DUAL_FEASIBLE
+  Solution status : OPTIMAL
+  Primal.  obj: 5.9143450126e+005   Viol.  con: 2e-007   var: 4e-008 
+  Dual.    obj: 5.9143450111e+005   Viol.  con: 0e+000   var: 1e-008 
+
+Basic solution summary
+  Problem status  : PRIMAL_AND_DUAL_FEASIBLE
+  Solution status : OPTIMAL
+  Primal.  obj: 5.9143450000e+005   Viol.  con: 6e-014   var: 1e-006 
+  Dual.    obj: 5.9143450000e+005   Viol.  con: 0e+000   var: 1e-015 
+
+Optimizer summary
+  Optimizer                 -                        time: 1084.97 
+    Interior-point          - iterations : 7         time: 1084.92 
+      Basis identification  -                        time: 37.25   
+        Primal              - iterations : 568929    time: 33.96   
+        Dual                - iterations : 8360      time: 0.69    
+        Clean primal        - iterations : 0         time: 0.00    
+        Clean dual          - iterations : 0         time: 0.00    
+        Clean primal-dual   - iterations : 0         time: 0.00    
+    Simplex                 -                        time: 0.00    
+      Primal simplex        - iterations : 0         time: 0.00    
+      Dual simplex          - iterations : 0         time: 0.00    
+      Primal-dual simplex   - iterations : 0         time: 0.00    
+    Mixed integer           - relaxations: 0         time: 0.00    
+
+Open file '../lp/com_dblp_ungraph_600000_nb_only_org.sol'
+Start writing.
+done writing. Time: 6.27
+
+Open file '../lp/com_dblp_ungraph_600000_nb_only_org.bas'
+Start writing.
+done writing. Time: 5.30
+
+Return code - 0  [MSK_RES_OK]
+in_file = com_dblp_ungraph.gr
+n_new_edges = 600000
+random_or_nearby = 1
+weight_type = 3
+solver = 1
+read graph G - DONE
+n_old = 1049866  n_new = 600000
+n_nodes = 317080
+n_vars = 1649866
+call MOSEK: DONE, elapsed : 1100.91794794
+call linear_opt - DONE, elapsed 1138.68880561
+bas_file = ../lp/com_dblp_ungraph_600000_nb_only_org.bas
+write out_file: DONE, elapsed : 14.2216514918
+call parse_bas_file - DONE, elapsed : 23.6976826252

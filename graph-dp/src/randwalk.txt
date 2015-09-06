@@ -1,0 +1,299 @@
+file_name = com_dblp_ungraph
+#nodes : 317080
+#edges : 1049866
+#self-loops : 0
+#components : 1
+min-deg = 1
+max-deg = 343
+TEST random_walk_transform
+t = 2
+M = 10
+num_failed = 122044
+#nodes : 304074
+#edges : 990896
+#self-loops : 0
+
+-------------------
+file_name = com_dblp_ungraph
+#nodes : 317080
+#edges : 1049866
+#self-loops : 0
+#components : 1
+min-deg = 1
+max-deg = 343
+TEST random_walk_transform_multigraph
+t = 2
+M = 10
+alpha = 2
+num_failed = 119508
+#nodes : 298905
+#edges : 991166
+#self-loops : 0
+
+
+===================================
+file_name = com_dblp_ungraph
+#nodes : 317080
+#edges : 1049866
+#self-loops : 0
+#components : 1
+min-deg = 1
+max-deg = 343
+TEST random_walk_transform
+t = 2
+M = 100
+num_failed = 112178
+#nodes : 304174
+#edges : 996265
+#self-loops : 0
+
+===================================
+file_name = com_dblp_ungraph
+#nodes : 317080
+#edges : 1049866
+#self-loops : 0
+#components : 1
+min-deg = 1
+max-deg = 343
+TEST random_walk_transform
+t = 3
+M = 100
+num_failed = 619
+#nodes : 305878
+#edges : 1048900
+#self-loops : 0
+
+===================================
+file_name = com_dblp_ungraph
+#nodes : 317080
+#edges : 1049866
+#self-loops : 0
+#components : 1
+min-deg = 1
+max-deg = 343
+TEST random_walk_transform_multigraph
+t = 3
+M = 10
+num_failed = 4693
+#nodes : 305742
+#edges : 1046514
+#self-loops : 0
+
+-------------------
+file_name = com_dblp_ungraph
+#nodes : 317080
+#edges : 1049866
+#self-loops : 0
+#components : 1
+min-deg = 1
+max-deg = 343
+TEST random_walk_transform_multigraph
+t = 3
+M = 10
+alpha = 0.5
+num_failed = 4379
+#nodes : 300394
+#edges : 1047370
+#self-loops : 0
+
+
+===================================
+file_name = com_dblp_ungraph
+#nodes : 317080
+#edges : 1049866
+#self-loops : 0
+#components : 1
+min-deg = 1
+max-deg = 343
+TEST random_walk_transform_multigraph
+t = 5
+M = 10
+num_failed = 1244
+#nodes : 304941
+#edges : 1049220
+#self-loops : 0
+
+-------------------
+file_name = com_dblp_ungraph
+#nodes : 317080
+#edges : 1049866
+#self-loops : 0
+#components : 1
+min-deg = 1
+max-deg = 343
+TEST random_walk_transform_multigraph
+t = 5
+M = 10
+alpha = 0.5
+num_failed = 1193
+#nodes : 298908
+#edges : 1049639
+#self-loops : 0
+
+
+===================================
+file_name = com_dblp_ungraph
+#nodes : 317080
+#edges : 1049866
+#self-loops : 0
+#components : 1
+min-deg = 1
+max-deg = 343
+TEST random_walk_transform_multigraph
+t = 10
+M = 10
+num_failed = 327
+#nodes : 304218
+#edges : 1050288
+#self-loops : 0
+
+-------------------
+file_name = com_dblp_ungraph
+#nodes : 317080
+#edges : 1049866
+#self-loops : 0
+#components : 1
+min-deg = 1
+max-deg = 343
+TEST random_walk_transform_multigraph
+t = 10
+M = 10
+alpha = 0.5
+num_failed = 315
+#nodes : 297613
+#edges : 1049655
+#self-loops : 0
+
+
+=================================== AMAZON
+file_name = com_amazon_ungraph
+#nodes : 334863
+#edges : 925872
+#self-loops : 0
+#components : 1
+min-deg = 1
+max-deg = 549
+TEST random_walk_transform_multigraph
+t = 2
+M = 10
+num_failed = 130424
+#nodes : 326736
+#edges : 862557
+#self-loops : 0
+
+===================================
+file_name = com_amazon_ungraph
+#nodes : 334863
+#edges : 925872
+#self-loops : 0
+#components : 1
+min-deg = 1
+max-deg = 549
+TEST random_walk_transform_multigraph
+t = 3
+M = 10
+num_failed = 5248
+#nodes : 328270
+#edges : 923997
+#self-loops : 0
+
+
+===================================
+file_name = com_amazon_ungraph
+#nodes : 334863
+#edges : 925872
+#self-loops : 0
+#components : 1
+min-deg = 1
+max-deg = 549
+TEST random_walk_transform_multigraph
+t = 5
+M = 10
+num_failed = 1407
+#nodes : 327693
+#edges : 925144
+#self-loops : 0
+
+===================================
+file_name = com_amazon_ungraph
+#nodes : 334863
+#edges : 925872
+#self-loops : 0
+#components : 1
+min-deg = 1
+max-deg = 549
+TEST random_walk_transform_multigraph
+t = 10
+M = 10
+num_failed = 408
+#nodes : 327550
+#edges : 926081
+#self-loops : 0
+
+=================================== YOUTUBE
+file_name = com_youtube_ungraph
+#nodes : 1134890
+#edges : 2987624
+#self-loops : 0
+#components : 1
+min-deg = 1
+max-deg = 28754
+TEST random_walk_transform_multigraph
+t = 2
+M = 10
+num_failed = 810552
+#nodes : 944339
+#edges : 2584923
+#self-loops : 0
+
+
+===================================
+file_name = com_youtube_ungraph
+#nodes : 1134890
+#edges : 2987624
+#self-loops : 0
+#components : 1
+min-deg = 1
+max-deg = 28754
+TEST random_walk_transform_multigraph
+t = 3
+M = 10
+num_failed = 14134
+#nodes : 971588
+#edges : 2981722
+#self-loops : 0
+
+===================================
+file_name = com_youtube_ungraph
+#nodes : 1134890
+#edges : 2987624
+#self-loops : 0
+#components : 1
+min-deg = 1
+max-deg = 28754
+TEST random_walk_transform_multigraph
+t = 5
+M = 10
+num_failed = 4257
+#nodes : 961950
+#edges : 2986192
+#self-loops : 0
+
+===================================
+file_name = com_youtube_ungraph
+#nodes : 1134890
+#edges : 2987624
+#self-loops : 0
+#components : 1
+min-deg = 1
+max-deg = 28754
+TEST random_walk_transform_multigraph
+t = 10
+M = 10
+num_failed = 7072
+#nodes : 956846
+#edges : 2982909
+#self-loops : 0
+
+
+

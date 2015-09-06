@@ -1,0 +1,53 @@
+file_name = com_youtube_ungraph
+n_samples = 20
+start_id = 0
+t = 3
+M = 10
+p = 0.8
+file_name = com_youtube_ungraph
+#nodes : 1134890
+#edges : 2987624
+#components : 1
+min-deg = 1
+max-deg = 28754
+sample 0
+num_failed = 14374
+sample 1
+num_failed = 14195
+sample 2
+num_failed = 14371
+sample 3
+num_failed = 14286
+sample 4
+num_failed = 14331
+sample 5
+num_failed = 14477
+sample 6
+num_failed = 14317
+sample 7
+num_failed = 14261
+sample 8
+num_failed = 14292
+sample 9
+num_failed = 14285
+sample 10
+num_failed = 14251
+sample 11
+num_failed = 14518
+sample 12
+num_failed = 14385
+sample 13
+num_failed = 14369
+sample 14
+num_failed = 14288
+sample 15
+num_failed = 14447
+sample 16
+num_failed = 14427
+sample 17
+num_failed = 14404
+sample 18
+num_failed = 14579
+sample 19
+num_failed = 14331
+random_walk_transform for 20 samples DONE, elapsed : 699.468207131

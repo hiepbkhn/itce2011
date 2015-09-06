@@ -1,0 +1,13 @@
+data_name = com_dblp_ungraph_cvxopt_200000_20_rw_missing
+n_nodes = 317080
+n_samples = 5
+start_id = 0
+sum_p = 1049865.99998
+read uncertain graph G - DONE, elapsed 3.58541573846
+sample 0
+sample 1
+sample 2
+sample 3
+sample 4
+generate_samples_and_save - DONE, elapsed 11.0827026207
+DONE

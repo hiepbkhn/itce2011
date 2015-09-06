@@ -1,0 +1,28 @@
+filename = ../randwalk/com_dblp_ungraph_cvxopt_200000_20_rw_missing.out
+n_samples = 1
+sample i = 0
+read sample - DONE, elapsed : 0.695479252596
+n_nodes = 317080
+s_DD - degree distribution
+[4422, 42051, 56518, 47955, 34824, 25432, 18732, 13737, 10719, 8417, 6673]
+s_NE, s_AD, s_MD, s_DV - DONE, elapsed : 0.072086748935
+s_NE = 1049919.0
+s_AD = 6.62242336319
+s_MD = 340.0
+s_DV = 100.897457329
+s_CC = 0.0
+s_APD = 0.0
+s_EDiam = 0.0
+s_CL = 0.0
+s_Diam = 0.0
+----
+s_APD_i = 0.0
+s_EDiam_i = 0.0
+s_CL_i = 0.0
+all_statistics_from_file - Elapsed  0.800366974532
+Calculating best minimal value for power law fit
+Less than 2 unique data values left after xmin and xmax options! Cannot fit. Returning nans.
+Not enough data. Returning nan
+Not enough data. Returning nan
+s_PL = nan
+pl_xmin = nan

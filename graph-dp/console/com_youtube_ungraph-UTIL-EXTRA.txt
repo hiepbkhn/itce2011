@@ -1,0 +1,15 @@
+filename = ../data/com_youtube_ungraph.gr
+n_samples = 20
+eps = 0.01
+#nodes = 1134890
+#edges = 2987624
+min-deg = 1
+max-deg = 28754
+#components = 1
+cc_size = [1134890]
+Read graph - Elapsed  2.72989760058
+m_time = 67
+dd = 0.0098460822906
+m_time = 67
+assortativity = -0.0369099083953
+mixing_time_and_assortativity_one - Elapsed  276.236800702

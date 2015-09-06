@@ -1,0 +1,6 @@
+before_file = ../data/com_dblp_ungraph.gr
+after_file = ../randwalk/com_dblp_ungraph_randwalk_replace3_0.5_0.5.out
+n_samples = 20
+algo_type = 2
+sample_file = ../randwalk/com_dblp_ungraph_randwalk_replace3_0.5_0.5_sample.
+read bG: DONE, elapsed : 6.70999609384

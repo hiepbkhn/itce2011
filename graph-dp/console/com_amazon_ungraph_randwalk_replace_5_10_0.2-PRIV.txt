@@ -1,0 +1,56 @@
+before_file = ../data/com_amazon_ungraph.gr
+after_file = ../randwalk/com_amazon_ungraph_randwalk_replace_5_10_0.2.out
+n_samples = 5
+algo_type = 2
+sample_file = ../randwalk/com_amazon_ungraph_randwalk_replace_5_10_0.2_sample.
+read bG: DONE, elapsed : 0.564530774465
+aG.#edges = 925445
+count = 0
+aG.#edges = 925303
+count = 1
+aG.#edges = 926059
+count = 2
+aG.#edges = 925433
+count = 3
+aG.#edges = 925790
+count = 4
+compute score_H1, score_H2: DONE, elapsed : 74.8340502681
+score_H1 = 15.076177741
+score_H2 = 123.588180902
+elapsed : 82.9392543395
+compare sample 0  DONE
+compare sample 1  DONE
+compare sample 2  DONE
+compare sample 3  DONE
+compare sample 4  DONE
+[173785, 173400, 173718, 173481, 173982]
+[125932, 125540, 126035, 125667, 126364]
+compare_edges_diff_from_file: DONE, elapsed : 12.8277140737
+read bG - DONE
+read sample 0  DONE
+max_deg_G2 = 552
+check X...
+check Y...
+len(ent) = 553
+read sample 1  DONE
+max_deg_G2 = 545
+check X...
+check Y...
+len(ent) = 546
+read sample 2  DONE
+max_deg_G2 = 552
+check X...
+check Y...
+len(ent) = 553
+read sample 3  DONE
+max_deg_G2 = 545
+check X...
+check Y...
+len(ent) = 546
+read sample 4  DONE
+max_deg_G2 = 547
+check X...
+check Y...
+len(ent) = 548
+eps_arr = [0.0014244631386567043, 0.0021734261474095377, 0.004113921215541879]
+elapsed : 53.1055433702

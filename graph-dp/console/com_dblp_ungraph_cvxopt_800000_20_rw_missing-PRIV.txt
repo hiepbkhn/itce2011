@@ -1,0 +1,83 @@
+before_file = ../data/com_dblp_ungraph.gr
+after_file = ../out/com_dblp_ungraph_cvxopt_800000_20_rw_missing.out
+n_samples = 20
+algo_type = 0
+sample_file = ../sample/com_dblp_ungraph_cvxopt_800000_20_rw_missing_sample.
+read bG: DONE, elapsed : 0.601714183597
+aG.#edges = 1051263
+count = 0
+aG.#edges = 1050432
+count = 1
+aG.#edges = 1048993
+count = 2
+aG.#edges = 1049649
+count = 3
+aG.#edges = 1049022
+count = 4
+aG.#edges = 1050625
+count = 5
+aG.#edges = 1050418
+count = 6
+aG.#edges = 1048836
+count = 7
+aG.#edges = 1049206
+count = 8
+aG.#edges = 1049854
+count = 9
+aG.#edges = 1049962
+count = 10
+aG.#edges = 1050230
+count = 11
+aG.#edges = 1050863
+count = 12
+aG.#edges = 1050633
+count = 13
+aG.#edges = 1050718
+count = 14
+aG.#edges = 1049947
+count = 15
+aG.#edges = 1049041
+count = 16
+aG.#edges = 1049483
+count = 17
+aG.#edges = 1050509
+count = 18
+aG.#edges = 1050489
+count = 19
+compute score_H1, score_H2: DONE, elapsed : 310.943001418
+score_H1 = 24.9092550179
+score_H2 = 277.311007974
+elapsed : 318.863840344
+compare sample 0  DONE
+compare sample 1  DONE
+compare sample 2  DONE
+compare sample 3  DONE
+compare sample 4  DONE
+compare sample 5  DONE
+compare sample 6  DONE
+compare sample 7  DONE
+compare sample 8  DONE
+compare sample 9  DONE
+compare sample 10  DONE
+compare sample 11  DONE
+compare sample 12  DONE
+compare sample 13  DONE
+compare sample 14  DONE
+compare sample 15  DONE
+compare sample 16  DONE
+compare sample 17  DONE
+compare sample 18  DONE
+compare sample 19  DONE
+[252215, 252530, 253307, 252786, 253154, 252484, 252551, 253195, 252784, 252846, 252773, 252811, 252352, 252329, 252671, 252810, 253809, 252594, 252592, 252278]
+[253612, 253096, 252434, 252569, 252310, 253243, 253103, 252165, 252124, 252834, 252869, 253175, 253349, 253096, 253523, 252891, 252984, 252211, 253235, 252901]
+compare_edges_diff_from_file: DONE, elapsed : 54.151910186
+n_nodes = 0
+read bG - DONE
+sum_p = 1049866.00003
+read aG - DONE
+max_deg_G2 = 403
+check X...
+check Y...
+len(ent) = 404
+eps_arr = [0.00013245868550523527, 0.00018291913712627727, 0.0004825280686262142]
+elapsed : 26.9518120188

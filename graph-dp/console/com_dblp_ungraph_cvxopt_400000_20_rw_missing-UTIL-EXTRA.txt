@@ -1,0 +1,86 @@
+filename = ../out/com_dblp_ungraph_cvxopt_400000_20_rw_missing.out
+n_samples = 20
+eps = 0.02
+sample i = 0
+read sample - DONE, elapsed : 1.44569467814
+m_time = 73
+dd = 0.0202427434692
+sample i = 1
+read sample - DONE, elapsed : 1.29192166906
+m_time = 73
+dd = 0.0202961814272
+sample i = 2
+read sample - DONE, elapsed : 1.03841442394
+m_time = 73
+dd = 0.020012771266
+sample i = 3
+read sample - DONE, elapsed : 0.945734222755
+m_time = 73
+dd = 0.0201168920778
+sample i = 4
+read sample - DONE, elapsed : 1.15308444979
+m_time = 73
+dd = 0.0203479684253
+sample i = 5
+read sample - DONE, elapsed : 1.19253910842
+m_time = 73
+dd = 0.0200264744712
+sample i = 6
+read sample - DONE, elapsed : 1.54386192107
+m_time = 73
+dd = 0.0200416400257
+sample i = 7
+read sample - DONE, elapsed : 1.54405813481
+m_time = 73
+dd = 0.0201832243264
+sample i = 8
+read sample - DONE, elapsed : 1.4143107434
+m_time = 73
+dd = 0.0200652212425
+sample i = 9
+read sample - DONE, elapsed : 1.19637252114
+m_time = 74
+dd = 0.0199800048822
+sample i = 10
+read sample - DONE, elapsed : 1.4447250804
+m_time = 73
+dd = 0.0199988424422
+sample i = 11
+read sample - DONE, elapsed : 1.41036020616
+m_time = 73
+dd = 0.0199792382811
+sample i = 12
+read sample - DONE, elapsed : 2.61828639599
+m_time = 73
+dd = 0.0199630862162
+sample i = 13
+read sample - DONE, elapsed : 1.10810924215
+m_time = 73
+dd = 0.0200996239709
+sample i = 14
+read sample - DONE, elapsed : 1.0795752365
+m_time = 73
+dd = 0.0199570365786
+sample i = 15
+read sample - DONE, elapsed : 1.36375431142
+m_time = 73
+dd = 0.019952962606
+sample i = 16
+read sample - DONE, elapsed : 1.5634359018
+m_time = 73
+dd = 0.01998306403
+sample i = 17
+read sample - DONE, elapsed : 1.42668126497
+m_time = 74
+dd = 0.020131484747
+sample i = 18
+read sample - DONE, elapsed : 1.05541257108
+m_time = 71
+dd = 0.019975651756
+sample i = 19
+read sample - DONE, elapsed : 0.963918406479
+m_time = 73
+dd = 0.0201574217359
+m_time = 73.0
+assortativity = 0.251150607904
+mixing_time_and_assortativity - Elapsed  1646.98842158

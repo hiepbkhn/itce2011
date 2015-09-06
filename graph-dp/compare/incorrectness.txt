@@ -1,0 +1,23 @@
+
+er_1000_001.gr
+
+--> er_1000_001_cvxopt_rep.out
+sum_re_prob H1 = 13.5705000184
+sum_re_prob H2 (open) = 50.8333333333
+elapsed : 0.677395983061
+
+--> out/er_1000_001_entropy_post_01_2_001.out
+sum_re_prob H1 = 11.6740921987
+sum_re_prob H2 (open) = 132.5
+elapsed : 0.58240388379
+
+--> out/er_1000_001_entropy_post_05_2_001.out
+sum_re_prob H1 = 4.19741720686
+sum_re_prob H2 (open) = 1.0
+elapsed : 0.537041117823
+
+--> out/er_1000_001_entropy_post_05_2_001.out
+sum_re_prob H1 = 2.50689963791
+sum_re_prob H2 (open) = 0.0
+elapsed : 0.568980693834
+

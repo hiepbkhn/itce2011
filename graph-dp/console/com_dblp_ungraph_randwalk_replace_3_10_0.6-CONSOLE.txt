@@ -1,0 +1,18 @@
+file_name = com_dblp_ungraph
+n_samples = 5
+start_id = 0
+t = 3
+M = 10
+p = 0.6
+file_name = com_dblp_ungraph
+#nodes : 317080
+#edges : 1049866
+#components : 1
+min-deg = 1
+max-deg = 343
+sample 0
+sample 1
+sample 2
+sample 3
+sample 4
+random_walk_replace for 5 samples DONE, elapsed : 18.45134986

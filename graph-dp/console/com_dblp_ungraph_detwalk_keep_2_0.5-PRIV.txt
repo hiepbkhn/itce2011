@@ -1,0 +1,41 @@
+before_file = ../data/com_dblp_ungraph.gr
+after_file = ../randwalk/com_dblp_ungraph_detwalk_keep_2_0.5.out
+n_samples = 5
+algo_type = 2
+sample_file = ../randwalk/com_dblp_ungraph_detwalk_keep_2_0.5_sample.
+read bG: DONE, elapsed : 6.93422040055
+count = 0
+count = 1
+count = 2
+count = 3
+count = 4
+compute score_H1, score_H2: DONE, elapsed : 134.114124552
+score_H1 = 13.5746789667
+score_H2 = 5.22899502438
+elapsed : 152.550667519
+compare sample 0  DONE
+compare sample 1  DONE
+compare sample 2  DONE
+compare sample 3  DONE
+compare sample 4  DONE
+[725185, 725089, 724789, 724753, 724750]
+[724474, 725167, 724081, 724596, 723770]
+compare_edges_diff_from_file: DONE, elapsed : 82.1207792161
+read bG - DONE
+read sample 0  DONE
+max_deg = 589
+len(ent) = 590
+read sample 1  DONE
+max_deg = 614
+len(ent) = 615
+read sample 2  DONE
+max_deg = 622
+len(ent) = 623
+read sample 3  DONE
+max_deg = 588
+len(ent) = 589
+read sample 4  DONE
+max_deg = 632
+len(ent) = 633
+eps_arr = [0.0007032925444682731, 0.0013933392203860225, 0.0026283587738110256]
+elapsed : 93.531401443

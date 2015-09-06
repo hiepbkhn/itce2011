@@ -1,0 +1,2172 @@
+
+MOSEK Version 7.0.0.111 (Build date: 2014-3-31 22:24:02)
+Copyright (c) 1998-2014 MOSEK ApS, Denmark. WWW: http://mosek.com
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.0.mps'
+Using 'COST' as objective vector
+Read 234806 number of A nonzeros in 0.14 seconds.
+Using 'RHS1' as rhs vector
+Using 'BND1' as bound vector
+
+Read summary
+  Type             : QO (quadratic optimization problem)
+  Objective sense  : min
+  Constraints      : 17025       
+  Scalar variables : 117403      
+  Matrix variables : 0           
+  Time             : 0.3     
+
+Computer
+  Platform               : Windows/64-X86  
+  Cores                  : 4               
+
+Problem
+  Name                   : TESTPROB        
+  Objective sense        : min             
+  Type                   : QO (quadratic optimization problem)
+  Constraints            : 17025           
+  Cones                  : 0               
+  Scalar variables       : 117403          
+  Matrix variables       : 0               
+  Integer variables      : 0               
+
+Optimizer started.
+Interior-point optimizer started.
+Presolve started.
+Linear dependency checker started.
+Linear dependency checker terminated.
+Eliminator - tries                  : 0                 time                   : 0.00            
+Eliminator - elim's                 : 0               
+Lin. dep.  - tries                  : 1                 time                   : 0.01            
+Lin. dep.  - number                 : 0               
+Presolve terminated. Time: 0.11    
+Matrix reordering started.
+Local matrix reordering started.
+Local matrix reordering terminated.
+Matrix reordering terminated.
+Optimizer  - threads                : 4               
+Optimizer  - solved problem         : the primal      
+Optimizer  - Constraints            : 16094
+Optimizer  - Cones                  : 0
+Optimizer  - Scalar variables       : 115133            conic                  : 0               
+Optimizer  - Semi-definite variables: 0                 scalarized             : 0               
+Factor     - setup time             : 1.36              dense det. time        : 0.00            
+Factor     - ML order time          : 0.00              GP order time          : 1.12            
+Factor     - nonzeros before factor : 1.31e+005         after factor           : 5.44e+006       
+Factor     - dense dim.             : 0                 flops                  : 0.00e+000       
+Factor     - GP saved nzs           : 0                 GP saved flops         : 0.00e+000       
+ITE PFEAS    DFEAS    GFEAS    PRSTATUS   POBJ              DOBJ              MU       TIME  
+0   1.6e+003 3.3e+002 1.1e+005 0.00e+000  5.676950000e+004  -5.460350000e+004 1.0e+000 1.53  
+1   4.2e+002 8.8e+001 5.5e+004 9.20e-001  1.960484843e+004  -3.686157366e+004 3.7e-001 2.62  
+2   1.0e+002 2.2e+001 1.6e+004 1.38e+000  1.355421410e+004  -7.975506986e+002 1.1e-001 3.76  
+3   1.1e+001 2.4e+000 2.0e+003 1.15e+000  1.242896653e+004  1.081796197e+004  1.3e-002 4.82  
+4   2.2e+000 4.6e-001 3.9e+002 1.02e+000  1.231764457e+004  1.200237583e+004  2.5e-003 5.90  
+5   2.4e-001 5.1e-002 4.6e+001 1.00e+000  1.229379443e+004  1.225629541e+004  2.9e-004 6.94  
+6   1.5e-002 3.1e-003 3.2e+000 1.00e+000  1.229072258e+004  1.228810957e+004  2.0e-005 8.08  
+7   3.0e-004 6.3e-005 9.7e-002 1.00e+000  1.229048371e+004  1.229040459e+004  5.8e-007 9.14  
+8   3.1e-006 6.5e-007 3.1e-003 1.00e+000  1.229047505e+004  1.229047253e+004  1.8e-008 10.17 
+9   2.0e-007 4.3e-008 3.2e-004 1.00e+000  1.229047473e+004  1.229047446e+004  1.8e-009 11.25 
+10  2.4e-008 5.1e-009 4.6e-005 1.00e+000  1.229047469e+004  1.229047466e+004  2.6e-010 12.26 
+Interior-point optimizer terminated. Time: 12.29. 
+
+Optimizer terminated. Time: 12.32   
+
+Interior-point solution summary
+  Problem status  : PRIMAL_AND_DUAL_FEASIBLE
+  Solution status : OPTIMAL
+  Primal.  obj: 1.2290474694e+004   Viol.  con: 2e-009   var: 0e+000 
+  Dual.    obj: 1.2290474656e+004   Viol.  con: 0e+000   var: 1e-011 
+
+Optimizer summary
+  Optimizer                 -                        time: 12.32   
+    Interior-point          - iterations : 10        time: 12.29   
+      Basis identification  -                        time: 0.00    
+        Primal              - iterations : 0         time: 0.00    
+        Dual                - iterations : 0         time: 0.00    
+        Clean primal        - iterations : 0         time: 0.00    
+        Clean dual          - iterations : 0         time: 0.00    
+        Clean primal-dual   - iterations : 0         time: 0.00    
+    Simplex                 -                        time: 0.00    
+      Primal simplex        - iterations : 0         time: 0.00    
+      Dual simplex          - iterations : 0         time: 0.00    
+      Primal-dual simplex   - iterations : 0         time: 0.00    
+    Mixed integer           - relaxations: 0         time: 0.00    
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.0.sol'
+Start writing.
+done writing. Time: 0.50
+
+Return code - 0  [MSK_RES_OK]
+
+MOSEK Version 7.0.0.111 (Build date: 2014-3-31 22:24:02)
+Copyright (c) 1998-2014 MOSEK ApS, Denmark. WWW: http://mosek.com
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.1.mps'
+Using 'COST' as objective vector
+Read 227174 number of A nonzeros in 0.17 seconds.
+Using 'RHS1' as rhs vector
+Using 'BND1' as bound vector
+
+Read summary
+  Type             : QO (quadratic optimization problem)
+  Objective sense  : min
+  Constraints      : 16350       
+  Scalar variables : 113587      
+  Matrix variables : 0           
+  Time             : 0.2     
+
+Computer
+  Platform               : Windows/64-X86  
+  Cores                  : 4               
+
+Problem
+  Name                   : TESTPROB        
+  Objective sense        : min             
+  Type                   : QO (quadratic optimization problem)
+  Constraints            : 16350           
+  Cones                  : 0               
+  Scalar variables       : 113587          
+  Matrix variables       : 0               
+  Integer variables      : 0               
+
+Optimizer started.
+Interior-point optimizer started.
+Presolve started.
+Linear dependency checker started.
+Linear dependency checker terminated.
+Eliminator - tries                  : 0                 time                   : 0.00            
+Eliminator - elim's                 : 0               
+Lin. dep.  - tries                  : 1                 time                   : 0.01            
+Lin. dep.  - number                 : 0               
+Presolve terminated. Time: 0.11    
+Matrix reordering started.
+Local matrix reordering started.
+Local matrix reordering terminated.
+Matrix reordering terminated.
+Optimizer  - threads                : 4               
+Optimizer  - solved problem         : the primal      
+Optimizer  - Constraints            : 15676
+Optimizer  - Cones                  : 0
+Optimizer  - Scalar variables       : 112137            conic                  : 0               
+Optimizer  - Semi-definite variables: 0                 scalarized             : 0               
+Factor     - setup time             : 0.80              dense det. time        : 0.00            
+Factor     - ML order time          : 0.00              GP order time          : 0.66            
+Factor     - nonzeros before factor : 1.28e+005         after factor           : 1.47e+006       
+Factor     - dense dim.             : 0                 flops                  : 0.00e+000       
+Factor     - GP saved nzs           : 0                 GP saved flops         : 0.00e+000       
+ITE PFEAS    DFEAS    GFEAS    PRSTATUS   POBJ              DOBJ              MU       TIME  
+0   1.5e+003 3.3e+002 1.1e+005 0.00e+000  5.557450000e+004  -5.418850000e+004 1.0e+000 0.94  
+1   3.5e+002 7.7e+001 5.2e+004 8.71e-001  1.745949233e+004  -3.786653976e+004 3.5e-001 1.04  
+2   7.3e+001 1.6e+001 1.3e+004 1.37e+000  1.192207183e+004  -7.618630765e+001 8.5e-002 1.17  
+3   7.9e+000 1.7e+000 1.5e+003 1.13e+000  1.107779144e+004  9.775530032e+003  9.8e-003 1.29  
+4   1.3e+000 2.9e-001 2.8e+002 1.02e+000  1.098605797e+004  1.075395168e+004  1.7e-003 1.42  
+5   1.2e-001 2.7e-002 2.9e+001 1.00e+000  1.096784788e+004  1.094367574e+004  1.8e-004 1.53  
+6   6.1e-003 1.3e-003 1.8e+000 1.00e+000  1.096570281e+004  1.096419650e+004  1.1e-005 1.64  
+7   1.4e-004 3.1e-005 7.1e-002 1.00e+000  1.096554648e+004  1.096548667e+004  4.1e-007 1.75  
+8   1.1e-006 2.5e-007 2.3e-003 1.00e+000  1.096553921e+004  1.096553730e+004  1.3e-008 1.87  
+9   1.5e-007 3.3e-008 3.8e-004 1.00e+000  1.096553897e+004  1.096553865e+004  2.1e-009 2.09  
+10  5.5e-009 1.2e-009 2.3e-005 1.00e+000  1.096553892e+004  1.096553891e+004  1.3e-010 2.20  
+Interior-point optimizer terminated. Time: 2.21. 
+
+Optimizer terminated. Time: 2.26    
+
+Interior-point solution summary
+  Problem status  : PRIMAL_AND_DUAL_FEASIBLE
+  Solution status : OPTIMAL
+  Primal.  obj: 1.0965538925e+004   Viol.  con: 3e-010   var: 1e-012 
+  Dual.    obj: 1.0965538905e+004   Viol.  con: 0e+000   var: 3e-012 
+
+Optimizer summary
+  Optimizer                 -                        time: 2.26    
+    Interior-point          - iterations : 10        time: 2.21    
+      Basis identification  -                        time: 0.00    
+        Primal              - iterations : 0         time: 0.00    
+        Dual                - iterations : 0         time: 0.00    
+        Clean primal        - iterations : 0         time: 0.00    
+        Clean dual          - iterations : 0         time: 0.00    
+        Clean primal-dual   - iterations : 0         time: 0.00    
+    Simplex                 -                        time: 0.00    
+      Primal simplex        - iterations : 0         time: 0.00    
+      Dual simplex          - iterations : 0         time: 0.00    
+      Primal-dual simplex   - iterations : 0         time: 0.00    
+    Mixed integer           - relaxations: 0         time: 0.00    
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.1.sol'
+Start writing.
+done writing. Time: 0.47
+
+Return code - 0  [MSK_RES_OK]
+
+MOSEK Version 7.0.0.111 (Build date: 2014-3-31 22:24:02)
+Copyright (c) 1998-2014 MOSEK ApS, Denmark. WWW: http://mosek.com
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.2.mps'
+Using 'COST' as objective vector
+Read 233470 number of A nonzeros in 0.14 seconds.
+Using 'RHS1' as rhs vector
+Using 'BND1' as bound vector
+
+Read summary
+  Type             : QO (quadratic optimization problem)
+  Objective sense  : min
+  Constraints      : 16947       
+  Scalar variables : 116735      
+  Matrix variables : 0           
+  Time             : 0.2     
+
+Computer
+  Platform               : Windows/64-X86  
+  Cores                  : 4               
+
+Problem
+  Name                   : TESTPROB        
+  Objective sense        : min             
+  Type                   : QO (quadratic optimization problem)
+  Constraints            : 16947           
+  Cones                  : 0               
+  Scalar variables       : 116735          
+  Matrix variables       : 0               
+  Integer variables      : 0               
+
+Optimizer started.
+Interior-point optimizer started.
+Presolve started.
+Linear dependency checker started.
+Linear dependency checker terminated.
+Eliminator - tries                  : 0                 time                   : 0.00            
+Eliminator - elim's                 : 0               
+Lin. dep.  - tries                  : 1                 time                   : 0.03            
+Lin. dep.  - number                 : 0               
+Presolve terminated. Time: 0.11    
+Matrix reordering started.
+Local matrix reordering started.
+Local matrix reordering terminated.
+Matrix reordering terminated.
+Optimizer  - threads                : 4               
+Optimizer  - solved problem         : the primal      
+Optimizer  - Constraints            : 15954
+Optimizer  - Cones                  : 0
+Optimizer  - Scalar variables       : 113908            conic                  : 0               
+Optimizer  - Semi-definite variables: 0                 scalarized             : 0               
+Factor     - setup time             : 0.84              dense det. time        : 0.00            
+Factor     - ML order time          : 0.00              GP order time          : 0.66            
+Factor     - nonzeros before factor : 1.30e+005         after factor           : 3.16e+006       
+Factor     - dense dim.             : 0                 flops                  : 0.00e+000       
+Factor     - GP saved nzs           : 0                 GP saved flops         : 0.00e+000       
+ITE PFEAS    DFEAS    GFEAS    PRSTATUS   POBJ              DOBJ              MU       TIME  
+0   1.6e+003 3.3e+002 1.1e+005 0.00e+000  5.649100000e+004  -5.377500000e+004 1.0e+000 1.00  
+1   4.0e+002 8.3e+001 5.3e+004 8.80e-001  1.923606993e+004  -3.700917667e+004 3.6e-001 1.45  
+2   4.6e+001 9.4e+000 9.5e+003 1.38e+000  1.282851890e+004  4.500690260e+003  5.9e-002 1.93  
+3   7.3e+000 1.5e+000 1.6e+003 1.09e+000  1.238601514e+004  1.107342353e+004  9.7e-003 2.40  
+4   1.3e+000 2.7e-001 2.9e+002 1.02e+000  1.230972262e+004  1.206408581e+004  1.8e-003 2.87  
+5   1.7e-001 3.6e-002 4.1e+001 1.00e+000  1.229399818e+004  1.225966229e+004  2.5e-004 3.32  
+6   8.4e-003 1.7e-003 2.4e+000 1.00e+000  1.229143695e+004  1.228940655e+004  1.5e-005 3.79  
+7   1.3e-004 2.7e-005 7.1e-002 1.00e+000  1.229125239e+004  1.229119279e+004  4.1e-007 4.23  
+8   1.0e-006 2.1e-007 2.5e-003 1.00e+000  1.229124515e+004  1.229124303e+004  1.4e-008 4.66  
+9   7.8e-009 1.6e-009 1.3e-004 1.00e+000  1.229124485e+004  1.229124473e+004  7.3e-010 5.12  
+Interior-point optimizer terminated. Time: 5.15. 
+
+Optimizer terminated. Time: 5.18    
+
+Interior-point solution summary
+  Problem status  : PRIMAL_AND_DUAL_FEASIBLE
+  Solution status : OPTIMAL
+  Primal.  obj: 1.2291244845e+004   Viol.  con: 7e-010   var: 0e+000 
+  Dual.    obj: 1.2291244734e+004   Viol.  con: 0e+000   var: 4e-012 
+
+Optimizer summary
+  Optimizer                 -                        time: 5.18    
+    Interior-point          - iterations : 9         time: 5.15    
+      Basis identification  -                        time: 0.00    
+        Primal              - iterations : 0         time: 0.00    
+        Dual                - iterations : 0         time: 0.00    
+        Clean primal        - iterations : 0         time: 0.00    
+        Clean dual          - iterations : 0         time: 0.00    
+        Clean primal-dual   - iterations : 0         time: 0.00    
+    Simplex                 -                        time: 0.00    
+      Primal simplex        - iterations : 0         time: 0.00    
+      Dual simplex          - iterations : 0         time: 0.00    
+      Primal-dual simplex   - iterations : 0         time: 0.00    
+    Mixed integer           - relaxations: 0         time: 0.00    
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.2.sol'
+Start writing.
+done writing. Time: 0.50
+
+Return code - 0  [MSK_RES_OK]
+
+MOSEK Version 7.0.0.111 (Build date: 2014-3-31 22:24:02)
+Copyright (c) 1998-2014 MOSEK ApS, Denmark. WWW: http://mosek.com
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.3.mps'
+Using 'COST' as objective vector
+Read 220736 number of A nonzeros in 0.14 seconds.
+Using 'RHS1' as rhs vector
+Using 'BND1' as bound vector
+
+Read summary
+  Type             : QO (quadratic optimization problem)
+  Objective sense  : min
+  Constraints      : 16990       
+  Scalar variables : 110368      
+  Matrix variables : 0           
+  Time             : 0.2     
+
+Computer
+  Platform               : Windows/64-X86  
+  Cores                  : 4               
+
+Problem
+  Name                   : TESTPROB        
+  Objective sense        : min             
+  Type                   : QO (quadratic optimization problem)
+  Constraints            : 16990           
+  Cones                  : 0               
+  Scalar variables       : 110368          
+  Matrix variables       : 0               
+  Integer variables      : 0               
+
+Optimizer started.
+Interior-point optimizer started.
+Presolve started.
+Linear dependency checker started.
+Linear dependency checker terminated.
+Eliminator - tries                  : 0                 time                   : 0.00            
+Eliminator - elim's                 : 0               
+Lin. dep.  - tries                  : 1                 time                   : 0.03            
+Lin. dep.  - number                 : 0               
+Presolve terminated. Time: 0.11    
+Matrix reordering started.
+Local matrix reordering started.
+Local matrix reordering terminated.
+Matrix reordering terminated.
+Optimizer  - threads                : 4               
+Optimizer  - solved problem         : the primal      
+Optimizer  - Constraints            : 16189
+Optimizer  - Cones                  : 0
+Optimizer  - Scalar variables       : 108790            conic                  : 0               
+Optimizer  - Semi-definite variables: 0                 scalarized             : 0               
+Factor     - setup time             : 1.54              dense det. time        : 0.00            
+Factor     - ML order time          : 0.00              GP order time          : 1.37            
+Factor     - nonzeros before factor : 1.25e+005         after factor           : 3.86e+006       
+Factor     - dense dim.             : 0                 flops                  : 0.00e+000       
+Factor     - GP saved nzs           : 0                 GP saved flops         : 0.00e+000       
+ITE PFEAS    DFEAS    GFEAS    PRSTATUS   POBJ              DOBJ              MU       TIME  
+0   1.5e+003 3.2e+002 1.1e+005 0.00e+000  5.375600000e+004  -5.229000000e+004 1.0e+000 1.70  
+1   3.7e+002 7.7e+001 5.1e+004 8.09e-001  1.649723663e+004  -3.894653062e+004 3.5e-001 2.17  
+2   9.2e+001 1.9e+001 1.5e+004 1.37e+000  1.098657048e+004  -2.930535118e+003 1.0e-001 2.61  
+3   9.9e+000 2.0e+000 1.8e+003 1.15e+000  9.985002131e+003  8.459547176e+003  1.2e-002 3.03  
+4   2.1e+000 4.2e-001 3.8e+002 1.02e+000  9.885087741e+003  9.558254958e+003  2.5e-003 3.43  
+5   2.3e-001 4.8e-002 4.7e+001 1.01e+000  9.861107807e+003  9.820537735e+003  3.1e-004 3.85  
+6   1.4e-002 2.9e-003 3.4e+000 1.00e+000  9.857776702e+003  9.854830736e+003  2.2e-005 4.28  
+7   2.2e-004 4.6e-005 1.0e-001 1.00e+000  9.857492709e+003  9.857405152e+003  6.1e-007 4.74  
+8   2.0e-006 4.1e-007 3.7e-003 1.00e+000  9.857481761e+003  9.857478588e+003  2.1e-008 5.16  
+9   2.5e-007 5.1e-008 5.8e-004 1.00e+000  9.857481344e+003  9.857480844e+003  3.3e-009 5.54  
+10  1.8e-008 3.8e-009 5.7e-005 1.00e+000  9.857481277e+003  9.857481229e+003  3.2e-010 5.96  
+Interior-point optimizer terminated. Time: 5.97. 
+
+Optimizer terminated. Time: 6.02    
+
+Interior-point solution summary
+  Problem status  : PRIMAL_AND_DUAL_FEASIBLE
+  Solution status : OPTIMAL
+  Primal.  obj: 9.8574812775e+003   Viol.  con: 1e-009   var: 1e-011 
+  Dual.    obj: 9.8574812290e+003   Viol.  con: 0e+000   var: 1e-011 
+
+Optimizer summary
+  Optimizer                 -                        time: 6.02    
+    Interior-point          - iterations : 10        time: 5.97    
+      Basis identification  -                        time: 0.00    
+        Primal              - iterations : 0         time: 0.00    
+        Dual                - iterations : 0         time: 0.00    
+        Clean primal        - iterations : 0         time: 0.00    
+        Clean dual          - iterations : 0         time: 0.00    
+        Clean primal-dual   - iterations : 0         time: 0.00    
+    Simplex                 -                        time: 0.00    
+      Primal simplex        - iterations : 0         time: 0.00    
+      Dual simplex          - iterations : 0         time: 0.00    
+      Primal-dual simplex   - iterations : 0         time: 0.00    
+    Mixed integer           - relaxations: 0         time: 0.00    
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.3.sol'
+Start writing.
+done writing. Time: 0.55
+
+Return code - 0  [MSK_RES_OK]
+
+MOSEK Version 7.0.0.111 (Build date: 2014-3-31 22:24:02)
+Copyright (c) 1998-2014 MOSEK ApS, Denmark. WWW: http://mosek.com
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.4.mps'
+Using 'COST' as objective vector
+Read 219640 number of A nonzeros in 0.14 seconds.
+Using 'RHS1' as rhs vector
+Using 'BND1' as bound vector
+
+Read summary
+  Type             : QO (quadratic optimization problem)
+  Objective sense  : min
+  Constraints      : 16519       
+  Scalar variables : 109820      
+  Matrix variables : 0           
+  Time             : 0.2     
+
+Computer
+  Platform               : Windows/64-X86  
+  Cores                  : 4               
+
+Problem
+  Name                   : TESTPROB        
+  Objective sense        : min             
+  Type                   : QO (quadratic optimization problem)
+  Constraints            : 16519           
+  Cones                  : 0               
+  Scalar variables       : 109820          
+  Matrix variables       : 0               
+  Integer variables      : 0               
+
+Optimizer started.
+Interior-point optimizer started.
+Presolve started.
+Linear dependency checker started.
+Linear dependency checker terminated.
+Eliminator - tries                  : 0                 time                   : 0.00            
+Eliminator - elim's                 : 0               
+Lin. dep.  - tries                  : 1                 time                   : 0.03            
+Lin. dep.  - number                 : 0               
+Presolve terminated. Time: 0.11    
+Matrix reordering started.
+Local matrix reordering started.
+Local matrix reordering terminated.
+Matrix reordering terminated.
+Optimizer  - threads                : 4               
+Optimizer  - solved problem         : the primal      
+Optimizer  - Constraints            : 15687
+Optimizer  - Cones                  : 0
+Optimizer  - Scalar variables       : 108166            conic                  : 0               
+Optimizer  - Semi-definite variables: 0                 scalarized             : 0               
+Factor     - setup time             : 1.09              dense det. time        : 0.00            
+Factor     - ML order time          : 0.00              GP order time          : 0.92            
+Factor     - nonzeros before factor : 1.24e+005         after factor           : 3.89e+006       
+Factor     - dense dim.             : 0                 flops                  : 0.00e+000       
+Factor     - GP saved nzs           : 0                 GP saved flops         : 0.00e+000       
+ITE PFEAS    DFEAS    GFEAS    PRSTATUS   POBJ              DOBJ              MU       TIME  
+0   1.5e+003 3.2e+002 1.1e+005 0.00e+000  5.361850000e+004  -5.207150000e+004 1.0e+000 1.25  
+1   4.1e+002 8.5e+001 5.2e+004 8.10e-001  1.712105411e+004  -3.898671756e+004 3.7e-001 1.69  
+2   4.1e+001 8.4e+000 9.2e+003 1.37e+000  1.008579292e+004  1.841343012e+003  5.8e-002 2.06  
+3   6.9e+000 1.4e+000 1.6e+003 1.09e+000  9.686510336e+003  8.309833405e+003  1.0e-002 2.50  
+4   2.1e+000 4.4e-001 5.0e+002 1.02e+000  9.623109413e+003  9.191461931e+003  3.2e-003 2.93  
+5   2.9e-001 6.0e-002 7.2e+001 1.01e+000  9.598077314e+003  9.536157294e+003  4.6e-004 3.34  
+6   1.7e-002 3.4e-003 4.8e+000 1.00e+000  9.594008852e+003  9.589901219e+003  3.0e-005 3.74  
+7   3.3e-004 6.8e-005 1.5e-001 1.00e+000  9.593680230e+003  9.593550163e+003  9.1e-007 4.17  
+8   4.0e-006 8.2e-007 5.2e-003 1.00e+000  9.593666172e+003  9.593661731e+003  3.0e-008 4.56  
+9   1.2e-008 2.4e-009 2.1e-004 1.00e+000  9.593665576e+003  9.593665399e+003  1.2e-009 4.99  
+10  3.5e-011 7.2e-012 1.1e-005 1.00e+000  9.593665551e+003  9.593665541e+003  6.3e-011 5.38  
+Interior-point optimizer terminated. Time: 5.41. 
+
+Optimizer terminated. Time: 5.46    
+
+Interior-point solution summary
+  Problem status  : PRIMAL_AND_DUAL_FEASIBLE
+  Solution status : OPTIMAL
+  Primal.  obj: 9.5936655506e+003   Viol.  con: 3e-012   var: 0e+000 
+  Dual.    obj: 9.5936655411e+003   Viol.  con: 0e+000   var: 2e-014 
+
+Optimizer summary
+  Optimizer                 -                        time: 5.46    
+    Interior-point          - iterations : 10        time: 5.41    
+      Basis identification  -                        time: 0.00    
+        Primal              - iterations : 0         time: 0.00    
+        Dual                - iterations : 0         time: 0.00    
+        Clean primal        - iterations : 0         time: 0.00    
+        Clean dual          - iterations : 0         time: 0.00    
+        Clean primal-dual   - iterations : 0         time: 0.00    
+    Simplex                 -                        time: 0.00    
+      Primal simplex        - iterations : 0         time: 0.00    
+      Dual simplex          - iterations : 0         time: 0.00    
+      Primal-dual simplex   - iterations : 0         time: 0.00    
+    Mixed integer           - relaxations: 0         time: 0.00    
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.4.sol'
+Start writing.
+done writing. Time: 0.52
+
+Return code - 0  [MSK_RES_OK]
+
+MOSEK Version 7.0.0.111 (Build date: 2014-3-31 22:24:02)
+Copyright (c) 1998-2014 MOSEK ApS, Denmark. WWW: http://mosek.com
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.5.mps'
+Using 'COST' as objective vector
+Read 230120 number of A nonzeros in 0.14 seconds.
+Using 'RHS1' as rhs vector
+Using 'BND1' as bound vector
+
+Read summary
+  Type             : QO (quadratic optimization problem)
+  Objective sense  : min
+  Constraints      : 16810       
+  Scalar variables : 115060      
+  Matrix variables : 0           
+  Time             : 0.3     
+
+Computer
+  Platform               : Windows/64-X86  
+  Cores                  : 4               
+
+Problem
+  Name                   : TESTPROB        
+  Objective sense        : min             
+  Type                   : QO (quadratic optimization problem)
+  Constraints            : 16810           
+  Cones                  : 0               
+  Scalar variables       : 115060          
+  Matrix variables       : 0               
+  Integer variables      : 0               
+
+Optimizer started.
+Interior-point optimizer started.
+Presolve started.
+Linear dependency checker started.
+Linear dependency checker terminated.
+Eliminator - tries                  : 0                 time                   : 0.00            
+Eliminator - elim's                 : 0               
+Lin. dep.  - tries                  : 1                 time                   : 0.03            
+Lin. dep.  - number                 : 0               
+Presolve terminated. Time: 0.11    
+Matrix reordering started.
+Local matrix reordering started.
+Local matrix reordering terminated.
+Matrix reordering terminated.
+Optimizer  - threads                : 4               
+Optimizer  - solved problem         : the primal      
+Optimizer  - Constraints            : 15895
+Optimizer  - Cones                  : 0
+Optimizer  - Scalar variables       : 113059            conic                  : 0               
+Optimizer  - Semi-definite variables: 0                 scalarized             : 0               
+Factor     - setup time             : 0.84              dense det. time        : 0.00            
+Factor     - ML order time          : 0.00              GP order time          : 0.70            
+Factor     - nonzeros before factor : 1.29e+005         after factor           : 1.97e+006       
+Factor     - dense dim.             : 0                 flops                  : 0.00e+000       
+Factor     - GP saved nzs           : 0                 GP saved flops         : 0.00e+000       
+ITE PFEAS    DFEAS    GFEAS    PRSTATUS   POBJ              DOBJ              MU       TIME  
+0   1.6e+003 3.3e+002 1.1e+005 0.00e+000  5.601200000e+004  -5.406000000e+004 1.0e+000 1.01  
+1   3.8e+002 7.8e+001 5.3e+004 8.89e-001  1.795361255e+004  -3.737755764e+004 3.5e-001 1.19  
+2   4.0e+001 8.2e+000 8.6e+003 1.37e+000  1.194062523e+004  4.418337256e+003  5.3e-002 1.42  
+3   5.8e+000 1.2e+000 1.3e+003 1.08e+000  1.153934453e+004  1.044727294e+004  8.0e-003 1.61  
+4   7.2e-001 1.5e-001 1.7e+002 1.01e+000  1.147240105e+004  1.132900549e+004  1.0e-003 1.81  
+5   5.5e-002 1.1e-002 1.5e+001 1.00e+000  1.146239545e+004  1.144961741e+004  9.2e-005 2.01  
+6   3.0e-003 6.1e-004 1.0e+000 1.00e+000  1.146136183e+004  1.146048942e+004  6.1e-006 2.21  
+7   3.3e-005 6.8e-006 2.6e-002 1.00e+000  1.146128520e+004  1.146126290e+004  1.5e-007 2.42  
+8   1.3e-007 2.6e-008 9.3e-004 1.00e+000  1.146128241e+004  1.146128162e+004  5.1e-009 2.62  
+9   5.7e-010 1.2e-010 5.0e-005 1.00e+000  1.146128229e+004  1.146128225e+004  2.7e-010 2.84  
+Interior-point optimizer terminated. Time: 2.86. 
+
+Optimizer terminated. Time: 2.89    
+
+Interior-point solution summary
+  Problem status  : PRIMAL_AND_DUAL_FEASIBLE
+  Solution status : OPTIMAL
+  Primal.  obj: 1.1461282290e+004   Viol.  con: 6e-011   var: 0e+000 
+  Dual.    obj: 1.1461282247e+004   Viol.  con: 0e+000   var: 3e-013 
+
+Optimizer summary
+  Optimizer                 -                        time: 2.89    
+    Interior-point          - iterations : 9         time: 2.86    
+      Basis identification  -                        time: 0.00    
+        Primal              - iterations : 0         time: 0.00    
+        Dual                - iterations : 0         time: 0.00    
+        Clean primal        - iterations : 0         time: 0.00    
+        Clean dual          - iterations : 0         time: 0.00    
+        Clean primal-dual   - iterations : 0         time: 0.00    
+    Simplex                 -                        time: 0.00    
+      Primal simplex        - iterations : 0         time: 0.00    
+      Dual simplex          - iterations : 0         time: 0.00    
+      Primal-dual simplex   - iterations : 0         time: 0.00    
+    Mixed integer           - relaxations: 0         time: 0.00    
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.5.sol'
+Start writing.
+done writing. Time: 0.48
+
+Return code - 0  [MSK_RES_OK]
+
+MOSEK Version 7.0.0.111 (Build date: 2014-3-31 22:24:02)
+Copyright (c) 1998-2014 MOSEK ApS, Denmark. WWW: http://mosek.com
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.6.mps'
+Using 'COST' as objective vector
+Read 230986 number of A nonzeros in 0.17 seconds.
+Using 'RHS1' as rhs vector
+Using 'BND1' as bound vector
+
+Read summary
+  Type             : QO (quadratic optimization problem)
+  Objective sense  : min
+  Constraints      : 16362       
+  Scalar variables : 115493      
+  Matrix variables : 0           
+  Time             : 0.3     
+
+Computer
+  Platform               : Windows/64-X86  
+  Cores                  : 4               
+
+Problem
+  Name                   : TESTPROB        
+  Objective sense        : min             
+  Type                   : QO (quadratic optimization problem)
+  Constraints            : 16362           
+  Cones                  : 0               
+  Scalar variables       : 115493          
+  Matrix variables       : 0               
+  Integer variables      : 0               
+
+Optimizer started.
+Interior-point optimizer started.
+Presolve started.
+Linear dependency checker started.
+Linear dependency checker terminated.
+Eliminator - tries                  : 0                 time                   : 0.00            
+Eliminator - elim's                 : 0               
+Lin. dep.  - tries                  : 1                 time                   : 0.03            
+Lin. dep.  - number                 : 0               
+Presolve terminated. Time: 0.13    
+Matrix reordering started.
+Local matrix reordering started.
+Local matrix reordering terminated.
+Matrix reordering terminated.
+Optimizer  - threads                : 4               
+Optimizer  - solved problem         : the primal      
+Optimizer  - Constraints            : 15549
+Optimizer  - Cones                  : 0
+Optimizer  - Scalar variables       : 113800            conic                  : 0               
+Optimizer  - Semi-definite variables: 0                 scalarized             : 0               
+Factor     - setup time             : 0.87              dense det. time        : 0.00            
+Factor     - ML order time          : 0.00              GP order time          : 0.72            
+Factor     - nonzeros before factor : 1.29e+005         after factor           : 2.51e+006       
+Factor     - dense dim.             : 0                 flops                  : 0.00e+000       
+Factor     - GP saved nzs           : 0                 GP saved flops         : 0.00e+000       
+ITE PFEAS    DFEAS    GFEAS    PRSTATUS   POBJ              DOBJ              MU       TIME  
+0   1.7e+003 3.3e+002 1.1e+005 0.00e+000  5.623250000e+004  -5.462450000e+004 1.0e+000 1.04  
+1   4.5e+002 8.9e+001 5.4e+004 9.02e-001  1.915879070e+004  -3.744408082e+004 3.8e-001 1.34  
+2   3.9e+001 7.8e+000 8.7e+003 1.38e+000  1.202481196e+004  4.488400821e+003  5.4e-002 1.65  
+3   6.2e+000 1.2e+000 1.4e+003 1.08e+000  1.165295436e+004  1.047091083e+004  8.7e-003 1.98  
+4   1.3e+000 2.6e-001 3.1e+002 1.01e+000  1.159001336e+004  1.133452304e+004  1.9e-003 2.28  
+5   1.6e-001 3.2e-002 4.1e+001 1.00e+000  1.157450981e+004  1.154027638e+004  2.5e-004 2.57  
+6   6.4e-003 1.3e-003 2.0e+000 1.00e+000  1.157208272e+004  1.157040349e+004  1.2e-005 2.86  
+7   1.0e-004 2.1e-005 6.4e-002 1.00e+000  1.157193361e+004  1.157188042e+004  3.7e-007 3.14  
+8   4.9e-007 9.8e-008 2.2e-003 1.00e+000  1.157192727e+004  1.157192545e+004  1.2e-008 3.43  
+9   8.7e-010 1.7e-010 1.1e-004 1.00e+000  1.157192700e+004  1.157192691e+004  5.9e-010 3.71  
+Interior-point optimizer terminated. Time: 3.74. 
+
+Optimizer terminated. Time: 3.79    
+
+Interior-point solution summary
+  Problem status  : PRIMAL_AND_DUAL_FEASIBLE
+  Solution status : OPTIMAL
+  Primal.  obj: 1.1571926999e+004   Viol.  con: 2e-010   var: 0e+000 
+  Dual.    obj: 1.1571926910e+004   Viol.  con: 0e+000   var: 4e-013 
+
+Optimizer summary
+  Optimizer                 -                        time: 3.79    
+    Interior-point          - iterations : 9         time: 3.74    
+      Basis identification  -                        time: 0.00    
+        Primal              - iterations : 0         time: 0.00    
+        Dual                - iterations : 0         time: 0.00    
+        Clean primal        - iterations : 0         time: 0.00    
+        Clean dual          - iterations : 0         time: 0.00    
+        Clean primal-dual   - iterations : 0         time: 0.00    
+    Simplex                 -                        time: 0.00    
+      Primal simplex        - iterations : 0         time: 0.00    
+      Dual simplex          - iterations : 0         time: 0.00    
+      Primal-dual simplex   - iterations : 0         time: 0.00    
+    Mixed integer           - relaxations: 0         time: 0.00    
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.6.sol'
+Start writing.
+done writing. Time: 0.48
+
+Return code - 0  [MSK_RES_OK]
+
+MOSEK Version 7.0.0.111 (Build date: 2014-3-31 22:24:02)
+Copyright (c) 1998-2014 MOSEK ApS, Denmark. WWW: http://mosek.com
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.7.mps'
+Using 'COST' as objective vector
+Read 225364 number of A nonzeros in 0.17 seconds.
+Using 'RHS1' as rhs vector
+Using 'BND1' as bound vector
+
+Read summary
+  Type             : QO (quadratic optimization problem)
+  Objective sense  : min
+  Constraints      : 16366       
+  Scalar variables : 112682      
+  Matrix variables : 0           
+  Time             : 0.3     
+
+Computer
+  Platform               : Windows/64-X86  
+  Cores                  : 4               
+
+Problem
+  Name                   : TESTPROB        
+  Objective sense        : min             
+  Type                   : QO (quadratic optimization problem)
+  Constraints            : 16366           
+  Cones                  : 0               
+  Scalar variables       : 112682          
+  Matrix variables       : 0               
+  Integer variables      : 0               
+
+Optimizer started.
+Interior-point optimizer started.
+Presolve started.
+Linear dependency checker started.
+Linear dependency checker terminated.
+Eliminator - tries                  : 0                 time                   : 0.00            
+Eliminator - elim's                 : 0               
+Lin. dep.  - tries                  : 1                 time                   : 0.03            
+Lin. dep.  - number                 : 0               
+Presolve terminated. Time: 0.13    
+Matrix reordering started.
+Local matrix reordering started.
+Local matrix reordering terminated.
+Matrix reordering terminated.
+Optimizer  - threads                : 4               
+Optimizer  - solved problem         : the primal      
+Optimizer  - Constraints            : 15507
+Optimizer  - Cones                  : 0
+Optimizer  - Scalar variables       : 111020            conic                  : 0               
+Optimizer  - Semi-definite variables: 0                 scalarized             : 0               
+Factor     - setup time             : 1.84              dense det. time        : 0.00            
+Factor     - ML order time          : 0.00              GP order time          : 1.67            
+Factor     - nonzeros before factor : 1.27e+005         after factor           : 2.94e+006       
+Factor     - dense dim.             : 0                 flops                  : 0.00e+000       
+Factor     - GP saved nzs           : 0                 GP saved flops         : 0.00e+000       
+ITE PFEAS    DFEAS    GFEAS    PRSTATUS   POBJ              DOBJ              MU       TIME  
+0   1.6e+003 3.2e+002 1.1e+005 0.00e+000  5.488050000e+004  -5.330750000e+004 1.0e+000 2.01  
+1   3.0e+002 6.1e+001 5.0e+004 8.82e-001  1.530286672e+004  -3.794797780e+004 3.2e-001 2.21  
+2   2.9e+001 6.1e+000 6.9e+003 1.34e+000  1.070884699e+004  4.547805806e+003  4.2e-002 2.43  
+3   5.6e+000 1.2e+000 1.3e+003 1.06e+000  1.042064877e+004  9.243684930e+003  8.2e-003 2.67  
+4   8.7e-001 1.8e-001 2.2e+002 1.01e+000  1.035993807e+004  1.017181450e+004  1.3e-003 2.89  
+5   8.2e-002 1.7e-002 2.2e+001 1.00e+000  1.034909222e+004  1.032999415e+004  1.3e-004 3.11  
+6   3.3e-003 6.8e-004 1.1e+000 1.00e+000  1.034784187e+004  1.034692210e+004  6.2e-006 3.31  
+7   4.4e-005 9.2e-006 2.8e-002 1.00e+000  1.034776857e+004  1.034774415e+004  1.6e-007 3.54  
+8   3.1e-007 6.5e-008 9.8e-004 1.00e+000  1.034776585e+004  1.034776500e+004  5.4e-009 3.76  
+9   1.3e-009 2.6e-010 4.7e-005 1.00e+000  1.034776574e+004  1.034776570e+004  2.5e-010 3.96  
+Interior-point optimizer terminated. Time: 3.98. 
+
+Optimizer terminated. Time: 4.03    
+
+Interior-point solution summary
+  Problem status  : PRIMAL_AND_DUAL_FEASIBLE
+  Solution status : OPTIMAL
+  Primal.  obj: 1.0347765740e+004   Viol.  con: 1e-010   var: 0e+000 
+  Dual.    obj: 1.0347765700e+004   Viol.  con: 0e+000   var: 7e-013 
+
+Optimizer summary
+  Optimizer                 -                        time: 4.03    
+    Interior-point          - iterations : 9         time: 3.98    
+      Basis identification  -                        time: 0.00    
+        Primal              - iterations : 0         time: 0.00    
+        Dual                - iterations : 0         time: 0.00    
+        Clean primal        - iterations : 0         time: 0.00    
+        Clean dual          - iterations : 0         time: 0.00    
+        Clean primal-dual   - iterations : 0         time: 0.00    
+    Simplex                 -                        time: 0.00    
+      Primal simplex        - iterations : 0         time: 0.00    
+      Dual simplex          - iterations : 0         time: 0.00    
+      Primal-dual simplex   - iterations : 0         time: 0.00    
+    Mixed integer           - relaxations: 0         time: 0.00    
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.7.sol'
+Start writing.
+done writing. Time: 0.48
+
+Return code - 0  [MSK_RES_OK]
+
+MOSEK Version 7.0.0.111 (Build date: 2014-3-31 22:24:02)
+Copyright (c) 1998-2014 MOSEK ApS, Denmark. WWW: http://mosek.com
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.8.mps'
+Using 'COST' as objective vector
+Read 223042 number of A nonzeros in 0.17 seconds.
+Using 'RHS1' as rhs vector
+Using 'BND1' as bound vector
+
+Read summary
+  Type             : QO (quadratic optimization problem)
+  Objective sense  : min
+  Constraints      : 16360       
+  Scalar variables : 111521      
+  Matrix variables : 0           
+  Time             : 0.3     
+
+Computer
+  Platform               : Windows/64-X86  
+  Cores                  : 4               
+
+Problem
+  Name                   : TESTPROB        
+  Objective sense        : min             
+  Type                   : QO (quadratic optimization problem)
+  Constraints            : 16360           
+  Cones                  : 0               
+  Scalar variables       : 111521          
+  Matrix variables       : 0               
+  Integer variables      : 0               
+
+Optimizer started.
+Interior-point optimizer started.
+Presolve started.
+Linear dependency checker started.
+Linear dependency checker terminated.
+Eliminator - tries                  : 0                 time                   : 0.00            
+Eliminator - elim's                 : 0               
+Lin. dep.  - tries                  : 1                 time                   : 0.03            
+Lin. dep.  - number                 : 0               
+Presolve terminated. Time: 0.11    
+Matrix reordering started.
+Local matrix reordering started.
+Local matrix reordering terminated.
+Matrix reordering terminated.
+Optimizer  - threads                : 4               
+Optimizer  - solved problem         : the primal      
+Optimizer  - Constraints            : 15307
+Optimizer  - Cones                  : 0
+Optimizer  - Scalar variables       : 109491            conic                  : 0               
+Optimizer  - Semi-definite variables: 0                 scalarized             : 0               
+Factor     - setup time             : 0.84              dense det. time        : 0.00            
+Factor     - ML order time          : 0.00              GP order time          : 0.70            
+Factor     - nonzeros before factor : 1.25e+005         after factor           : 1.96e+006       
+Factor     - dense dim.             : 0                 flops                  : 0.00e+000       
+Factor     - GP saved nzs           : 0                 GP saved flops         : 0.00e+000       
+ITE PFEAS    DFEAS    GFEAS    PRSTATUS   POBJ              DOBJ              MU       TIME  
+0   1.7e+003 3.2e+002 1.1e+005 0.00e+000  5.434050000e+004  -5.247050000e+004 1.0e+000 1.00  
+1   3.8e+002 7.3e+001 5.1e+004 8.37e-001  1.640701668e+004  -3.836170195e+004 3.5e-001 1.19  
+2   4.5e+001 8.7e+000 8.8e+003 1.37e+000  1.070872070e+004  2.741758791e+003  5.6e-002 1.40  
+3   7.4e+000 1.4e+000 1.5e+003 1.09e+000  1.028948946e+004  8.994278567e+003  9.4e-003 1.62  
+4   1.1e+000 2.2e-001 2.4e+002 1.02e+000  1.021339087e+004  1.000716664e+004  1.5e-003 1.84  
+5   1.0e-001 2.0e-002 2.4e+001 1.00e+000  1.019953865e+004  1.017857221e+004  1.5e-004 2.06  
+6   4.8e-003 9.2e-004 1.4e+000 1.00e+000  1.019790776e+004  1.019666867e+004  8.7e-006 2.29  
+7   8.4e-005 1.6e-005 4.8e-002 1.00e+000  1.019779171e+004  1.019775007e+004  2.8e-007 2.48  
+8   9.1e-007 1.8e-007 1.8e-003 1.00e+000  1.019778677e+004  1.019778520e+004  1.0e-008 2.70  
+9   7.5e-009 1.4e-009 8.7e-005 1.00e+000  1.019778655e+004  1.019778648e+004  4.9e-010 2.90  
+Interior-point optimizer terminated. Time: 2.93. 
+
+Optimizer terminated. Time: 2.96    
+
+Interior-point solution summary
+  Problem status  : PRIMAL_AND_DUAL_FEASIBLE
+  Solution status : OPTIMAL
+  Primal.  obj: 1.0197786554e+004   Viol.  con: 1e-009   var: 0e+000 
+  Dual.    obj: 1.0197786479e+004   Viol.  con: 0e+000   var: 4e-012 
+
+Optimizer summary
+  Optimizer                 -                        time: 2.96    
+    Interior-point          - iterations : 9         time: 2.93    
+      Basis identification  -                        time: 0.00    
+        Primal              - iterations : 0         time: 0.00    
+        Dual                - iterations : 0         time: 0.00    
+        Clean primal        - iterations : 0         time: 0.00    
+        Clean dual          - iterations : 0         time: 0.00    
+        Clean primal-dual   - iterations : 0         time: 0.00    
+    Simplex                 -                        time: 0.00    
+      Primal simplex        - iterations : 0         time: 0.00    
+      Dual simplex          - iterations : 0         time: 0.00    
+      Primal-dual simplex   - iterations : 0         time: 0.00    
+    Mixed integer           - relaxations: 0         time: 0.00    
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.8.sol'
+Start writing.
+done writing. Time: 0.47
+
+Return code - 0  [MSK_RES_OK]
+
+MOSEK Version 7.0.0.111 (Build date: 2014-3-31 22:24:02)
+Copyright (c) 1998-2014 MOSEK ApS, Denmark. WWW: http://mosek.com
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.9.mps'
+Using 'COST' as objective vector
+Read 231372 number of A nonzeros in 0.14 seconds.
+Using 'RHS1' as rhs vector
+Using 'BND1' as bound vector
+
+Read summary
+  Type             : QO (quadratic optimization problem)
+  Objective sense  : min
+  Constraints      : 17109       
+  Scalar variables : 115686      
+  Matrix variables : 0           
+  Time             : 0.2     
+
+Computer
+  Platform               : Windows/64-X86  
+  Cores                  : 4               
+
+Problem
+  Name                   : TESTPROB        
+  Objective sense        : min             
+  Type                   : QO (quadratic optimization problem)
+  Constraints            : 17109           
+  Cones                  : 0               
+  Scalar variables       : 115686          
+  Matrix variables       : 0               
+  Integer variables      : 0               
+
+Optimizer started.
+Interior-point optimizer started.
+Presolve started.
+Linear dependency checker started.
+Linear dependency checker terminated.
+Eliminator - tries                  : 0                 time                   : 0.00            
+Eliminator - elim's                 : 0               
+Lin. dep.  - tries                  : 1                 time                   : 0.02            
+Lin. dep.  - number                 : 0               
+Presolve terminated. Time: 0.13    
+Matrix reordering started.
+Local matrix reordering started.
+Local matrix reordering terminated.
+Matrix reordering terminated.
+Optimizer  - threads                : 4               
+Optimizer  - solved problem         : the primal      
+Optimizer  - Constraints            : 15872
+Optimizer  - Cones                  : 0
+Optimizer  - Scalar variables       : 113103            conic                  : 0               
+Optimizer  - Semi-definite variables: 0                 scalarized             : 0               
+Factor     - setup time             : 0.97              dense det. time        : 0.00            
+Factor     - ML order time          : 0.00              GP order time          : 0.78            
+Factor     - nonzeros before factor : 1.29e+005         after factor           : 3.68e+006       
+Factor     - dense dim.             : 0                 flops                  : 0.00e+000       
+Factor     - GP saved nzs           : 0                 GP saved flops         : 0.00e+000       
+ITE PFEAS    DFEAS    GFEAS    PRSTATUS   POBJ              DOBJ              MU       TIME  
+0   1.7e+003 3.3e+002 1.1e+005 0.00e+000  5.600900000e+004  -5.354800000e+004 1.0e+000 1.14  
+1   4.1e+002 8.1e+001 5.3e+004 8.98e-001  1.839167627e+004  -3.709305419e+004 3.6e-001 1.67  
+2   4.9e+001 9.7e+000 9.5e+003 1.38e+000  1.219470892e+004  3.910750772e+003  6.0e-002 2.23  
+3   8.1e+000 1.6e+000 1.6e+003 1.08e+000  1.173983500e+004  1.038058852e+004  1.0e-002 2.78  
+4   1.3e+000 2.5e-001 2.6e+002 1.02e+000  1.165963181e+004  1.143865257e+004  1.6e-003 3.26  
+5   1.0e-001 2.1e-002 2.4e+001 1.00e+000  1.164496787e+004  1.162491818e+004  1.5e-004 3.77  
+6   4.7e-003 9.4e-004 1.3e+000 1.00e+000  1.164345547e+004  1.164233365e+004  8.1e-006 4.29  
+7   5.9e-005 1.2e-005 3.6e-002 1.00e+000  1.164335489e+004  1.164332470e+004  2.1e-007 4.76  
+8   3.3e-007 6.5e-008 1.3e-003 1.00e+000  1.164335124e+004  1.164335013e+004  7.3e-009 5.26  
+9   2.9e-010 5.8e-011 6.1e-005 1.00e+000  1.164335108e+004  1.164335102e+004  3.4e-010 5.79  
+Interior-point optimizer terminated. Time: 5.80. 
+
+Optimizer terminated. Time: 5.84    
+
+Interior-point solution summary
+  Problem status  : PRIMAL_AND_DUAL_FEASIBLE
+  Solution status : OPTIMAL
+  Primal.  obj: 1.1643351075e+004   Viol.  con: 4e-011   var: 0e+000 
+  Dual.    obj: 1.1643351024e+004   Viol.  con: 0e+000   var: 1e-013 
+
+Optimizer summary
+  Optimizer                 -                        time: 5.84    
+    Interior-point          - iterations : 9         time: 5.80    
+      Basis identification  -                        time: 0.00    
+        Primal              - iterations : 0         time: 0.00    
+        Dual                - iterations : 0         time: 0.00    
+        Clean primal        - iterations : 0         time: 0.00    
+        Clean dual          - iterations : 0         time: 0.00    
+        Clean primal-dual   - iterations : 0         time: 0.00    
+    Simplex                 -                        time: 0.00    
+      Primal simplex        - iterations : 0         time: 0.00    
+      Dual simplex          - iterations : 0         time: 0.00    
+      Primal-dual simplex   - iterations : 0         time: 0.00    
+    Mixed integer           - relaxations: 0         time: 0.00    
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.9.sol'
+Start writing.
+done writing. Time: 0.50
+
+Return code - 0  [MSK_RES_OK]
+
+MOSEK Version 7.0.0.111 (Build date: 2014-3-31 22:24:02)
+Copyright (c) 1998-2014 MOSEK ApS, Denmark. WWW: http://mosek.com
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.10.mps'
+Using 'COST' as objective vector
+Read 231566 number of A nonzeros in 0.14 seconds.
+Using 'RHS1' as rhs vector
+Using 'BND1' as bound vector
+
+Read summary
+  Type             : QO (quadratic optimization problem)
+  Objective sense  : min
+  Constraints      : 17113       
+  Scalar variables : 115783      
+  Matrix variables : 0           
+  Time             : 0.3     
+
+Computer
+  Platform               : Windows/64-X86  
+  Cores                  : 4               
+
+Problem
+  Name                   : TESTPROB        
+  Objective sense        : min             
+  Type                   : QO (quadratic optimization problem)
+  Constraints            : 17113           
+  Cones                  : 0               
+  Scalar variables       : 115783          
+  Matrix variables       : 0               
+  Integer variables      : 0               
+
+Optimizer started.
+Interior-point optimizer started.
+Presolve started.
+Linear dependency checker started.
+Linear dependency checker terminated.
+Eliminator - tries                  : 0                 time                   : 0.00            
+Eliminator - elim's                 : 0               
+Lin. dep.  - tries                  : 1                 time                   : 0.03            
+Lin. dep.  - number                 : 0               
+Presolve terminated. Time: 0.13    
+Matrix reordering started.
+Local matrix reordering started.
+Local matrix reordering terminated.
+Matrix reordering terminated.
+Optimizer  - threads                : 4               
+Optimizer  - solved problem         : the primal      
+Optimizer  - Constraints            : 16242
+Optimizer  - Cones                  : 0
+Optimizer  - Scalar variables       : 113707            conic                  : 0               
+Optimizer  - Semi-definite variables: 0                 scalarized             : 0               
+Factor     - setup time             : 0.87              dense det. time        : 0.00            
+Factor     - ML order time          : 0.00              GP order time          : 0.70            
+Factor     - nonzeros before factor : 1.30e+005         after factor           : 2.97e+006       
+Factor     - dense dim.             : 0                 flops                  : 0.00e+000       
+Factor     - GP saved nzs           : 0                 GP saved flops         : 0.00e+000       
+ITE PFEAS    DFEAS    GFEAS    PRSTATUS   POBJ              DOBJ              MU       TIME  
+0   1.5e+003 3.3e+002 1.1e+005 0.00e+000  5.618350000e+004  -5.424250000e+004 1.0e+000 1.03  
+1   3.8e+002 8.2e+001 5.3e+004 8.94e-001  1.859015552e+004  -3.722977998e+004 3.6e-001 1.45  
+2   5.5e+001 1.2e+001 1.1e+004 1.38e+000  1.241504621e+004  2.995587903e+003  6.8e-002 1.83  
+3   7.4e+000 1.6e+000 1.5e+003 1.10e+000  1.183815142e+004  1.056977112e+004  9.5e-003 2.21  
+4   1.1e+000 2.3e-001 2.3e+002 1.02e+000  1.175442301e+004  1.156507838e+004  1.4e-003 2.61  
+5   1.0e-001 2.3e-002 2.5e+001 1.00e+000  1.174066225e+004  1.171982576e+004  1.5e-004 2.98  
+6   4.1e-003 8.8e-004 1.3e+000 1.00e+000  1.173893888e+004  1.173786837e+004  7.7e-006 3.35  
+7   6.7e-005 1.4e-005 4.2e-002 1.00e+000  1.173883374e+004  1.173879881e+004  2.4e-007 3.73  
+8   4.8e-007 1.0e-007 1.5e-003 1.00e+000  1.173882945e+004  1.173882820e+004  8.3e-009 4.07  
+9   1.7e-009 3.8e-010 7.1e-005 1.00e+000  1.173882927e+004  1.173882921e+004  3.9e-010 4.45  
+Interior-point optimizer terminated. Time: 4.48. 
+
+Optimizer terminated. Time: 4.51    
+
+Interior-point solution summary
+  Problem status  : PRIMAL_AND_DUAL_FEASIBLE
+  Solution status : OPTIMAL
+  Primal.  obj: 1.1738829274e+004   Viol.  con: 1e-010   var: 0e+000 
+  Dual.    obj: 1.1738829215e+004   Viol.  con: 0e+000   var: 1e-012 
+
+Optimizer summary
+  Optimizer                 -                        time: 4.51    
+    Interior-point          - iterations : 9         time: 4.48    
+      Basis identification  -                        time: 0.00    
+        Primal              - iterations : 0         time: 0.00    
+        Dual                - iterations : 0         time: 0.00    
+        Clean primal        - iterations : 0         time: 0.00    
+        Clean dual          - iterations : 0         time: 0.00    
+        Clean primal-dual   - iterations : 0         time: 0.00    
+    Simplex                 -                        time: 0.00    
+      Primal simplex        - iterations : 0         time: 0.00    
+      Dual simplex          - iterations : 0         time: 0.00    
+      Primal-dual simplex   - iterations : 0         time: 0.00    
+    Mixed integer           - relaxations: 0         time: 0.00    
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.10.sol'
+Start writing.
+done writing. Time: 0.48
+
+Return code - 0  [MSK_RES_OK]
+
+MOSEK Version 7.0.0.111 (Build date: 2014-3-31 22:24:02)
+Copyright (c) 1998-2014 MOSEK ApS, Denmark. WWW: http://mosek.com
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.11.mps'
+Using 'COST' as objective vector
+Read 222428 number of A nonzeros in 0.17 seconds.
+Using 'RHS1' as rhs vector
+Using 'BND1' as bound vector
+
+Read summary
+  Type             : QO (quadratic optimization problem)
+  Objective sense  : min
+  Constraints      : 16306       
+  Scalar variables : 111214      
+  Matrix variables : 0           
+  Time             : 0.3     
+
+Computer
+  Platform               : Windows/64-X86  
+  Cores                  : 4               
+
+Problem
+  Name                   : TESTPROB        
+  Objective sense        : min             
+  Type                   : QO (quadratic optimization problem)
+  Constraints            : 16306           
+  Cones                  : 0               
+  Scalar variables       : 111214          
+  Matrix variables       : 0               
+  Integer variables      : 0               
+
+Optimizer started.
+Interior-point optimizer started.
+Presolve started.
+Linear dependency checker started.
+Linear dependency checker terminated.
+Eliminator - tries                  : 0                 time                   : 0.00            
+Eliminator - elim's                 : 0               
+Lin. dep.  - tries                  : 1                 time                   : 0.02            
+Lin. dep.  - number                 : 0               
+Presolve terminated. Time: 0.11    
+Matrix reordering started.
+Local matrix reordering started.
+Local matrix reordering terminated.
+Matrix reordering terminated.
+Optimizer  - threads                : 4               
+Optimizer  - solved problem         : the primal      
+Optimizer  - Constraints            : 15390
+Optimizer  - Cones                  : 0
+Optimizer  - Scalar variables       : 109478            conic                  : 0               
+Optimizer  - Semi-definite variables: 0                 scalarized             : 0               
+Factor     - setup time             : 1.11              dense det. time        : 0.00            
+Factor     - ML order time          : 0.00              GP order time          : 0.97            
+Factor     - nonzeros before factor : 1.25e+005         after factor           : 1.84e+006       
+Factor     - dense dim.             : 0                 flops                  : 0.00e+000       
+Factor     - GP saved nzs           : 0                 GP saved flops         : 0.00e+000       
+ITE PFEAS    DFEAS    GFEAS    PRSTATUS   POBJ              DOBJ              MU       TIME  
+0   1.6e+003 3.2e+002 1.1e+005 0.00e+000  5.429450000e+004  -5.266350000e+004 1.0e+000 1.26  
+1   3.5e+002 7.1e+001 5.0e+004 8.24e-001  1.615290838e+004  -3.860259148e+004 3.4e-001 1.39  
+2   3.9e+001 7.8e+000 8.3e+003 1.36e+000  1.061408341e+004  3.042172915e+003  5.2e-002 1.54  
+3   7.1e+000 1.4e+000 1.6e+003 1.08e+000  1.023752530e+004  8.875548869e+003  9.7e-003 1.70  
+4   1.3e+000 2.6e-001 3.0e+002 1.02e+000  1.016198847e+004  9.901956302e+003  1.9e-003 1.84  
+5   1.5e-001 2.9e-002 3.6e+001 1.00e+000  1.014521642e+004  1.011393429e+004  2.2e-004 2.00  
+6   7.9e-003 1.6e-003 2.4e+000 1.00e+000  1.014286182e+004  1.014078216e+004  1.4e-005 2.15  
+7   1.7e-004 3.5e-005 8.7e-002 1.00e+000  1.014267127e+004  1.014259575e+004  5.1e-007 2.31  
+8   1.0e-006 2.0e-007 2.6e-003 1.00e+000  1.014266251e+004  1.014266028e+004  1.4e-008 2.46  
+9   4.6e-009 9.3e-010 1.3e-004 1.00e+000  1.014266219e+004  1.014266208e+004  7.0e-010 2.61  
+10  1.3e-011 2.6e-012 6.4e-006 1.00e+000  1.014266218e+004  1.014266217e+004  3.6e-011 2.76  
+Interior-point optimizer terminated. Time: 2.79. 
+
+Optimizer terminated. Time: 2.84    
+
+Interior-point solution summary
+  Problem status  : PRIMAL_AND_DUAL_FEASIBLE
+  Solution status : OPTIMAL
+  Primal.  obj: 1.0142662176e+004   Viol.  con: 3e-012   var: 0e+000 
+  Dual.    obj: 1.0142662171e+004   Viol.  con: 0e+000   var: 8e-015 
+
+Optimizer summary
+  Optimizer                 -                        time: 2.84    
+    Interior-point          - iterations : 10        time: 2.79    
+      Basis identification  -                        time: 0.00    
+        Primal              - iterations : 0         time: 0.00    
+        Dual                - iterations : 0         time: 0.00    
+        Clean primal        - iterations : 0         time: 0.00    
+        Clean dual          - iterations : 0         time: 0.00    
+        Clean primal-dual   - iterations : 0         time: 0.00    
+    Simplex                 -                        time: 0.00    
+      Primal simplex        - iterations : 0         time: 0.00    
+      Dual simplex          - iterations : 0         time: 0.00    
+      Primal-dual simplex   - iterations : 0         time: 0.00    
+    Mixed integer           - relaxations: 0         time: 0.00    
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.11.sol'
+Start writing.
+done writing. Time: 0.52
+
+Return code - 0  [MSK_RES_OK]
+
+MOSEK Version 7.0.0.111 (Build date: 2014-3-31 22:24:02)
+Copyright (c) 1998-2014 MOSEK ApS, Denmark. WWW: http://mosek.com
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.12.mps'
+Using 'COST' as objective vector
+Read 224892 number of A nonzeros in 0.14 seconds.
+Using 'RHS1' as rhs vector
+Using 'BND1' as bound vector
+
+Read summary
+  Type             : QO (quadratic optimization problem)
+  Objective sense  : min
+  Constraints      : 17118       
+  Scalar variables : 112446      
+  Matrix variables : 0           
+  Time             : 0.2     
+
+Computer
+  Platform               : Windows/64-X86  
+  Cores                  : 4               
+
+Problem
+  Name                   : TESTPROB        
+  Objective sense        : min             
+  Type                   : QO (quadratic optimization problem)
+  Constraints            : 17118           
+  Cones                  : 0               
+  Scalar variables       : 112446          
+  Matrix variables       : 0               
+  Integer variables      : 0               
+
+Optimizer started.
+Interior-point optimizer started.
+Presolve started.
+Linear dependency checker started.
+Linear dependency checker terminated.
+Eliminator - tries                  : 0                 time                   : 0.00            
+Eliminator - elim's                 : 0               
+Lin. dep.  - tries                  : 1                 time                   : 0.02            
+Lin. dep.  - number                 : 0               
+Presolve terminated. Time: 0.13    
+Matrix reordering started.
+Local matrix reordering started.
+Local matrix reordering terminated.
+Matrix reordering terminated.
+Optimizer  - threads                : 4               
+Optimizer  - solved problem         : the primal      
+Optimizer  - Constraints            : 16486
+Optimizer  - Cones                  : 0
+Optimizer  - Scalar variables       : 111189            conic                  : 0               
+Optimizer  - Semi-definite variables: 0                 scalarized             : 0               
+Factor     - setup time             : 0.98              dense det. time        : 0.00            
+Factor     - ML order time          : 0.00              GP order time          : 0.83            
+Factor     - nonzeros before factor : 1.28e+005         after factor           : 1.57e+006       
+Factor     - dense dim.             : 0                 flops                  : 0.00e+000       
+Factor     - GP saved nzs           : 0                 GP saved flops         : 0.00e+000       
+ITE PFEAS    DFEAS    GFEAS    PRSTATUS   POBJ              DOBJ              MU       TIME  
+0   1.5e+003 3.2e+002 1.1e+005 0.00e+000  5.488950000e+004  -5.369450000e+004 1.0e+000 1.16  
+1   3.7e+002 8.0e+001 5.2e+004 8.56e-001  1.736944296e+004  -3.835817583e+004 3.6e-001 1.29  
+2   3.1e+001 6.7e+000 7.9e+003 1.37e+000  1.086178035e+004  3.876190562e+003  4.9e-002 1.45  
+3   5.0e+000 1.1e+000 1.3e+003 1.07e+000  1.053450009e+004  9.416466297e+003  8.1e-003 1.59  
+4   8.3e-001 1.8e-001 2.3e+002 1.01e+000  1.047401700e+004  1.028056770e+004  1.4e-003 1.73  
+5   6.8e-002 1.5e-002 2.1e+001 1.00e+000  1.046168603e+004  1.044360537e+004  1.3e-004 1.87  
+6   3.0e-003 6.5e-004 1.2e+000 1.00e+000  1.046029711e+004  1.045923957e+004  7.4e-006 2.03  
+7   5.8e-005 1.3e-005 4.7e-002 1.00e+000  1.046019542e+004  1.046015537e+004  2.7e-007 2.14  
+8   4.9e-007 1.0e-007 1.8e-003 1.00e+000  1.046019048e+004  1.046018895e+004  1.0e-008 2.28  
+9   2.7e-009 5.8e-010 8.6e-005 1.00e+000  1.046019026e+004  1.046019019e+004  4.8e-010 2.40  
+Interior-point optimizer terminated. Time: 2.43. 
+
+Optimizer terminated. Time: 2.48    
+
+Interior-point solution summary
+  Problem status  : PRIMAL_AND_DUAL_FEASIBLE
+  Solution status : OPTIMAL
+  Primal.  obj: 1.0460190264e+004   Viol.  con: 3e-010   var: 0e+000 
+  Dual.    obj: 1.0460190191e+004   Viol.  con: 0e+000   var: 2e-012 
+
+Optimizer summary
+  Optimizer                 -                        time: 2.48    
+    Interior-point          - iterations : 9         time: 2.43    
+      Basis identification  -                        time: 0.00    
+        Primal              - iterations : 0         time: 0.00    
+        Dual                - iterations : 0         time: 0.00    
+        Clean primal        - iterations : 0         time: 0.00    
+        Clean dual          - iterations : 0         time: 0.00    
+        Clean primal-dual   - iterations : 0         time: 0.00    
+    Simplex                 -                        time: 0.00    
+      Primal simplex        - iterations : 0         time: 0.00    
+      Dual simplex          - iterations : 0         time: 0.00    
+      Primal-dual simplex   - iterations : 0         time: 0.00    
+    Mixed integer           - relaxations: 0         time: 0.00    
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.12.sol'
+Start writing.
+done writing. Time: 0.47
+
+Return code - 0  [MSK_RES_OK]
+
+MOSEK Version 7.0.0.111 (Build date: 2014-3-31 22:24:02)
+Copyright (c) 1998-2014 MOSEK ApS, Denmark. WWW: http://mosek.com
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.13.mps'
+Using 'COST' as objective vector
+Read 223204 number of A nonzeros in 0.14 seconds.
+Using 'RHS1' as rhs vector
+Using 'BND1' as bound vector
+
+Read summary
+  Type             : QO (quadratic optimization problem)
+  Objective sense  : min
+  Constraints      : 17234       
+  Scalar variables : 111602      
+  Matrix variables : 0           
+  Time             : 0.2     
+
+Computer
+  Platform               : Windows/64-X86  
+  Cores                  : 4               
+
+Problem
+  Name                   : TESTPROB        
+  Objective sense        : min             
+  Type                   : QO (quadratic optimization problem)
+  Constraints            : 17234           
+  Cones                  : 0               
+  Scalar variables       : 111602          
+  Matrix variables       : 0               
+  Integer variables      : 0               
+
+Optimizer started.
+Interior-point optimizer started.
+Presolve started.
+Linear dependency checker started.
+Linear dependency checker terminated.
+Eliminator - tries                  : 0                 time                   : 0.00            
+Eliminator - elim's                 : 0               
+Lin. dep.  - tries                  : 1                 time                   : 0.02            
+Lin. dep.  - number                 : 0               
+Presolve terminated. Time: 0.11    
+Matrix reordering started.
+Local matrix reordering started.
+Local matrix reordering terminated.
+Matrix reordering terminated.
+Optimizer  - threads                : 4               
+Optimizer  - solved problem         : the primal      
+Optimizer  - Constraints            : 16673
+Optimizer  - Cones                  : 0
+Optimizer  - Scalar variables       : 110344            conic                  : 0               
+Optimizer  - Semi-definite variables: 0                 scalarized             : 0               
+Factor     - setup time             : 0.84              dense det. time        : 0.00            
+Factor     - ML order time          : 0.00              GP order time          : 0.70            
+Factor     - nonzeros before factor : 1.27e+005         after factor           : 1.56e+006       
+Factor     - dense dim.             : 0                 flops                  : 0.00e+000       
+Factor     - GP saved nzs           : 0                 GP saved flops         : 0.00e+000       
+ITE PFEAS    DFEAS    GFEAS    PRSTATUS   POBJ              DOBJ              MU       TIME  
+0   1.4e+003 3.2e+002 1.1e+005 0.00e+000  5.442750000e+004  -5.330350000e+004 1.0e+000 1.00  
+1   2.6e+002 5.7e+001 4.9e+004 8.38e-001  1.479403175e+004  -3.865121617e+004 3.1e-001 1.11  
+2   5.2e+001 1.1e+001 1.1e+004 1.34e+000  1.091572741e+004  2.657400689e+002  7.0e-002 1.25  
+3   7.1e+000 1.6e+000 1.6e+003 1.10e+000  1.032714333e+004  8.885186620e+003  9.8e-003 1.37  
+4   1.3e+000 2.9e-001 3.0e+002 1.02e+000  1.024585806e+004  9.977131607e+003  1.8e-003 1.48  
+5   1.4e-001 3.2e-002 3.6e+001 1.00e+000  1.022887672e+004  1.019674776e+004  2.2e-004 1.62  
+6   6.2e-003 1.4e-003 1.9e+000 1.00e+000  1.022653326e+004  1.022484956e+004  1.1e-005 1.75  
+7   1.8e-004 4.0e-005 8.0e-002 1.00e+000  1.022638525e+004  1.022631465e+004  4.6e-007 1.86  
+8   9.3e-007 2.1e-007 2.0e-003 1.00e+000  1.022637772e+004  1.022637598e+004  1.1e-008 1.98  
+9   9.8e-008 2.2e-008 2.7e-004 1.00e+000  1.022637750e+004  1.022637725e+004  1.5e-009 2.09  
+10  1.2e-008 2.7e-009 4.0e-005 1.00e+000  1.022637747e+004  1.022637743e+004  2.2e-010 2.21  
+Interior-point optimizer terminated. Time: 2.23. 
+
+Optimizer terminated. Time: 2.28    
+
+Interior-point solution summary
+  Problem status  : PRIMAL_AND_DUAL_FEASIBLE
+  Solution status : OPTIMAL
+  Primal.  obj: 1.0226377467e+004   Viol.  con: 1e-009   var: 7e-012 
+  Dual.    obj: 1.0226377432e+004   Viol.  con: 0e+000   var: 7e-012 
+
+Optimizer summary
+  Optimizer                 -                        time: 2.28    
+    Interior-point          - iterations : 10        time: 2.23    
+      Basis identification  -                        time: 0.00    
+        Primal              - iterations : 0         time: 0.00    
+        Dual                - iterations : 0         time: 0.00    
+        Clean primal        - iterations : 0         time: 0.00    
+        Clean dual          - iterations : 0         time: 0.00    
+        Clean primal-dual   - iterations : 0         time: 0.00    
+    Simplex                 -                        time: 0.00    
+      Primal simplex        - iterations : 0         time: 0.00    
+      Dual simplex          - iterations : 0         time: 0.00    
+      Primal-dual simplex   - iterations : 0         time: 0.00    
+    Mixed integer           - relaxations: 0         time: 0.00    
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.13.sol'
+Start writing.
+done writing. Time: 0.47
+
+Return code - 0  [MSK_RES_OK]
+
+MOSEK Version 7.0.0.111 (Build date: 2014-3-31 22:24:02)
+Copyright (c) 1998-2014 MOSEK ApS, Denmark. WWW: http://mosek.com
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.14.mps'
+Using 'COST' as objective vector
+Read 229506 number of A nonzeros in 0.14 seconds.
+Using 'RHS1' as rhs vector
+Using 'BND1' as bound vector
+
+Read summary
+  Type             : QO (quadratic optimization problem)
+  Objective sense  : min
+  Constraints      : 17221       
+  Scalar variables : 114753      
+  Matrix variables : 0           
+  Time             : 0.2     
+
+Computer
+  Platform               : Windows/64-X86  
+  Cores                  : 4               
+
+Problem
+  Name                   : TESTPROB        
+  Objective sense        : min             
+  Type                   : QO (quadratic optimization problem)
+  Constraints            : 17221           
+  Cones                  : 0               
+  Scalar variables       : 114753          
+  Matrix variables       : 0               
+  Integer variables      : 0               
+
+Optimizer started.
+Interior-point optimizer started.
+Presolve started.
+Linear dependency checker started.
+Linear dependency checker terminated.
+Eliminator - tries                  : 0                 time                   : 0.00            
+Eliminator - elim's                 : 0               
+Lin. dep.  - tries                  : 1                 time                   : 0.03            
+Lin. dep.  - number                 : 0               
+Presolve terminated. Time: 0.13    
+Matrix reordering started.
+Local matrix reordering started.
+Local matrix reordering terminated.
+Matrix reordering terminated.
+Optimizer  - threads                : 4               
+Optimizer  - solved problem         : the primal      
+Optimizer  - Constraints            : 16611
+Optimizer  - Cones                  : 0
+Optimizer  - Scalar variables       : 113368            conic                  : 0               
+Optimizer  - Semi-definite variables: 0                 scalarized             : 0               
+Factor     - setup time             : 0.83              dense det. time        : 0.00            
+Factor     - ML order time          : 0.00              GP order time          : 0.67            
+Factor     - nonzeros before factor : 1.30e+005         after factor           : 2.12e+006       
+Factor     - dense dim.             : 0                 flops                  : 0.00e+000       
+Factor     - GP saved nzs           : 0                 GP saved flops         : 0.00e+000       
+ITE PFEAS    DFEAS    GFEAS    PRSTATUS   POBJ              DOBJ              MU       TIME  
+0   1.5e+003 3.3e+002 1.1e+005 0.00e+000  5.610800000e+004  -5.484900000e+004 1.0e+000 0.98  
+1   3.1e+002 6.8e+001 5.2e+004 9.06e-001  1.681840855e+004  -3.726030832e+004 3.3e-001 1.22  
+2   4.0e+001 8.9e+000 8.9e+003 1.35e+000  1.174416319e+004  3.899476690e+003  5.4e-002 1.42  
+3   6.0e+000 1.3e+000 1.4e+003 1.08e+000  1.130071905e+004  1.012498010e+004  8.4e-003 1.72  
+4   9.3e-001 2.1e-001 2.2e+002 1.01e+000  1.122855162e+004  1.104015322e+004  1.4e-003 1.90  
+5   1.0e-001 2.3e-002 2.7e+001 1.00e+000  1.121582915e+004  1.119308890e+004  1.6e-004 2.09  
+6   5.1e-003 1.1e-003 1.6e+000 1.00e+000  1.121408685e+004  1.121274939e+004  9.3e-006 2.28  
+7   6.7e-005 1.5e-005 4.1e-002 1.00e+000  1.121396590e+004  1.121393087e+004  2.3e-007 2.46  
+8   5.4e-007 1.2e-007 1.5e-003 1.00e+000  1.121396170e+004  1.121396045e+004  8.1e-009 2.67  
+9   1.3e-007 2.9e-008 4.0e-004 1.00e+000  1.121396156e+004  1.121396122e+004  2.2e-009 2.86  
+10  9.0e-009 2.0e-009 3.7e-005 1.00e+000  1.121396152e+004  1.121396149e+004  2.0e-010 3.04  
+Interior-point optimizer terminated. Time: 3.07. 
+
+Optimizer terminated. Time: 3.12    
+
+Interior-point solution summary
+  Problem status  : PRIMAL_AND_DUAL_FEASIBLE
+  Solution status : OPTIMAL
+  Primal.  obj: 1.1213961517e+004   Viol.  con: 6e-010   var: 5e-012 
+  Dual.    obj: 1.1213961486e+004   Viol.  con: 0e+000   var: 5e-012 
+
+Optimizer summary
+  Optimizer                 -                        time: 3.12    
+    Interior-point          - iterations : 10        time: 3.07    
+      Basis identification  -                        time: 0.00    
+        Primal              - iterations : 0         time: 0.00    
+        Dual                - iterations : 0         time: 0.00    
+        Clean primal        - iterations : 0         time: 0.00    
+        Clean dual          - iterations : 0         time: 0.00    
+        Clean primal-dual   - iterations : 0         time: 0.00    
+    Simplex                 -                        time: 0.00    
+      Primal simplex        - iterations : 0         time: 0.00    
+      Dual simplex          - iterations : 0         time: 0.00    
+      Primal-dual simplex   - iterations : 0         time: 0.00    
+    Mixed integer           - relaxations: 0         time: 0.00    
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.14.sol'
+Start writing.
+done writing. Time: 0.48
+
+Return code - 0  [MSK_RES_OK]
+
+MOSEK Version 7.0.0.111 (Build date: 2014-3-31 22:24:02)
+Copyright (c) 1998-2014 MOSEK ApS, Denmark. WWW: http://mosek.com
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.15.mps'
+Using 'COST' as objective vector
+Read 221280 number of A nonzeros in 0.14 seconds.
+Using 'RHS1' as rhs vector
+Using 'BND1' as bound vector
+
+Read summary
+  Type             : QO (quadratic optimization problem)
+  Objective sense  : min
+  Constraints      : 16411       
+  Scalar variables : 110640      
+  Matrix variables : 0           
+  Time             : 0.2     
+
+Computer
+  Platform               : Windows/64-X86  
+  Cores                  : 4               
+
+Problem
+  Name                   : TESTPROB        
+  Objective sense        : min             
+  Type                   : QO (quadratic optimization problem)
+  Constraints            : 16411           
+  Cones                  : 0               
+  Scalar variables       : 110640          
+  Matrix variables       : 0               
+  Integer variables      : 0               
+
+Optimizer started.
+Interior-point optimizer started.
+Presolve started.
+Linear dependency checker started.
+Linear dependency checker terminated.
+Eliminator - tries                  : 0                 time                   : 0.00            
+Eliminator - elim's                 : 0               
+Lin. dep.  - tries                  : 1                 time                   : 0.02            
+Lin. dep.  - number                 : 0               
+Presolve terminated. Time: 0.11    
+Matrix reordering started.
+Local matrix reordering started.
+Local matrix reordering terminated.
+Matrix reordering terminated.
+Optimizer  - threads                : 4               
+Optimizer  - solved problem         : the primal      
+Optimizer  - Constraints            : 15744
+Optimizer  - Cones                  : 0
+Optimizer  - Scalar variables       : 109293            conic                  : 0               
+Optimizer  - Semi-definite variables: 0                 scalarized             : 0               
+Factor     - setup time             : 0.59              dense det. time        : 0.00            
+Factor     - ML order time          : 0.00              GP order time          : 0.44            
+Factor     - nonzeros before factor : 1.25e+005         after factor           : 9.35e+005       
+Factor     - dense dim.             : 0                 flops                  : 0.00e+000       
+Factor     - GP saved nzs           : 0                 GP saved flops         : 0.00e+000       
+ITE PFEAS    DFEAS    GFEAS    PRSTATUS   POBJ              DOBJ              MU       TIME  
+0   1.4e+003 3.2e+002 1.1e+005 0.00e+000  5.433350000e+004  -5.307150000e+004 1.0e+000 0.75  
+1   3.9e+002 8.7e+001 5.3e+004 8.26e-001  1.781089916e+004  -3.879853407e+004 3.8e-001 0.84  
+2   7.2e+001 1.6e+001 1.3e+004 1.37e+000  1.089075498e+004  -1.036484113e+003 8.7e-002 0.92  
+3   1.0e+001 2.3e+000 2.0e+003 1.14e+000  1.007356187e+004  8.387052653e+003  1.3e-002 0.98  
+4   2.1e+000 4.7e-001 4.2e+002 1.02e+000  9.960005967e+003  9.605592926e+003  2.8e-003 1.06  
+5   2.2e-001 4.9e-002 4.9e+001 1.01e+000  9.932583940e+003  9.891340500e+003  3.2e-004 1.12  
+6   1.0e-002 2.3e-003 2.9e+000 1.00e+000  9.928912449e+003  9.926459887e+003  1.8e-005 1.20  
+7   2.6e-004 5.7e-005 1.2e-001 1.00e+000  9.928651398e+003  9.928546665e+003  7.5e-007 1.28  
+8   2.0e-006 4.3e-007 4.1e-003 1.00e+000  9.928638210e+003  9.928634783e+003  2.3e-008 1.34  
+9   5.5e-007 1.2e-007 1.2e-003 1.00e+000  9.928637844e+003  9.928636810e+003  7.1e-009 1.42  
+10  1.5e-008 3.4e-009 6.2e-005 1.00e+000  9.928637707e+003  9.928637654e+003  3.6e-010 1.50  
+Interior-point optimizer terminated. Time: 1.53. 
+
+Optimizer terminated. Time: 1.56    
+
+Interior-point solution summary
+  Problem status  : PRIMAL_AND_DUAL_FEASIBLE
+  Solution status : OPTIMAL
+  Primal.  obj: 9.9286377065e+003   Viol.  con: 1e-009   var: 3e-011 
+  Dual.    obj: 9.9286376543e+003   Viol.  con: 0e+000   var: 9e-012 
+
+Optimizer summary
+  Optimizer                 -                        time: 1.56    
+    Interior-point          - iterations : 10        time: 1.53    
+      Basis identification  -                        time: 0.00    
+        Primal              - iterations : 0         time: 0.00    
+        Dual                - iterations : 0         time: 0.00    
+        Clean primal        - iterations : 0         time: 0.00    
+        Clean dual          - iterations : 0         time: 0.00    
+        Clean primal-dual   - iterations : 0         time: 0.00    
+    Simplex                 -                        time: 0.00    
+      Primal simplex        - iterations : 0         time: 0.00    
+      Dual simplex          - iterations : 0         time: 0.00    
+      Primal-dual simplex   - iterations : 0         time: 0.00    
+    Mixed integer           - relaxations: 0         time: 0.00    
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.15.sol'
+Start writing.
+done writing. Time: 0.47
+
+Return code - 0  [MSK_RES_OK]
+
+MOSEK Version 7.0.0.111 (Build date: 2014-3-31 22:24:02)
+Copyright (c) 1998-2014 MOSEK ApS, Denmark. WWW: http://mosek.com
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.16.mps'
+Using 'COST' as objective vector
+Read 227658 number of A nonzeros in 0.16 seconds.
+Using 'RHS1' as rhs vector
+Using 'BND1' as bound vector
+
+Read summary
+  Type             : QO (quadratic optimization problem)
+  Objective sense  : min
+  Constraints      : 17008       
+  Scalar variables : 113829      
+  Matrix variables : 0           
+  Time             : 0.3     
+
+Computer
+  Platform               : Windows/64-X86  
+  Cores                  : 4               
+
+Problem
+  Name                   : TESTPROB        
+  Objective sense        : min             
+  Type                   : QO (quadratic optimization problem)
+  Constraints            : 17008           
+  Cones                  : 0               
+  Scalar variables       : 113829          
+  Matrix variables       : 0               
+  Integer variables      : 0               
+
+Optimizer started.
+Interior-point optimizer started.
+Presolve started.
+Linear dependency checker started.
+Linear dependency checker terminated.
+Eliminator - tries                  : 0                 time                   : 0.00            
+Eliminator - elim's                 : 0               
+Lin. dep.  - tries                  : 1                 time                   : 0.03            
+Lin. dep.  - number                 : 0               
+Presolve terminated. Time: 0.13    
+Matrix reordering started.
+Local matrix reordering started.
+Local matrix reordering terminated.
+Matrix reordering terminated.
+Optimizer  - threads                : 4               
+Optimizer  - solved problem         : the primal      
+Optimizer  - Constraints            : 16327
+Optimizer  - Cones                  : 0
+Optimizer  - Scalar variables       : 112406            conic                  : 0               
+Optimizer  - Semi-definite variables: 0                 scalarized             : 0               
+Factor     - setup time             : 0.89              dense det. time        : 0.00            
+Factor     - ML order time          : 0.00              GP order time          : 0.75            
+Factor     - nonzeros before factor : 1.29e+005         after factor           : 1.74e+006       
+Factor     - dense dim.             : 0                 flops                  : 0.00e+000       
+Factor     - GP saved nzs           : 0                 GP saved flops         : 0.00e+000       
+ITE PFEAS    DFEAS    GFEAS    PRSTATUS   POBJ              DOBJ              MU       TIME  
+0   1.4e+003 3.3e+002 1.1e+005 0.00e+000  5.560600000e+004  -5.427600000e+004 1.0e+000 1.06  
+1   2.8e+002 6.3e+001 5.1e+004 8.88e-001  1.605964749e+004  -3.760817312e+004 3.2e-001 1.22  
+2   3.3e+001 7.4e+000 7.9e+003 1.35e+000  1.135423819e+004  4.267059414e+003  4.8e-002 1.40  
+3   6.4e+000 1.4e+000 1.6e+003 1.07e+000  1.099858847e+004  9.635551882e+003  9.5e-003 1.56  
+4   9.4e-001 2.1e-001 2.4e+002 1.02e+000  1.092098462e+004  1.071314262e+004  1.5e-003 1.70  
+5   6.9e-002 1.6e-002 2.0e+001 1.00e+000  1.090723033e+004  1.088994031e+004  1.2e-004 1.84  
+6   3.0e-003 6.7e-004 1.1e+000 1.00e+000  1.090588291e+004  1.090492478e+004  6.5e-006 1.97  
+7   5.3e-005 1.2e-005 3.8e-002 1.00e+000  1.090579135e+004  1.090575845e+004  2.1e-007 2.11  
+8   5.2e-007 1.2e-007 1.4e-003 1.00e+000  1.090578752e+004  1.090578629e+004  7.8e-009 2.26  
+9   1.3e-009 3.0e-010 6.6e-005 1.00e+000  1.090578735e+004  1.090578730e+004  3.5e-010 2.43  
+Interior-point optimizer terminated. Time: 2.46. 
+
+Optimizer terminated. Time: 2.51    
+
+Interior-point solution summary
+  Problem status  : PRIMAL_AND_DUAL_FEASIBLE
+  Solution status : OPTIMAL
+  Primal.  obj: 1.0905787353e+004   Viol.  con: 1e-010   var: 0e+000 
+  Dual.    obj: 1.0905787296e+004   Viol.  con: 0e+000   var: 8e-013 
+
+Optimizer summary
+  Optimizer                 -                        time: 2.51    
+    Interior-point          - iterations : 9         time: 2.46    
+      Basis identification  -                        time: 0.00    
+        Primal              - iterations : 0         time: 0.00    
+        Dual                - iterations : 0         time: 0.00    
+        Clean primal        - iterations : 0         time: 0.00    
+        Clean dual          - iterations : 0         time: 0.00    
+        Clean primal-dual   - iterations : 0         time: 0.00    
+    Simplex                 -                        time: 0.00    
+      Primal simplex        - iterations : 0         time: 0.00    
+      Dual simplex          - iterations : 0         time: 0.00    
+      Primal-dual simplex   - iterations : 0         time: 0.00    
+    Mixed integer           - relaxations: 0         time: 0.00    
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.16.sol'
+Start writing.
+done writing. Time: 0.48
+
+Return code - 0  [MSK_RES_OK]
+
+MOSEK Version 7.0.0.111 (Build date: 2014-3-31 22:24:02)
+Copyright (c) 1998-2014 MOSEK ApS, Denmark. WWW: http://mosek.com
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.17.mps'
+Using 'COST' as objective vector
+Read 227620 number of A nonzeros in 0.17 seconds.
+Using 'RHS1' as rhs vector
+Using 'BND1' as bound vector
+
+Read summary
+  Type             : QO (quadratic optimization problem)
+  Objective sense  : min
+  Constraints      : 16342       
+  Scalar variables : 113810      
+  Matrix variables : 0           
+  Time             : 0.3     
+
+Computer
+  Platform               : Windows/64-X86  
+  Cores                  : 4               
+
+Problem
+  Name                   : TESTPROB        
+  Objective sense        : min             
+  Type                   : QO (quadratic optimization problem)
+  Constraints            : 16342           
+  Cones                  : 0               
+  Scalar variables       : 113810          
+  Matrix variables       : 0               
+  Integer variables      : 0               
+
+Optimizer started.
+Interior-point optimizer started.
+Presolve started.
+Linear dependency checker started.
+Linear dependency checker terminated.
+Eliminator - tries                  : 0                 time                   : 0.00            
+Eliminator - elim's                 : 0               
+Lin. dep.  - tries                  : 1                 time                   : 0.02            
+Lin. dep.  - number                 : 0               
+Presolve terminated. Time: 0.11    
+Matrix reordering started.
+Local matrix reordering started.
+Local matrix reordering terminated.
+Matrix reordering terminated.
+Optimizer  - threads                : 4               
+Optimizer  - solved problem         : the primal      
+Optimizer  - Constraints            : 15766
+Optimizer  - Cones                  : 0
+Optimizer  - Scalar variables       : 112506            conic                  : 0               
+Optimizer  - Semi-definite variables: 0                 scalarized             : 0               
+Factor     - setup time             : 0.09              dense det. time        : 0.00            
+Factor     - ML order time          : 0.00              GP order time          : 0.00            
+Factor     - nonzeros before factor : 1.28e+005         after factor           : 3.62e+005       
+Factor     - dense dim.             : 0                 flops                  : 0.00e+000       
+ITE PFEAS    DFEAS    GFEAS    PRSTATUS   POBJ              DOBJ              MU       TIME  
+0   1.4e+003 3.2e+002 1.1e+005 0.00e+000  5.581850000e+004  -5.458450000e+004 1.0e+000 0.25  
+1   3.0e+002 6.7e+001 5.1e+004 8.72e-001  1.661381626e+004  -3.771501352e+004 3.3e-001 0.30  
+2   3.0e+001 6.6e+000 7.4e+003 1.35e+000  1.149520877e+004  4.865131122e+003  4.5e-002 0.34  
+3   5.5e+000 1.2e+000 1.4e+003 1.07e+000  1.116948287e+004  9.949508035e+003  8.5e-003 0.39  
+4   9.3e-001 2.1e-001 2.5e+002 1.01e+000  1.109977959e+004  1.088611998e+004  1.5e-003 0.42  
+5   1.1e-001 2.4e-002 3.2e+001 1.00e+000  1.108567417e+004  1.105852159e+004  1.9e-004 0.45  
+6   6.4e-003 1.4e-003 2.2e+000 1.00e+000  1.108357550e+004  1.108164593e+004  1.3e-005 0.48  
+7   1.3e-004 2.9e-005 7.6e-002 1.00e+000  1.108339561e+004  1.108332985e+004  4.3e-007 0.52  
+8   1.9e-006 4.2e-007 2.9e-003 1.00e+000  1.108338790e+004  1.108338541e+004  1.6e-008 0.56  
+9   1.0e-008 2.3e-009 1.2e-004 1.00e+000  1.108338756e+004  1.108338746e+004  6.2e-010 0.59  
+Interior-point optimizer terminated. Time: 0.62. 
+
+Optimizer terminated. Time: 0.67    
+
+Interior-point solution summary
+  Problem status  : PRIMAL_AND_DUAL_FEASIBLE
+  Solution status : OPTIMAL
+  Primal.  obj: 1.1083387558e+004   Viol.  con: 1e-009   var: 0e+000 
+  Dual.    obj: 1.1083387459e+004   Viol.  con: 0e+000   var: 6e-012 
+
+Optimizer summary
+  Optimizer                 -                        time: 0.67    
+    Interior-point          - iterations : 9         time: 0.62    
+      Basis identification  -                        time: 0.00    
+        Primal              - iterations : 0         time: 0.00    
+        Dual                - iterations : 0         time: 0.00    
+        Clean primal        - iterations : 0         time: 0.00    
+        Clean dual          - iterations : 0         time: 0.00    
+        Clean primal-dual   - iterations : 0         time: 0.00    
+    Simplex                 -                        time: 0.00    
+      Primal simplex        - iterations : 0         time: 0.00    
+      Dual simplex          - iterations : 0         time: 0.00    
+      Primal-dual simplex   - iterations : 0         time: 0.00    
+    Mixed integer           - relaxations: 0         time: 0.00    
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.17.sol'
+Start writing.
+done writing. Time: 0.53
+
+Return code - 0  [MSK_RES_OK]
+
+MOSEK Version 7.0.0.111 (Build date: 2014-3-31 22:24:02)
+Copyright (c) 1998-2014 MOSEK ApS, Denmark. WWW: http://mosek.com
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.18.mps'
+Using 'COST' as objective vector
+Read 231552 number of A nonzeros in 0.17 seconds.
+Using 'RHS1' as rhs vector
+Using 'BND1' as bound vector
+
+Read summary
+  Type             : QO (quadratic optimization problem)
+  Objective sense  : min
+  Constraints      : 16352       
+  Scalar variables : 115776      
+  Matrix variables : 0           
+  Time             : 0.3     
+
+Computer
+  Platform               : Windows/64-X86  
+  Cores                  : 4               
+
+Problem
+  Name                   : TESTPROB        
+  Objective sense        : min             
+  Type                   : QO (quadratic optimization problem)
+  Constraints            : 16352           
+  Cones                  : 0               
+  Scalar variables       : 115776          
+  Matrix variables       : 0               
+  Integer variables      : 0               
+
+Optimizer started.
+Interior-point optimizer started.
+Presolve started.
+Linear dependency checker started.
+Linear dependency checker terminated.
+Eliminator - tries                  : 0                 time                   : 0.00            
+Eliminator - elim's                 : 0               
+Lin. dep.  - tries                  : 1                 time                   : 0.01            
+Lin. dep.  - number                 : 0               
+Presolve terminated. Time: 0.14    
+Matrix reordering started.
+Local matrix reordering started.
+Local matrix reordering terminated.
+Matrix reordering terminated.
+Optimizer  - threads                : 4               
+Optimizer  - solved problem         : the primal      
+Optimizer  - Constraints            : 15714
+Optimizer  - Cones                  : 0
+Optimizer  - Scalar variables       : 114277            conic                  : 0               
+Optimizer  - Semi-definite variables: 0                 scalarized             : 0               
+Factor     - setup time             : 0.83              dense det. time        : 0.00            
+Factor     - ML order time          : 0.00              GP order time          : 0.67            
+Factor     - nonzeros before factor : 1.30e+005         after factor           : 1.75e+006       
+Factor     - dense dim.             : 0                 flops                  : 0.00e+000       
+Factor     - GP saved nzs           : 0                 GP saved flops         : 0.00e+000       
+ITE PFEAS    DFEAS    GFEAS    PRSTATUS   POBJ              DOBJ              MU       TIME  
+0   1.5e+003 3.3e+002 1.1e+005 0.00e+000  5.663650000e+004  -5.518950000e+004 1.0e+000 1.00  
+1   5.0e+002 1.1e+002 5.7e+004 9.03e-001  2.147281644e+004  -3.788686104e+004 4.2e-001 1.19  
+2   6.1e+001 1.3e+001 1.2e+004 1.38e+000  1.252661830e+004  1.838312211e+003  7.9e-002 1.39  
+3   8.3e+000 1.8e+000 1.7e+003 1.11e+000  1.187559971e+004  1.045066858e+004  1.1e-002 1.58  
+4   1.5e+000 3.1e-001 3.2e+002 1.02e+000  1.178250157e+004  1.152198961e+004  2.0e-003 1.76  
+5   1.6e-001 3.4e-002 3.9e+001 1.00e+000  1.176330400e+004  1.173168000e+004  2.4e-004 1.95  
+6   5.5e-003 1.2e-003 1.9e+000 1.00e+000  1.176058544e+004  1.175907707e+004  1.1e-005 2.14  
+7   1.2e-004 2.6e-005 7.7e-002 1.00e+000  1.176042592e+004  1.176036313e+004  4.5e-007 2.29  
+8   4.4e-007 9.5e-008 2.5e-003 1.00e+000  1.176041783e+004  1.176041579e+004  1.4e-008 2.46  
+9   2.8e-009 5.9e-010 1.3e-004 1.00e+000  1.176041753e+004  1.176041743e+004  7.2e-010 2.64  
+Interior-point optimizer terminated. Time: 2.67. 
+
+Optimizer terminated. Time: 2.71    
+
+Interior-point solution summary
+  Problem status  : PRIMAL_AND_DUAL_FEASIBLE
+  Solution status : OPTIMAL
+  Primal.  obj: 1.1760417531e+004   Viol.  con: 4e-010   var: 0e+000 
+  Dual.    obj: 1.1760417426e+004   Viol.  con: 0e+000   var: 1e-012 
+
+Optimizer summary
+  Optimizer                 -                        time: 2.71    
+    Interior-point          - iterations : 9         time: 2.67    
+      Basis identification  -                        time: 0.00    
+        Primal              - iterations : 0         time: 0.00    
+        Dual                - iterations : 0         time: 0.00    
+        Clean primal        - iterations : 0         time: 0.00    
+        Clean dual          - iterations : 0         time: 0.00    
+        Clean primal-dual   - iterations : 0         time: 0.00    
+    Simplex                 -                        time: 0.00    
+      Primal simplex        - iterations : 0         time: 0.00    
+      Dual simplex          - iterations : 0         time: 0.00    
+      Primal-dual simplex   - iterations : 0         time: 0.00    
+    Mixed integer           - relaxations: 0         time: 0.00    
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.18.sol'
+Start writing.
+done writing. Time: 0.47
+
+Return code - 0  [MSK_RES_OK]
+
+MOSEK Version 7.0.0.111 (Build date: 2014-3-31 22:24:02)
+Copyright (c) 1998-2014 MOSEK ApS, Denmark. WWW: http://mosek.com
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.19.mps'
+Using 'COST' as objective vector
+Read 247784 number of A nonzeros in 0.16 seconds.
+Using 'RHS1' as rhs vector
+Using 'BND1' as bound vector
+
+Read summary
+  Type             : QO (quadratic optimization problem)
+  Objective sense  : min
+  Constraints      : 16920       
+  Scalar variables : 123892      
+  Matrix variables : 0           
+  Time             : 0.2     
+
+Computer
+  Platform               : Windows/64-X86  
+  Cores                  : 4               
+
+Problem
+  Name                   : TESTPROB        
+  Objective sense        : min             
+  Type                   : QO (quadratic optimization problem)
+  Constraints            : 16920           
+  Cones                  : 0               
+  Scalar variables       : 123892          
+  Matrix variables       : 0               
+  Integer variables      : 0               
+
+Optimizer started.
+Interior-point optimizer started.
+Presolve started.
+Linear dependency checker started.
+Linear dependency checker terminated.
+Eliminator - tries                  : 0                 time                   : 0.00            
+Eliminator - elim's                 : 0               
+Lin. dep.  - tries                  : 1                 time                   : 0.03            
+Lin. dep.  - number                 : 0               
+Presolve terminated. Time: 0.13    
+Matrix reordering started.
+Local matrix reordering started.
+Local matrix reordering terminated.
+Matrix reordering terminated.
+Optimizer  - threads                : 4               
+Optimizer  - solved problem         : the primal      
+Optimizer  - Constraints            : 16149
+Optimizer  - Cones                  : 0
+Optimizer  - Scalar variables       : 121616            conic                  : 0               
+Optimizer  - Semi-definite variables: 0                 scalarized             : 0               
+Factor     - setup time             : 0.86              dense det. time        : 0.00            
+Factor     - ML order time          : 0.00              GP order time          : 0.66            
+Factor     - nonzeros before factor : 1.38e+005         after factor           : 4.05e+006       
+Factor     - dense dim.             : 0                 flops                  : 0.00e+000       
+Factor     - GP saved nzs           : 0                 GP saved flops         : 0.00e+000       
+ITE PFEAS    DFEAS    GFEAS    PRSTATUS   POBJ              DOBJ              MU       TIME  
+0   1.6e+003 3.4e+002 1.2e+005 0.00e+000  5.996900000e+004  -5.774200000e+004 1.0e+000 1.03  
+1   4.6e+002 9.9e+001 5.8e+004 1.02e+000  2.273755360e+004  -3.525670990e+004 3.9e-001 1.67  
+2   3.9e+001 8.2e+000 9.1e+003 1.39e+000  1.505726877e+004  7.604029614e+003  5.4e-002 2.34  
+3   6.2e+000 1.3e+000 1.5e+003 1.07e+000  1.467405694e+004  1.349333078e+004  8.8e-003 3.01  
+4   8.9e-001 1.9e-001 2.2e+002 1.01e+000  1.460564407e+004  1.442740684e+004  1.3e-003 3.63  
+5   7.3e-002 1.6e-002 2.1e+001 1.00e+000  1.459388133e+004  1.457750476e+004  1.2e-004 4.24  
+6   4.1e-003 8.8e-004 1.4e+000 1.00e+000  1.459267892e+004  1.459159531e+004  7.9e-006 4.87  
+7   7.4e-005 1.6e-005 4.0e-002 1.00e+000  1.459258671e+004  1.459255480e+004  2.3e-007 5.44  
+8   3.4e-007 7.2e-008 1.1e-003 1.00e+000  1.459258328e+004  1.459258240e+004  6.0e-009 6.02  
+9   6.5e-010 1.4e-010 5.4e-005 1.00e+000  1.459258315e+004  1.459258311e+004  2.9e-010 6.63  
+Interior-point optimizer terminated. Time: 6.65. 
+
+Optimizer terminated. Time: 6.69    
+
+Interior-point solution summary
+  Problem status  : PRIMAL_AND_DUAL_FEASIBLE
+  Solution status : OPTIMAL
+  Primal.  obj: 1.4592583154e+004   Viol.  con: 7e-011   var: 0e+000 
+  Dual.    obj: 1.4592583112e+004   Viol.  con: 0e+000   var: 3e-013 
+
+Optimizer summary
+  Optimizer                 -                        time: 6.69    
+    Interior-point          - iterations : 9         time: 6.65    
+      Basis identification  -                        time: 0.00    
+        Primal              - iterations : 0         time: 0.00    
+        Dual                - iterations : 0         time: 0.00    
+        Clean primal        - iterations : 0         time: 0.00    
+        Clean dual          - iterations : 0         time: 0.00    
+        Clean primal-dual   - iterations : 0         time: 0.00    
+    Simplex                 -                        time: 0.00    
+      Primal simplex        - iterations : 0         time: 0.00    
+      Dual simplex          - iterations : 0         time: 0.00    
+      Primal-dual simplex   - iterations : 0         time: 0.00    
+    Mixed integer           - relaxations: 0         time: 0.00    
+
+Open file '../qp/com_amazon_ungraph_1400000_20_nb.19.sol'
+Start writing.
+done writing. Time: 0.53
+
+Return code - 0  [MSK_RES_OK]
+in_file = com_amazon_ungraph.gr
+n_new_edges = 70000
+n_partitions = 20
+algo_type = 1
+add_edges_first = 0
+n_deleted = 0
+switch_ratio = 0.0
+switch_type = -1
+read graph G - DONE
+part_file = ../data/com_amazon_ungraph.metis.part.20
+sum_nodes = 334863
+sum_edges = 882100
+17025 - 47403
+16350 - 43587
+16947 - 46735
+16990 - 40368
+16519 - 39820
+16810 - 45060
+16362 - 45493
+16366 - 42682
+16360 - 41521
+17109 - 45686
+17113 - 45783
+16306 - 41214
+17118 - 42446
+17234 - 41602
+17221 - 44753
+16411 - 40640
+17008 - 43829
+16342 - 43810
+16352 - 45776
+16920 - 53892
+#missing edges = 43772
+n_old = 47403  n_new = 70000
+n_nodes = 17025
+n_vars = 117403
+file ../qp/com_amazon_ungraph_1400000_20_nb.0.mps written
+n_old = 43587  n_new = 70000
+n_nodes = 16350
+n_vars = 113587
+file ../qp/com_amazon_ungraph_1400000_20_nb.1.mps written
+n_old = 46735  n_new = 70000
+n_nodes = 16947
+n_vars = 116735
+file ../qp/com_amazon_ungraph_1400000_20_nb.2.mps written
+n_old = 40368  n_new = 70000
+n_nodes = 16990
+n_vars = 110368
+file ../qp/com_amazon_ungraph_1400000_20_nb.3.mps written
+n_old = 39820  n_new = 70000
+n_nodes = 16519
+n_vars = 109820
+file ../qp/com_amazon_ungraph_1400000_20_nb.4.mps written
+n_old = 45060  n_new = 70000
+n_nodes = 16810
+n_vars = 115060
+file ../qp/com_amazon_ungraph_1400000_20_nb.5.mps written
+n_old = 45493  n_new = 70000
+n_nodes = 16362
+n_vars = 115493
+file ../qp/com_amazon_ungraph_1400000_20_nb.6.mps written
+n_old = 42682  n_new = 70000
+n_nodes = 16366
+n_vars = 112682
+file ../qp/com_amazon_ungraph_1400000_20_nb.7.mps written
+n_old = 41521  n_new = 70000
+n_nodes = 16360
+n_vars = 111521
+file ../qp/com_amazon_ungraph_1400000_20_nb.8.mps written
+n_old = 45686  n_new = 70000
+n_nodes = 17109
+n_vars = 115686
+file ../qp/com_amazon_ungraph_1400000_20_nb.9.mps written
+n_old = 45783  n_new = 70000
+n_nodes = 17113
+n_vars = 115783
+file ../qp/com_amazon_ungraph_1400000_20_nb.10.mps written
+n_old = 41214  n_new = 70000
+n_nodes = 16306
+n_vars = 111214
+file ../qp/com_amazon_ungraph_1400000_20_nb.11.mps written
+n_old = 42446  n_new = 70000
+n_nodes = 17118
+n_vars = 112446
+file ../qp/com_amazon_ungraph_1400000_20_nb.12.mps written
+n_old = 41602  n_new = 70000
+n_nodes = 17234
+n_vars = 111602
+file ../qp/com_amazon_ungraph_1400000_20_nb.13.mps written
+n_old = 44753  n_new = 70000
+n_nodes = 17221
+n_vars = 114753
+file ../qp/com_amazon_ungraph_1400000_20_nb.14.mps written
+n_old = 40640  n_new = 70000
+n_nodes = 16411
+n_vars = 110640
+file ../qp/com_amazon_ungraph_1400000_20_nb.15.mps written
+n_old = 43829  n_new = 70000
+n_nodes = 17008
+n_vars = 113829
+file ../qp/com_amazon_ungraph_1400000_20_nb.16.mps written
+n_old = 43810  n_new = 70000
+n_nodes = 16342
+n_vars = 113810
+file ../qp/com_amazon_ungraph_1400000_20_nb.17.mps written
+n_old = 45776  n_new = 70000
+n_nodes = 16352
+n_vars = 115776
+file ../qp/com_amazon_ungraph_1400000_20_nb.18.mps written
+n_old = 53892  n_new = 70000
+n_nodes = 16920
+n_vars = 123892
+file ../qp/com_amazon_ungraph_1400000_20_nb.19.mps written
+prepare MPS files, DONE, elapsed : 55.841206636
+call MOSEK part i = 0 DONE, elapsed : 13.1049713317
+call MOSEK part i = 1 DONE, elapsed : 3.00011561517
+call MOSEK part i = 2 DONE, elapsed : 5.94911000467
+call MOSEK part i = 3 DONE, elapsed : 6.81278371752
+call MOSEK part i = 4 DONE, elapsed : 6.22945355379
+call MOSEK part i = 5 DONE, elapsed : 3.63384071188
+call MOSEK part i = 6 DONE, elapsed : 4.55930062179
+call MOSEK part i = 7 DONE, elapsed : 4.79783977729
+call MOSEK part i = 8 DONE, elapsed : 3.70890937159
+call MOSEK part i = 9 DONE, elapsed : 6.62261879534
+call MOSEK part i = 10 DONE, elapsed : 5.25825320266
+call MOSEK part i = 11 DONE, elapsed : 3.62920342656
+call MOSEK part i = 12 DONE, elapsed : 3.20250042714
+call MOSEK part i = 13 DONE, elapsed : 3.00533640996
+call MOSEK part i = 14 DONE, elapsed : 3.85178225467
+call MOSEK part i = 15 DONE, elapsed : 2.28169893326
+call MOSEK part i = 16 DONE, elapsed : 3.26713896823
+call MOSEK part i = 17 DONE, elapsed : 1.47959618609
+call MOSEK part i = 18 DONE, elapsed : 3.45676083115
+call MOSEK part i = 19 DONE, elapsed : 7.50757988767
+len(all_deleted_edges) = 0
+prepare_mps_and_solve - DONE, elapsed : 158.071732724
+mps_file = com_amazon_ungraph_1400000_20_nb
+out_file = ../out/com_amazon_ungraph_cvxopt_1400000_20_nb_missing.out
+#nodes = 334863
+#edges = 925872
+read .sol file i = 0
+n_dup_edges = 0
+subsum_p = 47403.0000008 n_new = 70000 n_old = 47403
+read .sol file i = 1
+n_dup_edges = 0
+subsum_p = 43587.0000002 n_new = 70000 n_old = 43587
+read .sol file i = 2
+n_dup_edges = 0
+subsum_p = 46735.0000003 n_new = 70000 n_old = 46735
+read .sol file i = 3
+n_dup_edges = 0
+subsum_p = 40368.0000007 n_new = 70000 n_old = 40368
+read .sol file i = 4
+n_dup_edges = 0
+subsum_p = 39820.0 n_new = 70000 n_old = 39820
+read .sol file i = 5
+n_dup_edges = 0
+subsum_p = 45060.0 n_new = 70000 n_old = 45060
+read .sol file i = 6
+n_dup_edges = 0
+subsum_p = 45493.0 n_new = 70000 n_old = 45493
+read .sol file i = 7
+n_dup_edges = 0
+subsum_p = 42682.0 n_new = 70000 n_old = 42682
+read .sol file i = 8
+n_dup_edges = 0
+subsum_p = 41521.0000003 n_new = 70000 n_old = 41521
+read .sol file i = 9
+n_dup_edges = 0
+subsum_p = 45686.0 n_new = 70000 n_old = 45686
+read .sol file i = 10
+n_dup_edges = 0
+subsum_p = 45783.0000001 n_new = 70000 n_old = 45783
+read .sol file i = 11
+n_dup_edges = 0
+subsum_p = 41214.0 n_new = 70000 n_old = 41214
+read .sol file i = 12
+n_dup_edges = 0
+subsum_p = 42446.0000001 n_new = 70000 n_old = 42446
+read .sol file i = 13
+n_dup_edges = 0
+subsum_p = 41602.0000005 n_new = 70000 n_old = 41602
+read .sol file i = 14
+n_dup_edges = 0
+subsum_p = 44753.0000004 n_new = 70000 n_old = 44753
+read .sol file i = 15
+n_dup_edges = 0
+subsum_p = 40640.0000006 n_new = 70000 n_old = 40640
+read .sol file i = 16
+n_dup_edges = 0
+subsum_p = 43829.0000001 n_new = 70000 n_old = 43829
+read .sol file i = 17
+n_dup_edges = 0
+subsum_p = 43810.0000004 n_new = 70000 n_old = 43810
+read .sol file i = 18
+n_dup_edges = 0
+subsum_p = 45776.0000001 n_new = 70000 n_old = 45776
+read .sol file i = 19
+n_dup_edges = 0
+subsum_p = 53892.0 n_new = 70000 n_old = 53892
+total_subsum_p = 882100.000005
+sum_p = 925872.000005
+sum_n_old = 882100
+#missing = 1443772
+combine_sol_files - DONE, elapsed : 209.580352545

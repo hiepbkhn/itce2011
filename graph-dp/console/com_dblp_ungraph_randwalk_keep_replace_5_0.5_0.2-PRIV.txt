@@ -1,0 +1,116 @@
+before_file = ../data/com_dblp_ungraph.gr
+after_file = ../randwalk/com_dblp_ungraph_randwalk_keep_replace5_0.5_0.2.out
+n_samples = 20
+algo_type = 2
+sample_file = ../randwalk/com_dblp_ungraph_randwalk_keep_replace5_0.5_0.2_sample.
+read bG: DONE, elapsed : 6.7153325038
+count = 0
+count = 1
+count = 2
+count = 3
+count = 4
+count = 5
+count = 6
+count = 7
+count = 8
+count = 9
+count = 10
+count = 11
+count = 12
+count = 13
+count = 14
+count = 15
+count = 16
+count = 17
+count = 18
+count = 19
+compute score_H1, score_H2: DONE, elapsed : 593.875718821
+score_H1 = 71.8193112703
+score_H2 = 518.407440966
+elapsed : 612.97865104
+compare sample 0  DONE
+compare sample 1  DONE
+compare sample 2  DONE
+compare sample 3  DONE
+compare sample 4  DONE
+compare sample 5  DONE
+compare sample 6  DONE
+compare sample 7  DONE
+compare sample 8  DONE
+compare sample 9  DONE
+compare sample 10  DONE
+compare sample 11  DONE
+compare sample 12  DONE
+compare sample 13  DONE
+compare sample 14  DONE
+compare sample 15  DONE
+compare sample 16  DONE
+compare sample 17  DONE
+compare sample 18  DONE
+compare sample 19  DONE
+[197062, 197606, 197954, 197639, 196763, 197682, 197943, 197728, 197653, 197668, 197792, 197958, 197488, 197098, 197741, 197519, 197456, 197638, 197143, 197383]
+[197111, 197545, 197615, 197102, 197313, 196877, 197011, 196879, 197654, 197250, 198003, 197610, 197113, 196954, 197747, 196919, 196971, 196977, 197123, 197604]
+compare_edges_diff_from_file: DONE, elapsed : 330.87935753
+read bG - DONE
+read sample 0  DONE
+max_deg = 687
+len(ent) = 688
+read sample 1  DONE
+max_deg = 698
+len(ent) = 699
+read sample 2  DONE
+max_deg = 675
+len(ent) = 676
+read sample 3  DONE
+max_deg = 681
+len(ent) = 682
+read sample 4  DONE
+max_deg = 634
+len(ent) = 635
+read sample 5  DONE
+max_deg = 670
+len(ent) = 671
+read sample 6  DONE
+max_deg = 666
+len(ent) = 667
+read sample 7  DONE
+max_deg = 699
+len(ent) = 700
+read sample 8  DONE
+max_deg = 672
+len(ent) = 673
+read sample 9  DONE
+max_deg = 651
+len(ent) = 652
+read sample 10  DONE
+max_deg = 643
+len(ent) = 644
+read sample 11  DONE
+max_deg = 677
+len(ent) = 678
+read sample 12  DONE
+max_deg = 684
+len(ent) = 685
+read sample 13  DONE
+max_deg = 685
+len(ent) = 686
+read sample 14  DONE
+max_deg = 685
+len(ent) = 686
+read sample 15  DONE
+max_deg = 668
+len(ent) = 669
+read sample 16  DONE
+max_deg = 632
+len(ent) = 633
+read sample 17  DONE
+max_deg = 652
+len(ent) = 653
+read sample 18  DONE
+max_deg = 686
+len(ent) = 687
+read sample 19  DONE
+max_deg = 691
+len(ent) = 692
+eps_arr = [0.0005463920777090955, 0.001042954459442412, 0.0022663050334300492]
+elapsed : 372.589278157

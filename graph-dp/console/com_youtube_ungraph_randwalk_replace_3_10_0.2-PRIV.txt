@@ -1,0 +1,56 @@
+before_file = ../data/com_youtube_ungraph.gr
+after_file = ../randwalk/com_youtube_ungraph_randwalk_replace_3_10_0.2.out
+n_samples = 5
+algo_type = 2
+sample_file = ../randwalk/com_youtube_ungraph_randwalk_replace_3_10_0.2_sample.
+read bG: DONE, elapsed : 1.69229580338
+aG.#edges = 2987225
+count = 0
+aG.#edges = 2986513
+count = 1
+aG.#edges = 2986059
+count = 2
+aG.#edges = 2984358
+count = 3
+aG.#edges = 2988231
+count = 4
+compute score_H1, score_H2: DONE, elapsed : 219.134054132
+score_H1 = 37.4650895932
+score_H2 = 272.987310357
+elapsed : 242.26874611
+compare sample 0  DONE
+compare sample 1  DONE
+compare sample 2  DONE
+compare sample 3  DONE
+compare sample 4  DONE
+[557748, 557431, 558488, 558788, 557907]
+[399374, 398706, 399734, 398225, 399991]
+compare_edges_diff_from_file: DONE, elapsed : 38.0787686471
+read bG - DONE
+read sample 0  DONE
+max_deg_G2 = 28379
+check X...
+check Y...
+len(ent) = 28380
+read sample 1  DONE
+max_deg_G2 = 28217
+check X...
+check Y...
+len(ent) = 28218
+read sample 2  DONE
+max_deg_G2 = 28266
+check X...
+check Y...
+len(ent) = 28267
+read sample 3  DONE
+max_deg_G2 = 28337
+check X...
+check Y...
+len(ent) = 28338
+read sample 4  DONE
+max_deg_G2 = 28396
+check X...
+check Y...
+len(ent) = 28397
+eps_arr = [0.0030288397994519293, 0.004124628818652028, 0.0060679008538272435]
+elapsed : 889.001781319

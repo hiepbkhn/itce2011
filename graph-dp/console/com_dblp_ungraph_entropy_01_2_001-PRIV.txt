@@ -1,0 +1,60 @@
+before_file = ../data/com_dblp_ungraph.gr
+after_file = ../out/com_dblp_ungraph_entropy_01_2_001.out
+n_samples = 20
+read bG: DONE, elapsed : 0.762289200452
+count = 0
+count = 1
+count = 2
+count = 3
+count = 4
+count = 5
+count = 6
+count = 7
+count = 8
+count = 9
+count = 10
+count = 11
+count = 12
+count = 13
+count = 14
+count = 15
+count = 16
+count = 17
+count = 18
+count = 19
+compute score_H1, score_H2: DONE, elapsed : 314.540861265
+score_H1 = 19.6827790852
+score_H2 = 7771.39389847
+elapsed : 323.777605779
+compare sample 0  DONE
+compare sample 1  DONE
+compare sample 2  DONE
+compare sample 3  DONE
+compare sample 4  DONE
+compare sample 5  DONE
+compare sample 6  DONE
+compare sample 7  DONE
+compare sample 8  DONE
+compare sample 9  DONE
+compare sample 10  DONE
+compare sample 11  DONE
+compare sample 12  DONE
+compare sample 13  DONE
+compare sample 14  DONE
+compare sample 15  DONE
+compare sample 16  DONE
+compare sample 17  DONE
+compare sample 18  DONE
+compare sample 19  DONE
+[65150, 64836, 65295, 65200, 65117, 65212, 65196, 65126, 65285, 65626, 65371, 65304, 65474, 65343, 65297, 65494, 65310, 65465, 65321, 65280]
+[6948, 6851, 6922, 6886, 6905, 6857, 6909, 6783, 7003, 6972, 6916, 6922, 6941, 7070, 6834, 6929, 6988, 6823, 6869, 7008]
+compare_edges_diff_from_file: DONE, elapsed : 49.8379586348
+n_nodes = 0
+read bG - DONE
+read aG - DONE
+max_deg_G2 = 343
+check X...
+check Y...
+len(ent) = 344
+eps_arr = [0.001785038476094361, 0.001990034060804844, 0.0024473319036205374]
+elapsed : 32.9563713423

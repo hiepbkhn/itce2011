@@ -1,0 +1,86 @@
+filename = ../out/com_amazon_ungraph_cvxopt_1000000_20_rw_first_missing.out
+n_samples = 20
+eps = 0.02
+sample i = 0
+read sample - DONE, elapsed : 0.756683492749
+m_time = 84
+dd = 0.0263639609841
+sample i = 1
+read sample - DONE, elapsed : 0.764743349411
+m_time = 86
+dd = 0.0261412516445
+sample i = 2
+read sample - DONE, elapsed : 0.687363895585
+m_time = 84
+dd = 0.0263214279601
+sample i = 3
+read sample - DONE, elapsed : 0.68405422261
+m_time = 84
+dd = 0.026589649135
+sample i = 4
+read sample - DONE, elapsed : 0.584688566535
+m_time = 83
+dd = 0.0268347880959
+sample i = 5
+read sample - DONE, elapsed : 0.657388171753
+m_time = 84
+dd = 0.0260645576862
+sample i = 6
+read sample - DONE, elapsed : 0.818154540356
+m_time = 84
+dd = 0.0267010623667
+sample i = 7
+read sample - DONE, elapsed : 0.66795201759
+m_time = 84
+dd = 0.0266232884459
+sample i = 8
+read sample - DONE, elapsed : 0.749833822056
+m_time = 85
+dd = 0.0266864063572
+sample i = 9
+read sample - DONE, elapsed : 0.567964816763
+m_time = 85
+dd = 0.0262402294429
+sample i = 10
+read sample - DONE, elapsed : 0.677500381862
+m_time = 86
+dd = 0.0261910130299
+sample i = 11
+read sample - DONE, elapsed : 0.619794223105
+m_time = 85
+dd = 0.0265123414657
+sample i = 12
+read sample - DONE, elapsed : 0.58786783284
+m_time = 84
+dd = 0.0262797339269
+sample i = 13
+read sample - DONE, elapsed : 0.643568385318
+m_time = 83
+dd = 0.026552971612
+sample i = 14
+read sample - DONE, elapsed : 0.669515992023
+m_time = 85
+dd = 0.026286997088
+sample i = 15
+read sample - DONE, elapsed : 0.6471234764
+m_time = 84
+dd = 0.0266107086436
+sample i = 16
+read sample - DONE, elapsed : 0.594488989994
+m_time = 83
+dd = 0.0265914777837
+sample i = 17
+read sample - DONE, elapsed : 0.615746182737
+m_time = 85
+dd = 0.0263221556375
+sample i = 18
+read sample - DONE, elapsed : 0.931485181033
+m_time = 85
+dd = 0.026351553524
+sample i = 19
+read sample - DONE, elapsed : 0.667011399112
+m_time = 84
+dd = 0.0261299937689
+m_time = 84.35
+assortativity = -0.0212042543021
+mixing_time_and_assortativity - Elapsed  1472.31477966

@@ -1,0 +1,86 @@
+filename = ../out/com_youtube_ungraph_entropy_001_2_001.out
+n_samples = 20
+eps = 0.01
+sample i = 0
+read sample - DONE, elapsed : 2.62527734057
+m_time = 84
+dd = 0.0110937794157
+sample i = 1
+read sample - DONE, elapsed : 2.83885418421
+m_time = 84
+dd = 0.0110966494319
+sample i = 2
+read sample - DONE, elapsed : 2.73579759677
+m_time = 84
+dd = 0.0111503618348
+sample i = 3
+read sample - DONE, elapsed : 2.62738739294
+m_time = 84
+dd = 0.0111485345135
+sample i = 4
+read sample - DONE, elapsed : 2.88089373245
+m_time = 84
+dd = 0.0111976782547
+sample i = 5
+read sample - DONE, elapsed : 2.63830049923
+m_time = 84
+dd = 0.0110443981459
+sample i = 6
+read sample - DONE, elapsed : 2.40582344265
+m_time = 84
+dd = 0.0111368457492
+sample i = 7
+read sample - DONE, elapsed : 2.8413497211
+m_time = 84
+dd = 0.0111152598966
+sample i = 8
+read sample - DONE, elapsed : 2.59536802754
+m_time = 84
+dd = 0.0110583324644
+sample i = 9
+read sample - DONE, elapsed : 2.52841808861
+m_time = 84
+dd = 0.0110115007572
+sample i = 10
+read sample - DONE, elapsed : 2.59022360518
+m_time = 84
+dd = 0.0110743964712
+sample i = 11
+read sample - DONE, elapsed : 2.58795748743
+m_time = 84
+dd = 0.0111307533592
+sample i = 12
+read sample - DONE, elapsed : 2.68942534731
+m_time = 84
+dd = 0.0111210144484
+sample i = 13
+read sample - DONE, elapsed : 2.39104069956
+m_time = 84
+dd = 0.0110895821967
+sample i = 14
+read sample - DONE, elapsed : 2.57474294491
+m_time = 84
+dd = 0.0111407799923
+sample i = 15
+read sample - DONE, elapsed : 2.33463498509
+m_time = 84
+dd = 0.0110800850177
+sample i = 16
+read sample - DONE, elapsed : 2.46012634957
+m_time = 84
+dd = 0.0111097439659
+sample i = 17
+read sample - DONE, elapsed : 2.71296103437
+m_time = 84
+dd = 0.0111299770657
+sample i = 18
+read sample - DONE, elapsed : 2.64860081492
+m_time = 84
+dd = 0.0110479619971
+sample i = 19
+read sample - DONE, elapsed : 2.66006543275
+m_time = 84
+dd = 0.0111368239731
+m_time = 84.0
+assortativity = -0.0356090315876
+mixing_time_and_assortativity - Elapsed  7014.82394164

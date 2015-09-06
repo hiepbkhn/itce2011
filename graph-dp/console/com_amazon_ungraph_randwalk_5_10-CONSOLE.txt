@@ -1,0 +1,52 @@
+file_name = com_amazon_ungraph
+n_samples = 20
+start_id = 0
+t = 5
+M = 10
+file_name = com_amazon_ungraph
+#nodes : 334863
+#edges : 925872
+#components : 1
+min-deg = 1
+max-deg = 549
+sample 0
+num_failed = 1429
+sample 1
+num_failed = 1516
+sample 2
+num_failed = 1376
+sample 3
+num_failed = 1374
+sample 4
+num_failed = 1412
+sample 5
+num_failed = 1429
+sample 6
+num_failed = 1301
+sample 7
+num_failed = 1350
+sample 8
+num_failed = 1488
+sample 9
+num_failed = 1471
+sample 10
+num_failed = 1423
+sample 11
+num_failed = 1394
+sample 12
+num_failed = 1404
+sample 13
+num_failed = 1447
+sample 14
+num_failed = 1351
+sample 15
+num_failed = 1434
+sample 16
+num_failed = 1340
+sample 17
+num_failed = 1383
+sample 18
+num_failed = 1521
+sample 19
+num_failed = 1406
+random_walk_transform for 20 samples DONE, elapsed : 303.493200741

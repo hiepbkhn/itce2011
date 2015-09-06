@@ -1,0 +1,15 @@
+filename = ../data/com_amazon_ungraph.gr
+n_samples = 20
+eps = 0.01
+#nodes = 334863
+#edges = 925872
+min-deg = 1
+max-deg = 549
+#components = 1
+cc_size = [334863]
+Read graph - Elapsed  0.960375088221
+m_time = 116
+dd = 0.0208897690235
+m_time = 116
+assortativity = -0.0588196197066
+mixing_time_and_assortativity_one - Elapsed  138.388080589

@@ -1,0 +1,83 @@
+before_file = ../data/com_dblp_ungraph.gr
+after_file = ../out/com_dblp_ungraph_cvxopt_200000_20_rw_first_missing.out
+n_samples = 20
+algo_type = 0
+sample_file = ../sample/com_dblp_ungraph_cvxopt_200000_20_rw_first_missing_sample.
+read bG: DONE, elapsed : 0.650154827733
+aG.#edges = 1049937
+count = 0
+aG.#edges = 1049473
+count = 1
+aG.#edges = 1049869
+count = 2
+aG.#edges = 1049721
+count = 3
+aG.#edges = 1049687
+count = 4
+aG.#edges = 1049929
+count = 5
+aG.#edges = 1049907
+count = 6
+aG.#edges = 1050104
+count = 7
+aG.#edges = 1050221
+count = 8
+aG.#edges = 1050085
+count = 9
+aG.#edges = 1049763
+count = 10
+aG.#edges = 1049938
+count = 11
+aG.#edges = 1050288
+count = 12
+aG.#edges = 1049590
+count = 13
+aG.#edges = 1050097
+count = 14
+aG.#edges = 1050300
+count = 15
+aG.#edges = 1049555
+count = 16
+aG.#edges = 1049703
+count = 17
+aG.#edges = 1049788
+count = 18
+aG.#edges = 1050047
+count = 19
+compute score_H1, score_H2: DONE, elapsed : 318.282506428
+score_H1 = 48.2148212228
+score_H2 = 5905.6866641
+elapsed : 325.836893858
+compare sample 0  DONE
+compare sample 1  DONE
+compare sample 2  DONE
+compare sample 3  DONE
+compare sample 4  DONE
+compare sample 5  DONE
+compare sample 6  DONE
+compare sample 7  DONE
+compare sample 8  DONE
+compare sample 9  DONE
+compare sample 10  DONE
+compare sample 11  DONE
+compare sample 12  DONE
+compare sample 13  DONE
+compare sample 14  DONE
+compare sample 15  DONE
+compare sample 16  DONE
+compare sample 17  DONE
+compare sample 18  DONE
+compare sample 19  DONE
+[71770, 71931, 71846, 71987, 72010, 71886, 71763, 71660, 71682, 71646, 71781, 71663, 71640, 72212, 72023, 71487, 71996, 71803, 71792, 71644]
+[71841, 71538, 71849, 71842, 71831, 71949, 71804, 71898, 72037, 71865, 71678, 71735, 72062, 71936, 72254, 71921, 71685, 71640, 71714, 71825]
+compare_edges_diff_from_file: DONE, elapsed : 54.8127145899
+n_nodes = 0
+read bG - DONE
+sum_p = 1049865.99998
+read aG - DONE
+max_deg_G2 = 375
+check X...
+check Y...
+len(ent) = 376
+eps_arr = [0.00020184180648416804, 0.0004572978428156932, 0.0007695218872208906]
+elapsed : 19.8889194781

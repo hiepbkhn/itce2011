@@ -1,0 +1,142 @@
+filename = ../out/com_youtube_ungraph_cvxopt_1800000_60_nb_missing.out
+n_samples = 20
+sample i = 0
+read sample - DONE, elapsed : 5.22461703606
+n_nodes = 1134890
+s_DD - degree distribution
+[74738, 500425, 195986, 98348, 58724, 38565, 26791, 20249, 15509, 12340, 9981]
+s_NE, s_AD, s_MD, s_DV - DONE, elapsed : 0.227072726471
+sample i = 1
+read sample - DONE, elapsed : 4.98914273916
+n_nodes = 1134890
+s_DD - degree distribution
+[74480, 500892, 196115, 98216, 58737, 38339, 27195, 19875, 15641, 12301, 9814]
+s_NE, s_AD, s_MD, s_DV - DONE, elapsed : 0.227658047148
+sample i = 2
+read sample - DONE, elapsed : 4.48542675281
+n_nodes = 1134890
+s_DD - degree distribution
+[74015, 500582, 196781, 98290, 58277, 38577, 27180, 20129, 15579, 12339, 9940]
+s_NE, s_AD, s_MD, s_DV - DONE, elapsed : 0.225649724063
+sample i = 3
+read sample - DONE, elapsed : 8.04916391816
+n_nodes = 1134890
+s_DD - degree distribution
+[74023, 500336, 196997, 98023, 58832, 38490, 26869, 20173, 15631, 12361, 10012]
+s_NE, s_AD, s_MD, s_DV - DONE, elapsed : 0.227138533541
+sample i = 4
+read sample - DONE, elapsed : 4.92737948401
+n_nodes = 1134890
+s_DD - degree distribution
+[73971, 501204, 196596, 97878, 58333, 38538, 27210, 20109, 15552, 12378, 9910]
+s_NE, s_AD, s_MD, s_DV - DONE, elapsed : 0.267336691305
+sample i = 5
+read sample - DONE, elapsed : 3.66654863656
+n_nodes = 1134890
+s_DD - degree distribution
+[74961, 500091, 196597, 98008, 58749, 38358, 27047, 20305, 15514, 12329, 9771]
+s_NE, s_AD, s_MD, s_DV - DONE, elapsed : 0.208473475223
+sample i = 6
+read sample - DONE, elapsed : 5.41204915365
+n_nodes = 1134890
+s_DD - degree distribution
+[74072, 500803, 196649, 97969, 58804, 38476, 26963, 20181, 15503, 12366, 9908]
+s_NE, s_AD, s_MD, s_DV - DONE, elapsed : 0.225331857806
+sample i = 7
+read sample - DONE, elapsed : 3.92328948409
+n_nodes = 1134890
+s_DD - degree distribution
+[73948, 501077, 196681, 97921, 58767, 38463, 27162, 19881, 15531, 12355, 9908]
+s_NE, s_AD, s_MD, s_DV - DONE, elapsed : 0.259553646949
+sample i = 8
+read sample - DONE, elapsed : 5.88512319506
+n_nodes = 1134890
+s_DD - degree distribution
+[74600, 500614, 196501, 98229, 58306, 38336, 27109, 20104, 15680, 12325, 9831]
+s_NE, s_AD, s_MD, s_DV - DONE, elapsed : 0.33982378195
+sample i = 9
+read sample - DONE, elapsed : 4.09759580815
+n_nodes = 1134890
+s_DD - degree distribution
+[74136, 500596, 196552, 98175, 58967, 38208, 26991, 20107, 15796, 12303, 9771]
+s_NE, s_AD, s_MD, s_DV - DONE, elapsed : 0.251743434537
+sample i = 10
+read sample - DONE, elapsed : 3.88084030194
+n_nodes = 1134890
+s_DD - degree distribution
+[74347, 500573, 196694, 97855, 58540, 38570, 27084, 20036, 15772, 12320, 9870]
+s_NE, s_AD, s_MD, s_DV - DONE, elapsed : 0.24086202431
+sample i = 11
+read sample - DONE, elapsed : 3.52359002317
+n_nodes = 1134890
+s_DD - degree distribution
+[74625, 500557, 196366, 98241, 58293, 38574, 27206, 20061, 15563, 12334, 9983]
+s_NE, s_AD, s_MD, s_DV - DONE, elapsed : 0.229373558961
+sample i = 12
+read sample - DONE, elapsed : 3.33098873009
+n_nodes = 1134890
+s_DD - degree distribution
+[74425, 500730, 196073, 98086, 58921, 38500, 26957, 19996, 15592, 12415, 9896]
+s_NE, s_AD, s_MD, s_DV - DONE, elapsed : 0.221979017808
+sample i = 13
+read sample - DONE, elapsed : 3.86343946384
+n_nodes = 1134890
+s_DD - degree distribution
+[74198, 501333, 195692, 98176, 58579, 38706, 27126, 20153, 15527, 12379, 9950]
+s_NE, s_AD, s_MD, s_DV - DONE, elapsed : 0.371269599489
+sample i = 14
+read sample - DONE, elapsed : 3.72836652968
+n_nodes = 1134890
+s_DD - degree distribution
+[74277, 500756, 196372, 98204, 58735, 38381, 27094, 20130, 15473, 12408, 9805]
+s_NE, s_AD, s_MD, s_DV - DONE, elapsed : 0.245188688187
+sample i = 15
+read sample - DONE, elapsed : 4.16747778408
+n_nodes = 1134890
+s_DD - degree distribution
+[74062, 500321, 197201, 98047, 58596, 38461, 27152, 20183, 15541, 12275, 9881]
+s_NE, s_AD, s_MD, s_DV - DONE, elapsed : 0.251993682521
+sample i = 16
+read sample - DONE, elapsed : 5.58793152684
+n_nodes = 1134890
+s_DD - degree distribution
+[74204, 500717, 196838, 98077, 58720, 38407, 26904, 20133, 15435, 12544, 9746]
+s_NE, s_AD, s_MD, s_DV - DONE, elapsed : 0.219937187454
+sample i = 17
+read sample - DONE, elapsed : 6.7679153709
+n_nodes = 1134890
+s_DD - degree distribution
+[74767, 501066, 195770, 98135, 58446, 38404, 27101, 20310, 15619, 12343, 9798]
+s_NE, s_AD, s_MD, s_DV - DONE, elapsed : 0.270143453374
+sample i = 18
+read sample - DONE, elapsed : 5.58873690877
+n_nodes = 1134890
+s_DD - degree distribution
+[74298, 500347, 196440, 98297, 58499, 38702, 27093, 20033, 15862, 12291, 9776]
+s_NE, s_AD, s_MD, s_DV - DONE, elapsed : 0.303252861551
+sample i = 19
+read sample - DONE, elapsed : 5.25145786808
+n_nodes = 1134890
+s_DD - degree distribution
+[74178, 500435, 196822, 98318, 58391, 38469, 26951, 20050, 15682, 12434, 9857]
+s_NE, s_AD, s_MD, s_DV - DONE, elapsed : 0.231985918495
+s_NE = 2987705.7
+s_AD = 5.2651899303
+s_MD = 28745.0
+s_DV = 2576.58924146
+s_CC = 0.0
+s_APD = 0.0
+s_EDiam = 0.0
+s_CL = 0.0
+s_Diam = 0.0
+----
+s_APD_i = 0.0
+s_EDiam_i = 0.0
+s_CL_i = 0.0
+all_statistics_from_file - Elapsed  103.422181027
+Calculating best minimal value for power law fit
+Less than 2 unique data values left after xmin and xmax options! Cannot fit. Returning nans.
+Not enough data. Returning nan
+Not enough data. Returning nan
+s_PL = nan
+pl_xmin = nan

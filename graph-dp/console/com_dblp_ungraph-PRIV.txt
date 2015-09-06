@@ -1,0 +1,21 @@
+before_file = ../data/com_dblp_ungraph.gr
+after_file = ../data/com_dblp_ungraph.gr
+n_samples = 5
+bG#nodes = 317080
+bG#edges = 1049866
+aG#nodes = 317080
+aG#edges = 1049866
+sum_re_prob H1 = 199.000000001
+sum_re_prob H2 (open) = 125302.0
+elapsed : 19.6338209036
+diff_b = 0
+diff_a = 0
+elapsed : 1.96287180942
+n_nodes = 317080
+read bG - DONE
+max_deg_G2 = 343
+check X...
+check Y...
+len(ent) = 344
+eps_arr = [0.002384256339094235, 0.003926453891762331, 0.006941465876119591]
+elapsed : 13.8518854041

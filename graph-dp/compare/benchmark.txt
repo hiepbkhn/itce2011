@@ -1,0 +1,226 @@
+---- read graph + transitivity (igraph) -----
+file_name = com_youtube_ungraph
+test_igraph()
+elapsed  2.1287110883
+#vertices  1134890
+#edges  2987624
+max_deg = 28754
+clustering_coeff = 0.00621855981803
+elapsed  1.3946250831
+elapsed  3.58818087451
+test_snap()
+elapsed  3.52666627789
+#nodes  1134890
+#edges  2987624
+max_deg = 28754
+clustering_coeff = 0.0808022777619
+elapsed  22.4467241279
+elapsed  27.3548644141
+test_networkx()
+elapsed  31.7347018276
+#nodes = 1134890
+#edges = 2987624
+max_deg = 28754
+clustering_coeff = 0.00621855981803
+elapsed  427.406803438
+elapsed  471.193852506
+
+
+---- BFS (N_BFS = 100) ---
+file_name = com_dblp_ungraph
+test_igraph()
+elapsed  0.698790981934
+#vertices  317080
+#edges  1049866
+max_deg = 343
+10
+20
+30
+40
+50
+60
+70
+80
+90
+100
+{0: 100, 1: 823, 2: 10641, 3: 128394, 4: 1031797, 5: 4220983, 6: 8259542, 7: 8697929, 8: 5687242, 9: 2573269, 10: 815933, 11: 210124, 12: 52329, 13: 13509, 14: 4033, 15: 1087, 16: 228, 17: 35, 18: 2}
+elapsed  23.5462293705
+elapsed  24.2658594105
+
+file_name = com_dblp_ungraph
+test_snap()
+elapsed  0.852726063985
+#nodes  317080
+#edges  1049866
+max_deg = 343
+s_Diam = 19
+elapsed  22.4333841076
+elapsed  23.6756094659
+
+---- BFS (N_BFS = 1000) ---
+file_name = com_dblp_ungraph
+test_igraph()
+elapsed  0.74544792918
+#vertices  317080
+#edges  1049866
+max_deg = 343
+{0: 1000, 1: 6142, 2: 72547, 3: 860008, 4: 7910916, 5: 39917152, 6: 89798314, 7: 92862043, 8: 53608784, 9: 21667289, 10: 7384434, 11: 2203182, 12: 577305, 13: 155652, 14: 41941, 15: 10498, 16: 2316, 17: 418, 18: 54, 19: 5}
+elapsed  243.503344336
+elapsed  244.270272338
+
+file_name = com_youtube_ungraph
+test_igraph()
+elapsed  2.28624033404
+#vertices  1134890
+#edges  2987624
+max_deg = 28754
+{0: 1000, 1: 5337, 2: 2159373, 3: 43511213, 4: 273852886, 5: 400111459, 6: 257560660, 7: 103345218, 8: 35618268, 9: 13159631, 10: 4109663, 11: 1071372, 12: 270479, 13: 75712, 14: 27308, 15: 8064, 16: 1752, 17: 430, 18: 152, 19: 23}
+elapsed  790.954311107
+elapsed  793.315735896
+
+++++ (PC)
+file_name = com_youtube_ungraph
+test_igraph()
+elapsed  2.05516220226
+#vertices  1134890
+#edges  2987624
+max_deg = 28754
+{0: 1000, 1: 4158, 2: 2191418, 3: 42963034, 4: 276529425, 5: 387690256, 6: 255484481, 7: 111705116, 8: 39215206, 9: 12572274, 10: 4326943, 11: 1589275, 12: 443910, 13: 120867, 14: 37829, 15: 11163, 16: 2806, 17: 624, 18: 150, 19: 45, 20: 20}
+elapsed  590.004652721
+elapsed  592.110927239
+
+
+---- utility_measure.py (DETERMINISTIC G)
+filename = ../data/com_dblp_ungraph.gr
+#nodes = 317080
+#edges = 1049866
+min-deg = 1
+max-deg = 343
+#components = 1
+cc_size = [317080]
+Read graph - Elapsed  14.1156743139
+s_NE = 1049866
+s_AD = 6.6220890627
+s_MD = 343
+s_DV = 100.154212464
+s_CC = 0.306376613002
+degree_statistics - Elapsed  17.4625852879
+convert to SNAP graph: DONE
+compute s_Diam, elapsed : 231.947059798
+MxDist = 20
+GetAnf, elapsed : 20.0411453364
+num_APD = 95378237940.9
+s_PDD :
+[317080.0, 1049866.0, 1536862.4490480404, 25392251.79316517, 305221208.44497424, 2709847474.4283686, 12939655693.251976, 27624665698.13616, 28050254114.728073, 15432614045.671951, 5849198598.222809, 1812838293.0078125, 472940219.50279236, 120131494.04924011, 32892121.22705078]
+s_APD = 7.70916123945
+s_EDiam = 9.0
+s_CL = 7.47871673312
+s_Diam = 20.0
+Elapsed  254.819680659
+Calculating best minimal value for power law fit
+C:\WinPython-64bit-2.7.5.3\python-2.7.5.amd64\lib\site-packages\powerlaw-1.2-py2.7.egg\powerlaw.py:682: RuntimeWarning: invalid value encountered in divide
+  (Theoretical_CDF * (1 - Theoretical_CDF))
+C:\WinPython-64bit-2.7.5.3\python-2.7.5.amd64\lib\site-packages\powerlaw-1.2-py2.7.egg\powerlaw.py:682: RuntimeWarning: divide by zero encountered in divide
+  (Theoretical_CDF * (1 - Theoretical_CDF))
+C:\WinPython-64bit-2.7.5.3\python-2.7.5.amd64\lib\site-packages\powerlaw-1.2-py2.7.egg\powerlaw.py:1113: RuntimeWarning: divide by zero encountered in double_scalars
+  self.alpha = 1 + (self.n / sum(log(data/self.xmin)))
+s_PL = 2.24474146382
+pl_xmin = 2
+size 15219841
+
+---- utility_measure.py (DETERMINISTIC G), fixed s_Diam to 20
+filename = ../data/com_youtube_ungraph.gr
+#nodes = 1134890
+#edges = 2987624
+min-deg = 1
+max-deg = 28754
+#components = 1
+cc_size = [1134890]
+Read graph - Elapsed  43.9501435753
+s_NE = 2987624
+s_AD = 5.26504595159
+s_MD = 28754
+s_DV = 2576.00332432
+s_CC = 0.00621855981803
+degree_statistics - Elapsed  426.342294638
+convert to SNAP graph: DONE
+MxDist = 20
+GetAnf, elapsed : 56.5135515926
+num_APD = 1.36519714491e+12
+s_PDD :
+[1134890.0, 2987624.0, 4776197.384337592, 2620689174.490308, 52025499859.39311, 334150954968.8687, 451013100716.82263, 289924218395.53845, 145100456880.14746, 64411640746.20752, 19563113041.26123, 5113752859.105957, 1265954446.00708]
+s_APD = 6.32132790962
+s_EDiam = 8.0
+s_CL = 6.0642223526
+s_Diam = 20.0
+Elapsed  66.6029419517
+Calculating best minimal value for power law fit
+C:\WinPython-64bit-2.7.5.3\python-2.7.5.amd64\lib\site-packages\powerlaw-1.2-py2.7.egg\powerlaw.py:682: RuntimeWarning: invalid value encountered in divide
+  (Theoretical_CDF * (1 - Theoretical_CDF))
+C:\WinPython-64bit-2.7.5.3\python-2.7.5.amd64\lib\site-packages\powerlaw-1.2-py2.7.egg\powerlaw.py:682: RuntimeWarning: divide by zero encountered in divide
+  (Theoretical_CDF * (1 - Theoretical_CDF))
+C:\WinPython-64bit-2.7.5.3\python-2.7.5.amd64\lib\site-packages\powerlaw-1.2-py2.7.egg\powerlaw.py:1113: RuntimeWarning: divide by zero encountered in double_scalars
+  self.alpha = 1 + (self.n / sum(log(data/self.xmin)))
+s_PL = 2.42900451811
+pl_xmin = 1
+size 59014281
+
+
+---- entropy_obfuscation_igraph.py (1.7GB mem)
+#nodes : 317080
+#edges : 1049866
+#components : 1
+min-deg = 1
+max-deg = 343
+START generate_obfuscation
+START - compute and sort uniqueness
+compute and sort uniqueness: DONE
+build H, V_H: DONE
+len(H) : 31708
+len(V_H) : 285372
+compute Q, sum_list: DONE
+[2.2077004591997358e-05, 4.4154009183994715e-05, 6.623101377599208e-05, 8.830801836798943e-05, 0.0001103850229599868, 0.00013246202755198415, 0.00015453903214398152, 0.00017661603673597886, 0.00019869304132797623] 1.0
+try: t = 0
+len(E) = 2099732
+FINISH: len(EC) = 4199464
+G2.number_of_nodes() = 317080
+len(unique_edge_list) = 2099732
+prepare to call compute_eps()
+max_deg_G2 = 343
+len(ent) = 344
+LOG2K = 5.64385618977
+eps2 = 0.00297401286742
+Elapsed  48.3739773024
+try: t = 1
+len(E) = 2099732
+
+
+---- entropy_obfuscation.py (3.2GB mem)
+#nodes : 317080
+#edges : 1049866
+#self-loops : 0
+#components : 1
+min-deg = 1
+max-deg = 343
+START generate_obfuscation
+START - compute and sort uniqueness
+compute and sort uniqueness: DONE
+build H, V_H: DONE
+len(H) : 31708
+len(V_H) : 285372
+compute Q, sum_list: DONE
+[2.2077004591997358e-05, 4.4154009183994715e-05, 6.623101377599208e-05, 8.830801836798943e-05, 0.0001103850229599868, 0.00013246202755198415, 0.00015453903214398152, 0.00017661603673597886, 0.00019869304132797623] 1.0
+try: t = 0
+len(E) = 2099732
+FINISH: len(EC) = 4199464
+G2.number_of_nodes() = 317080
+len(unique_edge_list) = 2099732
+prepare to call compute_eps()
+max_deg_G2 = 343
+len(ent) = 344
+LOG2K = 5.64385618977
+eps2 = 0.00296770531096
+Elapsed  57.619119536
+try: t = 1
+len(E) = 2099732
+

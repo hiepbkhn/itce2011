@@ -1,0 +1,61 @@
+before_file = ../data/com_amazon_ungraph.gr
+after_file = ../switch/com_amazon_ungraph_switch_rand_300000.out
+n_samples = 20
+algo_type = 1
+sample_file = ../switch/com_amazon_ungraph_switch_rand_300000_sample.
+read bG: DONE, elapsed : 0.828574102277
+count = 0
+count = 1
+count = 2
+count = 3
+count = 4
+count = 5
+count = 6
+count = 7
+count = 8
+count = 9
+count = 10
+count = 11
+count = 12
+count = 13
+count = 14
+count = 15
+count = 16
+count = 17
+count = 18
+count = 19
+compute score_H1, score_H2: DONE, elapsed : 387.501851519
+score_H1 = 153.0
+score_H2 = 9066.94786279
+elapsed : 398.685646236
+compare sample 0  DONE
+compare sample 1  DONE
+compare sample 2  DONE
+compare sample 3  DONE
+compare sample 4  DONE
+compare sample 5  DONE
+compare sample 6  DONE
+compare sample 7  DONE
+compare sample 8  DONE
+compare sample 9  DONE
+compare sample 10  DONE
+compare sample 11  DONE
+compare sample 12  DONE
+compare sample 13  DONE
+compare sample 14  DONE
+compare sample 15  DONE
+compare sample 16  DONE
+compare sample 17  DONE
+compare sample 18  DONE
+compare sample 19  DONE
+[415691, 415733, 416000, 416091, 416025, 415699, 416394, 415590, 415426, 415599, 416247, 415658, 416060, 416018, 416322, 416034, 415821, 416152, 416193, 416114]
+[415691, 415733, 416000, 416091, 416025, 415699, 416394, 415590, 415426, 415599, 416247, 415658, 416060, 416018, 416322, 416034, 415821, 416152, 416193, 416114]
+compare_edges_diff_from_file: DONE, elapsed : 62.9687736685
+read bG - DONE
+read sample 0  DONE
+max_deg_G2 = 549
+check X...
+check Y...
+len(ent) = 550
+eps_arr = [0.001511065719413611, 0.002182982294251679, 0.004563060117122525]
+elapsed : 14.2056996062

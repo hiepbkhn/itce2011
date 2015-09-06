@@ -1,0 +1,86 @@
+filename = ../out/com_youtube_ungraph_cvxopt_1800000_60_rw_missing.out
+n_samples = 20
+eps = 0.02
+sample i = 0
+read sample - DONE, elapsed : 2.09990780973
+m_time = 65
+dd = 0.0566229606656
+sample i = 1
+read sample - DONE, elapsed : 1.98009185218
+m_time = 65
+dd = 0.0566376185169
+sample i = 2
+read sample - DONE, elapsed : 2.0124948909
+m_time = 65
+dd = 0.0566029633335
+sample i = 3
+read sample - DONE, elapsed : 1.95282357608
+m_time = 64
+dd = 0.0565201096948
+sample i = 4
+read sample - DONE, elapsed : 1.92028801762
+m_time = 64
+dd = 0.0571752623327
+sample i = 5
+read sample - DONE, elapsed : 2.05449610199
+m_time = 64
+dd = 0.0570944131695
+sample i = 6
+read sample - DONE, elapsed : 1.92151571189
+m_time = 64
+dd = 0.0568842249693
+sample i = 7
+read sample - DONE, elapsed : 2.01484794643
+m_time = 65
+dd = 0.0565723853138
+sample i = 8
+read sample - DONE, elapsed : 2.01523524216
+m_time = 64
+dd = 0.0567657989385
+sample i = 9
+read sample - DONE, elapsed : 1.88966267538
+m_time = 65
+dd = 0.0566485536008
+sample i = 10
+read sample - DONE, elapsed : 1.95135559544
+m_time = 64
+dd = 0.0568183283881
+sample i = 11
+read sample - DONE, elapsed : 2.0028692486
+m_time = 64
+dd = 0.0568976696888
+sample i = 12
+read sample - DONE, elapsed : 1.9354179081
+m_time = 64
+dd = 0.0567515450312
+sample i = 13
+read sample - DONE, elapsed : 1.88684323488
+m_time = 64
+dd = 0.0568330894435
+sample i = 14
+read sample - DONE, elapsed : 1.84258013218
+m_time = 64
+dd = 0.0565954140051
+sample i = 15
+read sample - DONE, elapsed : 1.88662075869
+m_time = 64
+dd = 0.0568247059916
+sample i = 16
+read sample - DONE, elapsed : 1.8809643694
+m_time = 65
+dd = 0.0568392496175
+sample i = 17
+read sample - DONE, elapsed : 2.02498072577
+m_time = 64
+dd = 0.0568907351729
+sample i = 18
+read sample - DONE, elapsed : 2.04148350869
+m_time = 64
+dd = 0.0567564189707
+sample i = 19
+read sample - DONE, elapsed : 2.00208650671
+m_time = 65
+dd = 0.0565340925526
+m_time = 64.35
+assortativity = -0.0365322111967
+mixing_time_and_assortativity - Elapsed  3790.45635633

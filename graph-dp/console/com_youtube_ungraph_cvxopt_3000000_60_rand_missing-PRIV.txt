@@ -1,0 +1,60 @@
+before_file = ../data/com_youtube_ungraph.gr
+after_file = ../out/com_youtube_ungraph_cvxopt_3000000_60_rand_missing.out
+n_samples = 20
+read bG: DONE, elapsed : 1.92440150512
+count = 0
+count = 1
+count = 2
+count = 3
+count = 4
+count = 5
+count = 6
+count = 7
+count = 8
+count = 9
+count = 10
+count = 11
+count = 12
+count = 13
+count = 14
+count = 15
+count = 16
+count = 17
+count = 18
+count = 19
+compute score_H1, score_H2: DONE, elapsed : 934.29351689
+score_H1 = 230.927158882
+score_H2 = 2997.305119
+elapsed : 957.869442763
+compare sample 0  DONE
+compare sample 1  DONE
+compare sample 2  DONE
+compare sample 3  DONE
+compare sample 4  DONE
+compare sample 5  DONE
+compare sample 6  DONE
+compare sample 7  DONE
+compare sample 8  DONE
+compare sample 9  DONE
+compare sample 10  DONE
+compare sample 11  DONE
+compare sample 12  DONE
+compare sample 13  DONE
+compare sample 14  DONE
+compare sample 15  DONE
+compare sample 16  DONE
+compare sample 17  DONE
+compare sample 18  DONE
+compare sample 19  DONE
+[344440, 344308, 344134, 344152, 343488, 343949, 343514, 344171, 344488, 343982, 344129, 344692, 344708, 344179, 344579, 344526, 344186, 344653, 344069, 344316]
+[344621, 344108, 344445, 344327, 344370, 345106, 344061, 344627, 343769, 344006, 344054, 344418, 343883, 343496, 343823, 343972, 344249, 344258, 343930, 343274]
+compare_edges_diff_from_file: DONE, elapsed : 156.946991338
+n_nodes = 0
+read bG - DONE
+read aG - DONE
+max_deg_G2 = 28758
+check X...
+check Y...
+len(ent) = 28759
+eps_arr = [0.0009463472230788887, 0.0011965917401686506, 0.0018926944461577775]
+elapsed : 236.75448707

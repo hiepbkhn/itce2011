@@ -1,0 +1,94 @@
+file_name = com_dblp_ungraph
+n_samples = 20
+start_id = 0
+t = 5
+alpha = 0.5
+p = 0.2
+#nodes : 317080
+#edges : 1049866
+#self-loops : 0
+#components : 1
+min-deg = 1
+max-deg = 343
+TEST random_walk_transform_multigraph
+sample 0
+#nodes : 317080
+#edges : 1049915
+#self-loops : 7656
+sample 1
+#nodes : 317080
+#edges : 1049805
+#self-loops : 7627
+sample 2
+#nodes : 317080
+#edges : 1049527
+#self-loops : 7732
+sample 3
+#nodes : 317080
+#edges : 1049329
+#self-loops : 7750
+sample 4
+#nodes : 317080
+#edges : 1050416
+#self-loops : 7611
+sample 5
+#nodes : 317080
+#edges : 1049061
+#self-loops : 7710
+sample 6
+#nodes : 317080
+#edges : 1048934
+#self-loops : 7735
+sample 7
+#nodes : 317080
+#edges : 1049017
+#self-loops : 7623
+sample 8
+#nodes : 317080
+#edges : 1049867
+#self-loops : 7666
+sample 9
+#nodes : 317080
+#edges : 1049448
+#self-loops : 7628
+sample 10
+#nodes : 317080
+#edges : 1050077
+#self-loops : 7811
+sample 11
+#nodes : 317080
+#edges : 1049518
+#self-loops : 7719
+sample 12
+#nodes : 317080
+#edges : 1049491
+#self-loops : 7818
+sample 13
+#nodes : 317080
+#edges : 1049722
+#self-loops : 7618
+sample 14
+#nodes : 317080
+#edges : 1049872
+#self-loops : 7602
+sample 15
+#nodes : 317080
+#edges : 1049266
+#self-loops : 7551
+sample 16
+#nodes : 317080
+#edges : 1049381
+#self-loops : 7651
+sample 17
+#nodes : 317080
+#edges : 1049205
+#self-loops : 7711
+sample 18
+#nodes : 317080
+#edges : 1049846
+#self-loops : 7642
+sample 19
+#nodes : 317080
+#edges : 1050087
+#self-loops : 7739
+random_walk_multigraph_replace for 20 samples DONE, elapsed : 440.078128387

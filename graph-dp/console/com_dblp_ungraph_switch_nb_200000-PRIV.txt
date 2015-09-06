@@ -1,0 +1,61 @@
+before_file = ../data/com_dblp_ungraph.gr
+after_file = ../switch/com_dblp_ungraph_switch_nb_200000.out
+n_samples = 20
+algo_type = 1
+sample_file = ../switch/com_dblp_ungraph_switch_nb_200000_sample.
+read bG: DONE, elapsed : 0.708774000546
+count = 0
+count = 1
+count = 2
+count = 3
+count = 4
+count = 5
+count = 6
+count = 7
+count = 8
+count = 9
+count = 10
+count = 11
+count = 12
+count = 13
+count = 14
+count = 15
+count = 16
+count = 17
+count = 18
+count = 19
+compute score_H1, score_H2: DONE, elapsed : 327.778217066
+score_H1 = 199.000000001
+score_H2 = 27388.5594946
+elapsed : 336.430923556
+compare sample 0  DONE
+compare sample 1  DONE
+compare sample 2  DONE
+compare sample 3  DONE
+compare sample 4  DONE
+compare sample 5  DONE
+compare sample 6  DONE
+compare sample 7  DONE
+compare sample 8  DONE
+compare sample 9  DONE
+compare sample 10  DONE
+compare sample 11  DONE
+compare sample 12  DONE
+compare sample 13  DONE
+compare sample 14  DONE
+compare sample 15  DONE
+compare sample 16  DONE
+compare sample 17  DONE
+compare sample 18  DONE
+compare sample 19  DONE
+[243807, 243794, 243889, 243383, 244061, 243563, 243894, 243476, 243864, 243951, 243843, 244205, 244230, 243973, 243930, 243727, 243930, 243909, 244027, 244090]
+[243807, 243794, 243889, 243383, 244061, 243563, 243894, 243476, 243864, 243951, 243843, 244205, 244230, 243973, 243930, 243727, 243930, 243909, 244027, 244090]
+compare_edges_diff_from_file: DONE, elapsed : 67.0186407703
+read bG - DONE
+read sample 0  DONE
+max_deg_G2 = 343
+check X...
+check Y...
+len(ent) = 344
+eps_arr = [0.002384256339094235, 0.003926453891762331, 0.006941465876119591]
+elapsed : 18.2252127806

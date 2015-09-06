@@ -1,0 +1,21 @@
+before_file = ../data/com_youtube_ungraph.gr
+after_file = ../data/com_youtube_ungraph.gr
+n_samples = 5
+bG#nodes = 1134890
+bG#edges = 2987624
+aG#nodes = 1134890
+aG#edges = 2987624
+sum_re_prob H1 = 978.000000033
+sum_re_prob H2 (open) = 321724.0
+elapsed : 58.3761746136
+diff_b = 0
+diff_a = 0
+elapsed : 5.50743037747
+n_nodes = 1134890
+read bG - DONE
+max_deg_G2 = 28754
+check X...
+check Y...
+len(ent) = 28755
+eps_arr = [0.002914819938496242, 0.004016248270757518, 0.0058314021623241015]
+elapsed : 182.016345049

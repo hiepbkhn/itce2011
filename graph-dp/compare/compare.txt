@@ -1,0 +1,79 @@
+================= DBLP ====
+TEST compute_total_variance
+elapsed 44.1852659179
+file_name = ../out/com_dblp_ungraph_entropy_0001_2_001.out
+TV = 5088.54514366
+elapsed 47.3336267483
+file_name = ../out/com_dblp_ungraph_entropy_001_2_001.out
+TV = 13302.9689297
+elapsed 48.0118679125
+file_name = ../out/com_dblp_ungraph_entropy_01_2_001.out
+TV = 38569.0599365
+
+elapsed 27.6533772611
+file_name = ../out/com_dblp_ungraph_cvxopt_200000_20_nb_missing.out
+TV = 94740.2665407
+elapsed 30.0913676822
+file_name = ../out/com_dblp_ungraph_cvxopt_400000_20_nb_missing.out
+TV = 180018.303964
+elapsed 35.6663427631
+file_name = ../out/com_dblp_ungraph_cvxopt_600000_20_nb_missing.out
+TV = 246658.753251
+elapsed 38.9241030164
+file_name = ../out/com_dblp_ungraph_cvxopt_800000_20_nb_missing.out
+TV = 299910.242535
+elapsed 42.8631629534
+file_name = ../out/com_dblp_ungraph_cvxopt_1000000_20_nb_missing.out
+TV = 344385.985772
+elapsed 47.2183113302
+file_name = ../out/com_dblp_ungraph_cvxopt_1200000_20_nb_missing.out
+TV = 381549.88584
+elapsed 53.6341594837
+file_name = ../out/com_dblp_ungraph_cvxopt_1400000_20_nb_missing.out
+TV = 414244.915585
+elapsed 57.9846397848
+file_name = ../out/com_dblp_ungraph_cvxopt_1600000_20_nb_missing.out
+TV = 441693.012706
+elapsed 60.3085599904
+file_name = ../out/com_dblp_ungraph_cvxopt_1800000_20_nb_missing.out
+TV = 466489.120197
+elapsed 65.7719296021
+file_name = ../out/com_dblp_ungraph_cvxopt_2000000_20_nb_missing.out
+TV = 487838.304292
+
+====================================
+TEST compute_total_variance
+file_name = ../out/com_dblp_ungraph_cvxopt_200000_20_nb_missing.out elapsed 26.0329297971
+TV = 94740.2665407, TP = 94502.5875749
+file_name = ../out/com_dblp_ungraph_cvxopt_400000_20_nb_missing.out elapsed 31.3849644129
+TV = 180018.303964, TP = 179727.668998
+
+================= AMAZON ====
+TEST compute_total_variance
+file_name = ../out/com_amazon_ungraph_entropy_0001_2_001.out elapsed 38.0726367123
+TV = 4398.48251012 , TP = 6104.51736026
+file_name = ../out/com_amazon_ungraph_entropy_001_2_001.out elapsed 40.247975597
+TV = 9333.58048668 , TP = 14980.6162002
+file_name = ../out/com_amazon_ungraph_entropy_01_2_001.out elapsed 37.8725198893
+TV = 23187.008845 , TP = 39381.0827429
+file_name = ../out/com_amazon_ungraph_cvxopt_200000_20_nb_missing.out elapsed 24.6235686546
+TV = 104967.495205 , TP = 104814.263005
+file_name = ../out/com_amazon_ungraph_cvxopt_400000_20_nb_missing.out elapsed 27.7419589127
+TV = 196749.464205 , TP = 196587.376041
+file_name = ../out/com_amazon_ungraph_cvxopt_600000_20_nb_missing.out elapsed 30.6909601066
+TV = 266791.327512 , TP = 266629.457461
+file_name = ../out/com_amazon_ungraph_cvxopt_800000_20_nb_missing.out elapsed 34.6457574701
+TV = 322213.759551 , TP = 322055.966646
+file_name = ../out/com_amazon_ungraph_cvxopt_1000000_20_nb_missing.out elapsed 39.4903654264
+TV = 367582.155988 , TP = 367427.491014
+file_name = ../out/com_amazon_ungraph_cvxopt_1200000_20_nb_missing.out elapsed 43.7300788932
+TV = 405570.845472 , TP = 405413.744596
+file_name = ../out/com_amazon_ungraph_cvxopt_1400000_20_nb_missing.out elapsed 48.6318814987
+TV = 437553.296102 , TP = 437377.109746
+file_name = ../out/com_amazon_ungraph_cvxopt_1600000_20_nb_missing.out elapsed 53.1301649256
+TV = 465648.649731 , TP = 465467.494039
+file_name = ../out/com_amazon_ungraph_cvxopt_1800000_20_nb_missing.out elapsed 57.6221109335
+TV = 489809.141856 , TP = 489616.970301
+file_name = ../out/com_amazon_ungraph_cvxopt_2000000_20_nb_missing.out elapsed 60.8344244356
+TV = 510925.258672 , TP = 510720.035752
+

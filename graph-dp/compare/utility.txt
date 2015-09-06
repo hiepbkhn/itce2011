@@ -1,0 +1,72 @@
+
+
+============================= DBLP ====================
+filename = ../data/com_dblp_ungraph.gr
+#nodes = 317080
+#edges = 1049866
+min-deg = 1
+max-deg = 343
+#components = 1
+cc_size = [317080]
+Read graph - Elapsed  11.7352264546
+-------------------------------------
+convert to SNAP graph: DONE
+compute s_Diam, elapsed : 207.62532983
+MxDist = 20
+GetAnf, elapsed : 18.0242512516
+num_APD = 1.02885928247e+11
+s_APD = 7.76415972443
+s_EDiam = 9.0
+s_CL = 7.35435884777
+s_Diam = 20.0
+Elapsed  228.075321755
+size 15219841
+
+============================= AMAZON ====================
+filename = ../data/com_amazon_ungraph.gr
+#nodes = 334863
+#edges = 925872
+min-deg = 1
+max-deg = 549
+#components = 1
+cc_size = [334863]
+Read graph - Elapsed  11.6848979456
+-------------------------------------
+convert to SNAP graph: DONE
+compute s_Diam, elapsed : 218.63787128
+MxDist = 44
+GetAnf, elapsed : 30.2484481668
+num_APD = 1.03932918676e+11
+s_APD = 12.7771171876
+s_EDiam = 16.0
+s_CL = 13.0880382589
+s_Diam = 44.0
+Elapsed  251.693109387
+size 16073425
+
+============================= YOUTUBE ====================
+filename = ../data/com_youtube_ungraph.gr
+#nodes = 1134890
+#edges = 2987624
+min-deg = 1
+max-deg = 28754
+#components = 1
+cc_size = [1134890]
+Read graph - Elapsed  37.9839849428
+-------------------------------------
+convert to SNAP graph: DONE
+compute s_Diam, elapsed : 583.134993412
+MxDist = 20
+GetAnf, elapsed : 44.8527851191
+num_APD = 1.11143626485e+12
+s_APD = 6.07428129088
+s_EDiam = 8.0
+s_CL = 6.78990353677
+s_Diam = 20.0
+Elapsed  638.101667072
+size 59014281
+
+
+
+
+

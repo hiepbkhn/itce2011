@@ -1,0 +1,27 @@
+file_name = com_youtube_ungraph
+num_sw = 900000
+switch_type = 0
+n_samples = 15
+start_id = 5
+#nodes : 1134890
+#edges : 2987624
+#self-loops : 0
+#components : 1
+min-deg = 1
+max-deg = 28754
+sample 5
+sample 6
+sample 7
+sample 8
+sample 9
+sample 10
+sample 11
+sample 12
+sample 13
+sample 14
+sample 15
+sample 16
+sample 17
+sample 18
+sample 19
+random/nearby_switch for 15 samples : DONE, elapsed : 771.57648403

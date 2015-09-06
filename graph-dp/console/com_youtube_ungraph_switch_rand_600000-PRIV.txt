@@ -1,0 +1,61 @@
+before_file = ../data/com_youtube_ungraph.gr
+after_file = ../switch/com_youtube_ungraph_switch_rand_600000.out
+n_samples = 20
+algo_type = 1
+sample_file = ../switch/com_youtube_ungraph_switch_rand_600000_sample.
+read bG: DONE, elapsed : 1.66528661795
+count = 0
+count = 1
+count = 2
+count = 3
+count = 4
+count = 5
+count = 6
+count = 7
+count = 8
+count = 9
+count = 10
+count = 11
+count = 12
+count = 13
+count = 14
+count = 15
+count = 16
+count = 17
+count = 18
+count = 19
+compute score_H1, score_H2: DONE, elapsed : 896.536960502
+score_H1 = 978.000000033
+score_H2 = 70434.053539
+elapsed : 918.564668237
+compare sample 0  DONE
+compare sample 1  DONE
+compare sample 2  DONE
+compare sample 3  DONE
+compare sample 4  DONE
+compare sample 5  DONE
+compare sample 6  DONE
+compare sample 7  DONE
+compare sample 8  DONE
+compare sample 9  DONE
+compare sample 10  DONE
+compare sample 11  DONE
+compare sample 12  DONE
+compare sample 13  DONE
+compare sample 14  DONE
+compare sample 15  DONE
+compare sample 16  DONE
+compare sample 17  DONE
+compare sample 18  DONE
+compare sample 19  DONE
+[819422, 819522, 819101, 819137, 819296, 818383, 819594, 818884, 819188, 819099, 819443, 819330, 819447, 818773, 818688, 818515, 819126, 819404, 819178, 819029]
+[819422, 819522, 819101, 819137, 819296, 818383, 819594, 818884, 819188, 819099, 819443, 819330, 819447, 818773, 818688, 818515, 819126, 819404, 819178, 819029]
+compare_edges_diff_from_file: DONE, elapsed : 156.49088549
+read bG - DONE
+read sample 0  DONE
+max_deg_G2 = 28754
+check X...
+check Y...
+len(ent) = 28755
+eps_arr = [0.002914819938496242, 0.004016248270757518, 0.0058314021623241015]
+elapsed : 181.376350604

@@ -1,0 +1,86 @@
+filename = ../randwalk/com_youtube_ungraph_randwalk_2_10.out
+n_samples = 20
+eps = 0.01
+sample i = 0
+read sample - DONE, elapsed : 2.9191973711
+m_time = 81
+dd = 0.0325692002074
+sample i = 1
+read sample - DONE, elapsed : 3.22671954174
+m_time = 81
+dd = 0.0326092493303
+sample i = 2
+read sample - DONE, elapsed : 3.14442629216
+m_time = 81
+dd = 0.0330396973072
+sample i = 3
+read sample - DONE, elapsed : 3.02851619548
+m_time = 82
+dd = 0.0323248564596
+sample i = 4
+read sample - DONE, elapsed : 2.73371290126
+m_time = 81
+dd = 0.0327865632296
+sample i = 5
+read sample - DONE, elapsed : 3.06607392005
+m_time = 86
+dd = 0.0138511221407
+sample i = 6
+read sample - DONE, elapsed : 2.59838488925
+m_time = 86
+dd = 0.0135508350048
+sample i = 7
+read sample - DONE, elapsed : 2.53445422696
+m_time = 86
+dd = 0.0140407254473
+sample i = 8
+read sample - DONE, elapsed : 2.54194476191
+m_time = 86
+dd = 0.0138345184421
+sample i = 9
+read sample - DONE, elapsed : 2.22233854175
+m_time = 86
+dd = 0.0135354700216
+sample i = 10
+read sample - DONE, elapsed : 2.57655716733
+m_time = 86
+dd = 0.0139801518244
+sample i = 11
+read sample - DONE, elapsed : 2.45901789288
+m_time = 86
+dd = 0.0138609891904
+sample i = 12
+read sample - DONE, elapsed : 2.74242750808
+m_time = 86
+dd = 0.0137364728565
+sample i = 13
+read sample - DONE, elapsed : 2.26864015427
+m_time = 86
+dd = 0.0138190308196
+sample i = 14
+read sample - DONE, elapsed : 2.53440079645
+m_time = 86
+dd = 0.0136304136395
+sample i = 15
+read sample - DONE, elapsed : 2.04333244584
+m_time = 86
+dd = 0.013769322943
+sample i = 16
+read sample - DONE, elapsed : 2.20895344421
+m_time = 86
+dd = 0.0135288996877
+sample i = 17
+read sample - DONE, elapsed : 2.07585200533
+m_time = 85
+dd = 0.0140448239474
+sample i = 18
+read sample - DONE, elapsed : 2.08181478993
+m_time = 86
+dd = 0.0135766044867
+sample i = 19
+read sample - DONE, elapsed : 2.30670471402
+m_time = 86
+dd = 0.0139791900594
+m_time = 84.75
+assortativity = -0.0110240754014
+mixing_time_and_assortativity - Elapsed  6133.04656846

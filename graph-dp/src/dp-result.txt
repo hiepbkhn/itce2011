@@ -1,0 +1,112 @@
+=======================================================
+----- DATA: er_1000_005.gr 		1,000 nodes  24,912 edges
+=======================================================
+eps=0.1, k1=0.05, k2=0.03, k3=0.019, k4=0.001
+N_GRID_TRIALS = 20000
+
+len(diff_b) = 0
+len(diff_a) = 0
+#components bG,aG = 1 1
+
+
+eps=0.1, k1=0.05, k2=0.03, k3=0.01, k4=0.01
+N_GRID_TRIALS = 20000
+
+len(diff_b) = 0
+len(diff_a) = 0
+#components bG,aG = 1 1
+
+
+=======================================================
+eps=1.0, k1=0.05, k2=0.03, k3=0.019, k4=0.001
+N_GRID_TRIALS = 20000
+
+len(diff_b) = 3899
+len(diff_a) = 3899
+#components bG,aG = 1 1
+
+
+eps=1.0, k1=0.05, k2=0.03, k3=0.01, k4=0.01
+N_GRID_TRIALS = 20000
+
+len(diff_b) = 341		??
+len(diff_a) = 341
+#components bG,aG = 1 1
+
+
+eps=1.0, k1=0.025, k2=0.025, k3=0.025, k4=0.025
+N_GRID_TRIALS = 20000
+
+len(diff_b) = 979
+len(diff_a) = 979
+#components bG,aG = 1 1
+
+
+eps=1.0, k1=0.25, k2=0.25, k3=0.25, k4=0.25 (!!sum(k) = 1.0)
+N_GRID_TRIALS = 20000
+
+len(diff_b) = 3832
+len(diff_a) = 3832
+#components bG,aG = 1 1
+
+
+=======================================================
+eps=10.0, k1=0.05, k2=0.03, k3=0.019, k4=0.001
+N_GRID_TRIALS = 20000
+
+len(diff_b) = 9436
+len(diff_a) = 9436
+#components bG,aG = 1 1
+
+eps=10.0, k1=0.05, k2=0.03, k3=0.01, k4=0.01
+N_GRID_TRIALS = 20000
+
+len(diff_b) = 3618
+len(diff_a) = 3618
+#components bG,aG = 1 1
+
+=======================================================
+eps=100.0, k1=0.05, k2=0.03, k3=0.019, k4=0.001
+N_GRID_TRIALS = 20000
+
+len(diff_b) = 1597
+len(diff_a) = 1597
+#components bG,aG = 1 1
+
+
+
+eps=100.0, k1=0.05, k2=0.03, k3=0.01, k4=0.01
+len(diff_b) = 12
+len(diff_a) = 12
+#components bG,aG = 1 1
+
+len(diff_b) = 24
+len(diff_a) = 24
+#components bG,aG = 1 1
+
+
+
+
+=======================================================
+----- DATA: er_10000_0005.gr	10,000 nodes  248,793 edges
+=======================================================
+eps=1.0, k1=0.05, k2=0.03, k3=0.01, k4=0.01
+N_GRID_TRIALS = 20000
+
+len(diff_b) = 45
+len(diff_a) = 45
+#components bG,aG = 1 1
+
+eps=1.0, k1=0.025, k2=0.025, k3=0.025, k4=0.025
+N_GRID_TRIALS = 20000
+
+len(diff_b) = 15524
+len(diff_a) = 15524
+#components bG,aG = 1 1
+
+eps=1.0, k1=0.25, k2=0.25, k3=0.25, k4=0.25 (!!sum(k) = 1.0)
+N_GRID_TRIALS = 20000
+
+ERROR: Overflow
+
+

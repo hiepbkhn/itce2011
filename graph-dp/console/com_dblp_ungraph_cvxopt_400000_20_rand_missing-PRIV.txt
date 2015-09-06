@@ -1,0 +1,60 @@
+before_file = ../data/com_dblp_ungraph.gr
+after_file = ../out/com_dblp_ungraph_cvxopt_400000_20_rand_missing.out
+n_samples = 20
+read bG: DONE, elapsed : 0.610674724581
+count = 0
+count = 1
+count = 2
+count = 3
+count = 4
+count = 5
+count = 6
+count = 7
+count = 8
+count = 9
+count = 10
+count = 11
+count = 12
+count = 13
+count = 14
+count = 15
+count = 16
+count = 17
+count = 18
+count = 19
+compute score_H1, score_H2: DONE, elapsed : 312.502518652
+score_H1 = 75.3598184018
+score_H2 = 1101.44519521
+elapsed : 320.074051713
+compare sample 0  DONE
+compare sample 1  DONE
+compare sample 2  DONE
+compare sample 3  DONE
+compare sample 4  DONE
+compare sample 5  DONE
+compare sample 6  DONE
+compare sample 7  DONE
+compare sample 8  DONE
+compare sample 9  DONE
+compare sample 10  DONE
+compare sample 11  DONE
+compare sample 12  DONE
+compare sample 13  DONE
+compare sample 14  DONE
+compare sample 15  DONE
+compare sample 16  DONE
+compare sample 17  DONE
+compare sample 18  DONE
+compare sample 19  DONE
+[145211, 145213, 145441, 145405, 145895, 145239, 145486, 146022, 145507, 145692, 145563, 145889, 145718, 145241, 145327, 145679, 145705, 145688, 145311, 145619]
+[145224, 145436, 145605, 145454, 145590, 145261, 145794, 145651, 145573, 145705, 145892, 145429, 145744, 145715, 145999, 145481, 145639, 145675, 145564, 145281]
+compare_edges_diff_from_file: DONE, elapsed : 52.7266474174
+n_nodes = 0
+read bG - DONE
+read aG - DONE
+max_deg_G2 = 349
+check X...
+check Y...
+len(ent) = 350
+eps_arr = [0.0007127538791472183, 0.000854673899331399, 0.002210798536646903]
+elapsed : 21.3997600134

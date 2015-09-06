@@ -1,0 +1,94 @@
+file_name = com_youtube_ungraph
+n_samples = 20
+start_id = 0
+t = 3
+alpha = 0.5
+p = 0.8
+#nodes : 1134890
+#edges : 2987624
+#self-loops : 0
+#components : 1
+min-deg = 1
+max-deg = 28754
+TEST random_walk_transform_multigraph
+sample 0
+#nodes : 1134890
+#edges : 2986424
+#self-loops : 8541
+sample 1
+#nodes : 1134890
+#edges : 2985643
+#self-loops : 8537
+sample 2
+#nodes : 1134890
+#edges : 2987135
+#self-loops : 8520
+sample 3
+#nodes : 1134890
+#edges : 2986184
+#self-loops : 8648
+sample 4
+#nodes : 1134890
+#edges : 2987089
+#self-loops : 8501
+sample 5
+#nodes : 1134890
+#edges : 2987558
+#self-loops : 8448
+sample 6
+#nodes : 1134890
+#edges : 2987017
+#self-loops : 8525
+sample 7
+#nodes : 1134890
+#edges : 2986746
+#self-loops : 8580
+sample 8
+#nodes : 1134890
+#edges : 2987052
+#self-loops : 8523
+sample 9
+#nodes : 1134890
+#edges : 2985517
+#self-loops : 8587
+sample 10
+#nodes : 1134890
+#edges : 2987350
+#self-loops : 8505
+sample 11
+#nodes : 1134890
+#edges : 2987562
+#self-loops : 8498
+sample 12
+#nodes : 1134890
+#edges : 2986943
+#self-loops : 8604
+sample 13
+#nodes : 1134890
+#edges : 2987143
+#self-loops : 8526
+sample 14
+#nodes : 1134890
+#edges : 2985881
+#self-loops : 8507
+sample 15
+#nodes : 1134890
+#edges : 2985439
+#self-loops : 8542
+sample 16
+#nodes : 1134890
+#edges : 2985822
+#self-loops : 8659
+sample 17
+#nodes : 1134890
+#edges : 2985589
+#self-loops : 8549
+sample 18
+#nodes : 1134890
+#edges : 2985101
+#self-loops : 8457
+sample 19
+#nodes : 1134890
+#edges : 2987104
+#self-loops : 8549
+random_walk_multigraph_replace for 20 samples DONE, elapsed : 1372.0864889

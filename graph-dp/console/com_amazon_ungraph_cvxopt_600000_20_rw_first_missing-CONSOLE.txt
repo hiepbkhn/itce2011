@@ -1,0 +1,28 @@
+data_name = com_amazon_ungraph_cvxopt_600000_20_rw_first_missing
+n_nodes = 334863
+n_samples = 20
+start_id = 0
+sum_p = 925872.000012
+read uncertain graph G - DONE, elapsed 3.90840803039
+sample 0
+sample 1
+sample 2
+sample 3
+sample 4
+sample 5
+sample 6
+sample 7
+sample 8
+sample 9
+sample 10
+sample 11
+sample 12
+sample 13
+sample 14
+sample 15
+sample 16
+sample 17
+sample 18
+sample 19
+generate_samples_and_save - DONE, elapsed 40.9847107236
+DONE

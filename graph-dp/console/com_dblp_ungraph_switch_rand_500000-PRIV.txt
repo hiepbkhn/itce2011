@@ -1,0 +1,61 @@
+before_file = ../data/com_dblp_ungraph.gr
+after_file = ../switch/com_dblp_ungraph_switch_rand_500000.out
+n_samples = 20
+algo_type = 1
+sample_file = ../switch/com_dblp_ungraph_switch_rand_500000_sample.
+read bG: DONE, elapsed : 0.633647630246
+count = 0
+count = 1
+count = 2
+count = 3
+count = 4
+count = 5
+count = 6
+count = 7
+count = 8
+count = 9
+count = 10
+count = 11
+count = 12
+count = 13
+count = 14
+count = 15
+count = 16
+count = 17
+count = 18
+count = 19
+compute score_H1, score_H2: DONE, elapsed : 335.68288805
+score_H1 = 199.000000001
+score_H2 = 1406.92510555
+elapsed : 343.964100722
+compare sample 0  DONE
+compare sample 1  DONE
+compare sample 2  DONE
+compare sample 3  DONE
+compare sample 4  DONE
+compare sample 5  DONE
+compare sample 6  DONE
+compare sample 7  DONE
+compare sample 8  DONE
+compare sample 9  DONE
+compare sample 10  DONE
+compare sample 11  DONE
+compare sample 12  DONE
+compare sample 13  DONE
+compare sample 14  DONE
+compare sample 15  DONE
+compare sample 16  DONE
+compare sample 17  DONE
+compare sample 18  DONE
+compare sample 19  DONE
+[542208, 543154, 543159, 542171, 542563, 542616, 542802, 542649, 542922, 542402, 542576, 543020, 542808, 542660, 542073, 542838, 542207, 542229, 542494, 542738]
+[542208, 543154, 543159, 542171, 542563, 542616, 542802, 542649, 542922, 542402, 542576, 543020, 542808, 542660, 542073, 542838, 542207, 542229, 542494, 542738]
+compare_edges_diff_from_file: DONE, elapsed : 59.7566454402
+read bG - DONE
+read sample 0  DONE
+max_deg_G2 = 343
+check X...
+check Y...
+len(ent) = 344
+eps_arr = [0.002384256339094235, 0.003926453891762331, 0.006941465876119591]
+elapsed : 15.0756347193
