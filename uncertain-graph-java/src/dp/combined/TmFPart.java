@@ -1,6 +1,8 @@
 /* 
- * Sep 4
+ * Sep 4, 2015
  * 	- copy TmF algo from naive.GreedyConstruct
+ * Sep 7
+ * 	- filterByNodesets()
  */
 
 package dp.combined;
@@ -14,11 +16,17 @@ import hist.GraphIntDict;
 import hist.GraphIntSet;
 import hist.Int2;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import com.sun.mail.imap.protocol.Item;
 
 import naive.GreedyReconstruct;
 import toools.io.file.RegularFile;
@@ -59,14 +67,16 @@ public class TmFPart {
 //		System.out.println("upper_eps1 = " + upper_eps1);
 //		System.out.println("upper_eps2 = " + upper_eps2);
 		
-		System.out.println("eps = " + eps);
-		System.out.println("eps_threshold = " + eps_threshold);
-		System.out.println("theta = " + theta);
-		System.out.println("n1 = " + n1);
+//		System.out.println("eps = " + eps);
+//		System.out.println("eps_threshold = " + eps_threshold);
+//		System.out.println("theta = " + theta);
+//		System.out.println("n1 = " + n1);
 		
 		// 1. for 1-cells
+		int m_min = Math.min(m_noisy, m);
+		
 		int n1cells = 0;
-		for (int i = 0; i < m; i++){
+		for (int i = 0; i < m_min; i++){
 	    	int u = edgelist[0][i];
 	       	int v = edgelist[1][i];
 	       	if (1 + DPUtil.laplaceMechanism(eps) > theta){
@@ -125,8 +135,10 @@ public class TmFPart {
 		n2 = m_noisy-n1;
 		
 		// 1. for 1-cells
+		int m_min = Math.min(m_noisy, m);
+		
 		int n1cells = 0;
-		for (int i = 0; i < m; i++){
+		for (int i = 0; i < m_min; i++){
 	    	int u = edgelist[0][i];
 	       	int v = edgelist[1][i];
 	       	if (1 + DPUtil.laplaceMechanism(eps) > theta){
@@ -164,7 +176,7 @@ public class TmFPart {
 	}
 	
 	
-	////
+	//// return: list of nodesets
 	public static List<int[]> partitionNodeEqual(int n, int k){
 		List<int[]> nodelists = new ArrayList<int[]>();
 		
@@ -245,7 +257,7 @@ public class TmFPart {
 			int[][] edgelist = getEdgeSubgraph(G, nodelist);
 			
 			int[][] result = tmfSubgraph(nodelist, edgelist, eps); 
-			System.out.println("result[0].length = " + result[0].length);
+//			System.out.println("result[0].length = " + result[0].length);
 			
 			for (int t = 0; t < result[0].length; t++)
 				aG.addSimpleEdge(result[0][t], result[1][t], false);
@@ -257,7 +269,7 @@ public class TmFPart {
 				edgelist = getEdgeBigraph(G, nodelist1, nodelist2);
 			
 				result = tmfBigraph(nodelist1, nodelist2, edgelist, eps); 
-				System.out.println("result[0].length = " + result[0].length);
+//				System.out.println("result[0].length = " + result[0].length);
 				
 				for (int t = 0; t < result[0].length; t++)
 					aG.addSimpleEdge(result[0][t], result[1][t], false);
@@ -269,8 +281,118 @@ public class TmFPart {
 		return aG;
 	}
 	
-	
 	////
+	public static Grph filterByNodesets(Grph G, List<int[]> nodelists, double eps){
+		int n = G.getNumberOfVertices();
+		
+		Grph aG = new InMemoryGrph();
+		aG.addNVertices((int)n);
+		
+		int k = nodelists.size();
+		
+		int[] nodeToSet = new int[n];	// point to containing nodelist
+		for (int i = 0; i < k; i++){
+			int[] nodelist = nodelists.get(i);
+			for (int u:nodelist)
+				nodeToSet[u] = i;
+		}
+		
+		// compute edge list for each subgraph
+		// (i,j) is the subgraph (bigraph) Vi, Vj
+		Map<Int2, List<Int2>> subgraphs = new HashMap<Int2, List<Int2>>();
+		for (int i = 0; i < k; i++)
+			for (int j = i; j < k; j++)
+				subgraphs.put(new Int2(i, j), new ArrayList<Int2>());
+		
+		System.out.println("subgraphs.size = " + subgraphs.size());
+		
+		for (VertexPair p : G.getEdgePairs()){
+	    	int u = p.first;
+	       	int v = p.second;
+	       	List<Int2> edgelist = subgraphs.get(new Int2(nodeToSet[u], nodeToSet[v]));
+	       	if (edgelist == null)
+	       		edgelist = subgraphs.get(new Int2(nodeToSet[v], nodeToSet[u]));
+	       	
+	       	edgelist.add(new Int2(u,v));
+		}
+		
+		// process each subgraph
+		for (Map.Entry<Int2, List<Int2>> entry : subgraphs.entrySet()){
+			Int2 key = entry.getKey();
+			List<Int2> temp = entry.getValue();
+			
+			int[][] edgelist = new int[2][temp.size()];
+			
+			
+			for (int i = 0; i < edgelist[0].length; i++){
+				edgelist[0][i] = temp.get(i).val0;
+				edgelist[1][i] = temp.get(i).val1;
+			}
+			
+			if (key.val0 == key.val1){	// subgraph
+				int[][] result = tmfSubgraph(nodelists.get(key.val0), edgelist, eps);
+				
+				for (int t = 0; t < result[0].length; t++)
+					aG.addSimpleEdge(result[0][t], result[1][t], false);
+				
+			}else{						// bigraph
+				int[][] result = tmfBigraph(nodelists.get(key.val0), nodelists.get(key.val1), edgelist, eps); 
+				
+				for (int t = 0; t < result[0].length; t++)
+					aG.addSimpleEdge(result[0][t], result[1][t], false);
+			}
+		}
+		
+		
+		//
+		return aG;
+	}
+	
+	//// k: number of nodesets
+	public static Grph filterEqualByNodeSets(Grph G, int k, double eps){
+		int n = G.getNumberOfVertices();
+		
+		Grph aG = new InMemoryGrph();
+		aG.addNVertices((int)n);
+		
+		List<int[]> nodelists = partitionNodeEqual(n, k);
+		
+		aG = filterByNodesets(G, nodelists, eps);
+				
+		//
+		return aG;
+	}
+	
+	////k: number of nodesets
+	public static Grph filterByNodeSetsFromfile(Grph G, String community_file, double eps) throws IOException{
+		int n = G.getNumberOfVertices();
+		
+		Grph aG = new InMemoryGrph();
+		aG.addNVertices((int)n);
+		
+		List<int[]> nodelists = new ArrayList<int[]>();
+		
+		BufferedReader br = new BufferedReader(new FileReader(community_file));
+		while (true){
+		   	// level
+		   	String str = br.readLine();
+		   	if (str == null)
+		   		break;
+		   	String[] items = str.split(",");
+		   	int[] nodelist = new int[items.length];
+		   	for (int i = 0; i < items.length; i++)
+		   		nodelist[i] = Integer.parseInt(items[i]);
+		   	nodelists.add(nodelist);
+		}
+		
+		
+		aG = filterByNodesets(G, nodelists, eps);
+				
+		//
+		return aG;
+	}
+	
+	//////////////////////////////////////////////////
 	public static void main(String[] args) throws Exception{
 		// load graph
 //		String dataname = "polbooks";		// (105, 441)		
@@ -283,18 +405,18 @@ public class TmFPart {
 																		
 //		String dataname = "wiki-Vote";		// (7115,100762)
 //		String dataname = "ca-HepPh";		// (12006,118489) 	
-//		String dataname = "ca-AstroPh";		// (18771,198050) 	
+//		String dataname = "ca-AstroPh";		// (18771,198050) 	filterEqual (350s), filterEqualByNodeSets(0.3s)
 		// LARGE
-//		String dataname = "com_amazon_ungraph";		// (334863,925872) 
+//		String dataname = "com_amazon_ungraph";		// (334863,925872) 		filterEqualByNodeSets(3.5s)
 //		String dataname = "com_dblp_ungraph";		// (,) 
-//		String dataname = "com_youtube_ungraph";	// (1134890,2987624) 
+//		String dataname = "com_youtube_ungraph";	// (1134890,2987624) 	filterEqualByNodeSets(10.5s, 2.4GB)
 													//						
 		
 		// COMMAND-LINE <prefix> <dataname> <n_samples> <eps>
 		String prefix = "";
 	    int n_samples = 1;
-	    double eps = 4.0;
-	    int numpart = 10;
+	    double eps = 2.0;
+	    int numpart = 100;
 		
 		if(args.length >= 4){
 			prefix = args[0];
@@ -309,7 +431,7 @@ public class TmFPart {
 		System.out.println("numpart = " + numpart);
 		
 		String filename = prefix + "_data/" + dataname + ".gr";
-		String sample_file = prefix + "_sample/" + dataname + "_tmfpart_" + numpart + "_" + String.format("%.1f", eps);
+		String sample_file = prefix + "_sample/" + dataname + "_tmfpart_" + numpart + "_" + String.format("%.1f", eps) + "_sample";
 		System.out.println("sample_file = " + sample_file);
 
 		
@@ -330,8 +452,16 @@ public class TmFPart {
 			System.out.println("sample i = " + i);
 		
 			start = System.currentTimeMillis();
-			Grph aG = filterEqual(G, numpart, eps);
-			System.out.println("filterEqual - DONE, elapsed " + (System.currentTimeMillis() - start));
+			
+//			Grph aG = filterEqual(G, numpart, eps);
+//			System.out.println("filterEqual - DONE, elapsed " + (System.currentTimeMillis() - start));
+			
+//			Grph aG = filterEqualByNodeSets(G, numpart, eps);
+//			System.out.println("filterEqualByNodeSets - DONE, elapsed " + (System.currentTimeMillis() - start));
+			
+			Grph aG = filterByNodeSetsFromfile(G, "../uncertain-graph/_data/as20graph.louvain", eps);
+			System.out.println("filterByNodeSetsFromfile - DONE, elapsed " + (System.currentTimeMillis() - start));
+			
 			System.out.println("#nodes = " + aG.getNumberOfVertices());
 			System.out.println("#edges = " + aG.getNumberOfEdges());
 			

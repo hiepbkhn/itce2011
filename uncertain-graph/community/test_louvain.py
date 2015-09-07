@@ -26,7 +26,7 @@ if __name__ == '__main__':
 #    dataname = "ca-AstroPh"    # (18771,198050)    
 #    dataname = "com_amazon_ungraph" # (334863,925872) 
 #    dataname = "com_dblp_ungraph"  # (317080,1049866) 
-    dataname = "com_youtube_ungraph"# (1134890,2987624) (5.0GB mem, 230s Acer)
+#    dataname = "com_youtube_ungraph"# (1134890,2987624) (5.0GB mem, 230s Acer)
     
     filename = "../_data/" + dataname + ".gr"
 
@@ -41,13 +41,22 @@ if __name__ == '__main__':
     partition = community.best_partition(G)
     print "commynity detection - DONE, elapsed", time.clock() - start
     
-#    for com in set(partition.values()) :
-#        print "community", com,
-#        list_nodes = [nodes for nodes in partition.keys() if partition[nodes] == com]
-#        print "size :", len(list_nodes)
-#        print list_nodes
+    for com in set(partition.values()) :
+        print "community", com,
+        list_nodes = [nodes for nodes in partition.keys() if partition[nodes] == com]
+        print "size :", len(list_nodes)
+        print list_nodes
     
-    
+    #
+    louvain_file = "../_data/" + dataname + ".louvain"
+    f = open(louvain_file, 'w')
+    for com in set(partition.values()) :
+        list_nodes = [nodes for nodes in partition.keys() if partition[nodes] == com]
+        for u in list_nodes:
+            f.write("%d,"%u)
+        f.write("\n")
+    f.close()
+    print "write communities to file: DONE",
     
     
     # DRAWING (for up to polblogs)

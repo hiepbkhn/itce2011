@@ -102,7 +102,7 @@ clear
 %     rel_err23, rel_err24]     
     
 
-%%%%
+%%%% Sep 6, 2015
 % TmFPart, eps1 = 2, 4, 8 (numpart=5)
 % [rel_err1, e_deg_distr1, e_dist_distr1, e_AD1, e_MD1, e_DV1, e_CC1, e_PL1, e_APD1, e_CL1, e_EDiam1, e_Diam1 ] = ...
 %         aa_compute_util('as20graph', 'as20graph_tmfpart_2.0', 1);

@@ -102,13 +102,13 @@ clear
 %%%%
 % TmFPart, eps1 = 1, 2, 4
 [rel_err1, e_deg_distr1, e_dist_distr1, e_AD1, e_MD1, e_DV1, e_CC1, e_PL1, e_APD1, e_CL1, e_EDiam1, e_Diam1 ] = ...
-        aa_compute_util('polbooks', 'polbooks_tmfpart_1.0', 1);
+        aa_compute_util('polbooks', 'polbooks_tmfpart_5_1.0', 1);
 
 [rel_err2, e_deg_distr2, e_dist_distr2, e_AD2, e_MD2, e_DV2, e_CC2, e_PL2, e_APD2, e_CL2, e_EDiam2, e_Diam2 ] = ...
-        aa_compute_util('polbooks', 'polbooks_tmfpart_2.0', 1);
+        aa_compute_util('polbooks', 'polbooks_tmfpart_5_2.0', 1);
 
 [rel_err3, e_deg_distr3, e_dist_distr3, e_AD3, e_MD3, e_DV3, e_CC3, e_PL3, e_APD3, e_CL3, e_EDiam3, e_Diam3 ] = ...
-        aa_compute_util('polbooks', 'polbooks_tmfpart_4.0', 1);
+        aa_compute_util('polbooks', 'polbooks_tmfpart_5_4.0', 1);
 
 
     

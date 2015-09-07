@@ -1193,38 +1193,38 @@ if __name__ == '__main__':
 #    compute_utility_and_export_matlab("../data/polbooks.gr", "../data/polbooks.cut", 
 #                                      "../../uncertain-graph-java/_matlab/polbooks.mat", 
 #                                      1000, 105)   
-    
+#    
 #    compute_utility_and_export_matlab("../data/polblogs.gr", "../data/polblogs.cut", 
 #                                      "../../uncertain-graph-java/_matlab/polblogs.mat", 
 #                                      1000, 1224)   # polblogs: cut_query (21s)
-
+#
 #    compute_utility_and_export_matlab("../data/as20graph.gr", "../data/as20graph.cut", 
 #                                      "../../uncertain-graph-java/_matlab/as20graph.mat", 
 #                                      1000, 6474) 
-
+#
 #    compute_utility_and_export_matlab("../data/wiki-Vote.gr", "../data/wiki-Vote.cut", 
 #                                      "../../uncertain-graph-java/_matlab/wiki-Vote.mat", 
 #                                      1000, 7115) 
-    
+#    
 #    compute_utility_and_export_matlab("../data/ca-HepPh.gr", "../data/ca-HepPh.cut", 
 #                                      "../../uncertain-graph-java/_matlab/ca-HepPh.mat", 
 #                                      1000, 12006) 
-    
+#    
 #    compute_utility_and_export_matlab("../data/ca-AstroPh.gr", "../data/ca-AstroPh.cut", 
 #                                      "../../uncertain-graph-java/_matlab/ca-AstroPh.mat", 
 #                                      1000, 18771) 
     
-    ##
-#    compute_utility_and_export_matlab("../../uncertain-graph-java/_sample/polbooks_tmfpart_1.0.0", "../data/polbooks.cut", 
-#                                      "../../uncertain-graph-java/_matlab/polbooks_tmfpart_1.0.0.mat", 
+    ## Sep 6, 2015
+#    compute_utility_and_export_matlab("../../uncertain-graph-java/_sample/polbooks_tmfpart_5_1.0_sample.0", "../data/polbooks.cut", 
+#                                      "../../uncertain-graph-java/_matlab/polbooks_tmfpart_5_1.0.0.mat", 
 #                                      1000, 105)   
-    
-#    compute_utility_and_export_matlab("../../uncertain-graph-java/_sample/polbooks_tmfpart_2.0.0", "../data/polbooks.cut", 
-#                                      "../../uncertain-graph-java/_matlab/polbooks_tmfpart_2.0.0.mat", 
+#    
+#    compute_utility_and_export_matlab("../../uncertain-graph-java/_sample/polbooks_tmfpart_5_2.0_sample.0", "../data/polbooks.cut", 
+#                                      "../../uncertain-graph-java/_matlab/polbooks_tmfpart_5_2.0.0.mat", 
 #                                      1000, 105)   
-    
-#    compute_utility_and_export_matlab("../../uncertain-graph-java/_sample/polbooks_tmfpart_4.0.0", "../data/polbooks.cut", 
-#                                      "../../uncertain-graph-java/_matlab/polbooks_tmfpart_4.0.0.mat", 
+#    
+#    compute_utility_and_export_matlab("../../uncertain-graph-java/_sample/polbooks_tmfpart_5_4.0_sample.0", "../data/polbooks.cut", 
+#                                      "../../uncertain-graph-java/_matlab/polbooks_tmfpart_5_4.0.0.mat", 
 #                                      1000, 105)   
     
     ##
@@ -1240,14 +1240,17 @@ if __name__ == '__main__':
 #                                      "../../uncertain-graph-java/_matlab/as20graph_tmfpart_8.0.0.mat", 
 #                                      1000, 6474)   
 
-    compute_utility_and_export_matlab("../../uncertain-graph-java/_sample/as20graph_tmfpart_10_2.0.0", "../data/as20graph.cut", 
+    compute_utility_and_export_matlab("../../uncertain-graph-java/_sample/as20graph_tmfpart_10_2.0_sample.0", "../data/as20graph.cut", 
                                       "../../uncertain-graph-java/_matlab/as20graph_tmfpart_10_2.0.0.mat", 
                                       1000, 6474)   
     
-    compute_utility_and_export_matlab("../../uncertain-graph-java/_sample/as20graph_tmfpart_10_4.0.0", "../data/as20graph.cut", 
+    compute_utility_and_export_matlab("../../uncertain-graph-java/_sample/as20graph_tmfpart_10_4.0_sample.0", "../data/as20graph.cut", 
                                       "../../uncertain-graph-java/_matlab/as20graph_tmfpart_10_4.0.0.mat", 
                                       1000, 6474) 
     
-    compute_utility_and_export_matlab("../../uncertain-graph-java/_sample/as20graph_tmfpart_10_8.0.0", "../data/as20graph.cut", 
+    compute_utility_and_export_matlab("../../uncertain-graph-java/_sample/as20graph_tmfpart_10_8.0_sample.0", "../data/as20graph.cut", 
                                       "../../uncertain-graph-java/_matlab/as20graph_tmfpart_10_8.0.0.mat", 
                                       1000, 6474)
+    
+    
+    
