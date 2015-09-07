@@ -1,0 +1,59 @@
+filename = ../_data/as20graph.gr
+#nodes = 6474
+#edges = 12572
+s_NE = 12572
+s_AD = 3.88384306457
+s_MD = 1458
+s_DV = 624.994848623
+s_CC = 0.00959131071535
+degree_statistics - Elapsed  0.0115542881135
+s_APD = 3.70443118449
+s_EDiam = 5.0
+s_CL = 3.44353824394
+s_Diam = 9
+exact_neighborhood_function_statistics - Elapsed  55.7060901379
+s_PL = 2.06633921168
+pl_xmin = 6.0
+s_Assort = -0.181755046289
+s_Q = 0.355269979629
+s_Eigen = 46.3179375971
+
+filename = ../_out/as20graph.1k.gen
+#nodes = 6250
+#edges = 12451
+s_NE = 12451
+s_AD = 3.98432
+s_MD = 1458
+s_DV = 647.099914138
+s_CC = 0.0162794480769
+degree_statistics - Elapsed  0.00997443387273
+s_APD = 3.5000852992
+s_EDiam = 5.0
+s_CL = 3.27284699728
+s_Diam = 12
+exact_neighborhood_function_statistics - Elapsed  49.3503252354
+s_PL = 2.06633921168
+pl_xmin = 6.0
+s_Assort = -0.17599842747
+s_Q = 0.259427193132
+s_Eigen = 49.6373975049
+
+filename = ../_out/as20graph.2k.gen
+#nodes = 6420
+#edges = 12448
+s_NE = 12448
+s_AD = 3.87788161994
+s_MD = 1437
+s_DV = 614.999105793
+s_CC = 0.00633591230918
+degree_statistics - Elapsed  0.0106355294744
+s_APD = 3.46250909832
+s_EDiam = 4.0
+s_CL = 3.26915295863
+s_Diam = 8
+exact_neighborhood_function_statistics - Elapsed  50.8520131336
+s_PL = 2.06855815151
+pl_xmin = 6.0
+s_Assort = -0.181983492744
+s_Q = 0.271014722015
+s_Eigen = 42.6752619264

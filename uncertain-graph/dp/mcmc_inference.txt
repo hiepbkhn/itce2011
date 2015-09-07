@@ -1,0 +1,45 @@
+
+==as20graph===
+#nodes = 6474
+#edges = 12572
+build_dendrogram - DONE, elapsed 0.326791669169
+logLK = 100341.970638
+dU = 17.1648044596
+dendrogram_fitting - DONE, elapsed 34.5875949106
+logLK = 100342.765481
+add_laplace_noise - DONE
+generate_sanitized_sample - DONE, elapsed 465.363153467
+#nodes = 6474
+#edges = 15251
+
+============
+../_data/as20graph.gr
+#nodes = 6474
+#edges = 12572
+build_dendrogram - DONE, elapsed 0.163562899693
+logLK = 100341.970638
+dU = 17.1648044596
+#steps = 74740
+i = 0 1 0.188573955646
+i = 7474 7461 49.7232872329
+i = 14948 14927 89.707504313
+i = 22422 22389 133.389429754
+i = 29896 29854 175.998700152
+i = 37370 37320 221.052171117
+i = 44844 44786 260.958714883
+i = 52318 52250 303.241493708
+i = 59792 59718 341.710532965
+i = 67266 67176 382.767297925
+dendrogram_fitting - DONE, elapsed 424.088494413
+logLK = 101416.151874
+logLK = 101432.793231
+logLK = 101435.216362
+logLK = 101436.357206
+logLK = 101451.545327
+logLK = 101463.934811
+logLK = 101442.110856
+logLK = 101455.676697
+logLK = 101427.964317
+logLK = 101441.549321
+
+write_internal_nodes - DONE
