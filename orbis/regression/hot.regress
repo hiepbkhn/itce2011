@@ -1,0 +1,6 @@
+TOPO="hot"
+SIZES="50 100 250 400 800 1000 2000 4000 6000 8000 10000 15000"
+METRICS="scalar betweenness distance"
+K="0 1 2"
+# R is optional ... set to "r" for router topos, "" for non-router topos
+R="r"

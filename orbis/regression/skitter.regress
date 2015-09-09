@@ -1,0 +1,6 @@
+TOPO="skitter"
+SIZES="500 1000 5000 9000 15000 30000 40000 50000 90000 120000"
+METRICS="scalar betweenness distance"
+K="0 1 2"
+# R is optional ... set to "r" for router topos, "" for non-router topos
+# R="r"

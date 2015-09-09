@@ -1,4 +1,5 @@
 
+% draw degree and distance distributions of TmF scheme
 
 % polbooks
 clear

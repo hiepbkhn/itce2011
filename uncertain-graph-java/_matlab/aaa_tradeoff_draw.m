@@ -1,4 +1,7 @@
 
+% draw privacy-utility tradeoff ('HRG-MCMC', 'DER', 'TmF', 'ORBIS',
+% 'CONFIG', 'ORBIS-true')
+
 %%%
 % n = 105; name = 'comp-polbooks';
 % n = 1124; name = 'comp-polblogs';

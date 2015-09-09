@@ -1,0 +1,7 @@
+TOPO="rv_bgp_mar04"
+SIZES="1000 5000 10000 20000 30000 60000 100000 200000 300000"
+#METRICS="scalar betweenness distance"
+METRICS="scalar"
+K="0 1 2"
+# R is optional ... set to "r" for router topos, "" for non-router topos
+# R="r"

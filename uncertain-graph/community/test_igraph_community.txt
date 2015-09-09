@@ -1,0 +1,132 @@
+[polbooks]
+#nodes 105
+#edges 441
+fastgreeedy          modularity = 0.447187643009
+Clustering with 105 elements and 2 clusters
+elapsed 0.000909229494415
+infomap              modularity = 0.522847990292
+Clustering with 105 elements and 6 clusters
+elapsed 0.0633529497886
+multilevel           modularity = 0.520485291622
+Clustering with 105 elements and 4 clusters
+elapsed 0.000568721237542
+leading_eigenvector  modularity = 0.467184455037
+Clustering with 105 elements and 4 clusters
+elapsed 0.0193455781471
+label_propagation    modularity = 0.494621582571
+Clustering with 105 elements and 3 clusters
+elapsed 0.000400882061282
+
+
+[polblogs]
+#nodes 1224
+#edges 16715
+fastgreeedy          modularity = 0.000119645847861
+Clustering with 1224 elements and 2 clusters
+elapsed 0.132446240901
+infomap              modularity = 0.421821045024
+Clustering with 1224 elements and 41 clusters
+elapsed 2.81686391292
+multilevel           modularity = 0.426995618778
+Clustering with 1224 elements and 10 clusters
+elapsed 0.0173218482233
+leading_eigenvector  modularity = 0.424268258604
+Clustering with 1224 elements and 3 clusters
+elapsed 0.256828956484
+label_propagation    modularity = 0.425836802856
+Clustering with 1224 elements and 5 clusters
+elapsed 0.00757510123932
+
+
+[as20graph]
+#nodes 6474
+#edges 12572
+fastgreeedy          modularity = 0.355269979629
+Clustering with 6474 elements and 2 clusters
+elapsed 0.508956906688
+infomap              modularity = 0.540170998124
+Clustering with 6474 elements and 412 clusters
+elapsed 11.014985382
+multilevel           modularity = 0.62342079207
+Clustering with 6474 elements and 28 clusters
+elapsed 0.0324581647269
+leading_eigenvector  modularity = 0.399258147711
+Clustering with 6474 elements and 34 clusters
+elapsed 8.33773226935
+label_propagation    modularity = 0.449014320214
+Clustering with 6474 elements and 139 clusters
+elapsed 0.0573222104661
+
+
+[wiki-Vote]
+#nodes 7115
+#edges 100762
+infomap              modularity = 0.387155940687
+Clustering with 7115 elements and 255 clusters
+elapsed 40.8537791738
+multilevel           modularity = 0.425652336642
+Clustering with 7115 elements and 32 clusters
+elapsed 0.144015974909
+leading_eigenvector  modularity = 0.419635324482
+Clustering with 7115 elements and 33 clusters
+elapsed 11.7955598086
+label_propagation    modularity = 0.000635043956654
+Clustering with 7115 elements and 27 clusters
+elapsed 0.0536557093243
+
+
+[ca-HepPh]
+#nodes 12006
+#edges 118489
+multilevel           modularity = 0.658730556738
+Clustering with 12006 elements and 314 clusters
+elapsed 0.255853013936
+label_propagation    modularity = 0.455544426263
+Clustering with 12006 elements and 649 clusters
+elapsed 0.278887733401
+
+
+[ca-AstroPh]
+#nodes 18771
+#edges 198050
+multilevel           modularity = 0.627484773627
+Clustering with 18771 elements and 324 clusters
+elapsed 0.551040768921
+label_propagation    modularity = 0.297408988585
+Clustering with 18771 elements and 636 clusters
+elapsed 0.739186674294
+
+
+[amazon]
+#nodes 334863
+#edges 925872
+multilevel           modularity = 0.925415328616
+Clustering with 334863 elements and 254 clusters
+elapsed 5.69189859012
+label_propagation    modularity = 0.786176823975
+Clustering with 334863 elements and 22353 clusters
+elapsed 55.4104567429
+
+
+[dblp]
+#nodes 317080
+#edges 1049866
+multilevel           modularity = 0.820288850031
+Clustering with 317080 elements and 279 clusters
+elapsed 5.34612815246
+label_propagation    modularity = 0.700459479938
+Clustering with 317080 elements and 23431 clusters
+elapsed 85.9446320896
+
+
+[youtube]
+#nodes 1134890
+#edges 2987624
+multilevel           modularity = 0.710295730669
+Clustering with 1134890 elements and 13517 clusters
+elapsed 66.5450649698
+label_propagation    modularity = 0.25644549135
+Clustering with 1134890 elements and 31899 clusters
+elapsed 202.042443086
+
+

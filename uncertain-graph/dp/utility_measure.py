@@ -9,7 +9,8 @@ use IGRAPH functions
 
     Apr 30
     - normalize_graph(): add param is_directed
-    
+    Sep 9
+    - add "oned_as='column'" to compute_utility_and_export_matlab()
 '''
 
 
@@ -571,7 +572,7 @@ def compute_utility_and_export_matlab(graph_file, cut_query_file, matlab_file, n
     scipy.io.savemat(matlab_file, dict(s_AD=s_AD, s_MD=s_MD, s_DV=s_DV, s_CC=s_CC, s_PL=pl_alpha, \
                                        s_APD=s_APD, s_EDiam=s_EDiam, s_CL=s_CL, s_Diam=s_Diam, \
                                        deg_distr=array(deg_distr), dist_distr=array(dist_distr),
-                                        cut_queries=array(cut_queries)) )
+                                        cut_queries=array(cut_queries)), oned_as='column' )
 
 #######################################################
 if __name__ == '__main__':
@@ -645,7 +646,7 @@ if __name__ == '__main__':
     
     
     # TEST test_normalize_graphs()
-    test_normalize_graphs()
+#    test_normalize_graphs()
 
     # TEST convert_directed_graph()
 #    convert_directed_graph() 
@@ -656,6 +657,36 @@ if __name__ == '__main__':
     
     
     ## TEST compute_utility_and_export_matlab()
+    compute_utility_and_export_matlab("../../uncertain-graph-java/_data/polbooks.gr", 
+                                      "../../uncertain-graph-java/_data/polbooks.cut", 
+                                      "../../uncertain-graph-java/_matlab/polbooks.mat", 
+                                      1000, 105)   
+    
+#    compute_utility_and_export_matlab("../../uncertain-graph-java/_data/polblogs.gr", 
+#                                      "../../uncertain-graph-java/_data/polblogs.cut", 
+#                                      "../../uncertain-graph-java/_matlab/polblogs.mat", 
+#                                      1000, 1224)   # polblogs: cut_query (21s)
+#
+#    compute_utility_and_export_matlab("../../uncertain-graph-java/_data/as20graph.gr", 
+#                                      "../../uncertain-graph-java/_data/as20graph.cut", 
+#                                      "../../uncertain-graph-java/_matlab/as20graph.mat", 
+#                                      1000, 6474) 
+#
+#    compute_utility_and_export_matlab("../../uncertain-graph-java/_data/wiki-Vote.gr", 
+#                                      "../../uncertain-graph-java/_data/wiki-Vote.cut", 
+#                                      "../../uncertain-graph-java/_matlab/wiki-Vote.mat", 
+#                                      1000, 7115) 
+#    
+#    compute_utility_and_export_matlab("../../uncertain-graph-java/_data/ca-HepPh.gr", 
+#                                      "../../uncertain-graph-java/_data/ca-HepPh.cut", 
+#                                      "../../uncertain-graph-java/_matlab/ca-HepPh.mat", 
+#                                      1000, 12006) 
+#    
+#    compute_utility_and_export_matlab("../../uncertain-graph-java/_data/ca-AstroPh.gr", 
+#                                      "../../uncertain-graph-java/_data/ca-AstroPh.cut", 
+#                                      "../../uncertain-graph-java/_matlab/ca-AstroPh.mat", 
+#                                      1000, 18771) 
+
 #    start = time.clock()
 #    compute_utility_and_export_matlab("../../uncertain-graph-java/_data/com_amazon_ungraph.gr", 
 #                                      "../../uncertain-graph-java/_data/com_amazon_ungraph.cut", 
