@@ -384,7 +384,7 @@ public class TmFPart {
 		   		nodelist[i] = Integer.parseInt(items[i]);
 		   	nodelists.add(nodelist);
 		}
-		
+		br.close();
 		
 		aG = filterByNodesets(G, nodelists, eps);
 				
@@ -408,7 +408,7 @@ public class TmFPart {
 //		String dataname = "ca-AstroPh";		// (18771,198050) 	filterEqual (350s), filterEqualByNodeSets(0.3s)
 		// LARGE
 //		String dataname = "com_amazon_ungraph";		// (334863,925872) 		filterEqualByNodeSets(3.5s)
-//		String dataname = "com_dblp_ungraph";		// (,) 
+//		String dataname = "com_dblp_ungraph";		// (317080,1049866) 
 //		String dataname = "com_youtube_ungraph";	// (1134890,2987624) 	filterEqualByNodeSets(10.5s, 2.4GB)
 													//						
 		
