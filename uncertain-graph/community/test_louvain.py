@@ -21,7 +21,7 @@ if __name__ == '__main__':
     dataname = "polbooks"       # (105, 441)     build_dendrogram 0.0052s
     dataname = "polblogs"       # (1224,16715) build_dendrogram 0.306
     dataname = "as20graph"      # (6474,12572) build_dendrogram 0.16s, 75k fitting (424s)
-#    dataname = "wiki-Vote"     # (7115,100762)
+    dataname = "wiki-Vote"     # (7115,100762)
 #    dataname = "ca-HepPh"      # (12006,118489)     
 #    dataname = "ca-AstroPh"    # (18771,198050)    
 #    dataname = "com_amazon_ungraph" # (334863,925872) 
@@ -40,26 +40,30 @@ if __name__ == '__main__':
     start = time.clock()
     partition = community.best_partition(G)
     print "commynity detection - DONE, elapsed", time.clock() - start
+    print "modularity =", community.modularity(partition, G);
+    print "#communities =", len(set(partition.values()))
     
-    for com in set(partition.values()) :
-        print "community", com,
-        list_nodes = [nodes for nodes in partition.keys() if partition[nodes] == com]
-        print "size :", len(list_nodes)
-        print list_nodes
+#    for com in set(partition.values()) :
+#        print "community", com,
+#        list_nodes = [nodes for nodes in partition.keys() if partition[nodes] == com]
+#        print "size :", len(list_nodes)
+#        print list_nodes
+        
     
-    #
-    louvain_file = "../_data/" + dataname + ".louvain"
-    f = open(louvain_file, 'w')
-    for com in set(partition.values()) :
-        list_nodes = [nodes for nodes in partition.keys() if partition[nodes] == com]
-        for u in list_nodes:
-            f.write("%d,"%u)
-        f.write("\n")
-    f.close()
-    print "write communities to file: DONE",
+    # write to .louvain file
+#    louvain_file = "../_data/" + dataname + ".louvain"
+#    f = open(louvain_file, 'w')
+#    for com in set(partition.values()) :
+#        list_nodes = [nodes for nodes in partition.keys() if partition[nodes] == com]
+#        for u in list_nodes:
+#            f.write("%d,"%u)
+#        f.write("\n")
+#    f.close()
+#    print "write communities to file: DONE",
     
     
-    # DRAWING (for up to polblogs)
+    
+    # DRAWING (for graphs not larger than polblogs)
 #    color = ["red", "green", "blue", "cyan", "white", "black", "yellow", "magenta"]
 #    size = float(len(set(partition.values())))
 #    pos = nx.spring_layout(G)
