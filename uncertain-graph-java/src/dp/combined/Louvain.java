@@ -224,12 +224,13 @@ public class Louvain {
 	            
 	            Map<Integer, Integer> neigh_communities = neighcom(node, graph, status);
 	            
-	            // remove()
+	            // remove() 'node' from current 'com_node'
 	            int weight = 0;
 	            if (neigh_communities.containsKey(com_node))
 	            	weight = neigh_communities.get(com_node);
 	            remove(node, com_node, weight, status);
 	            
+	            // compute 'best_com'
 	            int best_com = com_node;
 	            double best_increase = 0;
 	            for (Map.Entry<Integer, Integer> entry : neigh_communities.entrySet()){
@@ -242,7 +243,7 @@ public class Louvain {
 	                }
 	            }
 	            
-	            // insert()
+	            // insert() 'node' into 'best_com'
 	            weight = 0;
 	            if (neigh_communities.containsKey(best_com))
 	            	weight = neigh_communities.get(best_com);
