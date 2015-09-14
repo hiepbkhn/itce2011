@@ -1,3 +1,22 @@
+[karate]
+#nodes 34
+#edges 78
+fastgreeedy          modularity = 0.371794871795
+Clustering with 34 elements and 2 clusters
+elapsed 0.000262324180161
+infomap              modularity = 0.402038132807
+Clustering with 34 elements and 3 clusters
+elapsed 0.018659127991
+multilevel           modularity = 0.418803418803
+Clustering with 34 elements and 4 clusters
+elapsed 0.000225496159471
+leading_eigenvector  modularity = 0.393408941486
+Clustering with 34 elements and 4 clusters
+elapsed 0.00632838217826
+label_propagation    modularity = 0.402038132807
+Clustering with 34 elements and 3 clusters
+elapsed 0.000118936394688
+
 [polbooks]
 #nodes 105
 #edges 441

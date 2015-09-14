@@ -1,6 +1,7 @@
 /*
- * Sep 14, 2015
- * 	- copy from LouvainGrph.java, but use algs4.EdgeWeightedGraph instead
+ * Sep 13, 2015
+ * 	- convert from python (http://perso.crans.org/aynaud/communities/)
+ * 	+ use Grph (not support weighted graph !), run failed on 'karate.gr'
  */
 
 package dp.combined;
@@ -12,24 +13,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import toools.io.file.RegularFile;
 import toools.set.IntHashSet;
 import toools.set.IntSet;
-import algs4.Edge;
-import algs4.EdgeWeightedGraph;
+
+import com.carrotsearch.hppc.cursors.IntCursor;
+
+import grph.Grph;
+import grph.VertexPair;
+import grph.in_memory.InMemoryGrph;
+import grph.io.EdgeListReader;
 
 
 
 
-////
-class Status{
-	public Map<Integer, Integer> node2com = new HashMap<Integer, Integer>();
-    double total_weight = 0;
-    public Map<Integer, Double> internals = new HashMap<Integer, Double>();
-    public Map<Integer, Integer> degrees = new HashMap<Integer, Integer>();
-    public Map<Integer, Integer> gdegrees = new HashMap<Integer, Integer>();
-    public Map<Integer, Integer> loops = new HashMap<Integer, Integer>();
-    
-    //
+public class LouvainGrph {
+	
+	
+	static final int PASS_MAX = -1;
+	static final double MIN = 0.0000001;
+
+	//
     public static Map<Integer, Integer> dictCopyInteger(Map<Integer, Integer> source){
     	Map<Integer, Integer> result = new HashMap<Integer, Integer>();
     	for (Map.Entry<Integer, Integer> entry: source.entrySet())
@@ -46,117 +50,109 @@ class Status{
     	
     	return result;
     }
-    
-    public Status copy(){
-    	Status new_status = new Status();
-        new_status.node2com = dictCopyInteger(this.node2com);
-        new_status.internals = dictCopyDouble(this.internals);
-        new_status.degrees = dictCopyInteger(this.degrees);
-        new_status.gdegrees = dictCopyInteger(this.gdegrees);
-        new_status.total_weight = this.total_weight;
-        //
-        return new_status;
-    }
-    
-    public void print(){
-    	System.out.println("STATUS");
-    	System.out.println("total_weight = " + total_weight + " modularity = " + Louvain.modularity(this));
-    	System.out.println("node2com");
-    	for (int key : this.node2com.keySet())
-    		System.out.print(key + ":" + this.node2com.get(key) + ", ");
-    	System.out.println();
-    	System.out.println("internals");
-    	for (int key : this.internals.keySet())
-    		System.out.print(key + ":" + this.internals.get(key) + ", ");
-    	System.out.println();
-    	System.out.println("degrees");
-    	for (int key : this.degrees.keySet())
-    		System.out.print(key + ":" + this.degrees.get(key) + ", ");
-    	System.out.println();
-    	System.out.println("------------");
-    }
-    
-    public void init(EdgeWeightedGraph graph, Map<Integer, Integer> part){
-    	int V = graph.V();
-    	
-    	// Initialize the status of a graph with every node in one community
-        int count = 0;
-        
-        this.node2com = new HashMap<Integer, Integer>();
-        int total_weight = 0;
-        this.internals = new HashMap<Integer, Double>();
-        this.degrees = new HashMap<Integer, Integer>();
-        this.gdegrees = new HashMap<Integer, Integer>();
-        this.loops = new HashMap<Integer, Integer>();
-        this.total_weight = graph.totalWeight();
-        
-        if (part == null){
-        	for (int node = 0; node < V; node++){
-        		
-        		this.node2com.put(node, count);
-//        		int deg = graph.degree(node);	// WRONG
-        		double deg = graph.adjWeight(node);
-                this.degrees.put(count, (int)deg);
-                this.gdegrees.put(node, (int)deg);
-                Edge e = graph.getEdge(node, node);
-                if (e != null)
-                	this.loops.put(node, (int)e.weight());
-                else
-                	this.loops.put(node, 0);
-                this.internals.put(count, (double)this.loops.get(node));
-                count = count + 1;
-        	}
-        	
-        }else{
-        	for (int node = 0; node < V; node++){
-        		
-        		int com = part.get(node);
-        		this.node2com.put(node, com);
-//        		int deg = graph.degree(node);	// WRONG
-        		double deg = graph.adjWeight(node);
-                this.degrees.put(count, (int)deg);
-        		if (this.degrees.containsKey(com))
-        			this.degrees.put(com, this.degrees.get(com) + (int)deg);
-        		else
-        			this.degrees.put(com, (int)deg);
-        		this.gdegrees.put(node, (int)deg);
-        		
-                double inc = 0.0;
-                for (Edge e : graph.adj(node)){
-                	int neighbor = e.other(node);
-                    double weight = e.weight();
-                    if (part.get(neighbor) == com)
-                        if (neighbor == node)
-                            inc += weight;
-                        else
-                            inc += weight / 2.;
-	                if (this.internals.containsKey(com))
-	                	this.internals.put(com, this.internals.get(com) + inc);
-	                else
-	                	this.internals.put(com, inc);
-                }
-        	}
-        	
-        }
-    }
 	
-}
-
-public class Louvain {
-	
-	
-	static final int PASS_MAX = -1;
-	static final double MIN = 0.0000001;
-
 	////
-	private Map<Integer, Integer> neighcom(int node, EdgeWeightedGraph graph, Status status){
+	class Status{
+		public Map<Integer, Integer> node2com = new HashMap<Integer, Integer>();
+	    int total_weight = 0;
+	    public Map<Integer, Double> internals = new HashMap<Integer, Double>();
+	    public Map<Integer, Integer> degrees = new HashMap<Integer, Integer>();
+	    public Map<Integer, Integer> gdegrees = new HashMap<Integer, Integer>();
+	    public Map<Integer, Integer> loops = new HashMap<Integer, Integer>();
+	    
+	    
+	    
+	    public Status copy(){
+	    	Status new_status = new Status();
+	        new_status.node2com = dictCopyInteger(this.node2com);
+	        new_status.internals = dictCopyDouble(this.internals);
+	        new_status.degrees = dictCopyInteger(this.degrees);
+	        new_status.gdegrees = dictCopyInteger(this.gdegrees);
+	        new_status.total_weight = this.total_weight;
+	        //
+	        return new_status;
+	    }
+	    
+	    public void print(){
+	    	System.out.println("STATUS");
+	    	System.out.println("modularity = " + LouvainGrph.modularity(this));
+	    	System.out.println("node2com");
+	    	for (int key : this.node2com.keySet())
+	    		System.out.print(key + ":" + this.node2com.get(key) + ", ");
+	    	System.out.println();
+	    	System.out.println("------------");
+	    }
+	    
+	    public void init(Grph graph, Map<Integer, Integer> part){
+	    	// Initialize the status of a graph with every node in one community
+	        int count = 0;
+	        
+	        this.node2com = new HashMap<Integer, Integer>();
+	        int total_weight = 0;
+	        this.internals = new HashMap<Integer, Double>();
+	        this.degrees = new HashMap<Integer, Integer>();
+	        this.gdegrees = new HashMap<Integer, Integer>();
+	        this.loops = new HashMap<Integer, Integer>();
+	        this.total_weight = graph.getNumberOfEdges();
+	        
+	        if (part == null){
+	        	for (IntCursor t : graph.getVertices()){
+	        		int node = t.value;
+	        		
+	        		this.node2com.put(node, count);
+	        		int deg = graph.getVertexDegree(node);
+	                this.degrees.put(count, deg);
+	                this.gdegrees.put(node, deg);
+	                if (graph.areEdgesAdjacent(node, node))
+	                	this.loops.put(node, 1);
+	                else
+	                	this.loops.put(node, 0);
+	                this.internals.put(count, (double)this.loops.get(node));
+	                count = count + 1;
+	        	}
+	        	
+	        }else{
+	        	for (IntCursor t : graph.getVertices()){
+	        		int node = t.value;
+	        		
+	        		int com = part.get(node);
+	        		this.node2com.put(node, com);
+	        		int deg = graph.getVertexDegree(node);
+	        		if (this.degrees.containsKey(com))
+	        			this.degrees.put(com, this.degrees.get(com) + deg);
+	        		else
+	        			this.degrees.put(com, deg);
+	        		this.gdegrees.put(node, deg);
+	                double inc = 0.0;
+	                for (IntCursor u : graph.getNeighbours(node)){
+	                	int neighbor = u.value;
+	                    int weight = graph.getEdgesConnecting(node, neighbor).size();
+	                    if (part.get(neighbor) == com)
+	                        if (neighbor == node)
+	                            inc += weight;
+	                        else
+	                            inc += weight / 2.;
+		                if (this.internals.containsKey(com))
+		                	this.internals.put(com, this.internals.get(com) + inc);
+		                else
+		                	this.internals.put(com, inc);
+	                }
+	        	}
+	        	
+	        }
+	    }
+		
+	}
+	
+	////
+	private Map<Integer, Integer> neighcom(int node, Grph graph, Status status){
 	    // Compute the communities in the neighborood of node in the graph given
 	    // with the decomposition node2com
 		Map<Integer, Integer> weights = new HashMap<Integer, Integer>();
-	    for (Edge e : graph.adj(node)){
-        	int neighbor = e.other(node);
+	    for (IntCursor u : graph.getNeighbours(node)){
+        	int neighbor = u.value;
 	        if (neighbor != node){
-	        	int weight = (int)e.weight();
+	        	int weight = graph.getEdgesConnecting(node, neighbor).size();
 	            int neighborcom = status.node2com.get(neighbor);
 	            if (weights.containsKey(neighborcom))
 	            	weights.put(neighborcom, weights.get(neighborcom) + weight);
@@ -172,8 +168,10 @@ public class Louvain {
 	////
 	private void remove(int node, int com, int weight, Status status){
 	    // Remove node from community com and modify status"""
-	    status.degrees.put(com, status.degrees.get(com) - status.gdegrees.get(node) );
-	    status.internals.put(com, status.internals.get(com) - weight - status.loops.get(node) );
+	    status.degrees.put(com, status.degrees.get(com)
+	                                    - status.gdegrees.get(node) );
+	    status.internals.put(com, status.internals.get(com) -
+	                weight - status.loops.get(node) );
 	    status.node2com.put(node, -1);
 	}
 	    
@@ -181,13 +179,15 @@ public class Louvain {
 	private void insert(int node, int com, int weight, Status status){
 	    // Insert node into community and modify status"""
 	    status.node2com.put(node, com);
-	    status.degrees.put(com, status.degrees.get(com) + status.gdegrees.get(node) );
-	    status.internals.put(com, status.internals.get(com) + weight + status.loops.get(node) );
+	    status.degrees.put(com, status.degrees.get(com) +
+	                                status.gdegrees.get(node) );
+	    status.internals.put(com, status.internals.get(com) +
+	                        weight + status.loops.get(node) );
 	}
 	                        
 	////
 	public static double modularity(Status status){
-		// Compute the modularity of the partition of the graph fastly using status precomputed
+		// Compute the modularity of the partition of the graph faslty using status precomputed
 	    double links = status.total_weight;
 	    double result = 0.0;
 	    
@@ -196,16 +196,14 @@ public class Louvain {
 	        double in_degree = status.internals.get(community);
 	        int degree = status.degrees.get(community);
 	        if (links > 0)
-	            result = result + in_degree / links - degree*degree / (4.*links *links);
+	            result = result + in_degree / links - ((degree / (2.*links)) * (degree / (2.*links)));
 	    }
 	    //
 	    return result;
 	}
 	
 	//// call neighcom(), remove(), insert()
-	private void one_level(EdgeWeightedGraph graph, Status status){
-		int V = graph.V();
-		
+	private void one_level(Grph graph, Status status){
 		// Compute one level of communities
 	    boolean modif = true;
 	    int nb_pass_done = 0;
@@ -217,8 +215,8 @@ public class Louvain {
 	        modif = false;
 	        nb_pass_done += 1;
 
-	        for (int node = 0; node < V; node++){
-	        	
+	        for (IntCursor u : graph.getVertices()){
+	        	int node = u.value;
 	            int com_node = status.node2com.get(node);
 	            double degc_totw = status.gdegrees.get(node) / (status.total_weight*2.);
 	            
@@ -263,7 +261,7 @@ public class Louvain {
 		
 		// Renumber the values of the dictionary from 0 to n
 	    int count = 0;
-	    Map<Integer, Integer> ret = Status.dictCopyInteger(dictionary);
+	    Map<Integer, Integer> ret = dictCopyInteger(dictionary);
 	    Map<Integer, Integer> new_values = new HashMap<Integer, Integer>();
 
 	    for (Integer key : dictionary.keySet()){
@@ -282,9 +280,11 @@ public class Louvain {
 	}
 	
 	////
-	private EdgeWeightedGraph induced_graph(Map<Integer, Integer> partition, EdgeWeightedGraph graph){
+	private Grph induced_graph(Map<Integer, Integer> partition, Grph graph){
 		// Produce the graph where nodes are the communities
 	    // there is a link of weight w between communities if the sum of the weights of the links between their elements is w
+		
+		Grph ret = new InMemoryGrph();
 		
 		// debug
 //		System.out.println("induced_graph");
@@ -294,29 +294,25 @@ public class Louvain {
 		IntSet nodeSet = new IntHashSet();
 		for (int value : partition.values())
 			nodeSet.add(value);
-		EdgeWeightedGraph ret = new EdgeWeightedGraph(nodeSet.size());	
+	    ret.addVertices(nodeSet);
 
-	    for (Edge e : graph.edges()){
-	    	int node1 = e.either();
-	    	int node2 = e.other(node1);
-	        int weight = (int)e.weight();
+	    for (VertexPair p : graph.getEdgePairs()){
+	    	int node1 = p.first;
+	    	int node2 = p.second;
+	        int weight = graph.getEdgesConnecting(node1, node2).size();
 	        int com1 = partition.get(node1);
 	        int com2 = partition.get(node2);
-	        
-	        Edge r_e = ret.getEdge(com1, com2);
-	        if (r_e != null){
-	        	r_e.setWeight(r_e.weight() + weight);
-	        }else
-	        	ret.addEdge(new Edge(com1, com2, weight));
+	        int w_prec = ret.getEdgesConnecting(com1, com2).size();
+	        		
+	        for (int i = 0; i < w_prec + weight; i++)		// simulate WEIGHTED edges
+	        	ret.addSimpleEdge(com1, com2, false);
 	    }
 
 	    return ret;
 	}
 	
 	////
-	public List<Map<Integer, Integer>> generate_dendrogram(EdgeWeightedGraph graph, Map<Integer, Integer> part_init){
-		int V = graph.V();
-		
+	public List<Map<Integer, Integer>> generate_dendrogram(Grph graph, Map<Integer, Integer> part_init){
 		// Find communities in the graph and return the associated dendrogram
 		//
 	    // A dendrogram is a tree and each level is a partition of the graph nodes.  
@@ -327,9 +323,9 @@ public class Louvain {
 		
 		// special case, when there is no link
 	    // the best partition is everyone in its community
-	    if (graph.E() == 0){
-	        for (int node = 0; node < V; node++)
-	            part.put(node, node);
+	    if (graph.getNumberOfEdges() == 0){
+	        for (IntCursor u : graph.getVertices())
+	            part.put(u.value, u.value);
 	        
 	        List<Map<Integer, Integer>> list = new ArrayList<Map<Integer,Integer>>();
 	        list.add(part);
@@ -337,21 +333,19 @@ public class Louvain {
 	    }
 	    
 	    //
-	    EdgeWeightedGraph current_graph = graph.clone();
+	    Grph current_graph = graph.clone();
 	    Status status = new Status();
 	    status.init(current_graph, part_init);
 	    double mod = modularity(status);
 	    //debug
-//	    status.print();
-//    	System.out.println(current_graph);
+	    status.print();
 	    
 	    List<Map<Integer, Integer>> status_list = new ArrayList<Map<Integer,Integer>>();
 	    
 	    one_level(current_graph, status);
 	    double new_mod = modularity(status);
 	    //debug
-//	    status.print();
-//	    System.out.println(current_graph);
+	    status.print();
 	    
 	    Map<Integer, Integer> partition = renumber(status.node2com);
 	    status_list.add(partition);
@@ -362,11 +356,9 @@ public class Louvain {
 	    
 	    
 	    while (true){
-	    	// debug
-//	    	status.print();
-//	    	System.out.println(current_graph);
-	    	
 	    	one_level(current_graph, status);
+	    	//debug
+		    status.print();
 		    
 	        new_mod = modularity(status);
 	        if (new_mod - mod < MIN)
@@ -378,18 +370,13 @@ public class Louvain {
 	        status.init(current_graph, null);
 	        
 	    }
-	    
-	  	//debug
-	    System.out.println("modularity = " + new_mod);
-	    System.out.println("#communitites = " + current_graph.V());
-	    
 	    //
 	    return status_list;
 	}
 	
 	////
 	public Map<Integer, Integer> partition_at_level(List<Map<Integer, Integer>> dendrogram, int level){
-		Map<Integer, Integer> partition = Status.dictCopyInteger(dendrogram.get(0));
+		Map<Integer, Integer> partition = dictCopyInteger(dendrogram.get(0));
 	    for (int index = 1; index < level + 1; index++)
 	        for (Map.Entry<Integer, Integer> entry : partition.entrySet()){
 	        	int node = entry.getKey();
@@ -400,9 +387,9 @@ public class Louvain {
 	}
 	
 	////
-	public Map<Integer, Integer> best_partition(EdgeWeightedGraph graph, Map<Integer, Integer> partition){
+	public Map<Integer, Integer> best_partition(Grph graph, Map<Integer, Integer> partition){
 		List<Map<Integer, Integer>> dendo = generate_dendrogram(graph, partition);
-	    return partition_at_level(dendo, dendo.size() -1 );
+	    return partition_at_level(dendo, dendo.size() - 1 );
 		
 	}
 	
@@ -423,17 +410,17 @@ public class Louvain {
 		
 		
 		// load graph
-//		String dataname = "karate";			// (105, 441)
+		String dataname = "karate";			// (105, 441)
 //		String dataname = "polbooks";		// (105, 441)		
 //		String dataname = "polblogs";		// (1224,16715) 	
 //		String dataname = "as20graph";		// (6474,12572)		
 //		String dataname = "wiki-Vote";		// (7115,100762)
 //		String dataname = "ca-HepPh";		// (12006,118489) 	
-//		String dataname = "ca-AstroPh";		// (18771,198050) 			1.56s
+//		String dataname = "ca-AstroPh";		// (18771,198050) 	
 		// LARGE
-//		String dataname = "com_amazon_ungraph";		// (334863,925872)	17.8s
+//		String dataname = "com_amazon_ungraph";		// (334863,925872)	
 //		String dataname = "com_dblp_ungraph";		// (317080,1049866)	
-		String dataname = "com_youtube_ungraph";	// (1134890,2987624)
+//		String dataname = "com_youtube_ungraph";	// (1134890,2987624)
 													//						
 		// COMMAND-LINE <prefix> <dataname> <n_samples> <eps>
 		String prefix = "";
@@ -443,18 +430,21 @@ public class Louvain {
 	    
 		String filename = prefix + "_data/" + dataname + ".gr";
 		
+		EdgeListReader reader = new EdgeListReader();
+		Grph G;
+		RegularFile f = new RegularFile(filename);
+		
 		long start = System.currentTimeMillis();
-		EdgeWeightedGraph G = EdgeWeightedGraph.readEdgeList(filename);
+		G = reader.readGraph(f);
 		System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
 		
-		System.out.println("#nodes = " + G.V());
-		System.out.println("#edges = " + G.E());
+		System.out.println("#nodes = " + G.getNumberOfVertices());
+		System.out.println("#edges = " + G.getNumberOfEdges());
 		
 		// TEST best_partition()
-		Louvain lv = new Louvain();
-		start = System.currentTimeMillis();
+		LouvainGrph lv = new LouvainGrph();
 		Map<Integer, Integer> part = lv.best_partition(G, null);
-		System.out.println("best_partition - DONE, elapsed " + (System.currentTimeMillis() - start));
+		
 
 	}
 

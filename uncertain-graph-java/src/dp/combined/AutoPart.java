@@ -306,50 +306,50 @@ public class AutoPart {
 //		String dataname = "com_youtube_ungraph";	// (1134890,2987624)k=20, nLoop=5 (mem=2.0GB): 1 cluster (failed at t=2)
 													//						
 		// COMMAND-LINE <prefix> <dataname> <n_samples> <eps>
-		String prefix = "";
-	    int n_samples = 1;
-	    
-	    System.out.println("dataname = " + dataname);
-	    
-		String filename = prefix + "_data/" + dataname + ".gr";
-		
-		EdgeListReader reader = new EdgeListReader();
-		Grph G;
-		RegularFile f = new RegularFile(filename);
-		
-		long start = System.currentTimeMillis();
-		G = reader.readGraph(f);
-		System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
-		
-		System.out.println("#nodes = " + G.getNumberOfVertices());
-		System.out.println("#edges = " + G.getNumberOfEdges());
-		
-		// TEST 
-		int k = 28;
-		int nLoop = 20;
-		System.out.println("k = " + k + ", nLoop = " + nLoop);
-		innerLoop(G, k, nLoop);
-		
-		// TEST modularity
-//		Grph G = new InMemoryGrph();
-//		G.addNVertices(4);
-//		G.addSimpleEdge(0, 1, false);
-//		G.addSimpleEdge(1, 2, false);
-//		G.addSimpleEdge(1, 3, false);
-//		G.addSimpleEdge(2, 3, false);
+//		String prefix = "";
+//	    int n_samples = 1;
+//	    
+//	    System.out.println("dataname = " + dataname);
+//	    
+//		String filename = prefix + "_data/" + dataname + ".gr";
+//		
+//		EdgeListReader reader = new EdgeListReader();
+//		Grph G;
+//		RegularFile f = new RegularFile(filename);
+//		
+//		long start = System.currentTimeMillis();
+//		G = reader.readGraph(f);
+//		System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
+//		
 //		System.out.println("#nodes = " + G.getNumberOfVertices());
 //		System.out.println("#edges = " + G.getNumberOfEdges());
 //		
-//		IntSet[] g = new IntSet[2];
-//		g[0] = new IntHashSet(); g[0].add(0); 
-//		g[1] = new IntHashSet(); g[1].add(1); g[1].add(2); g[1].add(3);
-//		
-//		int[][] D = new int[2][2];
-//		D[0][0] = 0;
-//		D[1][1] = 6;
-//		
-//		
-//		System.out.println("modularity Q = " + modularity(G, g, D));
+//		// TEST 
+//		int k = 28;
+//		int nLoop = 20;
+//		System.out.println("k = " + k + ", nLoop = " + nLoop);
+//		innerLoop(G, k, nLoop);
+		
+		// TEST modularity
+		Grph G = new InMemoryGrph();
+		G.addNVertices(4);
+		G.addSimpleEdge(0, 1, false);
+		G.addSimpleEdge(1, 2, false);
+		G.addSimpleEdge(1, 3, false);
+		G.addSimpleEdge(2, 3, false);
+		System.out.println("#nodes = " + G.getNumberOfVertices());
+		System.out.println("#edges = " + G.getNumberOfEdges());
+		
+		IntSet[] g = new IntSet[2];
+		g[0] = new IntHashSet(); g[0].add(0); g[0].add(3);
+		g[1] = new IntHashSet(); g[1].add(1); g[1].add(2); 
+		int[][] D = new int[2][2];
+		D[0][0] = 0;
+		D[1][1] = 2;
+		
+		
+		System.out.println("modularity Q = " + modularity(G, g, D));
+		
 	}
 
 }

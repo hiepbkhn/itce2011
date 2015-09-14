@@ -18,10 +18,11 @@ if __name__ == '__main__':
 #    G = nx.erdos_renyi_graph(30, 0.05)
 #    G = nx.karate_club_graph();
 
-    dataname = "polbooks"       # (105, 441)     build_dendrogram 0.0052s
-    dataname = "polblogs"       # (1224,16715) build_dendrogram 0.306
-    dataname = "as20graph"      # (6474,12572) build_dendrogram 0.16s, 75k fitting (424s)
-    dataname = "wiki-Vote"     # (7115,100762)
+    dataname = "karate"         # (34, 78)
+#    dataname = "polbooks"       # (105, 441)     build_dendrogram 0.0052s
+#    dataname = "polblogs"       # (1224,16715) build_dendrogram 0.306
+#    dataname = "as20graph"      # (6474,12572) build_dendrogram 0.16s, 75k fitting (424s)
+#    dataname = "wiki-Vote"     # (7115,100762)
 #    dataname = "ca-HepPh"      # (12006,118489)     
 #    dataname = "ca-AstroPh"    # (18771,198050)    
 #    dataname = "com_amazon_ungraph" # (334863,925872) 

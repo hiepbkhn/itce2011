@@ -97,7 +97,8 @@ if __name__ == '__main__':
 #    FILE_NAME = PATH + "adjnoun.gml"
 #    G = ig.Graph.Read(FILE_NAME, format="gml")
     
-    FILE_NAME = PATH + "polbooks.gr"
+    FILE_NAME = PATH + "karate.gr"
+#    FILE_NAME = PATH + "polbooks.gr"
 #    FILE_NAME = PATH + "polblogs.gr"
 #    FILE_NAME = PATH + "as20graph.gr"
 #    FILE_NAME = PATH + "wiki-Vote.gr"
