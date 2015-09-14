@@ -1,0 +1,51 @@
+dataname = com_amazon_ungraph
+readGraph - DONE, elapsed 468
+#nodes = 334863
+#edges = 925872
+modularity = 0.9331483783916803
+#communitites = 266
+best_partition - DONE, elapsed 17770
+----
+dataname = com_amazon_ungraph
+readGraph - DONE, elapsed 562
+#nodes = 334863
+#edges = 925872
+modularity = 0.9344471220716243
+#communitites = 257
+best_partition - DONE, elapsed 19301
+
+
+
+dataname = com_dblp_ungraph
+readGraph - DONE, elapsed 406
+#nodes = 317080
+#edges = 1049866
+modularity = 0.8417133369698134
+#communitites = 369
+best_partition - DONE, elapsed 27214
+----
+dataname = com_dblp_ungraph
+readGraph - DONE, elapsed 577
+#nodes = 317080
+#edges = 1049866
+modularity = 0.8416748042887203
+#communitites = 375
+best_partition - DONE, elapsed 19657
+
+
+
+dataname = com_youtube_ungraph
+readGraph - DONE, elapsed 1201
+#nodes = 1134890
+#edges = 2987624
+modularity = 0.8506970022546622
+#communitites = 13490
+best_partition - DONE, elapsed 668308
+----
+dataname = com_youtube_ungraph
+readGraph - DONE, elapsed 3309
+#nodes = 1134890
+#edges = 2987624
+modularity = 0.8505605539989366
+#communitites = 13481
+best_partition - DONE, elapsed 42153 !!

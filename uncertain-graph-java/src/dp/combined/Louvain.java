@@ -122,7 +122,7 @@ class Status{
         		this.gdegrees.put(node, (int)deg);
         		
                 double inc = 0.0;
-                for (Edge e : graph.adj(node)){
+                for (Edge e : graph.adj(node).values()){
                 	int neighbor = e.other(node);
                     double weight = e.weight();
                     if (part.get(neighbor) == com)
@@ -153,7 +153,7 @@ public class Louvain {
 	    // Compute the communities in the neighborood of node in the graph given
 	    // with the decomposition node2com
 		Map<Integer, Integer> weights = new HashMap<Integer, Integer>();
-	    for (Edge e : graph.adj(node)){
+	    for (Edge e : graph.adj(node).values()){
         	int neighbor = e.other(node);
 	        if (neighbor != node){
 	        	int weight = (int)e.weight();
@@ -431,9 +431,9 @@ public class Louvain {
 //		String dataname = "ca-HepPh";		// (12006,118489) 	
 //		String dataname = "ca-AstroPh";		// (18771,198050) 			1.56s
 		// LARGE
-//		String dataname = "com_amazon_ungraph";		// (334863,925872)	17.8s
-//		String dataname = "com_dblp_ungraph";		// (317080,1049866)	
-		String dataname = "com_youtube_ungraph";	// (1134890,2987624)
+		String dataname = "com_amazon_ungraph";		// (334863,925872)	17.8s
+//		String dataname = "com_dblp_ungraph";		// (317080,1049866)	27.2s 			(new : 20s, Mem 1.5GB)
+//		String dataname = "com_youtube_ungraph";	// (1134890,2987624) 670s, 2.2GB)	(new : 42s, Mem 2.7GB)
 													//						
 		// COMMAND-LINE <prefix> <dataname> <n_samples> <eps>
 		String prefix = "";

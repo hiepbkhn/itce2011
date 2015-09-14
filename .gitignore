@@ -2,6 +2,7 @@
 *.pyc
 *.asv
 *.mat
+*.o
 local-dp-java/.classpath
 local-dp-java/.settings/org.eclipse.jdt.core.prefs
 uncertain-graph-java/.classpath

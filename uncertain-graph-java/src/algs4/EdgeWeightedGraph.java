@@ -1,3 +1,8 @@
+/*
+ * Sep 15, 2015
+ * 	- replace Bag<Edge>[] adj to HashMap<Integer, Edge>[] adj
+ */
+
 package algs4;
 
 import hist.Int2;
@@ -6,7 +11,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 /******************************************************************************
  *  Compilation:  javac EdgeWeightedGraph.java
  *  Execution:    java EdgeWeightedGraph filename.txt
@@ -56,7 +63,7 @@ public class EdgeWeightedGraph {
 
     private final int V;
     private int E;
-    private Bag<Edge>[] adj;
+    private List<Map<Integer, Edge>> adj;
     
     /**
      * Initializes an empty edge-weighted graph with <tt>V</tt> vertices and 0 edges.
@@ -68,9 +75,9 @@ public class EdgeWeightedGraph {
         if (V < 0) throw new IllegalArgumentException("Number of vertices must be nonnegative");
         this.V = V;
         this.E = 0;
-        adj = (Bag<Edge>[]) new Bag[V];
+        adj = new ArrayList<Map<Integer,Edge>>();
         for (int v = 0; v < V; v++) {
-            adj[v] = new Bag<Edge>();
+            adj.add(new HashMap<Integer, Edge>());
         }
     }
 
@@ -129,11 +136,11 @@ public class EdgeWeightedGraph {
         for (int v = 0; v < G.V(); v++) {
             // reverse so that adjacency list is in same order as original
             Stack<Edge> reverse = new Stack<Edge>();
-            for (Edge e : G.adj[v]) {
+            for (Edge e : G.adj.get(v).values()) {
                 reverse.push(e);
             }
             for (Edge e : reverse) {
-                adj[v].add(e);
+                adj.get(v).put(e.other(v), e);
             }
         }
     }
@@ -175,10 +182,10 @@ public class EdgeWeightedGraph {
         validateVertex(v);
         validateVertex(w);
         if (v != w){		// hiepnh fixed
-        	adj[v].add(e);
-        	adj[w].add(e);
+        	adj.get(v).put(w, e);
+        	adj.get(w).put(v, e);
         }else
-        	adj[v].add(e);
+        	adj.get(v).put(v, e);
         E++;
     }
 
@@ -189,9 +196,9 @@ public class EdgeWeightedGraph {
      * @return the edges incident on vertex <tt>v</tt> as an Iterable
      * @throws IndexOutOfBoundsException unless 0 <= v < V
      */
-    public Iterable<Edge> adj(int v) {
+    public Map<Integer, Edge> adj(int v) {
         validateVertex(v);
-        return adj[v];
+        return adj.get(v);
     }
 
     /**
@@ -203,7 +210,7 @@ public class EdgeWeightedGraph {
      */
     public int degree(int v) {
         validateVertex(v);
-        return adj[v].size();
+        return adj.get(v).size();
     }
 
     /**
@@ -217,7 +224,7 @@ public class EdgeWeightedGraph {
         Bag<Edge> list = new Bag<Edge>();
         for (int v = 0; v < V; v++) {
             int selfLoops = 0;
-            for (Edge e : adj(v)) {
+            for (Edge e : adj.get(v).values()) {
                 if (e.other(v) > v) {
                     list.add(e);
                 }
@@ -243,7 +250,7 @@ public class EdgeWeightedGraph {
         s.append(V + " " + E + " " + totalWeight() + NEWLINE);
         for (int v = 0; v < V; v++) {
             s.append(v + ": ");
-            for (Edge e : adj[v]) {
+            for (Edge e : adj.get(v).values()) {
                 s.append(e + "  ");
             }
             s.append(NEWLINE);
@@ -263,27 +270,23 @@ public class EdgeWeightedGraph {
     
     public double adjWeight(int v){
     	double ret = 0.0;
-    	for (Edge e : adj[v]){
+    	for (Edge e : adj.get(v).values()) {
     		if (e.other(v) != v)
     			ret += e.weight();
     		else
-    			ret += e.weight() * 2;
+    			ret += e.weight() * 2;		// IMPORTANT
     	}
     	//
     	return ret;
     }
     
     public boolean areEdgesAdjacent(int u, int v){
-    	for (Edge e : adj[u])
-    		if (e.other(u) == v)
-    			return true;
-    	return false;
+    	return adj.get(u).containsKey(v);
     }
     
     public Edge getEdge(int u, int v){
-    	for (Edge e : adj[u])
-    		if (e.other(u) == v)
-    			return e;
+    	if (adj.get(u).containsKey(v))
+    		return adj.get(u).get(v); 
     	return null;
     }
     
