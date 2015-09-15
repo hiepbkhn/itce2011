@@ -120,16 +120,23 @@ class Status{
         		else
         			this.degrees.put(com, (int)deg);
         		this.gdegrees.put(node, (int)deg);
+        		// missing in python (package 'community')
+        		Edge e1 = graph.getEdge(node, node);
+                if (e1 != null)
+                	this.loops.put(node, (int)e1.weight());
+                else
+                	this.loops.put(node, 0);
         		
                 double inc = 0.0;
                 for (Edge e : graph.adj(node).values()){
                 	int neighbor = e.other(node);
                     double weight = e.weight();
-                    if (part.get(neighbor) == com)
+                    if (part.get(neighbor) == com){
                         if (neighbor == node)
                             inc += weight;
                         else
                             inc += weight / 2.;
+                    }
 	                if (this.internals.containsKey(com))
 	                	this.internals.put(com, this.internals.get(com) + inc);
 	                else
@@ -347,9 +354,12 @@ public class Louvain {
 //    	System.out.println(current_graph);
 	    
 	    List<Map<Integer, Integer>> status_list = new ArrayList<Map<Integer,Integer>>();
+	    List<Status> status_all = new ArrayList<Status>();			// for logLK()
 	    
 	    one_level(current_graph, status);
 	    double new_mod = modularity(status);
+	    status_all.add(status.copy());
+	    
 	    //debug
 //	    status.print();
 //	    System.out.println(current_graph);
@@ -370,6 +380,8 @@ public class Louvain {
 	    	one_level(current_graph, status);
 		    
 	        new_mod = modularity(status);
+	        status_all.add(status.copy());
+	        
 	        if (new_mod - mod < MIN)
 	            break;
 	        partition = renumber(status.node2com);
@@ -383,6 +395,10 @@ public class Louvain {
 	  	//debug
 	    System.out.println("modularity = " + new_mod);
 	    System.out.println("#communitites = " + current_graph.V());
+	    
+	    //
+	    System.out.println("logLK = " + logLK(graph, status_all));
+	    
 	    
 	    //
 	    return status_list;
@@ -407,22 +423,18 @@ public class Louvain {
 		
 	}
 	
+	////
+	public double logLK(EdgeWeightedGraph graph, List<Status> status_all){
+		double ret = 0.0;
+		
+		for (Status status : status_all){	// at each level
+			//count e_ij, ni, nj for all pairs (ci < cj)
+		}
+		return ret;
+	}
+	
 	////////////////////////////////////////////////
 	public static void main(String[] args) throws Exception{
-//		// weighted Grph ?? YES, see TOY example below
-//		Grph G = new InMemoryGrph();
-//		G.addNVertices(4);
-//		G.addSimpleEdge(0, 1, false);
-//		G.addSimpleEdge(1, 2, false);
-//		G.addSimpleEdge(1, 3, false);
-//		G.addSimpleEdge(2, 3, false);
-////		G.addSimpleEdge(2, 3, false);
-//		
-//		System.out.println("#nodes = " + G.getNumberOfVertices());
-//		System.out.println("#edges = " + G.getNumberOfEdges());
-////		System.out.println(G.getEdgesConnecting(2, 3).size()); // weight
-		
-		
 		// load graph
 //		String dataname = "karate";			// (105, 441)
 //		String dataname = "polbooks";		// (105, 441)		
