@@ -1,0 +1,187 @@
+
+dataname = com_amazon_ungraph
+readGraph - DONE, elapsed 546
+#nodes = 334863
+#edges = 925872
+k = 4
+modularity = 0.8715360113367109
+#communitites = 4
+partitionEqual - DONE, elapsed 10031
+k = 8
+modularity = 0.8190852434278899
+#communitites = 8
+partitionEqual - DONE, elapsed 10905
+k = 16
+modularity = 0.7986156202867073
+#communitites = 16
+partitionEqual - DONE, elapsed 13798
+k = 32
+modularity = 0.7960824572979094
+#communitites = 32
+partitionEqual - DONE, elapsed 19141
+k = 64
+modularity = 0.7610400367807141
+#communitites = 64
+partitionEqual - DONE, elapsed 17288
+k = 128
+modularity = 0.7623097054376446
+#communitites = 128
+partitionEqual - DONE, elapsed 19210
+k = 256
+modularity = 0.7660280370928839
+#communitites = 256
+partitionEqual - DONE, elapsed 23395
+k = 512
+modularity = 0.7694734701232225
+#communitites = 512
+partitionEqual - DONE, elapsed 24188
+k = 1024
+modularity = 0.7766452874817636
+#communitites = 1022
+partitionEqual - DONE, elapsed 22175
+k = 2048
+modularity = 0.7866247547375087
+#communitites = 186
+partitionEqual - DONE, elapsed 20054
+k = 4096
+modularity = 0.8008919405593243
+#communitites = 184
+partitionEqual - DONE, elapsed 16749
+k = 8192
+modularity = 0.8213066120747928
+#communitites = 188
+partitionEqual - DONE, elapsed 18051
+k = 16384
+modularity = 0.851242284048923
+#communitites = 191
+partitionEqual - DONE, elapsed 20203
+k = 32768
+modularity = 0.8847601528875352
+#communitites = 198
+partitionEqual - DONE, elapsed 17441
+
+
+-------------------
+dataname = com_dblp_ungraph
+readGraph - DONE, elapsed 608
+#nodes = 317080
+#edges = 1049866
+k = 4
+modularity = 0.8744993271044329
+#communitites = 4
+partitionEqual - DONE, elapsed 8877
+k = 8
+modularity = 0.8073553289530114
+#communitites = 8
+partitionEqual - DONE, elapsed 8300
+k = 16
+modularity = 0.7633367277534833
+#communitites = 16
+partitionEqual - DONE, elapsed 18176
+k = 32
+modularity = 0.7265997607554205
+#communitites = 32
+partitionEqual - DONE, elapsed 11607
+k = 64
+modularity = 0.684306536781444
+#communitites = 64
+partitionEqual - DONE, elapsed 16163
+k = 128
+modularity = 0.6759053066292336
+#communitites = 128
+partitionEqual - DONE, elapsed 10267
+k = 256
+modularity = 0.6748273417635126
+#communitites = 256
+partitionEqual - DONE, elapsed 10187
+k = 512
+modularity = 0.6751620811464165
+#communitites = 512
+partitionEqual - DONE, elapsed 13916
+k = 1024
+modularity = 0.6805666149793206
+#communitites = 1024
+partitionEqual - DONE, elapsed 13183
+k = 2048
+modularity = 0.6923061457572492
+#communitites = 2048
+partitionEqual - DONE, elapsed 14041
+k = 4096
+modularity = 0.698861447163697
+#communitites = 4095
+partitionEqual - DONE, elapsed 13432
+k = 8192
+modularity = 0.7162064927540649
+#communitites = 8133
+partitionEqual - DONE, elapsed 16085
+k = 16384
+modularity = 0.7386499580725673
+#communitites = 15623
+partitionEqual - DONE, elapsed 19096
+
+
+-------------------
+dataname = com_youtube_ungraph
+readGraph - DONE, elapsed 3620
+#nodes = 1134890
+#edges = 2987624
+k = 4
+modularity = 0.9257912072750618
+#communitites = 4
+partitionEqual - DONE, elapsed 26006
+k = 8
+modularity = 0.8757969192657286
+#communitites = 8
+partitionEqual - DONE, elapsed 39141
+k = 16
+modularity = 0.8275340656635101
+#communitites = 16
+partitionEqual - DONE, elapsed 26631
+k = 32
+modularity = 0.7898116599185054
+#communitites = 32
+partitionEqual - DONE, elapsed 33665
+k = 64
+modularity = 0.7549837373390946
+#communitites = 64
+partitionEqual - DONE, elapsed 36781
+k = 128
+modularity = 0.750733062766663
+#communitites = 128
+partitionEqual - DONE, elapsed 26817
+k = 256
+modularity = 0.7388745320141366
+#communitites = 256
+partitionEqual - DONE, elapsed 41857
+k = 512
+modularity = 0.7584062058883627
+#communitites = 512
+partitionEqual - DONE, elapsed 32558
+k = 1024
+modularity = 0.7592344464115869
+#communitites = 1024
+partitionEqual - DONE, elapsed 46255
+k = 2048
+modularity = 0.7491890366968845
+#communitites = 2039
+partitionEqual - DONE, elapsed 17394
+k = 4096
+modularity = 0.7518051937362101
+#communitites = 4024
+partitionEqual - DONE, elapsed 47659
+k = 8192
+modularity = 0.7545726492690089
+#communitites = 7782
+partitionEqual - DONE, elapsed 34774
+k = 16384
+modularity = 0.7113984990353648
+#communitites = 15442
+partitionEqual - DONE, elapsed 14463
+k = 32768
+modularity = 0.757276717795826
+#communitites = 27343
+partitionEqual - DONE, elapsed 18284
+k = 65536
+modularity = 0.7909923892668621
+#communitites = 560
+partitionEqual - DONE, elapsed 43666
