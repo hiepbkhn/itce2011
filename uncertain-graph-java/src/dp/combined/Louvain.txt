@@ -49,3 +49,75 @@ readGraph - DONE, elapsed 3309
 modularity = 0.8505605539989366
 #communitites = 13481
 best_partition - DONE, elapsed 42153 !!
+
+
+
+///// Sep 16, 2015
+====== as20graph
+total_e = 11095.0
+logLK = -62518.737114281976
+check level 0
+checkNumEdges - DONE.
+level 0*
+logLK2 = -69063.85011827906
+checkTrueEdges - DONE.
+best_partition - DONE, elapsed 1178
+
+
+====== polbooks
+total_e = 441.0
+logLK = -1085.0481677363368
+check level 0
+checkNumEdges - DONE.
+level 0*
+logLK2 = -1085.0481677363368
+checkTrueEdges - DONE.
+best_partition - DONE, elapsed 31
+
+
+====== wiki-vote
+total_e = 100762.0
+logLK = -605552.1007134304
+check level 0
+checkNumEdges - DONE.
+level 0*
+logLK2 = -605552.1007134308
+checkTrueEdges - DONE.
+best_partition - DONE, elapsed 1165
+
+====== ca-Hep
+total_e = 110991.0
+logLK = -343918.9884264367
+check level 0
+checkNumEdges - DONE.
+level 0*
+logLK2 = -373940.3036834273
+checkTrueEdges - DONE.
+best_partition - DONE, elapsed 9305
+
+
+====== ca-Astro
+total_e = 689024.0
+logLK = -1919469.8993485824
+level 0*
+logLK2 = -3166610.078277466
+checkTrueEdges - DONE.
+best_partition - DONE, elapsed 71360
+
+====== amazon
+total_e = 187830.0
+logLK = -883395.5975491476
+check level 0
+checkNumEdges - DONE.
+level 0*
+logLK2 = -935756.6108564533
+checkTrueEdges - DONE.
+best_partition - DONE, elapsed 12205
+
+====== youtube
+total_e = 2796447.0
+logLK = -9559416.382500235
+level 0*
+logLK2 = -1.0951673247434728E7
+checkTrueEdges - DONE.
+best_partition - DONE, elapsed 584210

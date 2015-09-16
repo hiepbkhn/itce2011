@@ -9,6 +9,8 @@
 
 package dp.combined;
 
+import hist.Int2;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -69,6 +71,7 @@ class Status{
     public void print(){
     	System.out.println("STATUS");
     	System.out.println("total_weight = " + total_weight + " modularity = " + Louvain.modularity(this));
+    	
 //    	System.out.println("node2com");
 //    	for (int key : this.node2com.keySet())
 //    		System.out.print(key + ":" + this.node2com.get(key) + ", ");
@@ -463,10 +466,11 @@ public class Louvain {
 	    logLK(graph_all, status_all);
 //	    System.out.println("logLK = " + logLK(graph, status_all));
 	    
-	    checkNumEdges(graph_all, status_all, graph);
-	    System.out.println("checkNumEdges - DONE.");
+//	    checkNumEdges(graph_all, status_all, graph);
+//	    System.out.println("checkNumEdges - DONE.");
 	    
-	    checkTrueEdges(status_all, graph);
+	    double logLK2 = checkTrueEdges(status_all, graph);
+	    System.out.println("logLK2 = " + logLK2);
 	    System.out.println("checkTrueEdges - DONE.");
 	    
 	    //
@@ -566,63 +570,171 @@ public class Louvain {
 		return com;
 	}
 	
+	//
+	private int findReCom(List<Status> status_all, int u, int level){
+		int com = status_all.get(0).node2com.get(u);
+		int recom = status_all.get(0).com2com.get(com);
+		
+		for (int l = 1; l < level; l++){
+			com = status_all.get(l).node2com.get(recom);
+			recom = status_all.get(l).com2com.get(com);
+		}
+		
+		//
+		return recom;
+	}
+	
 	//// graph: original graph
-	public void checkTrueEdges(List<Status> status_all, EdgeWeightedGraph graph){
+	public double checkTrueEdges(List<Status> status_all, EdgeWeightedGraph graph){
+		double logLK = 0.0;
 		
-		double edges_counted_old = 0.0;
-		double total_nedges = 0.0;
+		List<Int2> edgeList = new ArrayList<Int2>();
+		for (Edge e : graph.edges()){
+			int u = e.either();
+			int v = e.other(u);
+			edgeList.add(new Int2(u, v));
+		}
 		
-		for (int l = status_all.size(); l > 0; l--){		// MUST BE TOP-DOWN !
-			System.out.println("level " + l);
-			double edges_counted = 0.0;		// inter-cluster edges
+		//
+		for (int l = status_all.size()-1; l >= 0; l--){		// MUST BE TOP-DOWN !
+			Status status = status_all.get(l);
+//			System.out.println("status.sizes");
+//	    	for (int key : status.sizes.keySet())
+//	    		System.out.print(key + ":" + status.sizes.get(key) + ", ");
+//	    	System.out.println();
 			
-			//
-			for (Edge e : graph.edges()){
-				int u = e.either();
-				int v = e.other(u);
+			Map<Int2, Integer> comDict = new HashMap<Int2, Integer>();		// (u_com, v_com) -> num edges
+			
+			int i = edgeList.size() - 1;
+			while (i >= 0){
+				Int2 e = edgeList.get(i);
+				int u = e.val0;
+				int v = e.val1;
 				// find communities of u and v
-				int u_com = findCom(status_all, u, l);
-				int v_com = findCom(status_all, v, l);
-				if (u_com != v_com)
-					edges_counted += 1;
+				int u_com = findReCom(status_all, u, l+1);		// findReCom, not findCom
+				int v_com = findReCom(status_all, v, l+1);
+				if (u_com != v_com){
+					if (u_com > v_com){		// swap for comDict
+						int temp = u_com;
+						u_com = v_com;
+						v_com = temp;
+					}
+					Int2 key = new Int2(u_com, v_com);
+					if (comDict.containsKey(key))
+						comDict.put(key, comDict.get(key) + 1);
+					else
+						comDict.put(key,  1);
+					
+					// delete e
+					edgeList.remove(i);
+				}
+				i = i - 1;
 				
 			}
+			// debug
+//			for (Int2 com : comDict.keySet())
+//				System.out.print("(" + com.val0 + "," + com.val1 + "):" + comDict.get(com) + ",");
+//			System.out.println();
 			
-			double nedges = edges_counted;
-			if (l > 0)
-				nedges = edges_counted - edges_counted_old;
-			System.out.println("edges counted = " + nedges);
-			total_nedges += nedges;
-			
-			edges_counted_old = edges_counted;
+			// compute logLK
+			for (Int2 com : comDict.keySet()){
+				int ni = status.sizes.get(com.val0);
+				int nj = status.sizes.get(com.val1);
+				double e_ij = comDict.get(com);
+				double p_ij = e_ij/(ni*nj);
+				if (p_ij > 0.0 && p_ij < 1.0)
+					logLK += ni*nj* (p_ij*Math.log(p_ij) + (1-p_ij)*Math.log(1-p_ij)); 
+			}
 			
 		}
 		
 		// at level 0
 		System.out.println("level 0*");
 		Status status = status_all.get(0);
-		double edges_counted = 0.0;
-		for (Edge e : graph.edges()){
-			int u = e.either();
-			int v = e.other(u);
-			int u_com = status.node2com.get(u);
-			int v_com = status.node2com.get(v);
-			if (u_com == v_com)
-				edges_counted += 1;
+//		System.out.println("status.sizes");
+//    	for (int key : status.sizes.keySet())
+//    		System.out.print(key + ":" + status.sizes.get(key) + ", ");
+//    	System.out.println();
+    	
+		Map<Integer, Integer> comDict = new HashMap<Integer, Integer>();
+		for (Int2 e : edgeList){
+			int u = e.val0;
+			int v = e.val1;
+			int u_com = status.com2com.get(status.node2com.get(u));
+			int v_com = status.com2com.get(status.node2com.get(v));
+			if (u_com == v_com){
+				if (comDict.containsKey(u_com))
+					comDict.put(u_com, comDict.get(u_com) + 1);
+				else
+					comDict.put(u_com, 1);
+			}
 		}
-		double nedges = edges_counted;
-		System.out.println("edges counted = " + nedges);
-		total_nedges += nedges;
+		// debug
+//		for (int com : comDict.keySet())
+//			System.out.print("(" + com + "):" + comDict.get(com) + ",");
+//		System.out.println();
+		for (int com : comDict.keySet()){
+			int ni = status.sizes.get(com);
+			double e_ij = comDict.get(com);
+			double p_ij = e_ij/(ni*(ni-1)/2);
+			if (p_ij > 0.0 && p_ij < 1.0)
+				logLK += ni*(ni-1)/2 * (p_ij*Math.log(p_ij) + (1-p_ij)*Math.log(1-p_ij)); 
+					
+		}
+		
+		
+		//// OK
+//		double edges_counted_old = 0.0;
+//		double total_nedges = 0.0;
+//		
+//		for (int l = status_all.size(); l > 0; l--){		// MUST BE TOP-DOWN !
+//			System.out.println("level " + l);
+//			double edges_counted = 0.0;		// inter-cluster edges
+//			
+//			//
+//			for (Edge e : graph.edges()){
+//				int u = e.either();
+//				int v = e.other(u);
+//				// find communities of u and v
+//				int u_com = findCom(status_all, u, l);
+//				int v_com = findCom(status_all, v, l);
+//				if (u_com != v_com)
+//					edges_counted += 1;
+//				
+//			}
+//			
+//			double nedges = edges_counted;
+//			if (l > 0)
+//				nedges = edges_counted - edges_counted_old;
+//			System.out.println("edges counted = " + nedges);
+//			total_nedges += nedges;
+//			
+//			edges_counted_old = edges_counted;
+//			
+//		}
+//		
+//		// at level 0
+//		System.out.println("level 0*");
+//		Status status = status_all.get(0);
+//		double edges_counted = 0.0;
+//		for (Edge e : graph.edges()){
+//			int u = e.either();
+//			int v = e.other(u);
+//			int u_com = status.node2com.get(u);
+//			int v_com = status.node2com.get(v);
+//			if (u_com == v_com)
+//				edges_counted += 1;
+//		}
+//		double nedges = edges_counted;
+//		System.out.println("edges counted = " + nedges);
+//		total_nedges += nedges;
+//		
+//		//
+//		System.out.println("total_nedges = " + total_nedges);
+		
 		
 		//
-		System.out.println("total_nedges = " + total_nedges);
-		
-		
-//		System.out.println("findCom = " + findCom(status_all, 0, 0));
-//		System.out.println("findCom = " + findCom(status_all, 0, 1));
-//		System.out.println("findCom = " + findCom(status_all, 0, 2));
-//		System.out.println("findCom = " + findCom(status_all, 0, 3));
-		
+		return logLK;
 	}
 	
 	////
@@ -735,12 +847,12 @@ public class Louvain {
 //		String dataname = "polblogs";		// (1224,16715)		ok 	
 //		String dataname = "as20graph";		// (6474,12572)		wrong total_e
 //		String dataname = "wiki-Vote";		// (7115,100762)	ok
-		String dataname = "ca-HepPh";		// (12006,118489) 	wrong total_e
+//		String dataname = "ca-HepPh";		// (12006,118489) 	wrong total_e
 //		String dataname = "ca-AstroPh";		// (18771,198050) 	wrong total_e		1.56s
 		// LARGE
 //		String dataname = "com_amazon_ungraph";		// (334863,925872)	17.8s
 //		String dataname = "com_dblp_ungraph";		// (317080,1049866)	27.2s 			(new : 20s, Mem 1.5GB)
-//		String dataname = "com_youtube_ungraph";	// (1134890,2987624) 670s, 2.2GB)	(new : 42s, Mem 2.7GB)
+		String dataname = "com_youtube_ungraph";	// (1134890,2987624) 670s, 2.2GB)	(new : 42s, Mem 2.7GB)
 													//						
 		// COMMAND-LINE <prefix> <dataname> <n_samples> <eps>
 		String prefix = "";
