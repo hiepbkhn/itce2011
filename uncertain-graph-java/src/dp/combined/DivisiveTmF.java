@@ -1,6 +1,7 @@
 /*
- * Sep 3
+ * Sep 3, 2015
  * 	- combine HRG-Divisive (dp.comm.NodeSet2) with TmF (naive.GreedyConstruct)
+ * 	- use NodeSetDiv.java
  * 
  */
 

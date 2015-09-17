@@ -1,6 +1,6 @@
 /*
  * 
- * Mar 24
+ * Mar 24, 2015
  * 	- add computeTopLevels() (top-down Node.toplevel) to speed up compute_nL_nR()
  *  - lowestCommonAncestor() runs faster using Node.level 
  * Mar 25
@@ -8,6 +8,8 @@
  * Apr 2
  *  - addlaplaceNoise(): use Geometric Mechanism
  *  - generateSanitizedSample(): run much faster O(m)
+ * Sep 17
+ * 	- add partitionTopDown() using queue
  */
 
 package dp.mcmc;
@@ -702,6 +704,89 @@ public class Dendrogram {
 	    }
 	    //
 	    return list_T;
+	}
+	
+	//// top-down cuts: use queue
+	public static List<Map<Integer, Integer>> partitionTopDown(Dendrogram T){
+		T.computeTopLevels();
+		
+		List<Map<Integer, Integer>> part_list = new ArrayList<Map<Integer,Integer>>();
+		
+		//
+		System.out.println("root_node.toplevel = " + T.root_node.toplevel);
+		
+		int maxToplevel = -1;
+		for (Node r : T.node_dict.values())
+			if (maxToplevel < r.toplevel)
+				maxToplevel = r.toplevel;
+		System.out.println("maxToplevel = " + maxToplevel);
+		
+		int minNodeParentToplevel = maxToplevel;
+		for (Node r : T.node_list)
+			if (minNodeParentToplevel > r.parent.toplevel)
+				minNodeParentToplevel = r.parent.toplevel;
+		System.out.println("minNodeParentToplevel = " + minNodeParentToplevel);
+		
+		// try double the number of clusters per iteration
+		int n = T.node_list.length;
+		
+		for (int i = 1; i < Math.log(n)/Math.log(2); i++){
+			
+			List<Node> cut_list = new ArrayList<Node>();
+			Queue<Node> queue = new LinkedList<Node>();
+			queue.add(T.root_node);
+			
+			int numChildren = 0;		// number of covered children
+			List<List<Integer>> children_list = new ArrayList<List<Integer>>();
+			
+			while (numChildren < n){
+				Node cur_node = queue.remove();
+				
+				// WAY-1
+				if (cur_node.left.id >= 0 || cur_node.right.id >= 0){
+					cut_list.add(cur_node);
+					
+					List<Integer> children = findChildren(cur_node);
+					children_list.add(children);
+					numChildren += children.size();
+					
+					if (cur_node.left.id < 0)
+						queue.add(cur_node.left);
+					if (cur_node.right.id < 0)
+						queue.add(cur_node.right);
+				}
+				else if (cur_node.left.toplevel >= i){		
+					List<Integer> children = findChildren(cur_node.left);
+					children_list.add(children);
+					numChildren += children.size();
+					
+					children = findChildren(cur_node.right);
+					children_list.add(children);
+					numChildren += children.size();
+				}
+				else{
+					queue.add(cur_node.right);
+					queue.add(cur_node.left);
+				}
+				
+				
+			}
+			//
+			Map<Integer, Integer> part = new HashMap<Integer, Integer>();
+			int count = 0;
+			for (List<Integer> children : children_list){
+				for (int u : children)
+					part.put(u, count);
+				
+				count += 1;
+			}
+			
+			//
+			part_list.add(part);
+		}
+		
+		//
+		return part_list;
 	}
 	
 	////

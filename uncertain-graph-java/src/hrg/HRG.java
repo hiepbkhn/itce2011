@@ -62,7 +62,7 @@ public class HRG extends Dendrogram {
 	////
 	// MCMC
 	// n_samples number of sample T
-	static List<HRG> dendrogramFitting(HRG T, Grph G, int n_steps, int n_samples, int sample_freq) {
+	public static List<HRG> dendrogramFitting(HRG T, Grph G, int n_steps, int n_samples, int sample_freq) {
 		List<HRG> list_T = new ArrayList<HRG>(); // list of sample T
 		HRG best_T;
 		double best_logLT = -Double.MAX_VALUE;
@@ -158,7 +158,7 @@ public class HRG extends Dendrogram {
 	}
 
 	////
-	static void writeInternalNodes(List<HRG> list_T, String node_file) throws Exception{
+	public static void writeInternalNodes(List<HRG> list_T, String node_file) throws Exception{
 	    
 		int i = 0;
 	    for (HRG T : list_T){
@@ -169,7 +169,7 @@ public class HRG extends Dendrogram {
 	
 	////
 	// list_T: list of new HRG()
-	static void readInternalNodes(Grph G, List<HRG> list_T, String node_file, int n_samples) throws Exception{
+	public static void readInternalNodes(Grph G, List<HRG> list_T, String node_file, int n_samples) throws Exception{
 		int i = 0;
 	    for (HRG T : list_T){
 	    	String filename = node_file + "." + i;
