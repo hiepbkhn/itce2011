@@ -1,5 +1,7 @@
 /*
  * Mar 25, 2015
+ * Apr 22
+ * 	- add normalizeGraph()
  */
 package dp;
 
@@ -13,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -276,6 +279,54 @@ public class UtilityMeasure {
 			System.out.print(d + " ");
 	}
 	
+	//// normalize to 0-based and consecutive ids
+	public static void normalizeGraph(String filename, int nEdges, String out_file) throws Exception{
+		
+		int[][] edges = new int[nEdges][2];
+		BufferedReader br = new BufferedReader(new FileReader(filename));
+		
+		int count = 0;
+		int nodeId = 0;
+		HashMap<Integer, Integer> node_dict = new HashMap<Integer, Integer>();
+		while (true){
+        	String str = br.readLine();
+        	if (str == null)
+        		break;
+        	if (str.charAt(0) == '#')
+        		continue;
+        	String[] items = str.split("\t");
+        	edges[count][0] = Integer.parseInt(items[0]);
+        	edges[count][1] = Integer.parseInt(items[1]);
+        	
+        	if (!node_dict.containsKey(edges[count][0])){
+        		node_dict.put(edges[count][0], nodeId);
+        		nodeId ++;
+        	}
+        	if (!node_dict.containsKey(edges[count][1])){
+        		node_dict.put(edges[count][1], nodeId);
+        		nodeId ++;
+        	}
+        	
+        	count++;
+        	
+        }
+		br.close();
+		
+		// update node ids
+		for (int i = 0; i < nEdges; i++){
+			edges[i][0] = node_dict.get(edges[i][0]);
+			edges[i][1] = node_dict.get(edges[i][1]);
+		}
+		
+		// write to file
+		BufferedWriter bw = new BufferedWriter(new FileWriter(out_file));
+		for (int i = 0; i < nEdges; i++)
+			bw.write(edges[i][0] + " " + edges[i][1] + "\n");
+		
+		bw.close();
+		
+	}
+	
 	////////////////////////////////////////////
 	public static void main(String[] args) throws Exception{
 		
@@ -287,9 +338,12 @@ public class UtilityMeasure {
 //		String dataname = "as20graph";			// (6474,12572)		getDistanceDistr: 2.5s
 //		String dataname = "wiki-Vote";			// (7115,100762) 	getDistanceDistr: 2.8s
 //		String dataname = "ca-HepPh";			// (12006,118489) 	WAY-1: OutOfMemory,		WAY-2: 9.4s
-		String dataname = "ca-AstroPh";			// (18771,198050) 	WAY-1: OutOfMemory, 	WAY-2: 25.6s
+//		String dataname = "ca-AstroPh";			// (18771,198050) 	WAY-1: OutOfMemory, 	WAY-2: 25.6s
 //		String dataname = "sm_50000_005_11";	// (50000,250000) 	WAY-1: OutOfMemory, 	WAY-2: 149s
 //		String dataname = "sm_100000_005_11";	// (100000,500000) 	WAY-1: OutOfMemory, 	WAY-2: 805s
+//		String dataname = "com_amazon_ungraph"; 	// (334863,925872) 
+//		String dataname = "com_dblp_ungraph";  		// (317080,1049866) 
+		String dataname = "com_youtube_ungraph"; 	// (1134890,2987624)
 		
 		
 		String filename = "_data/" + dataname + ".grph";
@@ -304,22 +358,23 @@ public class UtilityMeasure {
 	    
 	    
 	    //
-		GrphTextReader reader = new GrphTextReader();
-		Grph G;
-		RegularFile f = new RegularFile(filename);
-		
-		G = reader.readGraph(f);
-		
-		System.out.println("#nodes = " + G.getNumberOfVertices());
-		System.out.println("#edges = " + G.getNumberOfEdges());
+////		GrphTextReader reader = new GrphTextReader();
+//		EdgeListReader reader = new EdgeListReader();
+//		Grph G;
+//		RegularFile f = new RegularFile(edgelist_name);
+//		
+//		G = reader.readGraph(f);
+//		
+//		System.out.println("#nodes = " + G.getNumberOfVertices());
+//		System.out.println("#edges = " + G.getNumberOfEdges());
 		
 //		long start = System.currentTimeMillis();
 //		double[] dist = getDistanceDistr(G);
 //	    System.out.println("getDistanceDistr - DONE, elapsed " + (System.currentTimeMillis() - start));
 	 
 		// TEST generateCutQueries()
-		generateCutQueries(G, n_queries, cut_query_file, 500);
-		System.out.println("generateCutQueries - DONE");
+//		generateCutQueries(G, n_queries, cut_query_file, 500);
+//		System.out.println("generateCutQueries - DONE");
 		
 	    // TEST 
 //	    DegreeMetric deg = new DegreeMetric();
@@ -336,6 +391,12 @@ public class UtilityMeasure {
 //	    computeUtility(edgelist_name, cut_query_file, matlab_file, n_queries, n_nodes);
 ////	    computeUtility("_sample/as20graph_mcmc_10_10.0", cut_query_file, "_matlab/as20graph_mcmc_10_10.0.mat", n_queries, n_nodes);
 	    
+	    // TEST normalizeGraph()
+	    String file_name = "E:/Tailieu/Paper-code/DATA-SET/SNAP/Networks with ground-truth communities/com-lj.ungraph.txt";		// mem 2.4GB, 47s
+	    String out_file = "E:/Tailieu/Paper-code/DATA-SET/SNAP/Networks with ground-truth communities/com_lj_ungraph.gr";
+	    long start = System.currentTimeMillis();
+	    normalizeGraph(file_name, 34681189, out_file);
+	    System.out.println("normalizeGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
 	}
 
 }

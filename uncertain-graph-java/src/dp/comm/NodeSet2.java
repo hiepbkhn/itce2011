@@ -1,12 +1,6 @@
 /*
- * Mar 30
- * 	- created
- * Apr 1
- * 	- recursive partitioning
- * Apr 10
- * 	- add size_limit (=32) for large graphs (amazon, youtube)
  * Apr 13
- * 	- logLK(): use long instead of int to avoid overflow on amazon, youtube
+ * 	- copied from NodeSet, try to speedup add(), remove()
  *  - add reverse_add(), reverse_remove()
  */
 
@@ -27,7 +21,7 @@ import toools.set.BitVectorSet;
 import toools.set.IntHashSet;
 import toools.set.IntSet;
 
-public class NodeSet {
+public class NodeSet2 {
 
 	public static final int TYPE_LOG_LK = 0;
 	public static final int TYPE_MINCUT = 1;
@@ -40,7 +34,7 @@ public class NodeSet {
 	public int n_s = 0;
 	public int n_t = 0;
 	
-	public NodeSet parent, left, right;		// for recursive partitioning
+	public NodeSet2 parent, left, right;		// for recursive partitioning
 	public int id;
 	
 	//// init two sets S and T from N
@@ -54,7 +48,7 @@ public class NodeSet {
 	
 	////
 	// n_nodes: 0->n_nodes-1 are node ids in graph
-	public NodeSet(Grph G, IntSet A){
+	public NodeSet2(Grph G, IntSet A){
 		if (A.size() == 1){
 			this.id = A.toIntArray()[0];
 			return;
@@ -106,7 +100,7 @@ public class NodeSet {
 	}
 	
 	////
-	public NodeSet(Grph G){
+	public NodeSet2(Grph G){
 		int n_nodes = G.getNumberOfVertices();
 		
 		this.S = new IntHashSet();
@@ -155,14 +149,13 @@ public class NodeSet {
 		//
 		int count_add = 0;
 		int count_remove = 0;
-		IntSet N = G.getNeighbours(u);
-		for (IntCursor s : this.S)
-			if (N.contains(s.value))
+		int[] N = G.getNeighbours(u).toIntArray();
+		for (int v : N){
+			if (S.contains(v))
 				count_remove += 1;
-		
-		for (IntCursor t : this.T)
-			if (t.value != u && N.contains(t.value))
+			if (T.contains(v))
 				count_add += 1;
+		}
 		
 		this.e_st = this.e_st - count_remove + count_add;
 		this.e_s = this.e_s + count_remove;
@@ -185,14 +178,13 @@ public class NodeSet {
 		//
 		int count_add = 0;
 		int count_remove = 0;
-		IntSet N = G.getNeighbours(u);
-		for (IntCursor t : this.T)
-			if (N.contains(t.value))
-				count_remove += 1;
-		
-		for (IntCursor s : this.S)
-			if (s.value != u && N.contains(s.value))
+		int[] N = G.getNeighbours(u).toIntArray();
+		for (int v : N){
+			if (S.contains(v))
 				count_add += 1;
+			if (T.contains(v))
+				count_remove += 1;
+		}
 		
 		this.e_st = this.e_st - count_remove + count_add;
 		this.e_s = this.e_s - count_add;
@@ -314,7 +306,7 @@ public class NodeSet {
 	}
 	
 	//// LOG-LIKELIHOOD partition, using logLK()
-	public static void partitionLK(NodeSet R, Grph G, int n_steps, int n_samples, int sample_freq, boolean print_out){
+	public static void partitionLK(NodeSet2 R, Grph G, int n_steps, int n_samples, int sample_freq, boolean print_out){
 		if (print_out)
 			System.out.println("Node.partitionLK called");
 		
@@ -419,7 +411,7 @@ public class NodeSet {
 	
 	
 	//// MINCUT partition, using mincut()
-	public static void partitionMC(NodeSet R, Grph G, int n_steps, int n_samples, int sample_freq){
+	public static void partitionMC(NodeSet2 R, Grph G, int n_steps, int n_samples, int sample_freq){
 		System.out.println("Node.partitionMC called");
 		int n_nodes = G.getNumberOfVertices();
 		
@@ -508,7 +500,7 @@ public class NodeSet {
 	}
 	
 	//// EDGE-VAR partition, using edgeVar()
-	public static void partitionEV(NodeSet R, Grph G, int n_steps, int n_samples, int sample_freq){
+	public static void partitionEV(NodeSet2 R, Grph G, int n_steps, int n_samples, int sample_freq){
 		System.out.println("Node.partitionEV called");
 		int n_nodes = G.getNumberOfVertices();
 		
@@ -597,34 +589,34 @@ public class NodeSet {
 	}
 	
 	////
-	public static int binaryPartition(Grph G, NodeSet root, int id){
+	public static int binaryPartition(Grph G, NodeSet2 root, int id){
 		
 		int cur_id = id;
-		Queue<NodeSet> queue = new LinkedList<NodeSet>();
+		Queue<NodeSet2> queue = new LinkedList<NodeSet2>();
 		queue.add(root);
 		while(queue.size() > 0){
-			NodeSet R = queue.remove();
+			NodeSet2 R = queue.remove();
 			
 			if (R.S.size() >= 2){
-				NodeSet RS = new NodeSet(G, R.S);
+				NodeSet2 RS = new NodeSet2(G, R.S);
 				RS.id = cur_id--;
 				R.left = RS;
 				RS.parent = R;
 				queue.add(RS);
 			}else{
-				NodeSet RS = new NodeSet(G, R.S);		// RS.id is the remaining item in S
+				NodeSet2 RS = new NodeSet2(G, R.S);		// RS.id is the remaining item in S
 				R.left = RS;
 				RS.parent = R;
 			}
 			
 			if (R.T.size() >= 2){
-				NodeSet RT = new NodeSet(G, R.T);
+				NodeSet2 RT = new NodeSet2(G, R.T);
 				RT.id = cur_id--;
 				R.right = RT;
 				RT.parent = R;
 				queue.add(RT);
 			}else{
-				NodeSet RT = new NodeSet(G, R.T);		// RT.id is the remaining item in T
+				NodeSet2 RT = new NodeSet2(G, R.T);		// RT.id is the remaining item in T
 				R.right = RT;
 				RT.parent = R;
 			}
@@ -637,7 +629,7 @@ public class NodeSet {
 	
 	//////////////////////////////
 	// limit_size = 32: i.e. for NodeSet having size <= limit_size, call 
-	public static NodeSet recursiveLK(Grph G, int burn_factor, int limit_size){
+	public static NodeSet2 recursiveLK(Grph G, int burn_factor, int limit_size){
 		int n_nodes = G.getNumberOfVertices();
 		int id = -1;
 		
@@ -646,15 +638,15 @@ public class NodeSet {
 			A.add(i);
 		
 		// root node
-		NodeSet root = new NodeSet(G, A);
+		NodeSet2 root = new NodeSet2(G, A);
 		root.id = id--;
 		// 
-		Queue<NodeSet> queue = new LinkedList<NodeSet>();
+		Queue<NodeSet2> queue = new LinkedList<NodeSet2>();
 		queue.add(root);
 		while(queue.size() > 0){
-			NodeSet R = queue.remove();
+			NodeSet2 R = queue.remove();
 			
-			NodeSet.partitionLK(R, G, burn_factor*(R.S.size() + R.T.size()), 0, 0, false);
+			NodeSet2.partitionLK(R, G, burn_factor*(R.S.size() + R.T.size()), 0, 0, false);
 			
 			// debug
 //			R.print();
@@ -694,27 +686,27 @@ public class NodeSet {
 				
 			}else{
 				if (R.S.size() > 1){
-					NodeSet RS = new NodeSet(G, R.S);
+					NodeSet2 RS = new NodeSet2(G, R.S);
 					RS.id = id--;
 					R.left = RS;
 					RS.parent = R;
 					
 					queue.add(RS);
 				}else{
-					NodeSet RS = new NodeSet(G, R.S);		// RS.id is the remaining item in S
+					NodeSet2 RS = new NodeSet2(G, R.S);		// RS.id is the remaining item in S
 	//				System.out.println("leaf RS.id = " + RS.id);
 					R.left = RS;
 					RS.parent = R;
 				}
 				
 				if (R.T.size() > 1){
-					NodeSet RT = new NodeSet(G, R.T);
+					NodeSet2 RT = new NodeSet2(G, R.T);
 					RT.id = id--;
 					R.right = RT;
 					RT.parent = R;
 					queue.add(RT);
 				}else{
-					NodeSet RT = new NodeSet(G, R.T);		// RT.id is the remaining item in T
+					NodeSet2 RT = new NodeSet2(G, R.T);		// RT.id is the remaining item in T
 	//				System.out.println("leaf RT.id = " + RT.id);
 					R.right = RT;
 					RT.parent = R;
@@ -728,13 +720,13 @@ public class NodeSet {
 	}
 	
 	////
-	public static void printSetIds(NodeSet root_set){
+	public static void printSetIds(NodeSet2 root_set){
 		System.out.println("printSetIds");
 		
-		Queue<NodeSet> queue_set = new LinkedList<NodeSet>();
+		Queue<NodeSet2> queue_set = new LinkedList<NodeSet2>();
 		queue_set.add(root_set);
 		while (queue_set.size() > 0){
-			NodeSet R = queue_set.remove();
+			NodeSet2 R = queue_set.remove();
 			if (R.left != null)
 				System.out.println("R.id = " + R.id + " left.id = " + R.left.id + " right.id = " + R.right.id + 
 						" left.size = " + R.S.size() + " right.size = " + R.T.size());
@@ -748,7 +740,7 @@ public class NodeSet {
 	}
 	
 	////
-	public static Dendrogram convertToHRG(Grph G, NodeSet root_set){
+	public static Dendrogram convertToHRG(Grph G, NodeSet2 root_set){
 		int n_nodes = G.getNumberOfVertices();
 		Dendrogram D = new Dendrogram(); 
 		D.node_list = new Node[n_nodes];
@@ -756,14 +748,14 @@ public class NodeSet {
 		// D.root_node and D.node_list
 		Node root_node = new Node(root_set.id, null, 0.0);
 		
-		Queue<NodeSet> queue_set = new LinkedList<NodeSet>();
+		Queue<NodeSet2> queue_set = new LinkedList<NodeSet2>();
 		Queue<Node> queue = new LinkedList<Node>();
 		
 		queue_set.add(root_set);	// parallel queues
 		queue.add(root_node);
 		
 		while(queue.size() > 0){
-			NodeSet R = queue_set.remove();
+			NodeSet2 R = queue_set.remove();
 			Node r = queue.remove();
 			
 			if (R.left != null){	//internal node
