@@ -1,7 +1,7 @@
 /*
- * Sep 17, 2015
- * 	- use HRG-Divisive (see dp.comm.CommunityFit) but at each node, we decide the further partition if doing so increases the modularity
- * 	- use NodeSetDivGreedy.java
+ * Sep 18, 2015
+ * 	- divisive approach using exponential mechanism with modularity Q
+ * 	- use NodeSetMod.java
  */
 
 package dp.combined;
@@ -10,12 +10,12 @@ import grph.Grph;
 import grph.io.EdgeListReader;
 import toools.io.file.RegularFile;
 
-public class HRGDivisiveGreedy {
+public class ModDivisiveDP {
 
 	//////////////////////////////////////////////////
 	public static void main(String[] args) throws Exception {
 		ClassLoader.getSystemClassLoader().setDefaultAssertionStatus(true);
-		System.out.println("HRGDivisiveGreedy");
+		System.out.println("DivisiveTmF");
 		
 		// load graph
 //		String dataname = "polbooks";		// (105, 441)		

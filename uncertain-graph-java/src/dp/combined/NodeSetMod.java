@@ -1,8 +1,6 @@
 /*
- * Sep 3
- * 	- copied from 
- * 	- add param binaryPart to recursiveLK() (used in dp.combined.*) 
- * 	- add param lower_size to partitionLK() (used in dp.combined.*) 
+ * Sep 18, 2015
+ * 	- copied from NodeSetDiv
  */
 
 package dp.combined;
@@ -22,7 +20,7 @@ import toools.set.BitVectorSet;
 import toools.set.IntHashSet;
 import toools.set.IntSet;
 
-public class NodeSetDiv {
+public class NodeSetMod {
 
 	public static final int TYPE_LOG_LK = 0;
 	public static final int TYPE_MINCUT = 1;
@@ -35,7 +33,7 @@ public class NodeSetDiv {
 	public int n_s = 0;
 	public int n_t = 0;
 	
-	public NodeSetDiv parent, left, right;		// for recursive partitioning
+	public NodeSetMod parent, left, right;		// for recursive partitioning
 	public int id;
 	public int level = 0;
 	
@@ -50,7 +48,7 @@ public class NodeSetDiv {
 	
 	////
 	// n_nodes: 0->n_nodes-1 are node ids in graph
-	public NodeSetDiv(Grph G, IntSet A){
+	public NodeSetMod(Grph G, IntSet A){
 		if (A.size() == 1){
 			this.id = A.toIntArray()[0];
 			return;
@@ -102,7 +100,7 @@ public class NodeSetDiv {
 	}
 	
 	////
-	public NodeSetDiv(Grph G){
+	public NodeSetMod(Grph G){
 		int n_nodes = G.getNumberOfVertices();
 		
 		this.S = new IntHashSet();
@@ -257,44 +255,6 @@ public class NodeSetDiv {
 	}
 	
 	////
-	public double mincut(){
-		int nsC2 = this.n_s*(this.n_s-1)/2; 
-		int ntC2 = this.n_t*(this.n_t-1)/2; 
-		
-		double p_st = (double)this.e_st / (this.n_s * this.n_t);
-		double p_s = (double)this.e_s/nsC2;
-		double p_t = (double)this.e_t/ntC2;
-				
-//		double L = p_st;
-		double L = p_st*p_st/(p_s*p_t);
-		
-		//
-		return L;
-	}
-	
-	////
-	public double edgeVar(){
-		double L = 0.0;
-		//
-		int nsC2 = this.n_s*(this.n_s-1)/2; 
-		double p_s = (double)this.e_s/nsC2;
-		L += nsC2 * p_s * (1-p_s);
-		
-		//
-		int ntC2 = this.n_t*(this.n_t-1)/2; 
-		double p_t = (double)this.e_t/ntC2;
-		L += ntC2 * p_t * (1-p_t);
-		
-		//
-		int nst = this.n_s * this.n_t;
-		double p_st = (double)this.e_st/nst;
-		L += nst * p_st * (1-p_st);
-		
-		//
-		return L;
-	}
-	
-	////
 	public void print(){
 		System.out.print("S : ");
 		for (IntCursor s : this.S)
@@ -308,7 +268,7 @@ public class NodeSetDiv {
 	}
 	
 	//// LOG-LIKELIHOOD partition, using logLK()
-	public static void partitionLK(NodeSetDiv R, Grph G, double eps_p, int n_steps, int n_samples, int sample_freq, boolean print_out, int lower_size){
+	public static void partitionLK(NodeSetMod R, Grph G, double eps_p, int n_steps, int n_samples, int sample_freq, boolean print_out, int lower_size){
 		if (print_out)
 			System.out.println("Node.partitionLK called");
 		
@@ -412,221 +372,43 @@ public class NodeSetDiv {
 			}
 			
 			if (i % out_freq == 0 && print_out)
-				System.out.println("i = " + i + " n_accept = " + n_accept + " logLK = " + R.logLK() + " mincut = " + R.mincut() + " edgeVar = " + R.edgeVar()
+				System.out.println("i = " + i + " n_accept = " + n_accept + " logLK = " + R.logLK()
 						+ " n_accept_positive = " + n_accept_positive
 						+ " time : " + (System.currentTimeMillis() - start));
 		}
 		
 	}
 	
-	
-	//// MINCUT partition, using mincut()
-	public static void partitionMC(NodeSetDiv R, Grph G, int n_steps, int n_samples, int sample_freq){
-		System.out.println("Node.partitionMC called");
-		int n_nodes = G.getNumberOfVertices();
-		
-		System.out.println("#steps = " + (n_steps + n_samples * sample_freq));
-
-		int out_freq = (n_steps + n_samples * sample_freq) / 10;
-		//
-		long start = System.currentTimeMillis();
-		boolean is_add = true;			// add or remove
-		Random random = new Random();
-		int n_accept = 0;
-		int n_accept_positive = 0;
-		int u = -1;
-		
-		double logLT = R.mincut();
-		double logLT2;
-		
-		for (int i = 0; i < n_steps + n_samples * sample_freq; i++) {
-			// decide add or remove
-			if (R.S.size() < n_nodes/2 - 1 && R.S.size() > 1){	// add or remove
-				int rand_val = random.nextInt(2);
-				if (rand_val == 0)
-					is_add = true;
-				else
-					is_add = false;	
-			}else if (R.S.size() == 1){			// only add
-				is_add = true;
-			}else{								// only remove (R.S.size() >= n_nodes/2 - 1)
-				is_add = false;
-			}
-			
-			// perform add or remove
-			if (is_add){
-				// randomly pick an item from T
-				int id = random.nextInt(R.T.size());
-				for (IntCursor t: R.T){
-					if (id == 0){
-						u = t.value;
-						break;
-					}else
-						id = id - 1;
-				}
-				R.add(u, G);
-				
-			}else{
-				// randomly pick an item from S
-				int id = random.nextInt(R.S.size());
-				for (IntCursor s: R.S){
-					if (id == 0){
-						u = s.value;
-						break;
-					}else
-						id = id - 1;
-				}
-				R.remove(u, G);
-			}
-			
-			// MCMC
-			logLT2 = R.mincut();
-			
-			if (logLT2 < logLT){								// prefer smaller mincut
-				n_accept += 1;
-				n_accept_positive += 1;
-				logLT = logLT2;
-			}else{
-				double prob = logLT/logLT2;			// 
-				double prob_val = random.nextDouble();
-				if (prob_val > prob){
-					// reverse
-					if (is_add)
-						R.remove(u, G);
-					else
-						R.add(u, G);
-				}else {
-					n_accept += 1;
-					logLT = logLT2;
-				}
-			}
-			
-			if (i % out_freq == 0)
-				System.out.println("i = " + i + " n_accept = " + n_accept + " logLK = " + R.logLK() + " mincut = " + R.mincut() + " edgeVar = " + R.edgeVar()
-						+ " n_accept_positive = " + n_accept_positive
-						+ " time : " + (System.currentTimeMillis() - start));
-		}
-		
-	}
-	
-	//// EDGE-VAR partition, using edgeVar()
-	public static void partitionEV(NodeSetDiv R, Grph G, int n_steps, int n_samples, int sample_freq){
-		System.out.println("Node.partitionEV called");
-		int n_nodes = G.getNumberOfVertices();
-		
-		System.out.println("#steps = " + (n_steps + n_samples * sample_freq));
-
-		int out_freq = (n_steps + n_samples * sample_freq) / 10;
-		//
-		long start = System.currentTimeMillis();
-		boolean is_add = true;			// add or remove
-		Random random = new Random();
-		int n_accept = 0;
-		int n_accept_positive = 0;
-		int u = -1;
-		
-		double logLT = R.edgeVar();
-		double logLT2;
-		
-		for (int i = 0; i < n_steps + n_samples * sample_freq; i++) {
-			// decide add or remove
-			if (R.S.size() < n_nodes/2 - 1 && R.S.size() > 1){	// add or remove
-				int rand_val = random.nextInt(2);
-				if (rand_val == 0)
-					is_add = true;
-				else
-					is_add = false;	
-			}else if (R.S.size() == 1){			// only add
-				is_add = true;
-			}else{								// only remove (R.S.size() >= n_nodes/2 - 1)
-				is_add = false;
-			}
-			
-			// perform add or remove
-			if (is_add){
-				// randomly pick an item from T
-				int id = random.nextInt(R.T.size());
-				for (IntCursor t: R.T){
-					if (id == 0){
-						u = t.value;
-						break;
-					}else
-						id = id - 1;
-				}
-				R.add(u, G);
-				
-			}else{
-				// randomly pick an item from S
-				int id = random.nextInt(R.S.size());
-				for (IntCursor s: R.S){
-					if (id == 0){
-						u = s.value;
-						break;
-					}else
-						id = id - 1;
-				}
-				R.remove(u, G);
-			}
-			
-			// MCMC
-			logLT2 = R.edgeVar();
-			
-			if (logLT2 < logLT){				// smaller
-				n_accept += 1;
-				n_accept_positive += 1;
-				logLT = logLT2;
-			}else{
-				double prob = Math.exp(logLT - logLT2);			// prob << 1.0
-				double prob_val = random.nextDouble();
-				if (prob_val > prob){
-					// reverse
-					if (is_add)
-						R.remove(u, G);
-					else
-						R.add(u, G);
-				}else {
-					n_accept += 1;
-					logLT = logLT2;
-				}
-			}
-			
-			if (i % out_freq == 0)
-				System.out.println("i = " + i + " n_accept = " + n_accept + " logLK = " + R.logLK() + " mincut = " + R.mincut() + " edgeVar = " + R.edgeVar()
-						+ " n_accept_positive = " + n_accept_positive
-						+ " time : " + (System.currentTimeMillis() - start));
-		}
-		
-	}
 	
 	////
-	public static int binaryPartition(Grph G, NodeSetDiv root, int id){
+	public static int binaryPartition(Grph G, NodeSetMod root, int id){
 		
 		int cur_id = id;
-		Queue<NodeSetDiv> queue = new LinkedList<NodeSetDiv>();
+		Queue<NodeSetMod> queue = new LinkedList<NodeSetMod>();
 		queue.add(root);
 		while(queue.size() > 0){
-			NodeSetDiv R = queue.remove();
+			NodeSetMod R = queue.remove();
 			
 			if (R.S.size() >= 2){
-				NodeSetDiv RS = new NodeSetDiv(G, R.S);
+				NodeSetMod RS = new NodeSetMod(G, R.S);
 				RS.id = cur_id--;
 				R.left = RS;
 				RS.parent = R;
 				queue.add(RS);
 			}else{
-				NodeSetDiv RS = new NodeSetDiv(G, R.S);		// RS.id is the remaining item in S
+				NodeSetMod RS = new NodeSetMod(G, R.S);		// RS.id is the remaining item in S
 				R.left = RS;
 				RS.parent = R;
 			}
 			
 			if (R.T.size() >= 2){
-				NodeSetDiv RT = new NodeSetDiv(G, R.T);
+				NodeSetMod RT = new NodeSetMod(G, R.T);
 				RT.id = cur_id--;
 				R.right = RT;
 				RT.parent = R;
 				queue.add(RT);
 			}else{
-				NodeSetDiv RT = new NodeSetDiv(G, R.T);		// RT.id is the remaining item in T
+				NodeSetMod RT = new NodeSetMod(G, R.T);		// RT.id is the remaining item in T
 				R.right = RT;
 				RT.parent = R;
 			}
@@ -639,7 +421,7 @@ public class NodeSetDiv {
 	
 	//////////////////////////////
 	// limit_size = 32: i.e. for NodeSet having size <= limit_size, call 
-	public static NodeSetDiv recursiveLK(Grph G, double eps1, int burn_factor, int limit_size, int lower_size, int max_level, boolean binaryPart){
+	public static NodeSetMod recursiveLK(Grph G, double eps1, int burn_factor, int limit_size, int lower_size, int max_level){
 		int n_nodes = G.getNumberOfVertices();
 		int id = -1;
 		
@@ -648,57 +430,27 @@ public class NodeSetDiv {
 			A.add(i);
 		
 		// root node
-		NodeSetDiv root = new NodeSetDiv(G, A);
+		NodeSetMod root = new NodeSetMod(G, A);
 		root.id = id--;
 		root.level = 0;
 		// 
-		Queue<NodeSetDiv> queue = new LinkedList<NodeSetDiv>();
+		Queue<NodeSetMod> queue = new LinkedList<NodeSetMod>();
 		queue.add(root);
 		while(queue.size() > 0){
-			NodeSetDiv R = queue.remove();
+			NodeSetMod R = queue.remove();
 			
-			NodeSetDiv.partitionLK(R, G, eps1/max_level, burn_factor*(R.S.size() + R.T.size()), 0, 0, false, lower_size);
+			NodeSetMod.partitionLK(R, G, eps1/max_level, burn_factor*(R.S.size() + R.T.size()), 0, 0, false, lower_size);
+			// check modularity increase?
 			
-			// debug
-//			R.print();
-			//
 			
-			// DO NOT USE limit_size
-//			if (R.S.size() > 1){
-//				NodeSet RS = new NodeSet(G, R.S);
-//				RS.id = id--;
-//				R.left = RS;
-//				RS.parent = R;
-//				
-//				queue.add(RS);
-//			}else{
-//				NodeSet RS = new NodeSet(G, R.S);		// RS.id is the remaining item in S
-////				System.out.println("leaf RS.id = " + RS.id);
-//				R.left = RS;
-//				RS.parent = R;
-//			}
-//			
-//			if (R.T.size() > 1){
-//				NodeSet RT = new NodeSet(G, R.T);
-//				RT.id = id--;
-//				R.right = RT;
-//				RT.parent = R;
-//				queue.add(RT);
-//			}else{
-//				NodeSet RT = new NodeSet(G, R.T);		// RT.id is the remaining item in T
-////				System.out.println("leaf RT.id = " + RT.id);
-//				R.right = RT;
-//				RT.parent = R;
-//			}
 			
 			// USE limit_size
 			if (R.S.size() + R.T.size() <= limit_size || R.level == max_level){		// changed: < to <=
-				if (binaryPart)
-					id = binaryPartition(G, R, id);
+				// stop
 				
 			}else{
 				if (R.S.size() > lower_size){
-					NodeSetDiv RS = new NodeSetDiv(G, R.S);
+					NodeSetMod RS = new NodeSetMod(G, R.S);
 					RS.id = id--;
 					R.left = RS;
 					RS.parent = R;
@@ -706,7 +458,7 @@ public class NodeSetDiv {
 					
 					queue.add(RS);
 				}else{
-					NodeSetDiv RS = new NodeSetDiv(G, R.S);		// RS.id is the remaining item in S
+					NodeSetMod RS = new NodeSetMod(G, R.S);		// RS.id is the remaining item in S
 	//				System.out.println("leaf RS.id = " + RS.id);
 					R.left = RS;
 					RS.parent = R;
@@ -714,7 +466,7 @@ public class NodeSetDiv {
 				}
 				
 				if (R.T.size() > lower_size){
-					NodeSetDiv RT = new NodeSetDiv(G, R.T);
+					NodeSetMod RT = new NodeSetMod(G, R.T);
 					RT.id = id--;
 					R.right = RT;
 					RT.parent = R;
@@ -722,7 +474,7 @@ public class NodeSetDiv {
 					
 					queue.add(RT);
 				}else{
-					NodeSetDiv RT = new NodeSetDiv(G, R.T);		// RT.id is the remaining item in T
+					NodeSetMod RT = new NodeSetMod(G, R.T);		// RT.id is the remaining item in T
 	//				System.out.println("leaf RT.id = " + RT.id);
 					R.right = RT;
 					RT.parent = R;
@@ -737,13 +489,13 @@ public class NodeSetDiv {
 	}
 	
 	////
-	public static void printSetIds(NodeSetDiv root_set){
+	public static void printSetIds(NodeSetMod root_set){
 		System.out.println("printSetIds");
 		
-		Queue<NodeSetDiv> queue_set = new LinkedList<NodeSetDiv>();
+		Queue<NodeSetMod> queue_set = new LinkedList<NodeSetMod>();
 		queue_set.add(root_set);
 		while (queue_set.size() > 0){
-			NodeSetDiv R = queue_set.remove();
+			NodeSetMod R = queue_set.remove();
 			if (R.left != null)
 				System.out.println("R.id = " + R.id + " left.id = " + R.left.id + " right.id = " + R.right.id + 
 						" left.size = " + R.S.size() + " right.size = " + R.T.size());
@@ -757,7 +509,7 @@ public class NodeSetDiv {
 	}
 	
 	////
-	public static Dendrogram convertToHRG(Grph G, NodeSetDiv root_set){
+	public static Dendrogram convertToHRG(Grph G, NodeSetMod root_set){
 		int n_nodes = G.getNumberOfVertices();
 		Dendrogram D = new Dendrogram(); 
 		D.node_list = new Node[n_nodes];
@@ -765,14 +517,14 @@ public class NodeSetDiv {
 		// D.root_node and D.node_list
 		Node root_node = new Node(root_set.id, null, 0.0);
 		
-		Queue<NodeSetDiv> queue_set = new LinkedList<NodeSetDiv>();
+		Queue<NodeSetMod> queue_set = new LinkedList<NodeSetMod>();
 		Queue<Node> queue = new LinkedList<Node>();
 		
 		queue_set.add(root_set);	// parallel queues
 		queue.add(root_node);
 		
 		while(queue.size() > 0){
-			NodeSetDiv R = queue_set.remove();
+			NodeSetMod R = queue_set.remove();
 			Node r = queue.remove();
 			
 			if (R.left != null){	//internal node
