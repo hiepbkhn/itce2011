@@ -1,6 +1,6 @@
 /*
  * Sep 18, 2015
- * 	- copied from NodeSetDiv
+ * 	- copied from NodeSetDiv, exponential mechanism with modularity Q
  */
 
 package dp.combined;
@@ -22,16 +22,14 @@ import toools.set.IntSet;
 
 public class NodeSetMod {
 
-	public static final int TYPE_LOG_LK = 0;
-	public static final int TYPE_MINCUT = 1;
 	//
 	public IntSet S;
 	public IntSet T;
-	public int e_st;		//
-	public int e_s;
-	public int e_t;
-	public int n_s = 0;
-	public int n_t = 0;
+	public int e_st;
+	public int e_s;			// number of edges inside S
+	public int e_t;			// number of edges inside T
+	public int d_s = 0; 	// total degree of nodes in S
+	public int d_t = 0;		// total degree of nodes in T
 	
 	public NodeSetMod parent, left, right;		// for recursive partitioning
 	public int id;
@@ -54,22 +52,20 @@ public class NodeSetMod {
 			return;
 		}
 		
-//		int n_nodes = G.getNumberOfVertices();
-		
 		this.S = new IntHashSet();
 		this.T = new IntHashSet();
-		//
-//		for (int i = 0; i < n_nodes/2; i++)
-//			this.S.add(i);
-//		for (int i = n_nodes/2; i < n_nodes; i++)
-//			this.T.add(i);
-		
+
 		// call initSets
 		initSets(A, this.S, this.T);
 		
-		//
-		this.n_s = this.S.size();
-		this.n_t = this.T.size();
+		// d_s, d_t
+		this.d_s = 0;
+		for (IntCursor u : this.S)
+			this.d_s += G.getVertexDegree(u.value);
+		
+		this.d_t = this.T.size();
+		for (IntCursor u : this.T)
+			this.d_t += G.getVertexDegree(u.value);
 		
 		// e_st
 		this.e_st = 0;
@@ -79,6 +75,7 @@ public class NodeSetMod {
 				if (N.contains(t.value))
 					this.e_st ++;
 		}
+				
 		// e_s
 		this.e_s = 0;
 		int[] arrS = this.S.toIntArray();
@@ -97,6 +94,8 @@ public class NodeSetMod {
 				if (N.contains(arrT[j]))
 					this.e_t ++;
 		}
+		
+		
 	}
 	
 	////
@@ -111,9 +110,14 @@ public class NodeSetMod {
 		for (int i = n_nodes/2; i < n_nodes; i++)
 			this.T.add(i);
 		
-		//
-		this.n_s = this.S.size();
-		this.n_t = this.T.size();
+		// d_s, d_t
+		this.d_s = 0;
+		for (IntCursor u : this.S)
+			this.d_s += G.getVertexDegree(u.value);
+		
+		this.d_t = this.T.size();
+		for (IntCursor u : this.T)
+			this.d_t += G.getVertexDegree(u.value);
 		
 		// e_st
 		this.e_st = 0;
@@ -123,6 +127,7 @@ public class NodeSetMod {
 				if (N.contains(t.value))
 					this.e_st ++;
 		}
+		
 		// e_s
 		this.e_s = 0;
 		int[] arrS = this.S.toIntArray();
@@ -164,9 +169,11 @@ public class NodeSetMod {
 		//
 		this.S.add(u);
 		this.T.remove(u);
-		// update cut, size_S, size_T
-		this.n_s += 1;
-		this.n_t -= 1;
+		
+		// 
+		int deg_u = G.getVertexDegree(u);
+		this.d_s += deg_u;
+		this.d_t -= deg_u;
 		
 		//
 		
@@ -193,9 +200,11 @@ public class NodeSetMod {
 		//
 		this.S.remove(u);
 		this.T.add(u);
-		// update cut, size_S, size_T
-		this.n_s -= 1;
-		this.n_t += 1;
+		
+		// 
+		int deg_u = G.getVertexDegree(u);
+		this.d_s -= deg_u;
+		this.d_t += deg_u;
 		
 		//
 		
@@ -203,19 +212,21 @@ public class NodeSetMod {
 	
 	////move 1 item u from S back to T
 	public void reverse_add(int u, Grph G, int old_st, int old_s, int old_t){
+		int deg_u = G.getVertexDegree(u);
 		this.e_st = old_st;
 		this.e_s = old_s;
 		this.e_t = old_t;
 		
 		this.S.remove(u);
 		this.T.add(u);
-		// update cut, size_S, size_T
-		this.n_s -= 1;
-		this.n_t += 1;
+		// 
+		this.d_s -= deg_u;
+		this.d_t += deg_u;
 	}
 	
 	////move 1 item u from T back to S
 	public void reverse_remove(int u, Grph G, int old_st, int old_s, int old_t){
+		int deg_u = G.getVertexDegree(u);
 		this.e_st = old_st;
 		this.e_s = old_s;
 		this.e_t = old_t;
@@ -223,35 +234,58 @@ public class NodeSetMod {
 		//
 		this.S.add(u);
 		this.T.remove(u);
-		// update cut, size_S, size_T
-		this.n_s += 1;
-		this.n_t -= 1;
+		// 
+		this.d_s += deg_u;
+		this.d_t -= deg_u;
 		
 	}
 	
-	////
-	public double logLK(){
-		double L = 0.0;
-		//
-		long nsC2 = this.n_s*(this.n_s-1)/2; 		// int: overflow on amazon, youtube
-		double p_s = (double)this.e_s/nsC2;
-		if (p_s > 0.0 && p_s < 1.0) 
-			L += this.e_s * Math.log(p_s) + (nsC2-this.e_s)*Math.log(1-p_s);
+	
+	//// m : number of edges in G
+	public double modularity(int m){
+		double mod = 0.0;
+		
+		mod = ((double)this.e_s/m - (this.d_s*this.d_s/(4.0*m*m))) + ((double)this.e_t/m - (this.d_t*this.d_t/(4.0*m*m)));
 		
 		//
-		long ntC2 = this.n_t*(this.n_t-1)/2; 		// int: overflow on amazon, youtube
-		double p_t = (double)this.e_t/ntC2;
-		if (p_t > 0.0 && p_t < 1.0) 
-			L += this.e_t * Math.log(p_t) + (ntC2-this.e_t)*Math.log(1-p_t);
+		return mod;
+	}
+	
+	////m : number of edges in G
+	public double modularitySelf(int m){
+		double mod = 0.0;
+		
+		double lc = this.e_s + this.e_t + this.e_st;
+		double dc = this.d_s + this.d_t;
+		mod = lc/m - (dc*dc/(4.0*m*m));
 		
 		//
-		long nst = this.n_s * this.n_t;				// int: overflow on amazon, youtube
-		double p_st = (double)this.e_st/nst;
-		if (p_st > 0.0 && p_st < 1.0) 
-			L += this.e_st * Math.log(p_st) + (nst-this.e_st)*Math.log(1-p_st);
+		return mod;
+	}
+	
+	////m : number of edges in G
+	public double modularityAll(int m){
+		NodeSetMod root_set = this;
+		while (root_set.parent != null)
+			root_set = root_set.parent;
+		
+		double mod = 0.0;
+		
+		Queue<NodeSetMod> queue_set = new LinkedList<NodeSetMod>();
+		queue_set.add(root_set);
+		while (queue_set.size() > 0){
+			NodeSetMod R = queue_set.remove();
+			if (R.left == null) // leaf
+				mod += R.modularitySelf(m);
+			else{
+				queue_set.add(R.left);
+				queue_set.add(R.right);
+			}
+				
+		}
 		
 		//
-		return L;
+		return mod;
 	}
 	
 	////
@@ -267,21 +301,17 @@ public class NodeSetMod {
 		System.out.println();
 	}
 	
-	//// LOG-LIKELIHOOD partition, using logLK()
-	public static void partitionLK(NodeSetMod R, Grph G, double eps_p, int n_steps, int n_samples, int sample_freq, boolean print_out, int lower_size){
+	//// MODULARITY partition, using modularity()
+	public static void partitionMod(NodeSetMod R, Grph G, double eps_p, int n_steps, int n_samples, int sample_freq, boolean print_out, int lower_size){
 		if (print_out)
-			System.out.println("Node.partitionLK called");
+			System.out.println("NodeSetMod.partitionMod called");
 		
 //		int n_nodes = G.getNumberOfVertices();
 		int n_nodes = R.S.size() + R.T.size();
+		int n_edges = G.getNumberOfEdges();
 		
 		// compute dU
-		long nMax = 0;
-	    if (n_nodes % 2 == 0) 
-	        nMax = n_nodes*n_nodes/4;
-	    else 
-	        nMax = (n_nodes*n_nodes-1)/4; 
-	    double dU = Math.log(nMax) + (nMax-1)*Math.log(1+1.0/(nMax-1));
+	    double dU = 8.0/n_edges;
 		
 		if (print_out)
 			System.out.println("#steps = " + (n_steps + n_samples * sample_freq));
@@ -295,8 +325,8 @@ public class NodeSetMod {
 		int n_accept_positive = 0;
 		int u = -1;
 		
-		double logLT = R.logLK();
-		double logLT2;
+		double modT = R.modularity(n_edges);
+		double modT2;
 		int old_st = R.e_st;
 		int old_s = R.e_s;
 		int old_t = R.e_t;
@@ -342,18 +372,19 @@ public class NodeSetMod {
 			}
 			
 			// MCMC
-			logLT2 = R.logLK();
+			modT2 = R.modularity(n_edges);
 			
-			if (logLT2 > logLT){
+			if (modT2 > modT){
 				n_accept += 1;
 				n_accept_positive += 1;
-				logLT = logLT2;
+				modT = modT2;
 				//
 				old_st = R.e_st;
 				old_s = R.e_s;
 				old_t = R.e_t;
 			}else{
-				double prob = Math.exp(eps_p/(2*dU)*(logLT2 - logLT));			// prob << 1.0
+				double prob = Math.exp(eps_p/(2*dU)*(modT2 - modT));			// prob ~ 1.0
+				// System.out.println("prob = " + prob);
 				double prob_val = random.nextDouble();
 				if (prob_val > prob){
 					// reverse
@@ -363,7 +394,7 @@ public class NodeSetMod {
 						R.reverse_remove(u, G, old_st, old_s, old_t);
 				}else {
 					n_accept += 1;
-					logLT = logLT2;
+					modT = modT2;
 					//
 					old_st = R.e_st;
 					old_s = R.e_s;
@@ -372,7 +403,7 @@ public class NodeSetMod {
 			}
 			
 			if (i % out_freq == 0 && print_out)
-				System.out.println("i = " + i + " n_accept = " + n_accept + " logLK = " + R.logLK()
+				System.out.println("i = " + i + " n_accept = " + n_accept + " mod = " + R.modularityAll(n_edges)
 						+ " n_accept_positive = " + n_accept_positive
 						+ " time : " + (System.currentTimeMillis() - start));
 		}
@@ -380,49 +411,11 @@ public class NodeSetMod {
 	}
 	
 	
-	////
-	public static int binaryPartition(Grph G, NodeSetMod root, int id){
-		
-		int cur_id = id;
-		Queue<NodeSetMod> queue = new LinkedList<NodeSetMod>();
-		queue.add(root);
-		while(queue.size() > 0){
-			NodeSetMod R = queue.remove();
-			
-			if (R.S.size() >= 2){
-				NodeSetMod RS = new NodeSetMod(G, R.S);
-				RS.id = cur_id--;
-				R.left = RS;
-				RS.parent = R;
-				queue.add(RS);
-			}else{
-				NodeSetMod RS = new NodeSetMod(G, R.S);		// RS.id is the remaining item in S
-				R.left = RS;
-				RS.parent = R;
-			}
-			
-			if (R.T.size() >= 2){
-				NodeSetMod RT = new NodeSetMod(G, R.T);
-				RT.id = cur_id--;
-				R.right = RT;
-				RT.parent = R;
-				queue.add(RT);
-			}else{
-				NodeSetMod RT = new NodeSetMod(G, R.T);		// RT.id is the remaining item in T
-				R.right = RT;
-				RT.parent = R;
-			}
-				
-		}
-		
-		//
-		return cur_id;
-	}
-	
 	//////////////////////////////
 	// limit_size = 32: i.e. for NodeSet having size <= limit_size, call 
-	public static NodeSetMod recursiveLK(Grph G, double eps1, int burn_factor, int limit_size, int lower_size, int max_level){
+	public static NodeSetMod recursiveMod(Grph G, double eps1, int burn_factor, int limit_size, int lower_size, int max_level){
 		int n_nodes = G.getNumberOfVertices();
+		int n_edges = G.getNumberOfEdges();
 		int id = -1;
 		
 		IntSet A = new IntHashSet();
@@ -439,47 +432,46 @@ public class NodeSetMod {
 		while(queue.size() > 0){
 			NodeSetMod R = queue.remove();
 			
-			NodeSetMod.partitionLK(R, G, eps1/max_level, burn_factor*(R.S.size() + R.T.size()), 0, 0, false, lower_size);
-			// check modularity increase?
-			
-			
+			NodeSetMod.partitionMod(R, G, eps1/max_level, burn_factor*(R.S.size() + R.T.size()), 0, 0, false, lower_size);
 			
 			// USE limit_size
-			if (R.S.size() + R.T.size() <= limit_size || R.level == max_level){		// changed: < to <=
-				// stop
+			if (R.S.size() + R.T.size() <= limit_size || R.level == max_level || R.modularity(n_edges) < R.modularitySelf(n_edges)){	
+//			if (R.S.size() + R.T.size() <= limit_size || R.modularity(n_edges) < R.modularitySelf(n_edges)){
+				// stop dividing R
+				continue;
+			}
 				
+			
+			if (R.S.size() > lower_size){
+				NodeSetMod RS = new NodeSetMod(G, R.S);
+				RS.id = id--;
+				R.left = RS;
+				RS.parent = R;
+				RS.level = R.level + 1;
+				
+				queue.add(RS);
 			}else{
-				if (R.S.size() > lower_size){
-					NodeSetMod RS = new NodeSetMod(G, R.S);
-					RS.id = id--;
-					R.left = RS;
-					RS.parent = R;
-					RS.level = R.level + 1;
-					
-					queue.add(RS);
-				}else{
-					NodeSetMod RS = new NodeSetMod(G, R.S);		// RS.id is the remaining item in S
-	//				System.out.println("leaf RS.id = " + RS.id);
-					R.left = RS;
-					RS.parent = R;
-					RS.level = R.level + 1;
-				}
+				NodeSetMod RS = new NodeSetMod(G, R.S);		// RS.id is the remaining item in S
+//				System.out.println("leaf RS.id = " + RS.id);
+				R.left = RS;
+				RS.parent = R;
+				RS.level = R.level + 1;
+			}
+			
+			if (R.T.size() > lower_size){
+				NodeSetMod RT = new NodeSetMod(G, R.T);
+				RT.id = id--;
+				R.right = RT;
+				RT.parent = R;
+				RT.level = R.level + 1;
 				
-				if (R.T.size() > lower_size){
-					NodeSetMod RT = new NodeSetMod(G, R.T);
-					RT.id = id--;
-					R.right = RT;
-					RT.parent = R;
-					RT.level = R.level + 1;
-					
-					queue.add(RT);
-				}else{
-					NodeSetMod RT = new NodeSetMod(G, R.T);		// RT.id is the remaining item in T
-	//				System.out.println("leaf RT.id = " + RT.id);
-					R.right = RT;
-					RT.parent = R;
-					RT.level = R.level + 1;
-				}
+				queue.add(RT);
+			}else{
+				NodeSetMod RT = new NodeSetMod(G, R.T);		// RT.id is the remaining item in T
+//				System.out.println("leaf RT.id = " + RT.id);
+				R.right = RT;
+				RT.parent = R;
+				RT.level = R.level + 1;
 			}
 			
 		}
@@ -489,7 +481,7 @@ public class NodeSetMod {
 	}
 	
 	////
-	public static void printSetIds(NodeSetMod root_set){
+	public static void printSetIds(NodeSetMod root_set, int m){
 		System.out.println("printSetIds");
 		
 		Queue<NodeSetMod> queue_set = new LinkedList<NodeSetMod>();
@@ -498,67 +490,21 @@ public class NodeSetMod {
 			NodeSetMod R = queue_set.remove();
 			if (R.left != null)
 				System.out.println("R.id = " + R.id + " left.id = " + R.left.id + " right.id = " + R.right.id + 
-						" left.size = " + R.S.size() + " right.size = " + R.T.size());
-			else
-				System.out.println("LEAF R.id = " + R.id);
+						" left.size = " + R.S.size() + " right.size = " + R.T.size() + " mod = " + R.modularity(m));
+			else{
+				System.out.print("LEAF R.id = " + R.id + " : {");
+				for (IntCursor t : R.S)
+					System.out.print(t.value + " ");
+				System.out.print(" ** ");
+				for (IntCursor t : R.T)
+					System.out.print(t.value + " ");
+				System.out.println("}");
+			}
 			if (R.left != null){
 				queue_set.add(R.left);
 				queue_set.add(R.right);
 			}
 		}
-	}
-	
-	////
-	public static Dendrogram convertToHRG(Grph G, NodeSetMod root_set){
-		int n_nodes = G.getNumberOfVertices();
-		Dendrogram D = new Dendrogram(); 
-		D.node_list = new Node[n_nodes];
-		
-		// D.root_node and D.node_list
-		Node root_node = new Node(root_set.id, null, 0.0);
-		
-		Queue<NodeSetMod> queue_set = new LinkedList<NodeSetMod>();
-		Queue<Node> queue = new LinkedList<Node>();
-		
-		queue_set.add(root_set);	// parallel queues
-		queue.add(root_node);
-		
-		while(queue.size() > 0){
-			NodeSetMod R = queue_set.remove();
-			Node r = queue.remove();
-			
-			if (R.left != null){	//internal node
-				Node left_node = new Node(R.left.id, r, 0.0);
-				r.left = left_node;
-				queue_set.add(R.left);
-				queue.add(left_node);
-
-				Node right_node = new Node(R.right.id, r, 0.0);
-				r.right = right_node;
-				queue_set.add(R.right);
-				queue.add(right_node);
-			}else{					// leaf node
-				D.node_list[R.id] = r;
-			}
-			
-		}
-		
-		D.root_node = root_node;
-		// COPIED from Dendrogram.initByInternalNodes()
-		// compute node_dict{}
-        D.int_nodes = new int[D.node_list.length-1];
-        D.node_dict = Dendrogram.buildNodeDict(D.root_node, D.int_nodes);
-        
-        //
-        long start = System.currentTimeMillis();
-        D.computeNodeLevels();		// for compute_nL_nR() in buildDendrogram()
-//        D.computeTopLevels();
-        
-        //
-        Dendrogram.buildDendrogram(D.node_list, D.node_dict, D.root_node, G);
-        System.out.println("buildDendrogram - DONE, elapsed " + (System.currentTimeMillis() - start));
-		//
-		return D;
 	}
 	
 	

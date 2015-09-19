@@ -50,3 +50,6 @@
 
 - HRGDivisiveGreedy.java: combine HRG-Divisive and modularity
 - NodeSetDivGreedy.java
+
+- ModeDivisiveDP.java: exponential mechanism with modularity Q
+- NodeSetMod.java

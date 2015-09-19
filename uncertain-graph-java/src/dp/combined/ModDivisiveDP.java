@@ -18,11 +18,11 @@ public class ModDivisiveDP {
 		System.out.println("DivisiveTmF");
 		
 		// load graph
-//		String dataname = "polbooks";		// (105, 441)		
+//		String dataname = "polbooks";		// (105, 441)		eps = 50, final modularity = 0.442
 											// recursiveLK		
-//		String dataname = "polblogs";		// (1224,16715) 	
+//		String dataname = "polblogs";		// (1224,16715) 	eps = 50, final modularity = 0.399
 											// recursiveLK		
-		String dataname = "as20graph";		// (6474,12572)		
+		String dataname = "as20graph";		// (6474,12572)		eps = 50, final modularity = 0.189 (8s)
 											// recursiveLK		
 //		String dataname = "wiki-Vote";		// (7115,100762) 	
 											// recursiveLK		
@@ -39,10 +39,10 @@ public class ModDivisiveDP {
 		String prefix = "";
 		int n_samples = 1;
 		int burn_factor = 20;
-		int limit_size = 100;
-		int lower_size = 20;		// at least 2
+		int limit_size = 1;
+		int lower_size = 2;		// at least 2
 		int max_level = 4;
-		double eps1 = 1.0;
+		double eps1 = 50.0;	// 1, 10, 50, 100 for polbooks: interesting prob values and final results
 		
 		if(args.length >= 4){
 			prefix = args[0];
@@ -74,17 +74,20 @@ public class ModDivisiveDP {
 		System.out.println("#edges = " + G.getNumberOfEdges());
 		
 		//
-		NodeSetDivGreedy R = new NodeSetDivGreedy(G);
-		System.out.println("logLK = " + R.logLK());
+		NodeSetMod R = new NodeSetMod(G);
+		System.out.println("mod = " + R.modularity(G.getNumberOfEdges()));
 		
-		// TEST recursiveLK()
+		// TEST recursiveMod()
 		for (int i = 0; i < n_samples; i++){
 			System.out.println("sample i = " + i);
 			
 			long start = System.currentTimeMillis();
-			NodeSetDivGreedy root_set = NodeSetDivGreedy.recursiveLK(G, eps1, burn_factor, limit_size, lower_size, max_level);	
-			System.out.println("recursiveLK - DONE, elapsed " + (System.currentTimeMillis() - start));
+			NodeSetMod root_set = NodeSetMod.recursiveMod(G, eps1, burn_factor, limit_size, lower_size, max_level);	
+			System.out.println("recursiveMod - DONE, elapsed " + (System.currentTimeMillis() - start));
 			
+			
+			NodeSetMod.printSetIds(root_set, G.getNumberOfEdges());
+			System.out.println("final modularity = " + root_set.modularityAll(G.getNumberOfEdges()));
 		}
 
 	}
