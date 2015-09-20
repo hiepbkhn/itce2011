@@ -431,6 +431,7 @@ public class NodeSetMod {
 		queue.add(root);
 		while(queue.size() > 0){
 			NodeSetMod R = queue.remove();
+			System.out.println("R.level = " + R.level);
 			
 			NodeSetMod.partitionMod(R, G, eps1/max_level, burn_factor*(R.S.size() + R.T.size()), 0, 0, false, lower_size);
 			

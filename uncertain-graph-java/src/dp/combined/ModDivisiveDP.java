@@ -15,22 +15,22 @@ public class ModDivisiveDP {
 	//////////////////////////////////////////////////
 	public static void main(String[] args) throws Exception {
 		ClassLoader.getSystemClassLoader().setDefaultAssertionStatus(true);
-		System.out.println("DivisiveTmF");
+		System.out.println("ModDivisiveDP");
 		
 		// load graph
 //		String dataname = "polbooks";		// (105, 441)		eps = 50, final modularity = 0.442
 											// recursiveLK		
 //		String dataname = "polblogs";		// (1224,16715) 	eps = 50, final modularity = 0.399
 											// recursiveLK		
-		String dataname = "as20graph";		// (6474,12572)		eps = 50, final modularity = 0.189 (8s)
+//		String dataname = "as20graph";		// (6474,12572)		eps = 50, max_level = 4, final modularity = 0.189 (8s)
 											// recursiveLK		
 //		String dataname = "wiki-Vote";		// (7115,100762) 	
 											// recursiveLK		
-//		String dataname = "ca-HepPh";		// (12006,118489) 	 
+//		String dataname = "ca-HepPh";		// (12006,118489) 	eps = 50, max_level = 5, final modularity = 0.492 (58s) 
 															
-//		String dataname = "ca-AstroPh";		// (18771,198050) 	
+		String dataname = "ca-AstroPh";		// (18771,198050) 	eps = 50, max_level = 5, final modularity = 0.506 (92s) 
 		// LARGE
-//		String dataname = "com_amazon_ungraph"; 	// (334863,925872) 
+//		String dataname = "com_amazon_ungraph"; 	// (334863,925872) 	eps = 50, max_level = 4, final modularity = ? (?s)
 //		String dataname = "com_dblp_ungraph";  		// (317080,1049866) 
 //		String dataname = "com_youtube_ungraph"; 	// (1134890,2987624) 
 		
@@ -42,7 +42,7 @@ public class ModDivisiveDP {
 		int limit_size = 1;
 		int lower_size = 2;		// at least 2
 		int max_level = 4;
-		double eps1 = 50.0;	// 1, 10, 50, 100 for polbooks: interesting prob values and final results
+		double eps1 = 10.0;	// 1, 10, 50, 100 for polbooks: interesting prob values and final results
 		
 		if(args.length >= 4){
 			prefix = args[0];

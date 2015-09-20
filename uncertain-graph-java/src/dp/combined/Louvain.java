@@ -462,16 +462,16 @@ public class Louvain {
 	    System.out.println("modularity = " + new_mod);
 	    System.out.println("#communitites = " + current_graph.V());
 	    
-	    //
-	    logLK(graph_all, status_all);
-//	    System.out.println("logLK = " + logLK(graph, status_all));
-	    
-//	    checkNumEdges(graph_all, status_all, graph);
-//	    System.out.println("checkNumEdges - DONE.");
-	    
-	    double logLK2 = checkTrueEdges(status_all, graph);
-	    System.out.println("logLK2 = " + logLK2);
-	    System.out.println("checkTrueEdges - DONE.");
+	    // debug
+//	    logLK(graph_all, status_all);
+////	    System.out.println("logLK = " + logLK(graph, status_all));
+//	    
+////	    checkNumEdges(graph_all, status_all, graph);
+////	    System.out.println("checkNumEdges - DONE.");
+//	    
+//	    double logLK2 = checkTrueEdges(status_all, graph);
+//	    System.out.println("logLK2 = " + logLK2);
+//	    System.out.println("checkTrueEdges - DONE.");
 	    
 	    //
 	    return status_list;
@@ -845,14 +845,14 @@ public class Louvain {
 //		String dataname = "karate";			// (34, 78) 		ok
 //		String dataname = "polbooks";		// (105, 441)		ok
 //		String dataname = "polblogs";		// (1224,16715)		ok 	
-//		String dataname = "as20graph";		// (6474,12572)		wrong total_e
+		String dataname = "as20graph";		// (6474,12572)		ok
 //		String dataname = "wiki-Vote";		// (7115,100762)	ok
-//		String dataname = "ca-HepPh";		// (12006,118489) 	wrong total_e
-//		String dataname = "ca-AstroPh";		// (18771,198050) 	wrong total_e		1.56s
+//		String dataname = "ca-HepPh";		// (12006,118489) 	ok
+//		String dataname = "ca-AstroPh";		// (18771,198050) 	ok		1.56s
 		// LARGE
 //		String dataname = "com_amazon_ungraph";		// (334863,925872)	17.8s
 //		String dataname = "com_dblp_ungraph";		// (317080,1049866)	27.2s 			(new : 20s, Mem 1.5GB)
-		String dataname = "com_youtube_ungraph";	// (1134890,2987624) 670s, 2.2GB)	(new : 42s, Mem 2.7GB)
+//		String dataname = "com_youtube_ungraph";	// (1134890,2987624) 670s, 2.2GB)	(new : 42s, Mem 2.7GB)
 													//						
 		// COMMAND-LINE <prefix> <dataname> <n_samples> <eps>
 		String prefix = "";

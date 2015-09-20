@@ -1,0 +1,348 @@
+dataname = com_amazon_ungraph
+readGraph - DONE, elapsed 3047
+#nodes = 334863
+#edges = 925872
+=========
+eps = 2.0
+k = 4
+graph_new.V = 4 graph_new.E = 10
+graph_new.totalWeight = 925872.0
+modularity = 0.3852030095675797
+#communitites = 3
+partitionEqualPrivate - DONE, elapsed 531
+k = 8
+graph_new.V = 8 graph_new.E = 36
+graph_new.totalWeight = 925872.0
+modularity = 0.358437600618222
+#communitites = 3
+partitionEqualPrivate - DONE, elapsed 600
+k = 16
+graph_new.V = 16 graph_new.E = 136
+graph_new.totalWeight = 925869.0
+modularity = 0.3657726383663392
+#communitites = 3
+partitionEqualPrivate - DONE, elapsed 376
+k = 32
+graph_new.V = 32 graph_new.E = 528
+graph_new.totalWeight = 925861.0
+modularity = 0.347114612440873
+#communitites = 4
+partitionEqualPrivate - DONE, elapsed 578
+k = 64
+graph_new.V = 64 graph_new.E = 2080
+graph_new.totalWeight = 925836.0
+modularity = 0.34543729896703707
+#communitites = 5
+partitionEqualPrivate - DONE, elapsed 388
+k = 128
+graph_new.V = 128 graph_new.E = 8256
+graph_new.totalWeight = 925940.0
+modularity = 0.21410082241849823
+#communitites = 6
+partitionEqualPrivate - DONE, elapsed 531
+k = 256
+graph_new.V = 256 graph_new.E = 32896
+graph_new.totalWeight = 925875.0
+modularity = 0.1998002485587497
+#communitites = 6
+partitionEqualPrivate - DONE, elapsed 631
+k = 512
+graph_new.V = 512 graph_new.E = 131184
+graph_new.totalWeight = 925802.0
+modularity = 0.17583501543819907
+#communitites = 8
+partitionEqualPrivate - DONE, elapsed 885
+k = 1024
+graph_new.V = 1024 graph_new.E = 428474
+graph_new.totalWeight = 928734.0
+modularity = 0.1670771210744166
+#communitites = 9
+partitionEqualPrivate - DONE, elapsed 2252
+k = 2048
+graph_new.V = 2048 graph_new.E = 726287
+graph_new.totalWeight = 936613.0
+modularity = 0.19208364562907487
+#communitites = 9
+partitionEqualPrivate - DONE, elapsed 2759
+k = 4096
+graph_new.V = 4096 graph_new.E = 842505
+graph_new.totalWeight = 941218.0
+modularity = 0.1941718193510898
+#communitites = 10
+partitionEqualPrivate - DONE, elapsed 6404
+k = 8192
+graph_new.V = 8192 graph_new.E = 862095
+graph_new.totalWeight = 941076.0
+modularity = 0.2499098573908399
+#communitites = 9
+partitionEqualPrivate - DONE, elapsed 7866
+k = 16384
+graph_new.V = 16384 graph_new.E = 880510
+graph_new.totalWeight = 941544.0
+modularity = 0.2734280091606775
+#communitites = 12
+partitionEqualPrivate - DONE, elapsed 10806
+k = 32768
+graph_new.V = 32768 graph_new.E = 893683
+graph_new.totalWeight = 942250.0
+modularity = 0.2901097272940828
+#communitites = 19
+partitionEqualPrivate - DONE, elapsed 33098
+=========
+eps = 4.0
+k = 4
+graph_new.V = 4 graph_new.E = 10
+graph_new.totalWeight = 925872.0
+modularity = 0.3852030095675797
+#communitites = 3
+partitionEqualPrivate - DONE, elapsed 606
+k = 8
+graph_new.V = 8 graph_new.E = 36
+graph_new.totalWeight = 925872.0
+modularity = 0.3584374324428279
+#communitites = 3
+partitionEqualPrivate - DONE, elapsed 463
+k = 16
+graph_new.V = 16 graph_new.E = 136
+graph_new.totalWeight = 925873.0
+modularity = 0.36577264476742544
+#communitites = 3
+partitionEqualPrivate - DONE, elapsed 471
+k = 32
+graph_new.V = 32 graph_new.E = 528
+graph_new.totalWeight = 925875.0
+modularity = 0.3470950692528672
+#communitites = 4
+partitionEqualPrivate - DONE, elapsed 556
+k = 64
+graph_new.V = 64 graph_new.E = 2080
+graph_new.totalWeight = 925874.0
+modularity = 0.2651723462603833
+#communitites = 5
+partitionEqualPrivate - DONE, elapsed 442
+k = 128
+graph_new.V = 128 graph_new.E = 8256
+graph_new.totalWeight = 925891.0
+modularity = 0.21407577199362612
+#communitites = 6
+partitionEqualPrivate - DONE, elapsed 424
+k = 256
+graph_new.V = 256 graph_new.E = 32896
+graph_new.totalWeight = 925813.0
+modularity = 0.18907186485087465
+#communitites = 8
+partitionEqualPrivate - DONE, elapsed 532
+k = 512
+graph_new.V = 512 graph_new.E = 131184
+graph_new.totalWeight = 925972.0
+modularity = 0.1531259847581913
+#communitites = 10
+partitionEqualPrivate - DONE, elapsed 793
+k = 1024
+graph_new.V = 1024 graph_new.E = 428474
+graph_new.totalWeight = 926137.0
+modularity = 0.18019572852229424
+#communitites = 9
+partitionEqualPrivate - DONE, elapsed 3037
+k = 2048
+graph_new.V = 2048 graph_new.E = 726287
+graph_new.totalWeight = 926083.0
+modularity = 0.2169360486764285
+#communitites = 7
+partitionEqualPrivate - DONE, elapsed 4346
+k = 4096
+graph_new.V = 4096 graph_new.E = 842505
+graph_new.totalWeight = 925974.0
+modularity = 0.21344719619511315
+#communitites = 9
+partitionEqualPrivate - DONE, elapsed 7742
+k = 8192
+graph_new.V = 8192 graph_new.E = 862095
+graph_new.totalWeight = 926245.0
+modularity = 0.24842979923449365
+#communitites = 12
+partitionEqualPrivate - DONE, elapsed 6409
+k = 16384
+graph_new.V = 16384 graph_new.E = 880510
+graph_new.totalWeight = 926066.0
+modularity = 0.25402303916302343
+#communitites = 14
+partitionEqualPrivate - DONE, elapsed 12224
+k = 32768
+graph_new.V = 32768 graph_new.E = 893683
+graph_new.totalWeight = 925954.0
+modularity = 0.2742634761162011
+#communitites = 22
+partitionEqualPrivate - DONE, elapsed 24143
+=========
+eps = 8.0
+k = 4
+graph_new.V = 4 graph_new.E = 10
+graph_new.totalWeight = 925872.0
+modularity = 0.3852030095675797
+#communitites = 3
+partitionEqualPrivate - DONE, elapsed 399
+k = 8
+graph_new.V = 8 graph_new.E = 36
+graph_new.totalWeight = 925872.0
+modularity = 0.3584374324428279
+#communitites = 3
+partitionEqualPrivate - DONE, elapsed 394
+k = 16
+graph_new.V = 16 graph_new.E = 136
+graph_new.totalWeight = 925872.0
+modularity = 0.3657737712493176
+#communitites = 3
+partitionEqualPrivate - DONE, elapsed 412
+k = 32
+graph_new.V = 32 graph_new.E = 528
+graph_new.totalWeight = 925872.0
+modularity = 0.34709868701046215
+#communitites = 4
+partitionEqualPrivate - DONE, elapsed 498
+k = 64
+graph_new.V = 64 graph_new.E = 2080
+graph_new.totalWeight = 925873.0
+modularity = 0.2651718070771143
+#communitites = 5
+partitionEqualPrivate - DONE, elapsed 398
+k = 128
+graph_new.V = 128 graph_new.E = 8256
+graph_new.totalWeight = 925871.0
+modularity = 0.20391703639862638
+#communitites = 7
+partitionEqualPrivate - DONE, elapsed 409
+k = 256
+graph_new.V = 256 graph_new.E = 32896
+graph_new.totalWeight = 925869.0
+modularity = 0.18295931325908085
+#communitites = 7
+partitionEqualPrivate - DONE, elapsed 499
+k = 512
+graph_new.V = 512 graph_new.E = 131184
+graph_new.totalWeight = 925885.0
+modularity = 0.20453169680475464
+#communitites = 7
+partitionEqualPrivate - DONE, elapsed 1049
+k = 1024
+graph_new.V = 1024 graph_new.E = 428474
+graph_new.totalWeight = 925880.0
+modularity = 0.172112767548055
+#communitites = 9
+partitionEqualPrivate - DONE, elapsed 2341
+k = 2048
+graph_new.V = 2048 graph_new.E = 726287
+graph_new.totalWeight = 925858.0
+modularity = 0.20326848033977393
+#communitites = 8
+partitionEqualPrivate - DONE, elapsed 4985
+k = 4096
+graph_new.V = 4096 graph_new.E = 842505
+graph_new.totalWeight = 925880.0
+modularity = 0.20178381281560445
+#communitites = 12
+partitionEqualPrivate - DONE, elapsed 4935
+k = 8192
+graph_new.V = 8192 graph_new.E = 862095
+graph_new.totalWeight = 925890.0
+modularity = 0.2207514039464894
+#communitites = 12
+partitionEqualPrivate - DONE, elapsed 6464
+k = 16384
+graph_new.V = 16384 graph_new.E = 880510
+graph_new.totalWeight = 925911.0
+modularity = 0.25095744115261115
+#communitites = 12
+partitionEqualPrivate - DONE, elapsed 11529
+k = 32768
+graph_new.V = 32768 graph_new.E = 893683
+graph_new.totalWeight = 925902.0
+modularity = 0.2729278355956905
+#communitites = 26
+partitionEqualPrivate - DONE, elapsed 27649
+=========
+eps = 16.0
+k = 4
+graph_new.V = 4 graph_new.E = 10
+graph_new.totalWeight = 925872.0
+modularity = 0.3852030095675797
+#communitites = 3
+partitionEqualPrivate - DONE, elapsed 469
+k = 8
+graph_new.V = 8 graph_new.E = 36
+graph_new.totalWeight = 925872.0
+modularity = 0.3584374324428279
+#communitites = 3
+partitionEqualPrivate - DONE, elapsed 391
+k = 16
+graph_new.V = 16 graph_new.E = 136
+graph_new.totalWeight = 925872.0
+modularity = 0.3657737712493176
+#communitites = 3
+partitionEqualPrivate - DONE, elapsed 399
+k = 32
+graph_new.V = 32 graph_new.E = 528
+graph_new.totalWeight = 925872.0
+modularity = 0.3470987308716278
+#communitites = 4
+partitionEqualPrivate - DONE, elapsed 486
+k = 64
+graph_new.V = 64 graph_new.E = 2080
+graph_new.totalWeight = 925872.0
+modularity = 0.26517262338166914
+#communitites = 5
+partitionEqualPrivate - DONE, elapsed 484
+k = 128
+graph_new.V = 128 graph_new.E = 8256
+graph_new.totalWeight = 925872.0
+modularity = 0.20391650511509193
+#communitites = 7
+partitionEqualPrivate - DONE, elapsed 413
+k = 256
+graph_new.V = 256 graph_new.E = 32896
+graph_new.totalWeight = 925872.0
+modularity = 0.1829594278533999
+#communitites = 7
+partitionEqualPrivate - DONE, elapsed 500
+k = 512
+graph_new.V = 512 graph_new.E = 131184
+graph_new.totalWeight = 925872.0
+modularity = 0.19184432264001605
+#communitites = 7
+partitionEqualPrivate - DONE, elapsed 1016
+k = 1024
+graph_new.V = 1024 graph_new.E = 428474
+graph_new.totalWeight = 925872.0
+modularity = 0.17680435342568557
+#communitites = 9
+partitionEqualPrivate - DONE, elapsed 1915
+k = 2048
+graph_new.V = 2048 graph_new.E = 726287
+graph_new.totalWeight = 925872.0
+modularity = 0.19490375650817013
+#communitites = 9
+partitionEqualPrivate - DONE, elapsed 4342
+k = 4096
+graph_new.V = 4096 graph_new.E = 842505
+graph_new.totalWeight = 925872.0
+modularity = 0.21247405207575953
+#communitites = 9
+partitionEqualPrivate - DONE, elapsed 4894
+k = 8192
+graph_new.V = 8192 graph_new.E = 862095
+graph_new.totalWeight = 925872.0
+modularity = 0.21448531021926212
+#communitites = 12
+partitionEqualPrivate - DONE, elapsed 5865
+k = 16384
+graph_new.V = 16384 graph_new.E = 880510
+graph_new.totalWeight = 925871.0
+modularity = 0.27105708894691527
+#communitites = 12
+partitionEqualPrivate - DONE, elapsed 12493
+k = 32768
+graph_new.V = 32768 graph_new.E = 893683
+graph_new.totalWeight = 925872.0
+modularity = 0.267005091917976
+#communitites = 25
+partitionEqualPrivate - DONE, elapsed 17612
