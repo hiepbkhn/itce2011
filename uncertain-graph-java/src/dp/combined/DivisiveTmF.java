@@ -123,7 +123,7 @@ public class DivisiveTmF {
 											// recursiveLK		
 //		String dataname = "polblogs";		// (1224,16715) 	
 											// recursiveLK		
-		String dataname = "as20graph";		// (6474,12572)		(100,20): 12s
+//		String dataname = "as20graph";		// (6474,12572)		(100,20): 12s
 											// recursiveLK		
 //		String dataname = "wiki-Vote";		// (7115,100762) 	
 											// recursiveLK		
@@ -131,7 +131,7 @@ public class DivisiveTmF {
 															
 //		String dataname = "ca-AstroPh";		// (18771,198050) 	(200,30): 60s
 		
-//		String dataname = "com_amazon_ungraph"; 	// (334863,925872) 
+		String dataname = "com_amazon_ungraph"; 	// (334863,925872) 
 //		String dataname = "com_dblp_ungraph";  		// (317080,1049866) 
 //		String dataname = "com_youtube_ungraph"; 	// (1134890,2987624) mem (4.7GB) 
 		

@@ -59,16 +59,16 @@ public class CommunityFit2 {
 															
 //		String dataname = "ca-AstroPh";		// (18771,198050) 	188k steps(216s),converge at 188k (-1342741.6 > -1542791.1 start)
 		
-//		String dataname = "com_amazon_ungraph"; 	// (334863,925872) 
+		String dataname = "com_amazon_ungraph"; 	// (334863,925872) 		limit_size = 8k
 //		String dataname = "com_dblp_ungraph";  		// (317080,1049866) 
-		String dataname = "com_youtube_ungraph"; 	// (1134890,2987624) mem (4.7GB) (
+//		String dataname = "com_youtube_ungraph"; 	// (1134890,2987624) mem (4.7GB) (
 		
 		
 		// COMMAND-LINE <prefix> <dataname> <n_samples> <burn_factor>
 		String prefix = "";
 		int n_samples = 10;
 		int burn_factor = 20;
-		int limit_size = 1;
+		int limit_size = 8000;
 		
 		if(args.length >= 4){
 			prefix = args[0];

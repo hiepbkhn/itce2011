@@ -402,26 +402,12 @@ public class NodeSetMod2 {
 			// perform add or remove
 			if (is_add){
 				// randomly pick an item from T
-				int id = random.nextInt(R.T.size());
-				for (IntCursor t: R.T){
-					if (id == 0){
-						u = t.value;
-						break;
-					}else
-						id = id - 1;
-				}
+				u = R.T.pickRandomElement(random);
 				R.add(u, G);
 				
 			}else{
 				// randomly pick an item from S
-				int id = random.nextInt(R.S.size());
-				for (IntCursor s: R.S){
-					if (id == 0){
-						u = s.value;
-						break;
-					}else
-						id = id - 1;
-				}
+				u = R.S.pickRandomElement(random);
 				R.remove(u, G);
 			}
 			

@@ -4,7 +4,7 @@
  * Sep 21
  * 	- faster constructors NodeSetMod(Grph G, IntSet A), NodeSetMod(Grph G)
  * 	- fix error "this.d_t = this.T.size()" in constructors 
- * 	- getRandomItem()
+ * 	- getRandomItem(): use fast InthashSet.pickRandomElement(random)
  */
 
 package dp.combined;

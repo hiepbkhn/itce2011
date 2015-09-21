@@ -1,8 +1,10 @@
 /*
- * Sep 3
+ * Sep 3, 2015
  * 	- copied from 
  * 	- add param binaryPart to recursiveLK() (used in dp.combined.*) 
  * 	- add param lower_size to partitionLK() (used in dp.combined.*) 
+ * Sep 21, 2015
+ * 	- copy two improvements from NodeSetMod.java
  */
 
 package dp.combined;
@@ -18,6 +20,7 @@ import com.carrotsearch.hppc.cursors.IntCursor;
 import dp.mcmc.Dendrogram;
 import dp.mcmc.Node;
 import grph.Grph;
+import grph.VertexPair;
 import toools.set.BitVectorSet;
 import toools.set.IntHashSet;
 import toools.set.IntSet;
@@ -73,31 +76,32 @@ public class NodeSetDiv {
 		this.n_s = this.S.size();
 		this.n_t = this.T.size();
 		
-		// e_st
+		//
+		int n = G.getNumberOfVertices();
+		int[] node2Set = new int[n]; // 1:S, 2:T
+		
+		for (IntCursor u : this.S)
+			node2Set[u.value] = 1;
+		
+		for (IntCursor u : this.T)
+			node2Set[u.value] = 2;
+		
+		// e_st, e_s, e_t
 		this.e_st = 0;
-		for (IntCursor s : this.S){
-			IntSet N = G.getNeighbours(s.value);
-			for (IntCursor t : this.T)
-				if (N.contains(t.value))
-					this.e_st ++;
-		}
-		// e_s
 		this.e_s = 0;
-		int[] arrS = this.S.toIntArray();
-		for (int i = 0; i < arrS.length; i++){
-			IntSet N = G.getNeighbours(arrS[i]);
-			for (int j = i+1; j < arrS.length; j++)
-				if (N.contains(arrS[j]))
-					this.e_s ++;
-		}
-		// e_t
 		this.e_t = 0;
-		int[] arrT = this.T.toIntArray();
-		for (int i = 0; i < arrT.length; i++){
-			IntSet N = G.getNeighbours(arrT[i]);
-			for (int j = i+1; j < arrT.length; j++)
-				if (N.contains(arrT[j]))
-					this.e_t ++;
+		
+		int u; 
+		int v;
+		for (VertexPair p : G.getEdgePairs()){
+			u = p.first;
+			v = p.second;
+			if (node2Set[u] + node2Set[v] == 3)	// avoid node2Set[u] == 0
+				this.e_st += 1;
+			if (node2Set[u] == 1 && node2Set[v] == 1)
+				this.e_s += 1;
+			if (node2Set[u] == 2 && node2Set[v] == 2)
+				this.e_t += 1;
 		}
 	}
 	
@@ -117,31 +121,32 @@ public class NodeSetDiv {
 		this.n_s = this.S.size();
 		this.n_t = this.T.size();
 		
-		// e_st
+		//
+		int n = G.getNumberOfVertices();
+		int[] node2Set = new int[n]; // 1:S, 2:T
+		
+		for (IntCursor u : this.S)
+			node2Set[u.value] = 1;
+		
+		for (IntCursor u : this.T)
+			node2Set[u.value] = 2;
+		
+		// e_st, e_s, e_t
 		this.e_st = 0;
-		for (IntCursor s : this.S){
-			IntSet N = G.getNeighbours(s.value);
-			for (IntCursor t : this.T)
-				if (N.contains(t.value))
-					this.e_st ++;
-		}
-		// e_s
 		this.e_s = 0;
-		int[] arrS = this.S.toIntArray();
-		for (int i = 0; i < arrS.length; i++){
-			IntSet N = G.getNeighbours(arrS[i]);
-			for (int j = i+1; j < arrS.length; j++)
-				if (N.contains(arrS[j]))
-					this.e_s ++;
-		}
-		// e_t
 		this.e_t = 0;
-		int[] arrT = this.T.toIntArray();
-		for (int i = 0; i < arrT.length; i++){
-			IntSet N = G.getNeighbours(arrT[i]);
-			for (int j = i+1; j < arrT.length; j++)
-				if (N.contains(arrT[j]))
-					this.e_t ++;
+		
+		int u; 
+		int v;
+		for (VertexPair p : G.getEdgePairs()){
+			u = p.first;
+			v = p.second;
+			if (node2Set[u] + node2Set[v] == 3)	// avoid node2Set[u] == 0
+				this.e_st += 1;
+			if (node2Set[u] == 1 && node2Set[v] == 1)
+				this.e_s += 1;
+			if (node2Set[u] == 2 && node2Set[v] == 2)
+				this.e_t += 1;
 		}
 	}
 	
@@ -323,7 +328,7 @@ public class NodeSetDiv {
 	        nMax = (n_nodes*n_nodes-1)/4; 
 	    double dU = Math.log(nMax) + (nMax-1)*Math.log(1+1.0/(nMax-1));
 		
-		if (print_out)
+//		if (print_out)
 			System.out.println("#steps = " + (n_steps + n_samples * sample_freq));
 
 		int out_freq = (n_steps + n_samples * sample_freq) / 10;
@@ -358,26 +363,12 @@ public class NodeSetDiv {
 			// perform add or remove
 			if (is_add){
 				// randomly pick an item from T
-				int id = random.nextInt(R.T.size());
-				for (IntCursor t: R.T){
-					if (id == 0){
-						u = t.value;
-						break;
-					}else
-						id = id - 1;
-				}
+				u = R.T.pickRandomElement(random);
 				R.add(u, G);
 				
 			}else{
 				// randomly pick an item from S
-				int id = random.nextInt(R.S.size());
-				for (IntCursor s: R.S){
-					if (id == 0){
-						u = s.value;
-						break;
-					}else
-						id = id - 1;
-				}
+				u = R.S.pickRandomElement(random);
 				R.remove(u, G);
 			}
 			
@@ -456,26 +447,12 @@ public class NodeSetDiv {
 			// perform add or remove
 			if (is_add){
 				// randomly pick an item from T
-				int id = random.nextInt(R.T.size());
-				for (IntCursor t: R.T){
-					if (id == 0){
-						u = t.value;
-						break;
-					}else
-						id = id - 1;
-				}
+				u = R.T.pickRandomElement(random);
 				R.add(u, G);
 				
 			}else{
 				// randomly pick an item from S
-				int id = random.nextInt(R.S.size());
-				for (IntCursor s: R.S){
-					if (id == 0){
-						u = s.value;
-						break;
-					}else
-						id = id - 1;
-				}
+				u = R.S.pickRandomElement(random);
 				R.remove(u, G);
 			}
 			
@@ -545,26 +522,12 @@ public class NodeSetDiv {
 			// perform add or remove
 			if (is_add){
 				// randomly pick an item from T
-				int id = random.nextInt(R.T.size());
-				for (IntCursor t: R.T){
-					if (id == 0){
-						u = t.value;
-						break;
-					}else
-						id = id - 1;
-				}
+				u = R.T.pickRandomElement(random);
 				R.add(u, G);
 				
 			}else{
 				// randomly pick an item from S
-				int id = random.nextInt(R.S.size());
-				for (IntCursor s: R.S){
-					if (id == 0){
-						u = s.value;
-						break;
-					}else
-						id = id - 1;
-				}
+				u = R.S.pickRandomElement(random);
 				R.remove(u, G);
 			}
 			
@@ -656,6 +619,7 @@ public class NodeSetDiv {
 		queue.add(root);
 		while(queue.size() > 0){
 			NodeSetDiv R = queue.remove();
+			System.out.println("R.level = " + R.level);
 			
 			NodeSetDiv.partitionLK(R, G, eps1/max_level, burn_factor*(R.S.size() + R.T.size()), 0, 0, false, lower_size);
 			
