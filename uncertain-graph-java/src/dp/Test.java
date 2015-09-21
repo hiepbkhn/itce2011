@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
+import algs4.EdgeInt;
+import algs4.EdgeIntGraph;
+
 import com.carrotsearch.hppc.cursors.IntCursor;
 import com.jmatio.io.MatFileWriter;
 import com.jmatio.types.MLArray;
@@ -13,6 +16,7 @@ import com.jmatio.types.MLInt32;
 
 import dp.mcmc.Dendrogram;
 import toools.io.file.RegularFile;
+import toools.set.IntHashSet;
 import toools.set.IntSet;
 import grph.*;
 import grph.algo.AdjacencyMatrix;
@@ -121,7 +125,7 @@ public class Test {
 		ClassLoader.getSystemClassLoader().setDefaultAssertionStatus(true);
 		
 		//
-		testGrph();
+//		testGrph();
 		
 		//
 //		int i = 4/2;
@@ -162,10 +166,18 @@ public class Test {
 //		System.out.println("#edges = " + aG.getNumberOfEdges());
 		
 		////
-		Integer s = 3;
-		System.out.println("Before: s = " + s);
-		updatePrimitives(s);
-		System.out.println("After: s = " + s);
+//		Integer s = 3;
+//		System.out.println("Before: s = " + s);
+//		updatePrimitives(s);
+//		System.out.println("After: s = " + s);
+		
+		////
+		IntSet T = new IntHashSet();
+		int n = 10000;
+		long start = System.currentTimeMillis();
+		for (int i = 0; i < n; i++)
+			T.add(i);
+		System.out.println("init - elapsed " + (System.currentTimeMillis() - start));
 	}
 
 }

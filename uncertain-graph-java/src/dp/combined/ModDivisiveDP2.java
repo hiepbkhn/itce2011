@@ -6,11 +6,12 @@
 
 package dp.combined;
 
+import algs4.EdgeIntGraph;
 import grph.Grph;
 import grph.io.EdgeListReader;
 import toools.io.file.RegularFile;
 
-public class ModDivisiveDP {
+public class ModDivisiveDP2 {
 
 	//////////////////////////////////////////////////
 	public static void main(String[] args) throws Exception {
@@ -18,23 +19,22 @@ public class ModDivisiveDP {
 		System.out.println("ModDivisiveDP");
 		
 		// load graph
-//		String dataname = "karate";			// (34, 78)	
-//		String dataname = "polbooks";		// (105, 441)		eps = 50, max_level = 3, final modularity = 0.43
+//		String dataname = "polbooks";		// (105, 441)		
 											// recursiveLK		
-//		String dataname = "polblogs";		// (1224,16715) 	eps = 50, max_level = 4, final modularity = 0.37
+//		String dataname = "polblogs";		// (1224,16715) 	
 											// recursiveLK		
-//		String dataname = "as20graph";		// (6474,12572)		eps = 50, max_level = 4, final modularity = 0.23 (6s pc)
+//		String dataname = "as20graph";		// (6474,12572)		
 											// recursiveLK		
 //		String dataname = "wiki-Vote";		// (7115,100762) 	
 											// recursiveLK		
-//		String dataname = "ca-HepPh";		// (12006,118489) 	eps = 50, max_level = 5, final modularity = 0.382 0.47 (24s pc) 
+//		String dataname = "ca-HepPh";		// (12006,118489) 	
 															
-//		String dataname = "ca-AstroPh";		// (18771,198050) 	eps = 50, max_level = 4, final mod = 0.503 (compare mod/modSelf) 0.43 (compare mod) (23s pc) 
+//		String dataname = "ca-AstroPh";		// (18771,198050) 	
 		// LARGE
-//		String dataname = "com_amazon_ungraph"; 	// (334863,925872) 	eps = 50, max_level = 2, final mod = 0.523 (2h15); max_level = 1, mod=0.41 (compare mod) (97s pc)
-																														//	max_level = 4, mod=0.43 (compare mod) (113s pc)
+		String dataname = "com_amazon_ungraph"; 	// (334863,925872) 	eps = 50, max_level = 5, 30k, final modularity = 0.128 (114s)
+																							//	 60k, final modularity = 0.168 (388s)	
 //		String dataname = "com_dblp_ungraph";  		// (317080,1049866) 
-		String dataname = "com_youtube_ungraph"; 	// (1134890,2987624) eps = 100, max_level = 4, mod=? (compare mod) (?s pc)
+//		String dataname = "com_youtube_ungraph"; 	// (1134890,2987624) 
 		
 		
 		// COMMAND-LINE <prefix> <dataname> <n_samples> <burn_factor>
@@ -43,8 +43,8 @@ public class ModDivisiveDP {
 		int burn_factor = 20;
 		int limit_size = 1;
 		int lower_size = 2;		// at least 2
-		int max_level = 4;
-		double eps1 = 100.0;	// 1, 10, 50, 100 for polbooks: interesting prob values and final results
+		int max_level = 5;
+		double eps1 = 50.0;	// 1, 10, 50, 100 for polbooks: interesting prob values and final results
 		
 		if(args.length >= 4){
 			prefix = args[0];
@@ -76,20 +76,29 @@ public class ModDivisiveDP {
 		System.out.println("#edges = " + G.getNumberOfEdges());
 		
 		//
-		NodeSetMod R = new NodeSetMod(G);
-		System.out.println("mod = " + R.modularity(G.getNumberOfEdges()));
+		int num_group = 60000;		// G.getNumberOfVertices()
+		System.out.println("num_group = " + num_group);
+		if (num_group > G.getNumberOfVertices()){
+			System.err.println("Error !");
+			return;
+		}
+		//
+		EdgeIntGraph G_new = NodeSetMod2.induceWeightedGraph(G, num_group);
+		
+		NodeSetMod2 R = new NodeSetMod2(G_new);
+		System.out.println("mod = " + R.modularity(G_new.E()));
 		
 		// TEST recursiveMod()
 		for (int i = 0; i < n_samples; i++){
 			System.out.println("sample i = " + i);
 			
 			long start = System.currentTimeMillis();
-			NodeSetMod root_set = NodeSetMod.recursiveMod(G, eps1, burn_factor, limit_size, lower_size, max_level);	
+			NodeSetMod2 root_set = NodeSetMod2.recursiveMod(G_new, eps1, burn_factor, limit_size, lower_size, max_level);	
 			System.out.println("recursiveMod - DONE, elapsed " + (System.currentTimeMillis() - start));
 			
 			
-			NodeSetMod.printSetIds(root_set, G.getNumberOfEdges());
-			System.out.println("final modularity = " + root_set.modularityAll(G.getNumberOfEdges()));
+			NodeSetMod2.printSetIds(root_set, G_new.totalWeight());
+			System.out.println("final modularity = " + root_set.modularityAll(G_new.totalWeight()));
 		}
 
 	}
