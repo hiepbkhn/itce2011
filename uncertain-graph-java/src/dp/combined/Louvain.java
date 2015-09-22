@@ -5,6 +5,8 @@
  *	- add new variable status.sizes, status.com2com
  *	- checkTrueEdges (TOP-DOWN) + findCom(), checkNumEdges()
  *	- logLK() BOTTOm-UP --> wrong!
+ * Sep 22
+ * 	- (degree/(2.0*links))*(degree /(2.0*links)); 	
  */
 
 package dp.combined;
@@ -244,7 +246,7 @@ public class Louvain {
 	        double in_degree = status.internals.get(community);
 	        int degree = status.degrees.get(community);
 	        if (links > 0)
-	            result = result + in_degree / links - degree*degree / (4.*links *links);
+	            result = result + in_degree/links - (degree/(2.0*links))*(degree /(2.0*links));
 	    }
 	    //
 	    return result;

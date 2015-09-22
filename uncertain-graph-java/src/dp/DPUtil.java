@@ -1,3 +1,8 @@
+/*
+ * Sep 22, 2015
+ * 	- add epsilonByLevel()
+ */
+
 package dp;
 
 import java.util.Random;
@@ -49,6 +54,32 @@ public class DPUtil {
 		return minVal;
 	}
 	
+	////
+	public static double[] epsilonByLevel(double eps, int max_level, double ratio){
+		double[] ret = new double[max_level];
+		if (ratio == 1){
+			for (int i = 0; i < max_level; i++){
+				ret[i] = eps / max_level;
+//				System.out.println(ret[i]);
+			}
+			return ret;
+		}
+			
+		
+		double alpha = eps*(ratio-1)/(Math.pow(ratio, max_level) - 1);
+		
+		double s = 0.0;
+		for (int i = 1; i < max_level+1; i++){
+			ret[i-1] = alpha*Math.pow(ratio,max_level-i);
+//			s += ret[i-1];
+//			System.out.println(ret[i-1]);
+		}
+//		System.out.println("s = " + s);
+		
+		//
+		return ret;
+	}
+	
 	
 	////
 	public static void main(String[] args) throws Exception{
@@ -61,11 +92,16 @@ public class DPUtil {
 //		}
 		
 		// LAPLACE
-		double eps = 1.0;
-		double[] a = new double[1000];
-		for(int i = 0; i < a.length; i++){
-			a[i] = laplaceMechanism(eps);
-			System.out.print(a[i] + " ");
-		}
+//		double eps = 1.0;
+//		double[] a = new double[1000];
+//		for(int i = 0; i < a.length; i++){
+//			a[i] = laplaceMechanism(eps);
+//			System.out.print(a[i] + " ");
+//		}
+		
+		
+		// TEST epsilonByLevel()
+		double[] ret = epsilonByLevel(10.0, 5, 2);
+		ret = epsilonByLevel(10.0, 5, 1);
 	}
 }

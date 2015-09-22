@@ -1,6 +1,8 @@
 /*
  * Sep 15, 2015
  * 	- use Louvain with differential privacy
+ * Sep 22
+ * 	- add modularity()
  */
 
 package dp.combined;
@@ -42,6 +44,34 @@ public class LouvainDP {
 		//
 		return part_init;
 	}
+	
+	////
+	public static double modularity(EdgeWeightedGraph graph, Map<Integer, Integer> part_init, int k){
+		double mod = 0.0;
+		double[] lc = new double[k];
+		double[] dc = new double[k];
+		
+		//
+		for (int u = 0; u < graph.V(); u++)
+			dc[part_init.get(u)] += graph.degree(u);
+		
+		for (Edge e: graph.edges()){
+			int u = e.either();
+			int v = e.other(u);
+			
+			if (part_init.get(u) == part_init.get(v))
+				lc[part_init.get(u)] += 1;
+		}
+		
+		//
+		int m = graph.E();
+		for (int i = 0; i < k; i++)
+			mod += lc[i]/m - (dc[i]/(2*m))*(dc[i]/(2*m));
+		
+		//
+		return mod;
+	}
+				
 	
 	////
 	public static EdgeWeightedGraph getGraphbyPartition(EdgeWeightedGraph graph, Map<Integer, Integer> part_init, int k){

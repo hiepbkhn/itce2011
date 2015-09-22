@@ -5,18 +5,30 @@
  * 	- faster constructors NodeSetMod(Grph G, IntSet A), NodeSetMod(Grph G)
  * 	- fix error "this.d_t = this.T.size()" in constructors 
  * 	- getRandomItem(): use fast InthashSet.pickRandomElement(random)
+ * Sep 22
+ * 	- add writePart(), readPart()
+ * 	- fix recursiveMod(): correct order for checking limit_size, lower_size
+ * 	- use epsilonByLevel() in recursiveMod()
  */
 
 package dp.combined;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.Random;
 
 import com.carrotsearch.hppc.cursors.IntCursor;
 
+import dp.DPUtil;
 import dp.mcmc.Dendrogram;
 import dp.mcmc.Node;
 import grph.Grph;
@@ -529,11 +541,15 @@ public class NodeSetMod {
 	
 	//////////////////////////////
 	// limit_size = 32: i.e. for NodeSet having size <= limit_size, call 
-	public static NodeSetMod recursiveMod(Grph G, double eps1, int burn_factor, int limit_size, int lower_size, int max_level){
+	public static NodeSetMod recursiveMod(Grph G, double eps1, int burn_factor, int limit_size, int lower_size, int max_level, double ratio){
 		int n_nodes = G.getNumberOfVertices();
 		int n_edges = G.getNumberOfEdges();
 		int id = -1;
 		
+		//
+		double[] epsArr = DPUtil.epsilonByLevel(eps1, max_level, ratio); 
+		
+		//
 		IntSet A = new IntHashSet();
 		for (int i = 0; i < n_nodes; i++)
 			A.add(i);
@@ -547,11 +563,7 @@ public class NodeSetMod {
 		queue.add(root);
 		while(queue.size() > 0){
 			NodeSetMod R = queue.remove();
-			System.out.println("R.level = " + R.level);
-			
-			long start = System.currentTimeMillis();
-			NodeSetMod.partitionMod(R, G, eps1/max_level, burn_factor*(R.S.size() + R.T.size()), 0, 0, false, lower_size);
-			System.out.println("elapsed " + (System.currentTimeMillis() - start));
+			System.out.println("R.level = " + R.level + " R.S.size() + R.T.size() = " + (R.S.size() + R.T.size()));
 			
 			// USE limit_size
 			boolean check_mod = false;
@@ -559,45 +571,36 @@ public class NodeSetMod {
 				if (R.parent.modularity(n_edges) > R.parent.left.modularity(n_edges) + R.parent.right.modularity(n_edges))
 					check_mod = true;
 			
-			if (R.level == max_level || check_mod){
+//			if (R.level == max_level || check_mod){
+			if (R.S.size() + R.T.size() <= limit_size || R.level == max_level){
 //			if (R.S.size() + R.T.size() <= limit_size || R.level == max_level || R.modularity(n_edges) < R.modularitySelf(n_edges)){	
 //			if (R.S.size() + R.T.size() <= limit_size || R.modularity(n_edges) < R.modularitySelf(n_edges)){
 				// stop dividing R
 				continue;
 			}
-				
 			
-			if (R.S.size() > lower_size){
-				NodeSetMod RS = new NodeSetMod(G, R.S);
-				RS.id = id--;
-				R.left = RS;
-				RS.parent = R;
-				RS.level = R.level + 1;
-				
+			long start = System.currentTimeMillis();
+			NodeSetMod.partitionMod(R, G, epsArr[R.level], burn_factor*(R.S.size() + R.T.size()), 0, 0, false, lower_size);
+			System.out.println("elapsed " + (System.currentTimeMillis() - start));
+			
+			NodeSetMod RS = new NodeSetMod(G, R.S);
+			RS.id = id--;
+			R.left = RS;
+			RS.parent = R;
+			RS.level = R.level + 1;
+			
+			NodeSetMod RT = new NodeSetMod(G, R.T);
+			RT.id = id--;
+			R.right = RT;
+			RT.parent = R;
+			RT.level = R.level + 1;
+			
+			//
+//			if (R.S.size() > lower_size)
 				queue.add(RS);
-			}else{
-				NodeSetMod RS = new NodeSetMod(G, R.S);		// RS.id is the remaining item in S
-//				System.out.println("leaf RS.id = " + RS.id);
-				R.left = RS;
-				RS.parent = R;
-				RS.level = R.level + 1;
-			}
 			
-			if (R.T.size() > lower_size){
-				NodeSetMod RT = new NodeSetMod(G, R.T);
-				RT.id = id--;
-				R.right = RT;
-				RT.parent = R;
-				RT.level = R.level + 1;
-				
+//			if (R.T.size() > lower_size)
 				queue.add(RT);
-			}else{
-				NodeSetMod RT = new NodeSetMod(G, R.T);		// RT.id is the remaining item in T
-//				System.out.println("leaf RT.id = " + RT.id);
-				R.right = RT;
-				RT.parent = R;
-				RT.level = R.level + 1;
-			}
 			
 		}
 		
@@ -637,5 +640,60 @@ public class NodeSetMod {
 		}
 	}
 	
+	////
+	public static void writePart(NodeSetMod root_set, String part_file) throws IOException{
+		BufferedWriter bw = new BufferedWriter(new FileWriter(part_file));
+		
+		Queue<NodeSetMod> queue_set = new LinkedList<NodeSetMod>();
+		queue_set.add(root_set);
+		while (queue_set.size() > 0){
+			NodeSetMod R = queue_set.remove();
+			
+			if (R.left != null){
+				queue_set.add(R.left);
+				queue_set.add(R.right);
+			}else{	// leaf
+				if (R.S != null)
+					for (IntCursor t : R.S)
+						bw.write(t.value + ",");
+				if (R.T != null)
+					for (IntCursor t : R.T)
+						bw.write(t.value + ",");
+				bw.write("\n");
+			}
+		}
+		
+		bw.close();
+	}
+	
+	
+	////
+	public static int readPart(String part_file, Map<Integer, Integer> part_init) throws IOException{
+		
+		
+		BufferedReader br = new BufferedReader(new FileReader(part_file));
+		int count = 0;
+		while (true){
+        	String str = br.readLine();
+        	if (str == null)
+        		break;
+        	if (str.length() ==0)
+        		continue;
+        	
+        	String[] items = str.split(",");
+        	
+        	for (int i = 0; i < items.length; i++){
+        		int u = Integer.parseInt(items[i]);
+        		part_init.put(u, count);
+        	}
+        		
+        	//
+        	count += 1;
+		}
+		
+		br.close();
+		//
+		return count;
+	}
 	
 }
