@@ -172,12 +172,17 @@ public class Test {
 //		System.out.println("After: s = " + s);
 		
 		////
-		IntSet T = new IntHashSet();
-		int n = 10000;
-		long start = System.currentTimeMillis();
-		for (int i = 0; i < n; i++)
-			T.add(i);
-		System.out.println("init - elapsed " + (System.currentTimeMillis() - start));
+//		IntSet T = new IntHashSet();
+//		int n = 10000;
+//		long start = System.currentTimeMillis();
+//		for (int i = 0; i < n; i++)
+//			T.add(i);
+//		System.out.println("init - elapsed " + (System.currentTimeMillis() - start));
+		
+		////
+		Random random = new Random();
+		for (int i = 0; i < 50; i++)
+			System.out.print(random.nextInt(2) + " ");
 	}
 
 }

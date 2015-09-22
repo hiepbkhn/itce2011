@@ -33,9 +33,9 @@ public class ModDivisiveDP {
 											// recursiveLK		
 //		String dataname = "ca-HepPh";		// (12006,118489) 	eps = 50, max_level = 5, final modularity = 0.382 0.47 (24s pc) 
 															
-		String dataname = "ca-AstroPh";		// (18771,198050) 	eps = 50, max_level = 4, final mod = 0.503 (compare mod/modSelf) 0.43 (compare mod) (23s pc) 
+//		String dataname = "ca-AstroPh";		// (18771,198050) 	eps = 50, max_level = 4, final mod = 0.503 (compare mod/modSelf) 0.43 (compare mod) (23s pc) 
 		// LARGE
-//		String dataname = "com_amazon_ungraph"; 	// (334863,925872) 	eps = 50, max_level = 2, final mod = 0.523 (2h15); max_level = 1, mod=0.41 (compare mod) (97s pc)
+		String dataname = "com_amazon_ungraph"; 	// (334863,925872) 	eps = 50, max_level = 2, final mod = 0.523 (2h15); max_level = 1, mod=0.41 (compare mod) (97s pc)
 																														//	max_level = 4, mod=0.43 (compare mod) (113s pc)
 																														// max_level = 8 (not compare mod) (362s)
 																//		 eps = 50, max_level = 6, final mod=0.33 (not compare mod) (627s pc)
@@ -49,11 +49,11 @@ public class ModDivisiveDP {
 		// COMMAND-LINE <prefix> <dataname> <n_samples> <burn_factor>
 		String prefix = "";
 		int n_samples = 1;
-		int burn_factor = 20;
+		int burn_factor = 50;
 		int limit_size = 40;		// at least 4*lower_size
 		int lower_size = 10;		// at least 2
 		int max_level = 6;
-		double eps1 = 20.0;	// 1, 10, 50, 100 for polbooks: interesting prob values and final results
+		double eps1 = 30.0;	// 1, 10, 50, 100 for polbooks: interesting prob values and final results
 		double ratio = 1.0; // 1.26 = 2^(1/3)
 		
 		if(args.length >= 4){
@@ -119,14 +119,15 @@ public class ModDivisiveDP {
 //		int count = NodeSetMod.readPart("_out/ca-AstroPh_moddivdp_20_1_2_8_40.0.part", part_init);	// before: 0.216, after: 0.475
 //		int count = NodeSetMod.readPart("_out/ca-AstroPh_moddivdp_20_40_10_6_1.26_20.0.part", part_init);	// before: 0.415, after: 0.452
 //		int count = NodeSetMod.readPart("_out/ca-AstroPh_moddivdp_20_40_10_6_2.00_20.0.part", part_init);	// before: 0.369, after: 0.457
-		int count = NodeSetMod.readPart("_out/ca-AstroPh_moddivdp_100_40_10_6_1.00_20.0.part", part_init);	// before: 0.420, after: 0.428
+//		int count = NodeSetMod.readPart("_out/ca-AstroPh_moddivdp_100_40_10_6_1.00_20.0.part", part_init);	// before: 0.420, after: 0.428
 //		int count = NodeSetMod.readPart("_out/ca-AstroPh_moddivdp_20_40_10_6_1.26_50.0.part", part_init);	// before: 0.490, after: 0.520
 		
 		
 //		int count = NodeSetMod.readPart("_out/com_amazon_ungraph_moddivdp_20_1_2_5_30.0.part", part_init);	// before: 0.1621 , after: 0.229
 //		int count = NodeSetMod.readPart("_out/com_amazon_ungraph_moddivdp_20_1_2_8_30.0.part", part_init);	// before: 0.0055 , after: 0.0965
 //		int count = NodeSetMod.readPart("_out/com_amazon_ungraph_moddivdp_20_1_2_6_50.0.part", part_init);	// before: 0.333 , after: 0.362
-		
+//		int count = NodeSetMod.readPart("_out/com_amazon_ungraph_moddivdp_20_40_10_6_1.00_50.0.part", part_init);	// before: 0.316 , after: 0.364
+		int count = NodeSetMod.readPart("_out/com_amazon_ungraph_moddivdp_50_40_10_6_1.00_30.0.part", part_init);	// before: 0.162 , after: 0.165
 		
 		// hrgdivgreedy
 //		int count = NodeSetMod.readPart("_out/ca-AstroPh_hrgdivgreedy_20_50_10_7_30.0.part", part_init);	// before: 0.035 , after: 0.216
