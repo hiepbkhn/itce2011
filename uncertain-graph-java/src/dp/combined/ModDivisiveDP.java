@@ -27,7 +27,7 @@ public class ModDivisiveDP {
 											// recursiveLK		
 //		String dataname = "polblogs";		// (1224,16715) 	eps = 50, max_level = 4, final modularity = 0.37
 											// recursiveLK		
-//		String dataname = "as20graph";		// (6474,12572)		eps = 50, max_level = 4, final modularity = 0.23 (6s pc)
+		String dataname = "as20graph";		// (6474,12572)		eps = 50, max_level = 4, final modularity = 0.23 (6s pc)
 											// recursiveLK		
 //		String dataname = "wiki-Vote";		// (7115,100762) 	
 											// recursiveLK		
@@ -35,7 +35,7 @@ public class ModDivisiveDP {
 															
 //		String dataname = "ca-AstroPh";		// (18771,198050) 	eps = 50, max_level = 4, final mod = 0.503 (compare mod/modSelf) 0.43 (compare mod) (23s pc) 
 		// LARGE
-		String dataname = "com_amazon_ungraph"; 	// (334863,925872) 	eps = 50, max_level = 2, final mod = 0.523 (2h15); max_level = 1, mod=0.41 (compare mod) (97s pc)
+//		String dataname = "com_amazon_ungraph"; 	// (334863,925872) 	eps = 50, max_level = 2, final mod = 0.523 (2h15); max_level = 1, mod=0.41 (compare mod) (97s pc)
 																														//	max_level = 4, mod=0.43 (compare mod) (113s pc)
 																														// max_level = 8 (not compare mod) (362s)
 																//		 eps = 50, max_level = 6, final mod=0.33 (not compare mod) (627s pc)
@@ -127,13 +127,20 @@ public class ModDivisiveDP {
 //		int count = NodeSetMod.readPart("_out/com_amazon_ungraph_moddivdp_20_1_2_8_30.0.part", part_init);	// before: 0.0055 , after: 0.0965
 //		int count = NodeSetMod.readPart("_out/com_amazon_ungraph_moddivdp_20_1_2_6_50.0.part", part_init);	// before: 0.333 , after: 0.362
 //		int count = NodeSetMod.readPart("_out/com_amazon_ungraph_moddivdp_20_40_10_6_1.00_50.0.part", part_init);	// before: 0.316 , after: 0.364
-		int count = NodeSetMod.readPart("_out/com_amazon_ungraph_moddivdp_50_40_10_6_1.00_30.0.part", part_init);	// before: 0.162 , after: 0.165
+//		int count = NodeSetMod.readPart("_out/com_amazon_ungraph_moddivdp_50_40_10_6_1.00_30.0.part", part_init);	// before: 0.162 , after: 0.165
 		
 		// hrgdivgreedy
 //		int count = NodeSetMod.readPart("_out/ca-AstroPh_hrgdivgreedy_20_50_10_7_30.0.part", part_init);	// before: 0.035 , after: 0.216
 //		int count = NodeSetMod.readPart("_out/com_amazon_ungraph_hrgdivgreedy_20_100_20_7_30.0.part", part_init);	// before: 0.0 , after: 0.007
 //		int count = NodeSetMod.readPart("_out/as20graph_hrgdivgreedy_20_100_20_4_1.0.part", part_init);	// before:  , after: 0.013
 //		int count = NodeSetMod.readPart("_out/as20graph_hrgdivgreedy_20_100_20_4_10.0.part", part_init);	// before:  , after: 0.0
+		
+		// moddivopt
+//		int count = NodeSetMod.readPart("_out/as20graph_moddivopt_20_40_10_6.part", part_init);	// before: 0.385  , after: 0.454
+//		int count = NodeSetMod.readPart("_out/as20graph_moddivopt_50_40_10_6.part", part_init);	// before: 0.401  , after: 0.449
+		
+		// louvain
+		int count = NodeSetMod.readPart("_out/as20graph.louvain", part_init);	// before:  0.623  , after: 0.623
 		
 		System.out.println("count = " + count);
 		System.out.println("part_init.size = " + part_init.size());
@@ -142,7 +149,7 @@ public class ModDivisiveDP {
 		
 		System.out.println("init modularity = " + LouvainDP.modularity(graph, part_init, count));
 		
-		EdgeWeightedGraph graph_new = LouvainDP.getGraphbyPartition(graph, part_init, count);	// not add noise yet !
+		EdgeWeightedGraph graph_new = LouvainDP.getGraphbyPartition(graph, part_init);	// not add noise yet !
 		
 		Louvain lv = new Louvain();
 		Map<Integer, Integer> part = lv.best_partition(graph_new, null);

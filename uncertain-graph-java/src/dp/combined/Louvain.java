@@ -13,6 +13,9 @@ package dp.combined;
 
 import hist.Int2;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -841,6 +844,32 @@ public class Louvain {
 		return ret;
 	}
 	
+	////
+	public static void writePart(Map<Integer, Integer> part, String part_file) throws IOException{
+
+		List<List<Integer>> com = new ArrayList<List<Integer>>();
+		int k = 0;
+		for (int val : part.values())
+			if (k < val)
+				k = val;
+		k += 1;
+		for (int i = 0; i < k; i++)
+			com.add(new ArrayList<Integer>());
+		
+		for (Map.Entry<Integer, Integer> entry : part.entrySet())
+			com.get(entry.getValue()).add(entry.getKey());
+		
+		//
+		BufferedWriter bw = new BufferedWriter(new FileWriter(part_file));
+		for (List<Integer> list:com){
+			for (int u : list)
+				bw.write(u + ",");
+			bw.write("\n");
+		}
+		
+		bw.close();
+	}
+	
 	////////////////////////////////////////////////
 	public static void main(String[] args) throws Exception{
 		// load graph
@@ -863,6 +892,7 @@ public class Louvain {
 	    System.out.println("dataname = " + dataname);
 	    
 		String filename = prefix + "_data/" + dataname + ".gr";
+		String part_file = prefix + "_out/" + dataname + ".louvain";
 		
 		long start = System.currentTimeMillis();
 		EdgeWeightedGraph G = EdgeWeightedGraph.readEdgeList(filename);
@@ -877,7 +907,8 @@ public class Louvain {
 		Map<Integer, Integer> part = lv.best_partition(G, null);
 		System.out.println("best_partition - DONE, elapsed " + (System.currentTimeMillis() - start));
 
-		//
+		Louvain.writePart(part, part_file);
+		System.out.println("writePart - DONE");
 	}
 
 }
