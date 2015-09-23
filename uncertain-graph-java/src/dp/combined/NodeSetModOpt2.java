@@ -32,110 +32,137 @@ import toools.set.BitVectorSet;
 import toools.set.IntHashSet;
 import toools.set.IntSet;
 
-public class NodeSetModOpt{
+public class NodeSetModOpt2{
 
 	//
-	public IntSet S;
-	public IntSet T;
+	public boolean[] ind;	// ind[i] = true -> i in S, false -> i in T
+	public int[] ind2node;	// 
+	public Map<Integer, Integer> node2ind;
+	public int n_s;
+	public int n_t;
+	//
 	public int e_st;
 	public int e_s;			// number of edges inside S
 	public int e_t;			// number of edges inside T
 	public int d_s = 0; 	// total degree of nodes in S
 	public int d_t = 0;		// total degree of nodes in T
 	
-	public NodeSetModOpt parent, left, right;		// for recursive partitioning
+	public NodeSetModOpt2 parent, left, right;		// for recursive partitioning
 	public int id;
 	public int level = 0;
 	
-	//// init two sets S and T from N
-	public static void initSets(IntSet N, IntSet S, IntSet T){
-		int[] arrN = N.toIntArray();
-		for (int i = 0; i < arrN.length/2; i++)
-			S.add(arrN[i]);
-		for (int i = arrN.length/2; i < arrN.length; i++)
-			T.add(arrN[i]); 
-	}
-	
-	// n_nodes: 0->n_nodes-1 are node ids in graph
-	public NodeSetModOpt(Grph G, IntSet A){
-		if (A.size() == 1){
-			this.id = A.toIntArray()[0];
-			return;
-		}
+	////
+	public static NodeSetModOpt2 getSubSet(Grph G, NodeSetModOpt2 R, boolean val){
+		NodeSetModOpt2 ret = new NodeSetModOpt2();
 		
-		this.S = new IntHashSet();
-		this.T = new IntHashSet();
-
-		// call initSets
-		initSets(A, this.S, this.T);
+		ret.node2ind = new HashMap<Integer, Integer>();
+		int count = 0;
+		for (int i = 0; i < R.ind.length; i++)
+			if (R.ind[i] == val){
+				ret.node2ind.put(R.ind2node[i], count);
+				count ++;
+			}
 		
+		ret.ind = new boolean[count];
+		ret.ind2node = new int[count];
+		count = 0;
+		for (int i = 0; i < R.ind.length; i++)
+			if (R.ind[i] == val)
+				ret.ind2node[count++] = R.ind2node[i];
+		
+		//
+		int n_nodes = ret.ind.length;
+		
+		//
+		for (int i = 0; i < n_nodes/2; i++)
+			ret.ind[i] = true;
+		for (int i = n_nodes/2; i < n_nodes; i++)
+			ret.ind[i] = false;
+		
+		ret.n_s = n_nodes/2;
+		ret.n_t = n_nodes - n_nodes/2;
 		//
 		int n = G.getNumberOfVertices();
 		int[] node2Set = new int[n]; // 1:S, 2:T
 		
 		// d_s, d_t
-		this.d_s = 0;
-		for (IntCursor u : this.S){
-			this.d_s += G.getVertexDegree(u.value);
-			node2Set[u.value] = 1;
-		}
-		
-		this.d_t = 0;
-		for (IntCursor u : this.T){
-			this.d_t += G.getVertexDegree(u.value);
-			node2Set[u.value] = 2;
-		}
+		ret.d_s = 0;
+		ret.d_t = 0;
+		for (int u = 0; u < n; u++)
+			if (ret.node2ind.containsKey(u)){
+				if (ret.ind[ret.node2ind.get(u)] == true){
+					ret.d_s += G.getVertexDegree(u);
+					node2Set[u] = 1;
+				}else{
+					ret.d_t += G.getVertexDegree(u);
+					node2Set[u] = 2;
+				}
+			}
 		
 		// e_st, e_s, e_t
-		this.e_st = 0;
-		this.e_s = 0;
-		this.e_t = 0;
+		ret.e_st = 0;
+		ret.e_s = 0;
+		ret.e_t = 0;
 		
 		int u; 
 		int v;
 		for (VertexPair p : G.getEdgePairs()){
 			u = p.first;
 			v = p.second;
-			if (node2Set[u] + node2Set[v] == 3)	// avoid node2Set[u] == 0
-				this.e_st += 1;
+			if (node2Set[u] + node2Set[v] == 3)	//  
+				ret.e_st += 1;
 			if (node2Set[u] == 1 && node2Set[v] == 1)
-				this.e_s += 1;
+				ret.e_s += 1;
 			if (node2Set[u] == 2 && node2Set[v] == 2)
-				this.e_t += 1;
+				ret.e_t += 1;
 		}
-			
 		
+		//
+		return ret;
+	}
+	
+	////
+	public NodeSetModOpt2(){
 		
 	}
 	
 	////
-	public NodeSetModOpt(Grph G){
+	public NodeSetModOpt2(Grph G){
 		int n_nodes = G.getNumberOfVertices();
 		
-		this.S = new IntHashSet();
-		this.T = new IntHashSet();
+		this.ind = new boolean[n_nodes];
+		this.ind2node = new int[n_nodes];
+		this.node2ind = new HashMap<Integer, Integer>();
+		
+		//
+		for (int i = 0; i < n_nodes; i++){
+			this.ind2node[i] = i;
+			this.node2ind.put(i, i);
+		}
+		
 		//
 		for (int i = 0; i < n_nodes/2; i++)
-			this.S.add(i);
+			this.ind[i] = true;
 		for (int i = n_nodes/2; i < n_nodes; i++)
-			this.T.add(i);
+			this.ind[i] = false;
 		
+		this.n_s = n_nodes/2;
+		this.n_t = n_nodes - n_nodes/2;
 		//
 		int n = G.getNumberOfVertices();
 		int[] node2Set = new int[n]; // 1:S, 2:T
 		
 		// d_s, d_t
 		this.d_s = 0;
-		for (IntCursor u : this.S){
-			this.d_s += G.getVertexDegree(u.value);
-			node2Set[u.value] = 1;
-		}
-		
 		this.d_t = 0;
-		for (IntCursor u : this.T){
-			this.d_t += G.getVertexDegree(u.value);
-			node2Set[u.value] = 2;
-		}
+		for (int u = 0; u < n; u++)
+			if (this.ind[this.node2ind.get(u)] == true){
+				this.d_s += G.getVertexDegree(u);
+				node2Set[u] = 1;
+			}else{
+				this.d_t += G.getVertexDegree(u);
+				node2Set[u] = 2;
+			}
 		
 		// e_st, e_s, e_t
 		this.e_st = 0;
@@ -156,7 +183,7 @@ public class NodeSetModOpt{
 		}
 		
 		// debug
-		System.out.println("NodeSetMod called: e_st = " + this.e_st + " e_s = " + this.e_s + " d_s = " + this.d_s + " e_t = " + this.e_t + " d_t = " + this.d_t);
+		System.out.println("NodeSetModOpt2 called: e_st = " + this.e_st + " e_s = " + this.e_s + " d_s = " + this.d_s + " e_t = " + this.e_t + " d_t = " + this.d_t);
 	}
 	
 	//// move 1 item u from T to S
@@ -167,19 +194,22 @@ public class NodeSetModOpt{
 		int count_remove = 0;
 		int[] N = G.getNeighbours(u).toIntArray();
 		for (int v : N){
-			if (S.contains(v))
-				count_remove += 1;
-			if (T.contains(v))
-				count_add += 1;
+			if (this.node2ind.containsKey(v)){
+				if (this.ind[this.node2ind.get(v)] == true)
+					count_remove += 1;
+				else
+					count_add += 1;
+			}
 		}
+		this.n_s += 1;
+		this.n_t -= 1;
 		
 		this.e_st = this.e_st - count_remove + count_add;
 		this.e_s = this.e_s + count_remove;
 		this.e_t = this.e_t - count_add;
 		
 		//
-		this.S.add(u);
-		this.T.remove(u);
+		this.ind[this.node2ind.get(u)] = true;
 		
 		// 
 		int deg_u = G.getVertexDegree(u);
@@ -198,19 +228,21 @@ public class NodeSetModOpt{
 		int count_remove = 0;
 		int[] N = G.getNeighbours(u).toIntArray();
 		for (int v : N){
-			if (S.contains(v))
-				count_add += 1;
-			if (T.contains(v))
-				count_remove += 1;
+			if (this.node2ind.containsKey(v)){
+				if (this.ind[this.node2ind.get(v)] == true)
+					count_add += 1;
+				else
+					count_remove += 1;
+			}
 		}
+		this.n_s -= 1;
+		this.n_t += 1;
 		
 		this.e_st = this.e_st - count_remove + count_add;
 		this.e_s = this.e_s - count_add;
 		this.e_t = this.e_t + count_remove;
 		
-		//
-		this.S.remove(u);
-		this.T.add(u);
+		this.ind[this.node2ind.get(u)] = false;
 		
 		// 
 		int deg_u = G.getVertexDegree(u);
@@ -228,8 +260,10 @@ public class NodeSetModOpt{
 		this.e_s = old_s;
 		this.e_t = old_t;
 		
-		this.S.remove(u);
-		this.T.add(u);
+		this.ind[this.node2ind.get(u)] = false;
+		
+		this.n_s -= 1;
+		this.n_t += 1;
 		// 
 		this.d_s -= deg_u;
 		this.d_t += deg_u;
@@ -242,9 +276,10 @@ public class NodeSetModOpt{
 		this.e_s = old_s;
 		this.e_t = old_t;
 		
-		//
-		this.S.add(u);
-		this.T.remove(u);
+		this.ind[this.node2ind.get(u)] = true;
+		
+		this.n_s += 1;
+		this.n_t -= 1;
 		// 
 		this.d_s += deg_u;
 		this.d_t -= deg_u;
@@ -279,16 +314,16 @@ public class NodeSetModOpt{
 	
 	////m : number of edges in G
 	public double modularityAll(int m){
-		NodeSetModOpt root_set = this;
+		NodeSetModOpt2 root_set = this;
 		while (root_set.parent != null)
 			root_set = root_set.parent;
 		
 		double mod = 0.0;
 		
-		Queue<NodeSetModOpt> queue_set = new LinkedList<NodeSetModOpt>();
+		Queue<NodeSetModOpt2> queue_set = new LinkedList<NodeSetModOpt2>();
 		queue_set.add(root_set);
 		while (queue_set.size() > 0){
-			NodeSetModOpt R = queue_set.remove();
+			NodeSetModOpt2 R = queue_set.remove();
 			if (R.left == null) // leaf
 				mod += R.modularitySelf(m);
 			else{
@@ -305,27 +340,50 @@ public class NodeSetModOpt{
 	////
 	public void print(){
 		System.out.print("S : ");
-		for (IntCursor s : this.S)
-			System.out.print(s.value + " ");
+		for (int s = 0; s < this.ind.length; s++)
+			if (this.ind[s] == true)
+			System.out.print(this.ind2node[s] + " ");
 		System.out.println();
 		
 		System.out.print("T : ");
-		for (IntCursor t : this.T)
-			System.out.print(t.value + " ");
+		for (int t = 0; t < this.ind.length; t++)
+			if (this.ind[t] == false)
+			System.out.print(this.ind2node[t] + " ");
 		System.out.println();
 	}
 	
+	////
+	public int pickRandomFromS(Random random){
+		int loc = random.nextInt(this.ind.length);
+		while (true){
+			if (this.ind[loc] == true)
+				return this.ind2node[loc];
+			loc = random.nextInt(this.ind.length);
+		}
+	}
+	
+	////
+	public int pickRandomFromT(Random random){
+		int loc = random.nextInt(this.ind.length);
+		while (true){
+			if (this.ind[loc] == false)
+				return this.ind2node[loc];
+			loc = random.nextInt(this.ind.length);
+		}
+	}
+	
+	
 	//// MODULARITY partition, using modularity()
-	public static void partitionMod(NodeSetModOpt R, Grph G, int n_steps, int n_samples, int sample_freq, boolean print_out, int lower_size){
+	public static void partitionMod(NodeSetModOpt2 R, Grph G, int n_steps, int n_samples, int sample_freq, boolean print_out, int lower_size){
 		if (print_out)
 			System.out.println("NodeSetMod.partitionMod called");
 		
 //		int n_nodes = G.getNumberOfVertices();
-		int n_nodes = R.S.size() + R.T.size();
+		int n_nodes = R.ind.length;
 		int n_edges = G.getNumberOfEdges();
 		
 //		if (print_out)
-			System.out.println("#steps = " + (n_steps + n_samples * sample_freq));
+//			System.out.println("#steps = " + (n_steps + n_samples * sample_freq));
 
 		int out_freq = (n_steps + n_samples * sample_freq) / 10;
 		//
@@ -344,13 +402,13 @@ public class NodeSetModOpt{
 		
 		for (int i = 0; i < n_steps + n_samples * sample_freq; i++) {
 			// decide add or remove
-			if (R.S.size() < n_nodes/2 && R.S.size() > lower_size){	// add or remove
+			if (R.n_s < n_nodes/2 && R.n_s > lower_size){	// add or remove
 				int rand_val = random.nextInt(2);
 				if (rand_val == 0)
 					is_add = true;
 				else
 					is_add = false;	
-			}else if (R.S.size() <= lower_size){			// only add
+			}else if (R.n_s <= lower_size){			// only add
 				is_add = true;
 			}else{								// only remove (R.S.size() >= n_nodes/2)
 				is_add = false;
@@ -359,12 +417,12 @@ public class NodeSetModOpt{
 			// perform add or remove
 			if (is_add){
 				// randomly pick an item from T
-				u = R.T.pickRandomElement(random);
+				u = R.pickRandomFromT(random);
 				R.add(u, G);
 				
 			}else{
 				// randomly pick an item from S
-				u = R.S.pickRandomElement(random);
+				u = R.pickRandomFromS(random);
 				R.remove(u, G);
 			}
 			
@@ -393,33 +451,29 @@ public class NodeSetModOpt{
 //						+ " time : " + (System.currentTimeMillis() - start));
 		}
 		
-		System.out.println("n_accept = " + n_accept);
+		//
+//		System.out.println("n_accept = " + n_accept);
 		
 	}
 	
 	
 	//////////////////////////////
 	// limit_size = 32: i.e. for NodeSet having size <= limit_size, call 
-	public static NodeSetModOpt recursiveMod(Grph G, int burn_factor, int limit_size, int lower_size, int max_level){
+	public static NodeSetModOpt2 recursiveMod(Grph G, int burn_factor, int limit_size, int lower_size, int max_level){
 		int n_nodes = G.getNumberOfVertices();
 		int n_edges = G.getNumberOfEdges();
 		int id = -1;
 		
-		//
-		IntSet A = new IntHashSet();
-		for (int i = 0; i < n_nodes; i++)
-			A.add(i);
-		
 		// root node
-		NodeSetModOpt root = new NodeSetModOpt(G, A);
+		NodeSetModOpt2 root = new NodeSetModOpt2(G);
 		root.id = id--;
 		root.level = 0;
 		// 
-		Queue<NodeSetModOpt> queue = new LinkedList<NodeSetModOpt>();
+		Queue<NodeSetModOpt2> queue = new LinkedList<NodeSetModOpt2>();
 		queue.add(root);
 		while(queue.size() > 0){
-			NodeSetModOpt R = queue.remove();
-			System.out.println("R.level = " + R.level + " R.S.size() + R.T.size() = " + (R.S.size() + R.T.size()));
+			NodeSetModOpt2 R = queue.remove();
+			System.out.println("R.level = " + R.level + " R.S.size() + R.T.size() = " + R.ind.length);
 			
 			// USE limit_size
 //			boolean check_mod = false;
@@ -427,21 +481,21 @@ public class NodeSetModOpt{
 //				if (R.parent.modularity(n_edges) > R.parent.left.modularity(n_edges) + R.parent.right.modularity(n_edges))
 //					check_mod = true;
 			
-			if (R.S.size() + R.T.size() <= limit_size || R.level == max_level){
+			if (R.ind.length <= limit_size || R.level == max_level){
 				continue;
 			}
 			
 			long start = System.currentTimeMillis();
-			NodeSetModOpt.partitionMod(R, G, burn_factor*(R.S.size() + R.T.size()), 0, 0, false, lower_size);
+			NodeSetModOpt2.partitionMod(R, G, burn_factor* R.ind.length, 0, 0, false, lower_size);
 			System.out.println("elapsed " + (System.currentTimeMillis() - start));
 			
-			NodeSetModOpt RS = new NodeSetModOpt(G, R.S);
+			NodeSetModOpt2 RS = getSubSet(G, R, true);
 			RS.id = id--;
 			R.left = RS;
 			RS.parent = R;
 			RS.level = R.level + 1;
 			
-			NodeSetModOpt RT = new NodeSetModOpt(G, R.T);
+			NodeSetModOpt2 RT = getSubSet(G, R, false);
 			RT.id = id--;
 			R.right = RT;
 			RT.parent = R;
@@ -459,18 +513,18 @@ public class NodeSetModOpt{
 	}
 	
 	////
-	public static void printSetIds(NodeSetModOpt root_set, int m){
+	public static void printSetIds(NodeSetModOpt2 root_set, int m){
 		System.out.println("printSetIds");
 		
-		Queue<NodeSetModOpt> queue_set = new LinkedList<NodeSetModOpt>();
+		Queue<NodeSetModOpt2> queue_set = new LinkedList<NodeSetModOpt2>();
 		queue_set.add(root_set);
 		while (queue_set.size() > 0){
-			NodeSetModOpt R = queue_set.remove();
+			NodeSetModOpt2 R = queue_set.remove();
 			if (R.left != null){
 //				System.out.println("R.id = " + R.id + " left.id = " + R.left.id + " right.id = " + R.right.id + 
 //						" left.size = " + R.S.size() + " right.size = " + R.T.size() + " mod = " + R.modularity(m) + " modSelf = " + R.modularitySelf(m));
 				System.out.println("R.id = " + R.id + " left.id = " + R.left.id + " right.id = " + R.right.id + 
-					" left.size = " + R.S.size() + " right.size = " + R.T.size() + " (" + R.e_st + "," + R.e_s + "," + R.e_t + "," + R.d_s + "," + R.d_t + "," + m + ")" + 
+					" left.size = " + R.n_s + " right.size = " + R.n_t + " (" + R.e_st + "," + R.e_s + "," + R.e_t + "," + R.d_s + "," + R.d_t + "," + m + ")" + 
 					" mod = " + R.modularity(m) + " modSelf = " + R.modularitySelf(m));
 			}else{
 				System.out.println("LEAF R.id = " + R.id + " modSelf = " + R.modularitySelf(m)); // + " left.size = " + R.S.size() + " right.size = " + R.T.size());
@@ -491,24 +545,24 @@ public class NodeSetModOpt{
 	}
 	
 	////
-	public static void writePart(NodeSetModOpt root_set, String part_file) throws IOException{
+	public static void writePart(NodeSetModOpt2 root_set, String part_file) throws IOException{
 		BufferedWriter bw = new BufferedWriter(new FileWriter(part_file));
 		
-		Queue<NodeSetModOpt> queue_set = new LinkedList<NodeSetModOpt>();
+		Queue<NodeSetModOpt2> queue_set = new LinkedList<NodeSetModOpt2>();
 		queue_set.add(root_set);
 		while (queue_set.size() > 0){
-			NodeSetModOpt R = queue_set.remove();
+			NodeSetModOpt2 R = queue_set.remove();
 			
 			if (R.left != null){
 				queue_set.add(R.left);
 				queue_set.add(R.right);
 			}else{	// leaf
-				if (R.S != null)
-					for (IntCursor t : R.S)
-						bw.write(t.value + ",");
-				if (R.T != null)
-					for (IntCursor t : R.T)
-						bw.write(t.value + ",");
+				for (int s = 0; s < R.ind.length; s++)
+					if (R.ind[s] == true)
+						bw.write(R.ind2node[s] + " ");
+				for (int s = 0; s < R.ind.length; s++)
+					if (R.ind[s] == false)
+						bw.write(R.ind2node[s] + " ");
 				bw.write("\n");
 			}
 		}
@@ -517,18 +571,18 @@ public class NodeSetModOpt{
 	}
 	
 	////dynamic programming: opt(R) = max{mod(R), opt(R.left) + opt(R.right)}
-	public static List<NodeSetModOpt> bestCut(NodeSetModOpt root_set, int m){
+	public static List<NodeSetModOpt2> bestCut(NodeSetModOpt2 root_set, int m){
 		
-		List<NodeSetModOpt> ret = new ArrayList<NodeSetModOpt>();
+		List<NodeSetModOpt2> ret = new ArrayList<NodeSetModOpt2>();
 		Map<Integer, CutNode> sol = new HashMap<Integer, CutNode>();	// best solution node.id --> CutNode info
 		
-		Queue<NodeSetModOpt> queue = new LinkedList<NodeSetModOpt>();
-		Stack<NodeSetModOpt> stack = new Stack<NodeSetModOpt>();
+		Queue<NodeSetModOpt2> queue = new LinkedList<NodeSetModOpt2>();
+		Stack<NodeSetModOpt2> stack = new Stack<NodeSetModOpt2>();
 		
 		// fill stack using queue
 		queue.add(root_set);
 		while (queue.size() > 0){
-			NodeSetModOpt R = queue.remove();
+			NodeSetModOpt2 R = queue.remove();
 			stack.push(R);
 			if (R.left != null){
 				queue.add(R.left);
@@ -538,7 +592,7 @@ public class NodeSetModOpt{
 		
 		// 
 		while (stack.size() > 0){
-			NodeSetModOpt R = stack.pop();
+			NodeSetModOpt2 R = stack.pop();
 			
 			double mod = R.modularitySelf(m);			// non-private, need modularitySelfDP() !
 			boolean self = false;
@@ -560,10 +614,10 @@ public class NodeSetModOpt{
 		System.out.println("best modularity = " + sol.get(-1).mod);
 		
 		// compute ret
-		queue = new LinkedList<NodeSetModOpt>();
+		queue = new LinkedList<NodeSetModOpt2>();
 		queue.add(root_set);
 		while (queue.size() > 0){
-			NodeSetModOpt R = queue.remove();
+			NodeSetModOpt2 R = queue.remove();
 			
 			if (sol.get(R.id).self == true)
 				ret.add(R);

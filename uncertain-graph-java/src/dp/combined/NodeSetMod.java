@@ -18,13 +18,16 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.Random;
+import java.util.Stack;
 
 import com.carrotsearch.hppc.cursors.IntCursor;
 
@@ -695,5 +698,67 @@ public class NodeSetMod {
 		//
 		return count;
 	}
+	
+	//// dynamic programming: opt(R) = max{mod(R), opt(R.left) + opt(R.right)}
+	public static List<NodeSetMod> bestCut(NodeSetMod root_set, int m){
+		
+		List<NodeSetMod> ret = new ArrayList<NodeSetMod>();
+		Map<Integer, CutNode> sol = new HashMap<Integer, CutNode>();	// best solution node.id --> CutNode info
+		
+		Queue<NodeSetMod> queue = new LinkedList<NodeSetMod>();
+		Stack<NodeSetMod> stack = new Stack<NodeSetMod>();
+		
+		// fill stack using queue
+		queue.add(root_set);
+		while (queue.size() > 0){
+			NodeSetMod R = queue.remove();
+			stack.push(R);
+			if (R.left != null){
+				queue.add(R.left);
+				queue.add(R.right);
+			}
+		}
+		
+		// 
+		while (stack.size() > 0){
+			NodeSetMod R = stack.pop();
+			
+			double mod = R.modularitySelf(m);			// non-private, need modularitySelfDP() !
+			boolean self = false;
+			if (R.left == null){	// leaf nodes
+				sol.put(R.id, new CutNode(mod, true));
+			}else{
+				//
+				double mod_opt = sol.get(R.left.id).mod + sol.get(R.right.id).mod;
+				if (mod < mod_opt){
+					mod = mod_opt;
+					self = true;
+				}
+					
+				sol.put(R.id, new CutNode(mod, self));
+			}
+		}
+		
+		System.out.println("sol.size = " + sol.size());
+		System.out.println("best modularity = " + sol.get(-1).mod);
+		
+		// compute ret
+		queue = new LinkedList<NodeSetMod>();
+		queue.add(root_set);
+		while (queue.size() > 0){
+			NodeSetMod R = queue.remove();
+			
+			if (sol.get(R.id).self == true)
+				ret.add(R);
+			else if (R.left != null){
+				queue.add(R.left);
+				queue.add(R.right);
+			}
+		}
+		
+		//
+		return ret;
+	}
+	
 	
 }

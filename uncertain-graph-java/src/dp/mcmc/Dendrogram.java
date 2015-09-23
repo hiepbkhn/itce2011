@@ -9,7 +9,7 @@
  *  - addlaplaceNoise(): use Geometric Mechanism
  *  - generateSanitizedSample(): run much faster O(m)
  * Sep 17
- * 	- add partitionTopDown() using queue
+ * 	- add partitionTopDown() using queue (see dynamic programming in NodeSetMod.bestCut())
  */
 
 package dp.mcmc;

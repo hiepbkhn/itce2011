@@ -53,10 +53,12 @@
 
 - NodeDivisiveDP.java: exponential mechanism with modularity Q
 - NodeSetMod.java
+- CutNode.java: used in NodeSetMod.bestCut()
 
 - NodeDivisiveDP2.java: allow to fix nodes to groups (reduce MCMC space)
 - NodeSetMod2.java
 
 - NodeDivisiveOpt.java: non-private, try to find the best partition at each level
 - NodeSetModOpt.java
+- NodeSetModOpt2.java: do not use IntSet !
 
