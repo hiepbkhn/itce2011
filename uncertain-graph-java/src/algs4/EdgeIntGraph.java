@@ -299,7 +299,7 @@ public class EdgeIntGraph {
     	return ret;
     }
     
-    public static EdgeIntGraph readEdgeList(String filename) throws IOException{
+    public static EdgeIntGraph readEdgeList(String filename, String split_char) throws IOException{
 
     	int maxNodeId = -1;
     	List<Int2> edgeList = new ArrayList<Int2>();
@@ -311,7 +311,7 @@ public class EdgeIntGraph {
         	if (str == null)
         		break;
         	
-        	String[] items = str.split("\t");
+        	String[] items = str.split(split_char);
         	int u = Integer.parseInt(items[0]);
         	int v = Integer.parseInt(items[1]);
         	if (maxNodeId < u)

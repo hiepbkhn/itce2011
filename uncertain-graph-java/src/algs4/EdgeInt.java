@@ -57,7 +57,7 @@ public class EdgeInt implements Comparable<EdgeInt> {
      * Returns the weight of the edge.
      * @return the weight of the edge
      */
-    public double weight() {
+    public int weight() {
         return weight;
     }
 

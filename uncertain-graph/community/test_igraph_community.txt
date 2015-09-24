@@ -149,3 +149,12 @@ Clustering with 1134890 elements and 31899 clusters
 elapsed 202.042443086
 
 
+[live journal - lj]
+#nodes 3997962
+#edges 34681189
+multilevel           modularity = 0.717095445304
+Clustering with 3997962 elements and 7322 clusters
+elapsed 414.690819079
+label_propagation    modularity = 0.465238322936
+Clustering with 3997962 elements and 29021 clusters
+elapsed 1064.1947043

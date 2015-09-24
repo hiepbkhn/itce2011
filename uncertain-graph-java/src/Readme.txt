@@ -40,6 +40,8 @@
 - DivisiveTmF.java: use NodeSetDiv.java
 
 - Louvain.java: converted from Python 'community'
+- LouvainInt.java: use EdgeInt, EdgeIntGraph
+
 - LouvainDP.java: e-DP by input perturbation
 
 - Scan.java: SCAN algorithm

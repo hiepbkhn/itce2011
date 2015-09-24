@@ -23,23 +23,30 @@ public class ModDivisiveDP {
 		
 		// load graph
 //		String dataname = "karate";			// (34, 78)	
-//		String dataname = "polbooks";		// (105, 441)		eps = 50, max_level = 3, final modularity = 0.43
+//		String dataname = "polbooks";		// (105, 441)		eps = 50, max_level = 3, 		final modularity = 0.43
 											// recursiveLK		
-//		String dataname = "polblogs";		// (1224,16715) 	eps = 50, max_level = 4, final modularity = 0.37
+//		String dataname = "polblogs";		// (1224,16715) 	eps = 50, max_level = 4, 		final modularity = 0.37
 											// recursiveLK		
-		String dataname = "as20graph";		// (6474,12572)		eps = 50, max_level = 4, final modularity = 0.23 (6s pc)
-											// recursiveLK		
+//		String dataname = "as20graph";		// (6474,12572)		eps = 50, max_level = 4, 		final modularity = 0.23 (6s pc)
+											// recursiveLK		eps = 30, max_level = 6, ratio=2, final modularity = 0.23 (3s pc)
+											//					eps = 30, max_level = 6, ratio=3, final modularity = 0.24 (3s pc)
+											//					eps = 20, max_level = 6, ratio=3, final modularity = 0.20 (3s pc)
+											//					eps = 20, max_level = 6, ratio=2, final modularity = 0.17 (3s pc)
 //		String dataname = "wiki-Vote";		// (7115,100762) 	
 											// recursiveLK		
 //		String dataname = "ca-HepPh";		// (12006,118489) 	eps = 50, max_level = 5, final modularity = 0.382 0.47 (24s pc) 
 															
 //		String dataname = "ca-AstroPh";		// (18771,198050) 	eps = 50, max_level = 4, final mod = 0.503 (compare mod/modSelf) 0.43 (compare mod) (23s pc) 
 		// LARGE
-//		String dataname = "com_amazon_ungraph"; 	// (334863,925872) 	eps = 50, max_level = 2, final mod = 0.523 (2h15); max_level = 1, mod=0.41 (compare mod) (97s pc)
+		String dataname = "com_amazon_ungraph"; 	// (334863,925872) 	eps = 50, max_level = 2, final mod = 0.523 (2h15); max_level = 1, mod=0.41 (compare mod) (97s pc)
 																														//	max_level = 4, mod=0.43 (compare mod) (113s pc)
 																														// max_level = 8 (not compare mod) (362s)
-																//		 eps = 50, max_level = 6, final mod=0.33 (not compare mod) (627s pc)
-																// 		eps = 50, max_level = 6, (400,100), final mod=0.319 (249s pc)
+																//		 	eps = 50, max_level = 6, final mod=0.33 (not compare mod) (627s pc)
+																// 			eps = 50, max_level = 6, (400,100), final mod=0.319 (249s pc)
+																//Sep 24	eps = 20, burn=20, ratio=2, max_level=8, (40,10), bestCut=0.328 (110s)
+																//			eps = 30, burn=20, ratio=2, max_level=8, (40,10), bestCut=0.428 (150s)
+																//			eps = 30, burn=30, ratio=2, max_level=8, (40,10), bestCut=0.432 (355s)
+																//			eps = 50, burn=20, ratio=2, max_level=8, (40,10), bestCut=0.551 (192s)			
 //		String dataname = "com_dblp_ungraph";  		// (317080,1049866) 
 //		String dataname = "com_youtube_ungraph"; 	// (1134890,2987624) eps = 100, max_level = 4, mod=0.45 (compare mod) (485s pc)
 													//					 eps = 10, max_level = 4, mod=0.20 (compare mod) (385s pc)
@@ -52,9 +59,9 @@ public class ModDivisiveDP {
 		int burn_factor = 20;
 		int limit_size = 40;		// at least 4*lower_size
 		int lower_size = 10;		// at least 2
-		int max_level = 5;
-		double eps1 = 50.0;	// 1, 10, 50, 100 for polbooks: interesting prob values and final results
-		double ratio = 1.0; // 1.26 = 2^(1/3)
+		int max_level = 8;
+		double eps1 = 20.0;	// 1, 10, 50, 100 for polbooks: interesting prob values and final results
+		double ratio = 2.0; // 1.26 = 2^(1/3)
 		
 		if(args.length >= 4){
 			prefix = args[0];
@@ -79,19 +86,28 @@ public class ModDivisiveDP {
 						+ max_level + "_" + String.format("%.2f", ratio) + "_" + String.format("%.1f", eps1) + ".part";
 		
 		// TEST recursiveMod()
+		/*
 		EdgeListReader reader = new EdgeListReader();
-		
 		Grph G;
 		RegularFile f = new RegularFile(filename);
-		
 		G = reader.readGraph(f);
 		
 		System.out.println("#nodes = " + G.getNumberOfVertices());
 		System.out.println("#edges = " + G.getNumberOfEdges());
 		
 		//
-		NodeSetMod R = new NodeSetMod(G);
+		NodeSetModOpt R = new NodeSetModOpt(G);
 		System.out.println("mod = " + R.modularity(G.getNumberOfEdges()));
+		*/
+		
+		EdgeWeightedGraph G = EdgeWeightedGraph.readEdgeList(filename);
+		
+		System.out.println("#nodes = " + G.V());
+		System.out.println("#edges = " + G.E());
+		
+		//
+		NodeSetMod R = new NodeSetMod(G);
+		System.out.println("mod = " + R.modularity(G.E()));
 		
 		// TEST recursiveMod()
 		for (int i = 0; i < n_samples; i++){
@@ -102,13 +118,13 @@ public class ModDivisiveDP {
 			System.out.println("recursiveMod - DONE, elapsed " + (System.currentTimeMillis() - start));
 			
 			
-			NodeSetMod.printSetIds(root_set, G.getNumberOfEdges());
-			System.out.println("final modularity = " + root_set.modularityAll(G.getNumberOfEdges()));
+			NodeSetMod.printSetIds(root_set, G.E());
+			System.out.println("final modularity = " + root_set.modularityAll(G.E()));
 			
 			NodeSetMod.writePart(root_set, part_file);
 			System.out.println("writePart - DONE");
 			
-			NodeSetMod.bestCut(root_set, G.getNumberOfEdges());
+			NodeSetMod.bestCut(root_set, G.E());
 		}
 		
 		// TEST readPart()

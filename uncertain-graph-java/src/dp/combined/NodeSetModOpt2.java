@@ -1,6 +1,9 @@
 /*
- * Sep 22, 2015
- * 	- copied from NodeSetMod, non-private
+ * Sep 23, 2015
+ * 	- copied from NodeSetModOpt, use boolean array for both S and T, much faster
+ * Sep 24
+ * - replace EdgeWeightedGraph by EdgeWeightedGraph	
+ * - add partitionLouvain(), recursiveLouvain(): apply Louvain to each node, move nodes between S and T
  */
 
 package dp.combined;
@@ -21,16 +24,9 @@ import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.Random;
 
-import com.carrotsearch.hppc.cursors.IntCursor;
-
 import dp.DPUtil;
-import dp.mcmc.Dendrogram;
-import dp.mcmc.Node;
-import grph.Grph;
-import grph.VertexPair;
-import toools.set.BitVectorSet;
-import toools.set.IntHashSet;
-import toools.set.IntSet;
+import algs4.Edge;
+import algs4.EdgeWeightedGraph;
 
 public class NodeSetModOpt2{
 
@@ -52,7 +48,7 @@ public class NodeSetModOpt2{
 	public int level = 0;
 	
 	////
-	public static NodeSetModOpt2 getSubSet(Grph G, NodeSetModOpt2 R, boolean val){
+	public static NodeSetModOpt2 getSubSet(EdgeWeightedGraph G, NodeSetModOpt2 R, boolean val){
 		NodeSetModOpt2 ret = new NodeSetModOpt2();
 		
 		ret.node2ind = new HashMap<Integer, Integer>();
@@ -82,7 +78,7 @@ public class NodeSetModOpt2{
 		ret.n_s = n_nodes/2;
 		ret.n_t = n_nodes - n_nodes/2;
 		//
-		int n = G.getNumberOfVertices();
+		int n = G.V();
 		int[] node2Set = new int[n]; // 1:S, 2:T
 		
 		// d_s, d_t
@@ -91,10 +87,10 @@ public class NodeSetModOpt2{
 		for (int u = 0; u < n; u++)
 			if (ret.node2ind.containsKey(u)){
 				if (ret.ind[ret.node2ind.get(u)] == true){
-					ret.d_s += G.getVertexDegree(u);
+					ret.d_s += G.degree(u);
 					node2Set[u] = 1;
 				}else{
-					ret.d_t += G.getVertexDegree(u);
+					ret.d_t += G.degree(u);
 					node2Set[u] = 2;
 				}
 			}
@@ -106,9 +102,9 @@ public class NodeSetModOpt2{
 		
 		int u; 
 		int v;
-		for (VertexPair p : G.getEdgePairs()){
-			u = p.first;
-			v = p.second;
+		for (Edge e : G.edges()){
+			u = e.either();
+			v = e.other(u);
 			if (node2Set[u] + node2Set[v] == 3)	//  
 				ret.e_st += 1;
 			if (node2Set[u] == 1 && node2Set[v] == 1)
@@ -127,8 +123,8 @@ public class NodeSetModOpt2{
 	}
 	
 	////
-	public NodeSetModOpt2(Grph G){
-		int n_nodes = G.getNumberOfVertices();
+	public NodeSetModOpt2(EdgeWeightedGraph G){
+		int n_nodes = G.V();
 		
 		this.ind = new boolean[n_nodes];
 		this.ind2node = new int[n_nodes];
@@ -149,7 +145,7 @@ public class NodeSetModOpt2{
 		this.n_s = n_nodes/2;
 		this.n_t = n_nodes - n_nodes/2;
 		//
-		int n = G.getNumberOfVertices();
+		int n = G.V();
 		int[] node2Set = new int[n]; // 1:S, 2:T
 		
 		// d_s, d_t
@@ -157,10 +153,10 @@ public class NodeSetModOpt2{
 		this.d_t = 0;
 		for (int u = 0; u < n; u++)
 			if (this.ind[this.node2ind.get(u)] == true){
-				this.d_s += G.getVertexDegree(u);
+				this.d_s += G.degree(u);
 				node2Set[u] = 1;
 			}else{
-				this.d_t += G.getVertexDegree(u);
+				this.d_t += G.degree(u);
 				node2Set[u] = 2;
 			}
 		
@@ -171,9 +167,9 @@ public class NodeSetModOpt2{
 		
 		int u; 
 		int v;
-		for (VertexPair p : G.getEdgePairs()){
-			u = p.first;
-			v = p.second;
+		for (Edge e : G.edges()){
+			u = e.either();
+			v = e.other(u);
 			if (node2Set[u] + node2Set[v] == 3)	//  
 				this.e_st += 1;
 			if (node2Set[u] == 1 && node2Set[v] == 1)
@@ -187,13 +183,12 @@ public class NodeSetModOpt2{
 	}
 	
 	//// move 1 item u from T to S
-	public void add(int u, Grph G){
+	public void add(int u, EdgeWeightedGraph G){
 		
 		//
 		int count_add = 0;
 		int count_remove = 0;
-		int[] N = G.getNeighbours(u).toIntArray();
-		for (int v : N){
+		for (int v : G.adj(u).keySet()){
 			if (this.node2ind.containsKey(v)){
 				if (this.ind[this.node2ind.get(v)] == true)
 					count_remove += 1;
@@ -212,7 +207,7 @@ public class NodeSetModOpt2{
 		this.ind[this.node2ind.get(u)] = true;
 		
 		// 
-		int deg_u = G.getVertexDegree(u);
+		int deg_u = G.degree(u);
 		this.d_s += deg_u;
 		this.d_t -= deg_u;
 		
@@ -221,13 +216,12 @@ public class NodeSetModOpt2{
 	}
 	
 	//// move 1 item u from S to T
-	public void remove(int u, Grph G){
+	public void remove(int u, EdgeWeightedGraph G){
 		
 		//
 		int count_add = 0;
 		int count_remove = 0;
-		int[] N = G.getNeighbours(u).toIntArray();
-		for (int v : N){
+		for (int v : G.adj(u).keySet()){
 			if (this.node2ind.containsKey(v)){
 				if (this.ind[this.node2ind.get(v)] == true)
 					count_add += 1;
@@ -245,7 +239,7 @@ public class NodeSetModOpt2{
 		this.ind[this.node2ind.get(u)] = false;
 		
 		// 
-		int deg_u = G.getVertexDegree(u);
+		int deg_u = G.degree(u);
 		this.d_s -= deg_u;
 		this.d_t += deg_u;
 		
@@ -254,8 +248,8 @@ public class NodeSetModOpt2{
 	}
 	
 	////move 1 item u from S back to T
-	public void reverse_add(int u, Grph G, int old_st, int old_s, int old_t){
-		int deg_u = G.getVertexDegree(u);
+	public void reverse_add(int u, EdgeWeightedGraph G, int old_st, int old_s, int old_t){
+		int deg_u = G.degree(u);
 		this.e_st = old_st;
 		this.e_s = old_s;
 		this.e_t = old_t;
@@ -270,8 +264,8 @@ public class NodeSetModOpt2{
 	}
 	
 	////move 1 item u from T back to S
-	public void reverse_remove(int u, Grph G, int old_st, int old_s, int old_t){
-		int deg_u = G.getVertexDegree(u);
+	public void reverse_remove(int u, EdgeWeightedGraph G, int old_st, int old_s, int old_t){
+		int deg_u = G.degree(u);
 		this.e_st = old_st;
 		this.e_s = old_s;
 		this.e_t = old_t;
@@ -374,13 +368,13 @@ public class NodeSetModOpt2{
 	
 	
 	//// MODULARITY partition, using modularity()
-	public static void partitionMod(NodeSetModOpt2 R, Grph G, int n_steps, int n_samples, int sample_freq, boolean print_out, int lower_size){
+	public static void partitionMod(NodeSetModOpt2 R, EdgeWeightedGraph G, int n_steps, int n_samples, int sample_freq, boolean print_out, int lower_size){
 		if (print_out)
 			System.out.println("NodeSetMod.partitionMod called");
 		
-//		int n_nodes = G.getNumberOfVertices();
+//		int n_nodes = G.V();
 		int n_nodes = R.ind.length;
-		int n_edges = G.getNumberOfEdges();
+		int n_edges = G.E();
 		
 //		if (print_out)
 //			System.out.println("#steps = " + (n_steps + n_samples * sample_freq));
@@ -459,9 +453,9 @@ public class NodeSetModOpt2{
 	
 	//////////////////////////////
 	// limit_size = 32: i.e. for NodeSet having size <= limit_size, call 
-	public static NodeSetModOpt2 recursiveMod(Grph G, int burn_factor, int limit_size, int lower_size, int max_level){
-		int n_nodes = G.getNumberOfVertices();
-		int n_edges = G.getNumberOfEdges();
+	public static NodeSetModOpt2 recursiveMod(EdgeWeightedGraph G, int burn_factor, int limit_size, int lower_size, int max_level){
+		int n_nodes = G.V();
+		int n_edges = G.E();
 		int id = -1;
 		
 		// root node
@@ -559,10 +553,10 @@ public class NodeSetModOpt2{
 			}else{	// leaf
 				for (int s = 0; s < R.ind.length; s++)
 					if (R.ind[s] == true)
-						bw.write(R.ind2node[s] + " ");
+						bw.write(R.ind2node[s] + ",");
 				for (int s = 0; s < R.ind.length; s++)
 					if (R.ind[s] == false)
-						bw.write(R.ind2node[s] + " ");
+						bw.write(R.ind2node[s] + ",");
 				bw.write("\n");
 			}
 		}
@@ -629,6 +623,101 @@ public class NodeSetModOpt2{
 		
 		//
 		return ret;
+	}
+	
+	
+	//// see Louvain.one_level()
+	public static void partitionLouvain(NodeSetModOpt2 R, EdgeWeightedGraph G, int burn_factor){
+		int n_edges = G.E();
+		double modT, modT2;
+		
+		int old_st = R.e_st;
+		int old_s = R.e_s;
+		int old_t = R.e_t;
+		modT = R.modularity(n_edges);
+		
+		boolean modif = true;
+		int nb_pass_done = 0;
+		
+		while (modif && nb_pass_done != burn_factor){
+	        modif = false;
+	        nb_pass_done += 1;
+		
+			for (int i = 0; i < R.ind.length; i++){
+				int u = R.ind2node[i];
+				boolean is_add = false;
+				
+				if (R.ind[i] == true){	// u in S
+					R.remove(u, G);
+					is_add = false;
+				}else{
+					R.add(u,G);
+					is_add = true;
+				}
+				modT2 = R.modularity(n_edges);
+				
+				if (modT2 > modT){ 
+					modif = true;
+					modT = modT2;
+					old_st = R.e_st;
+					old_s = R.e_s;
+					old_t = R.e_t;
+				}else{ 		// reverse
+					if (is_add)
+						R.reverse_add(u, G, old_st, old_s, old_t);
+					else
+						R.reverse_remove(u, G, old_st, old_s, old_t);
+				}
+			}
+		}
+		//
+		System.out.println("nb_pass_done < burn_factor : " + (nb_pass_done < burn_factor));
+	}
+	
+	
+	public static NodeSetModOpt2 recursiveLouvain(EdgeWeightedGraph G, int burn_factor, int limit_size, int max_level){
+		int id = -1;
+		
+		// root node
+		NodeSetModOpt2 root = new NodeSetModOpt2(G);
+		root.id = id--;
+		root.level = 0;
+		// 
+		Queue<NodeSetModOpt2> queue = new LinkedList<NodeSetModOpt2>();
+		queue.add(root);
+		while(queue.size() > 0){
+			NodeSetModOpt2 R = queue.remove();
+			System.out.println("R.level = " + R.level + " R.S.size() + R.T.size() = " + R.ind.length);
+			
+			if (R.ind.length <= limit_size || R.level == max_level){
+				continue;
+			}
+			
+			long start = System.currentTimeMillis();
+			NodeSetModOpt2.partitionLouvain(R, G, burn_factor);
+			System.out.println("elapsed " + (System.currentTimeMillis() - start));
+			
+			NodeSetModOpt2 RS = getSubSet(G, R, true);
+			RS.id = id--;
+			R.left = RS;
+			RS.parent = R;
+			RS.level = R.level + 1;
+			
+			NodeSetModOpt2 RT = getSubSet(G, R, false);
+			RT.id = id--;
+			R.right = RT;
+			RT.parent = R;
+			RT.level = R.level + 1;
+			
+			//
+			queue.add(RS);
+		
+			queue.add(RT);
+			
+		}
+		
+		//
+		return root;
 	}
 	
 }

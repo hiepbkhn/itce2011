@@ -10,6 +10,8 @@
  *  - generateSanitizedSample(): run much faster O(m)
  * Sep 17
  * 	- add partitionTopDown() using queue (see dynamic programming in NodeSetMod.bestCut())
+ * Sep 24
+ * 	- add buildDendrogram() using EdgeWeightedGraph
  */
 
 package dp.mcmc;
@@ -32,6 +34,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
+
+import algs4.Edge;
+import algs4.EdgeWeightedGraph;
 
 import com.carrotsearch.hppc.cursors.IntCursor;
 
@@ -600,6 +605,26 @@ public class Dendrogram {
 		for (VertexPair p : G.getEdgePairs()){
 	        int u = p.first;
 	        int v = p.second;
+	//        print u, v
+	        // find lowest common ancestor
+	        int a_id = lowestCommonAncestor(node_dict.get(u), node_dict.get(v));
+	        node_dict.get(a_id).nEdge += 1;
+	    }
+		
+	    // compute value
+	    for (Node u : node_dict.values())
+	        if (u.id < 0)    // internal nodes
+	            u.value = (double)u.nEdge/(u.nL*u.nR);
+	}
+	
+	////
+	public static void buildDendrogram(Node[] node_list, HashMap<Integer, Node> node_dict, Node root_node, EdgeWeightedGraph G){
+		compute_nL_nR(root_node, node_dict);
+		
+	    // compute nEdge
+		for (Edge e : G.edges()){
+			int u = e.either();
+			int v = e.other(u);
 	//        print u, v
 	        // find lowest common ancestor
 	        int a_id = lowestCommonAncestor(node_dict.get(u), node_dict.get(v));
