@@ -16,6 +16,8 @@
 
 package dp.combined;
 
+import hist.Int2;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -56,14 +58,32 @@ public class NodeSetMod {
 	public int e_t;			// number of edges inside T
 	public int d_s = 0; 	// total degree of nodes in S
 	public int d_t = 0;		// total degree of nodes in T
+	public List<Int2> e_list;	
 	
 	public NodeSetMod parent, left, right;		// for recursive partitioning
 	public int id;
 	public int level = 0;
 	
+	
+	
+	//// return e_listS, e_listT (they MUST be initialized outside !)
+	public static void getSubEgdeLists(NodeSetMod R, List<Int2> e_listS, List<Int2> e_listT){
+		
+		int u = 0;
+		int v = 0;
+		for (Int2 e : R.e_list){
+			u = R.node2ind.get(e.val0);
+			v = R.node2ind.get(e.val1);
+			if (R.ind[u] == true && R.ind[v] == true)
+				e_listS.add(e);
+			if (R.ind[u] == false && R.ind[v] == false)
+				e_listT.add(e);
+		}
+	}
+	
 	////
-	public static NodeSetMod getSubSet(EdgeWeightedGraph G, NodeSetMod R, boolean val){
-		NodeSetMod ret = new NodeSetMod();
+	public static NodeSetMod getSubSet(EdgeWeightedGraph G, NodeSetMod R, NodeSetMod ret, boolean val, List<Int2> e_list){
+//		NodeSetMod ret = new NodeSetMod();
 		
 		ret.node2ind = new HashMap<Integer, Integer>();
 		int count = 0;
@@ -92,38 +112,35 @@ public class NodeSetMod {
 		ret.n_s = n_nodes/2;
 		ret.n_t = n_nodes - n_nodes/2;
 		//
-		int n = G.V();
-		int[] node2Set = new int[n]; // 1:S, 2:T
+		int[] node2Set = new int[n_nodes]; // 1:S, 2:T
 		
 		// d_s, d_t
 		ret.d_s = 0;
 		ret.d_t = 0;
-		for (int u = 0; u < n; u++)
-			if (ret.node2ind.containsKey(u)){
-				if (ret.ind[ret.node2ind.get(u)] == true){
-					ret.d_s += G.degree(u);
-					node2Set[u] = 1;
-				}else{
-					ret.d_t += G.degree(u);
-					node2Set[u] = 2;
-				}
+		for (int i = 0; i < n_nodes; i++)
+			if (ret.ind[i] == true){
+				ret.d_s += G.degree(ret.ind2node[i]);
+				node2Set[i] = 1;
+			}else{
+				ret.d_t += G.degree(ret.ind2node[i]);
+				node2Set[i] = 2;
 			}
-		
+	
 		// e_st, e_s, e_t
 		ret.e_st = 0;
 		ret.e_s = 0;
 		ret.e_t = 0;
 		
-		int u; 
-		int v;
-		for (Edge e : G.edges()){
-			u = e.either();
-			v = e.other(u);
-			if (node2Set[u] + node2Set[v] == 3)	//  
+		int u_id; 
+		int v_id;
+		for (Int2 e : e_list){
+			u_id = ret.node2ind.get(e.val0);
+			v_id = ret.node2ind.get(e.val1);
+			if (node2Set[u_id] + node2Set[v_id] == 3)	//  
 				ret.e_st += 1;
-			if (node2Set[u] == 1 && node2Set[v] == 1)
+			if (node2Set[u_id] == 1 && node2Set[v_id] == 1)
 				ret.e_s += 1;
-			if (node2Set[u] == 2 && node2Set[v] == 2)
+			if (node2Set[u_id] == 2 && node2Set[v_id] == 2)
 				ret.e_t += 1;
 		}
 		
@@ -133,7 +150,7 @@ public class NodeSetMod {
 	
 	////
 	public NodeSetMod(){
-		
+		this.e_list = new ArrayList<Int2>();
 	}
 	
 	////
@@ -174,16 +191,18 @@ public class NodeSetMod {
 				node2Set[u] = 2;
 			}
 		
-		// e_st, e_s, e_t
+		// e_st, e_s, e_t, e_list
 		this.e_st = 0;
 		this.e_s = 0;
 		this.e_t = 0;
+		this.e_list = new ArrayList<Int2>();
 		
 		int u; 
 		int v;
 		for (Edge e : G.edges()){
 			u = e.either();
 			v = e.other(u);
+			this.e_list.add(new Int2(u, v));
 			if (node2Set[u] + node2Set[v] == 3)	//  
 				this.e_st += 1;
 			if (node2Set[u] == 1 && node2Set[v] == 1)
@@ -191,6 +210,9 @@ public class NodeSetMod {
 			if (node2Set[u] == 2 && node2Set[v] == 2)
 				this.e_t += 1;
 		}
+		
+		// 
+		
 		
 		// debug
 		System.out.println("NodeSetMod called: e_st = " + this.e_st + " e_s = " + this.e_s + " d_s = " + this.d_s + " e_t = " + this.e_t + " d_t = " + this.d_t);
@@ -511,13 +533,19 @@ public class NodeSetMod {
 			NodeSetMod.partitionMod(R, G, epsArr[R.level], burn_factor*R.ind.length, 0, 0, false, lower_size);
 			System.out.println("elapsed " + (System.currentTimeMillis() - start));
 			
-			NodeSetMod RS = getSubSet(G, R, true);
+			NodeSetMod RS = new NodeSetMod();
+			NodeSetMod RT = new NodeSetMod();
+			
+			getSubEgdeLists(R, RS.e_list, RT.e_list);
+			
+			getSubSet(G, R, RS, true, RS.e_list);
+			getSubSet(G, R, RT, false, RT.e_list);
+					
 			RS.id = id--;
 			R.left = RS;
 			RS.parent = R;
 			RS.level = R.level + 1;
 			
-			NodeSetMod RT = getSubSet(G, R, false);
 			RT.id = id--;
 			R.right = RT;
 			RT.parent = R;
