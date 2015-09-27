@@ -121,3 +121,69 @@ level 0*
 logLK2 = -1.0951673247434728E7
 checkTrueEdges - DONE.
 best_partition - DONE, elapsed 584210
+
+
+///// Sep 27, 2015
+dataname = ca-AstroPh
+readGraph - DONE, elapsed 282
+#nodes = 18771
+#edges = 198050
+current_graph: #nodes = 18771 #edges = 396100
+current_graph: #nodes = 2003 #edges = 14119
+current_graph: #nodes = 471 #edges = 2398
+current_graph: #nodes = 335 #edges = 836
+current_graph: #nodes = 328 #edges = 696
+current_graph: #nodes = 328 #edges = 696
+modularity = 0.6297077955789789
+#communitites = 328
+best_partition - DONE, elapsed 2591
+
+dataname = com_amazon_ungraph
+readGraph - DONE, elapsed 3044
+#nodes = 334863
+#edges = 925872
+current_graph: #nodes = 334863 #edges = 1851744
+current_graph: #nodes = 52655 #edges = 223345
+current_graph: #nodes = 9906 #edges = 75134
+current_graph: #nodes = 1183 #edges = 15740
+current_graph: #nodes = 306 #edges = 5391
+current_graph: #nodes = 258 #edges = 4521
+current_graph: #nodes = 257 #edges = 4493
+current_graph: #nodes = 257 #edges = 4493
+modularity = 0.9256792135707866
+#communitites = 257
+best_partition - DONE, elapsed 26748
+
+
+dataname = com_dblp_ungraph
+readGraph - DONE, elapsed 2434
+#nodes = 317080
+#edges = 1049866
+current_graph: #nodes = 317080 #edges = 2099732
+current_graph: #nodes = 58394 #edges = 242581
+current_graph: #nodes = 9324 #edges = 72982
+current_graph: #nodes = 1411 #edges = 24155
+current_graph: #nodes = 427 #edges = 8300
+current_graph: #nodes = 375 #edges = 6620
+current_graph: #nodes = 375 #edges = 6620
+modularity = 0.8182948655395561
+#communitites = 375
+best_partition - DONE, elapsed 25496
+
+
+dataname = com_youtube_ungraph
+readGraph - DONE, elapsed 5577
+#nodes = 1134890
+#edges = 2987624
+current_graph: #nodes = 1134890 #edges = 5975248
+current_graph: #nodes = 147361 #edges = 477315
+current_graph: #nodes = 35410 #edges = 136035
+current_graph: #nodes = 17996 #edges = 67506
+current_graph: #nodes = 14284 #edges = 42638
+current_graph: #nodes = 13627 #edges = 35845
+current_graph: #nodes = 13493 #edges = 33537
+current_graph: #nodes = 13485 #edges = 33306
+current_graph: #nodes = 13485 #edges = 33306
+modularity = 0.7104183177339617
+#communitites = 13485
+best_partition - DONE, elapsed 53858
