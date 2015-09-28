@@ -1,13 +1,17 @@
 /*
  * Sep 28, 2015
  * 	- implement paper "Privacy-Integrated Graph Clustering Through Differential Privacy" (EDBTw'15)
- * 
+ * 	- perturbGraphAndLouvain() use routines from GreedyReconstruct (TmF)
  */
 
 package dp.combined;
 
+import java.io.IOException;
+import java.util.Map;
 import java.util.Random;
 
+import naive.GreedyReconstruct;
+import algs4.EdgeWeightedGraph;
 import toools.io.file.RegularFile;
 import grph.Grph;
 import grph.VertexPair;
@@ -47,7 +51,7 @@ public class EdgeFlip {
 		}
 		
 		// 0-edges
-		int n_zeros = (int)((n*(n-1)/2 - m)*s/2);
+		int n_zeros = (int)((n/2.0*(n-1) - m)*s/2);		// int overflow !
 		System.out.println("n_zeros = " + n_zeros);
 		
 		GraphIntSet I = new GraphIntSet(G);
@@ -65,13 +69,47 @@ public class EdgeFlip {
 		return aG;
 	}
 	
+	////
+	public static void perturbGraphAndLouvain(Grph G, double eps, String sample_file, int n_samples) throws IOException{
+		
+		RegularFile f;
+		Map<Integer, Integer> part;
+		
+		for (int i = 0; i < n_samples; i++){
+			Grph aG = perturbGraph(G, eps);
+			
+			f = new RegularFile(sample_file + "." + i);
+			EdgeListWriter writer = new EdgeListWriter();
+	    	writer.writeGraph(aG, f);
+	    	System.out.println("writeGraph - DONE");
+			
+			EdgeWeightedGraph G2 = GreedyReconstruct.convertGraph(aG);
+			System.out.println("convertGraph - DONE");
+			
+			
+			Louvain lv = new Louvain();
+			
+			long start = System.currentTimeMillis();
+			part = lv.best_partition(G2, null);
+			System.out.println("best_partition - DONE, elapsed " + (System.currentTimeMillis() - start));
+			
+			// compute modularity using G and part
+			System.out.println("real modularity = " + GreedyReconstruct.modularity(G, part));
+			
+			
+		}
+		
+	}
+	
 	////////////////////////////////////////////////
 	public static void main(String[] args) throws Exception{
+		ClassLoader.getSystemClassLoader().setDefaultAssertionStatus(true);
+		System.out.println("EdgeFlip");
 		
 		String dataname;
 		int n_samples = 1;
-		String[] dataname_list = new String[]{"com_amazon_ungraph"}; //, "com_dblp_ungraph", "com_youtube_ungraph"};
-		double[][] eps_list = new double[][]{{10.0, 20.0, 30.0}, {10.0, 20.0, 30.0}, {10.0, 20.0, 30.0}};
+		String[] dataname_list = new String[]{"ca-AstroPh"}; //com_amazon_ungraph, "com_dblp_ungraph", "com_youtube_ungraph"};
+		double[][] eps_list = new double[][]{{2.5, 5.0, 7.5, 10.0}, {10.0, 20.0, 30.0}, {10.0, 20.0, 30.0}};
 	    
 	    Grph G;
 	    
@@ -97,15 +135,15 @@ public class EdgeFlip {
 	    		
 	    		System.out.println("eps = " + eps);
 	    		
-	    		start = System.currentTimeMillis();
-	    		Grph aG = perturbGraph(G, eps);
-				System.out.println("perturbGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
-				System.out.println("#nodes = " + aG.getNumberOfVertices());
-				System.out.println("#edges = " + aG.getNumberOfEdges());
+//	    		start = System.currentTimeMillis();
+//	    		Grph aG = perturbGraph(G, eps);
+//				System.out.println("perturbGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
+//				System.out.println("#nodes = " + aG.getNumberOfVertices());
+//				System.out.println("#edges = " + aG.getNumberOfEdges());
 	    		
-	    		f = new RegularFile(sample_file + "." + i);
-				EdgeListWriter writer = new EdgeListWriter();
-		    	writer.writeGraph(aG, f);
+	    		//
+	    		perturbGraphAndLouvain(G, eps, sample_file, n_samples);
+	    		
 	    	}
 	    }
 

@@ -4,9 +4,11 @@
  * Sep 16
  *	- add new variable status.sizes, status.com2com
  *	- checkTrueEdges (TOP-DOWN) + findCom(), checkNumEdges()
- *	- logLK() BOTTOm-UP --> wrong!
+ *	- logLK() BOTTOM-UP --> wrong!
  * Sep 22
  * 	- (degree/(2.0*links))*(degree /(2.0*links)); 	
+ * Sep 28
+ * 	- PASS_MAX = 20 (nb_pass_done < PASS_MAX in true graphs), used to reduce runtime of Louvain on TmF, EdgeFlip
  */
 
 package dp.combined;
@@ -196,7 +198,7 @@ class Status{
 
 public class Louvain {
 	
-	static final int PASS_MAX = -1;
+	static final int PASS_MAX = 20;		// -1
 	static final double MIN = 0.0000001;
 
 	
@@ -310,6 +312,8 @@ public class Louvain {
 	        if (new_mod - cur_mod < MIN)
 	            break;
 	    }
+	    
+	    System.out.println("?PASS_MAX = " + (nb_pass_done < PASS_MAX));
 	}
 	
 	//// replace param 'dictionary' by 'status' (dictionary = status.node2com)
@@ -424,6 +428,8 @@ public class Louvain {
 	    List<Map<Integer, Integer>> status_list = new ArrayList<Map<Integer,Integer>>();
 	    
 	    one_level(current_graph, status);
+	    System.out.println("current_graph: #nodes = " + current_graph.V() + " #edges = " + current_graph.E() + " mod = " + mod);
+	    
 	    double new_mod = modularity(status);
 	    
 	    
@@ -437,8 +443,6 @@ public class Louvain {
 	    
 	    mod = new_mod;
 	    
-	    // debug
-	    System.out.println("current_graph: #nodes = " + current_graph.V() + " #edges = " + current_graph.E() + " mod = " + mod);
 	    
 	    current_graph = induced_graph(partition, current_graph);
 	    status.init(current_graph, null, status);
@@ -450,10 +454,11 @@ public class Louvain {
 	    	// debug
 //	    	status.print();
 //	    	System.out.println(current_graph);
-		    System.out.println("current_graph: #nodes = " + current_graph.V() + " #edges = " + current_graph.E() + " mod = " + mod);
-	    	
-	    	one_level(current_graph, status);
 		    
+	    	one_level(current_graph, status);
+	    	//debug
+	    	System.out.println("current_graph: #nodes = " + current_graph.V() + " #edges = " + current_graph.E() + " mod = " + mod);
+	    	
 	        new_mod = modularity(status);
 	        
 	        if (new_mod - mod < MIN)
@@ -462,15 +467,16 @@ public class Louvain {
 	        status_list.add(partition);
 	        status_all.add(status.copy());
 	        
+	        
+	        
 	        mod = new_mod;
+	        
 	        current_graph = induced_graph(partition, current_graph);
 	        status.init(current_graph, null, status);
 	        graph_all.add(current_graph.clone());
 	        
+	        
 	    }
-	    
-	    // debug
-	    System.out.println("current_graph: #nodes = " + current_graph.V() + " #edges = " + current_graph.E() + " mod = " + mod);
 	    
 	  	//debug
 	    System.out.println("modularity = " + new_mod);
@@ -890,9 +896,9 @@ public class Louvain {
 //		String dataname = "ca-HepPh";		// (12006,118489) 	ok
 //		String dataname = "ca-AstroPh";		// (18771,198050) 	ok		1.56s
 		// LARGE
-//		String dataname = "com_amazon_ungraph";		// (334863,925872)	17.8s
+		String dataname = "com_amazon_ungraph";		// (334863,925872)	17.8s
 //		String dataname = "com_dblp_ungraph";		// (317080,1049866)	27.2s 			(new : 20s, Mem 1.5GB)
-		String dataname = "com_youtube_ungraph";	// (1134890,2987624) 670s, 2.2GB)	(new : 42s, Mem 2.7GB)
+//		String dataname = "com_youtube_ungraph";	// (1134890,2987624) 670s, 2.2GB)	(new : 42s, Mem 2.7GB)
 													//						
 		// COMMAND-LINE <prefix> <dataname> <n_samples> <eps>
 		String prefix = "";

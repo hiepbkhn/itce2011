@@ -4,7 +4,7 @@
  * Apr 5
  * 	- 
  * Sep 28
- * 	- add filterLaplaceAndLouvain(), use Loouvain.java
+ * 	- add filterLaplaceAndLouvain(), use Louvain.java
  */
 
 package naive;
@@ -265,7 +265,7 @@ public class GreedyReconstruct {
 			System.out.println("best_partition - DONE, elapsed " + (System.currentTimeMillis() - start));
 			
 			// compute modularity using G and part
-			System.out.println("real modularity = " + modularity(G, part));
+			System.out.println("real modularity = " + modularity(G, part));		// test part on G not G2
 			
 			
 		}
@@ -275,6 +275,9 @@ public class GreedyReconstruct {
 	
 	///////////////////////////////////////////////////////
 	public static void main(String[] args) throws Exception{
+		ClassLoader.getSystemClassLoader().setDefaultAssertionStatus(true);
+		System.out.println("GreedyReconstruct");
+		
 		// TOY GRAPH
 //		Grph G = new InMemoryGrph();
 //		G.addNVertices(8);
@@ -391,9 +394,9 @@ public class GreedyReconstruct {
 		
 		// TEST filterLaplaceAndLouvain()
 		int n_samples = 1;
-		String[] dataname_list = new String[]{"com_amazon_ungraph", "com_dblp_ungraph", "com_youtube_ungraph"};
+		String[] dataname_list = new String[]{"ca-AstroPh"}; //com_amazon_ungraph, "com_dblp_ungraph", "com_youtube_ungraph"};
 //		double[][] eps_list = new double[][]{{5.0, 10.0, 20.0, 30.0}, {5.0, 10.0, 20.0, 30.0}, {10.0, 20.0, 30.0, 50.0}};
-	    double[][] eps_list = new double[][]{{5.0, 10.0}, {5.0, 10.0}, {5.0, 10.0}};
+	    double[][] eps_list = new double[][]{{10.0, 20.0}, {5.0, 10.0}, {5.0, 10.0}};
 	    
 	    Grph G;
 	    
