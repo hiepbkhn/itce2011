@@ -20,6 +20,8 @@ package dp.combined;
 
 import hist.Int2;
 
+import hist.Int2;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;

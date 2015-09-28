@@ -436,15 +436,20 @@ public class Louvain {
 	    
 	    mod = new_mod;
 	    
+	    // debug
+	    System.out.println("current_graph: #nodes = " + current_graph.V() + " #edges = " + current_graph.E());
+	    
 	    current_graph = induced_graph(partition, current_graph);
 	    status.init(current_graph, null, status);
 	    graph_all.add(current_graph.clone());
+	    
 	    
 	    
 	    while (true){
 	    	// debug
 //	    	status.print();
 //	    	System.out.println(current_graph);
+		    System.out.println("current_graph: #nodes = " + current_graph.V() + " #edges = " + current_graph.E());
 	    	
 	    	one_level(current_graph, status);
 		    
@@ -462,6 +467,9 @@ public class Louvain {
 	        graph_all.add(current_graph.clone());
 	        
 	    }
+	    
+	    // debug
+	    System.out.println("current_graph: #nodes = " + current_graph.V() + " #edges = " + current_graph.E());
 	    
 	  	//debug
 	    System.out.println("modularity = " + new_mod);
@@ -876,10 +884,10 @@ public class Louvain {
 //		String dataname = "karate";			// (34, 78) 		ok
 //		String dataname = "polbooks";		// (105, 441)		ok
 //		String dataname = "polblogs";		// (1224,16715)		ok 	
-		String dataname = "as20graph";		// (6474,12572)		ok
+//		String dataname = "as20graph";		// (6474,12572)		ok
 //		String dataname = "wiki-Vote";		// (7115,100762)	ok
 //		String dataname = "ca-HepPh";		// (12006,118489) 	ok
-//		String dataname = "ca-AstroPh";		// (18771,198050) 	ok		1.56s
+		String dataname = "ca-AstroPh";		// (18771,198050) 	ok		1.56s
 		// LARGE
 //		String dataname = "com_amazon_ungraph";		// (334863,925872)	17.8s
 //		String dataname = "com_dblp_ungraph";		// (317080,1049866)	27.2s 			(new : 20s, Mem 1.5GB)
@@ -907,8 +915,8 @@ public class Louvain {
 		Map<Integer, Integer> part = lv.best_partition(G, null);
 		System.out.println("best_partition - DONE, elapsed " + (System.currentTimeMillis() - start));
 
-		Louvain.writePart(part, part_file);
-		System.out.println("writePart - DONE");
+//		Louvain.writePart(part, part_file);
+//		System.out.println("writePart - DONE");
 	}
 
 }

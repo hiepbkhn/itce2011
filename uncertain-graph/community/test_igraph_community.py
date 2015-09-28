@@ -88,7 +88,15 @@ def test_label_propagation(G):
     #
     return get_clusters(vertex_cluster)
 
+#######################################################
+def test_spin_glass(G):
+    vertex_cluster = G.community_spinglass()
+    print "spin_glass    modularity =", G.modularity(vertex_cluster)
+    
+    print vertex_cluster.summary()
 
+    #
+    return get_clusters(vertex_cluster)
 
 #######################################################
 if __name__ == '__main__':
@@ -97,23 +105,23 @@ if __name__ == '__main__':
 #    FILE_NAME = PATH + "adjnoun.gml"
 #    G = ig.Graph.Read(FILE_NAME, format="gml")
     
-#    FILE_NAME = PATH + "karate.gr"
-##    FILE_NAME = PATH + "polbooks.gr"
-##    FILE_NAME = PATH + "polblogs.gr"
-##    FILE_NAME = PATH + "as20graph.gr"
-##    FILE_NAME = PATH + "wiki-Vote.gr"
-##    FILE_NAME = PATH + "ca-HepPh.gr"
-##    FILE_NAME = PATH + "ca-AstroPh.gr"
-##    FILE_NAME = PATH + "com_amazon_ungraph.gr"
-##    FILE_NAME = PATH + "com_dblp_ungraph.gr"
-##    FILE_NAME = PATH + "com_youtube_ungraph.gr"
-#    G = ig.Graph.Read_Edgelist(FILE_NAME, directed=False)
+    FILE_NAME = PATH + "karate.gr"
+    FILE_NAME = PATH + "polbooks.gr"
+#    FILE_NAME = PATH + "polblogs.gr"
+    FILE_NAME = PATH + "as20graph.gr"
+#    FILE_NAME = PATH + "wiki-Vote.gr"
+#    FILE_NAME = PATH + "ca-HepPh.gr"
+#    FILE_NAME = PATH + "ca-AstroPh.gr"
+#    FILE_NAME = PATH + "com_amazon_ungraph.gr"
+#    FILE_NAME = PATH + "com_dblp_ungraph.gr"
+#    FILE_NAME = PATH + "com_youtube_ungraph.gr"
+    G = ig.Graph.Read_Edgelist(FILE_NAME, directed=False)
 
 #    G = ig.Graph.Read_Edgelist("../_data/com_amazon_ungraph.gr", directed=False)    # 254 clusters, 6.3s
 #    G = ig.Graph.Read_Edgelist("../_data/com_dblp_ungraph.gr", directed=False)    # 278 clusters, 5s
 #    G = ig.Graph.Read_Edgelist("../_data/com_youtube_ungraph.gr", directed=False)   # 13517 clusters, 11.5s
-    PATH = "E:/Tailieu/Paper-code/DATA-SET/SNAP/Networks with ground-truth communities/"
-    G = ig.Graph.Read_Edgelist(PATH + "com_lj_ungraph.gr", directed=False) # (3997962, 34681189)   (mem 2.8GB, 286s), 7322 clusters
+#    PATH = "E:/Tailieu/Paper-code/DATA-SET/SNAP/Networks with ground-truth communities/"
+#    G = ig.Graph.Read_Edgelist(PATH + "com_lj_ungraph.gr", directed=False) # (3997962, 34681189)   (mem 2.8GB, 286s), 7322 clusters
     
     print "#nodes", G.vcount()
     print "#edges", G.ecount()   
@@ -128,16 +136,20 @@ if __name__ == '__main__':
 #    clusters = test_infomap(G)                  #
 #    print "elapsed", time.clock() - start
     
-    start = time.clock()
-    clusters = test_multilevel(G)               # (fast unfolding ...)
-    print "elapsed", time.clock() - start
+#    start = time.clock()
+#    clusters = test_multilevel(G)               # (fast unfolding ...)
+#    print "elapsed", time.clock() - start
     
 #    start = time.clock()
 #    clusters = test_leading_eigenvector(G)      #
 #    print "elapsed", time.clock() - start
     
+#    start = time.clock() 
+#    clusters = test_label_propagation(G)        #
+#    print "elapsed", time.clock() - start 
+    
     start = time.clock() 
-    clusters = test_label_propagation(G)        #
+    clusters = test_spin_glass(G)        #
     print "elapsed", time.clock() - start 
     
 #    print clusters

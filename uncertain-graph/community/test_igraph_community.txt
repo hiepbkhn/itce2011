@@ -16,6 +16,9 @@ elapsed 0.00632838217826
 label_propagation    modularity = 0.402038132807
 Clustering with 34 elements and 3 clusters
 elapsed 0.000118936394688
+spin_glass    modularity = 0.419789612097
+Clustering with 34 elements and 4 clusters
+elapsed 0.523160215958
 
 [polbooks]
 #nodes 105
@@ -35,6 +38,9 @@ elapsed 0.0193455781471
 label_propagation    modularity = 0.494621582571
 Clustering with 105 elements and 3 clusters
 elapsed 0.000400882061282
+spin_glass    modularity = 0.526264776508
+Clustering with 105 elements and 6 clusters
+elapsed 1.95403939704
 
 
 [polblogs]
