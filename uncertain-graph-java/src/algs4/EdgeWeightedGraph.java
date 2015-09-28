@@ -1,6 +1,8 @@
 /*
  * Sep 15, 2015
  * 	- replace Bag<Edge>[] adj to HashMap<Integer, Edge>[] adj
+ * Sep 28
+ * 	- fix error in clone()
  */
 
 package algs4;
@@ -292,7 +294,8 @@ public class EdgeWeightedGraph {
     
     public EdgeWeightedGraph clone(){
     	EdgeWeightedGraph ret = new EdgeWeightedGraph(this.V());
-    	ret.E = this.E;
+//    	ret.E = this.E;	// ERROR !
+    	ret.E = 0;
     	for (Edge e : this.edges())
     		ret.addEdge(e);
     	//

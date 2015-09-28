@@ -4,6 +4,9 @@
  * Sep 22
  * 	- add modularity()
  * 	- add initEqualCommunityFromFile()
+ * Sep 28
+ * 	- MCMC at the first level (use NodeSetLouvain.java)
+ * 	- add louvainAfterFirstPass()
  */
 
 package dp.combined;
@@ -107,7 +110,7 @@ public class LouvainDP {
 				
 	
 	////
-	public static EdgeWeightedGraph getGraphbyPartition(EdgeWeightedGraph graph, Map<Integer, Integer> part_init){
+	public static EdgeWeightedGraph getGraphByPartition(EdgeWeightedGraph graph, Map<Integer, Integer> part_init){
 		int k = 0;
 		for (int val : part_init.values())
 			if (k < val)
@@ -146,7 +149,7 @@ public class LouvainDP {
 		return graph_new;
 	}
 	
-	//// non-private
+	//// NON-PRIVATE
 	public static Map<Integer, Integer> partitionEqual(EdgeWeightedGraph graph, int k){
 		int n = graph.V();
 		Map<Integer, Integer> part_init = initEqualCommunity(n, k);
@@ -161,17 +164,17 @@ public class LouvainDP {
 //		return lv.best_partition(graph, part_init);
 		
 		// 2. fix nodes to partitions in part_init
-		EdgeWeightedGraph graph_new = getGraphbyPartition(graph, part_init);
+		EdgeWeightedGraph graph_new = getGraphByPartition(graph, part_init);
 		Louvain lv = new Louvain();
 		return lv.best_partition(graph_new, null);
 	}
 	
-	//// private
+	//// PRIVATE
 	public static Map<Integer, Integer> partitionEqualPrivate(EdgeWeightedGraph graph, int k, double eps){
 		int n = graph.V();
 		Map<Integer, Integer> part_init = initEqualCommunity(n, k);
 		
-		EdgeWeightedGraph graph_new = getGraphbyPartition(graph, part_init);
+		EdgeWeightedGraph graph_new = getGraphByPartition(graph, part_init);
 		
 		// add Laplace/geometric noise to graph_new edge weights
 		double alpha = Math.exp(-eps);
@@ -193,37 +196,92 @@ public class LouvainDP {
 	}
 	
 	
+	////////////////// Sep 28
+	// PRIVATE
+	public static void louvainAfterFirstPass(EdgeWeightedGraph graph, String part_file, double eps2) throws IOException{
+		Map<Integer, Integer> part_init = new HashMap<Integer, Integer>();
+		
+		// 1. read part_file
+		BufferedReader br = new BufferedReader(new FileReader(part_file));
+		int count = 0;
+		while (true){
+        	String str = br.readLine();
+        	if (str == null)
+        		break;
+        	if (str.length() == 0)
+        		continue;
+        	
+        	String[] items = str.split(",");
+        	
+        	for (int i = 0; i < items.length; i++){
+        		int u = Integer.parseInt(items[i]);
+        		part_init.put(u, count);
+        	}
+        		
+        	//
+        	count += 1;
+		}
+		
+		br.close();
+		
+		// 2. build graph_new, add noise and run exact Louvain
+		EdgeWeightedGraph graph_new = getGraphByPartition(graph, part_init);
+		
+		// add Laplace/geometric noise to graph_new edge weights
+		double alpha = Math.exp(-eps2);
+		for (Edge e : graph_new.edges()){
+			double value = e.weight() + DPUtil.geometricMechanism(alpha);
+			if (value < 0)
+				value = 0;
+			e.setWeight(value);
+		}
+
+		System.out.println("graph_new.V = " + graph_new.V() + " graph_new.E = " + graph_new.E());
+		System.out.println("graph_new.totalWeight = " + graph_new.totalWeight());
+		//
+		Louvain lv = new Louvain();
+		
+		lv.best_partition(graph_new, null);
+		
+	}
+	
+	
+	
 	////////////////////////////////////////////////
 	public static void main(String[] args) throws Exception{
 		// load graph
 //		String dataname = "karate";			// (105, 441)
 //		String dataname = "polbooks";		// (105, 441)		
 //		String dataname = "polblogs";		// (1224,16715) 	
-		String dataname = "as20graph";		// (6474,12572)		
+//		String dataname = "as20graph";		// (6474,12572)		
 //		String dataname = "wiki-Vote";		// (7115,100762)
 //		String dataname = "ca-HepPh";		// (12006,118489) 	
 //		String dataname = "ca-AstroPh";		// (18771,198050) 			
 		// LARGE
 //		String dataname = "com_amazon_ungraph";		// (334863,925872)	
 //		String dataname = "com_dblp_ungraph";		// (317080,1049866)	
-//		String dataname = "com_youtube_ungraph";	// (1134890,2987624) 
+		String dataname = "com_youtube_ungraph";	// (1134890,2987624) 
 													//						
 		// COMMAND-LINE <prefix> <dataname> <n_samples> <eps>
 		String prefix = "";
+		int burn_factor = 20;
 	    int n_samples = 1;
-//	    double eps = 1.0;
-	    
-	    System.out.println("dataname = " + dataname);
-	    
-	    
-		String filename = prefix + "_data/" + dataname + ".gr";
-		
-		long start = System.currentTimeMillis();
-		EdgeWeightedGraph G = EdgeWeightedGraph.readEdgeList(filename);
-		System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
-		
-		System.out.println("#nodes = " + G.V());
-		System.out.println("#edges = " + G.E());
+//	    int num_part = 10;
+//	    double eps = 30.0;
+//	    
+//	    System.out.println("dataname = " + dataname);
+//		System.out.println("burn_factor = " + burn_factor + " n_samples = " + n_samples);
+//		System.out.println("eps = " + eps);
+//		System.out.println("num_part = " + num_part);
+//	    
+//		String filename = prefix + "_data/" + dataname + ".gr";
+//		
+//		long start = System.currentTimeMillis();
+//		EdgeWeightedGraph G = EdgeWeightedGraph.readEdgeList(filename);
+//		System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
+//		
+//		System.out.println("#nodes = " + G.V());
+//		System.out.println("#edges = " + G.E());
 		
 		// TEST partitionEqual()
 //		int k = 0;
@@ -244,13 +302,64 @@ public class LouvainDP {
 //		}
 		
 		// TEST initEqualCommunityFromFile()
-		int size = 1;	// as20graph -> (size,mod) = 5:0.403, 2:0.471, 1:0.623
-		String part_file = "_out/as20graph.louvain";
-		Map<Integer, Integer> part = LouvainDP.initEqualCommunityFromFile(G.V(), size, part_file);
-		EdgeWeightedGraph graph_new = getGraphbyPartition(G, part);
+//		int size = 1;	// as20graph -> (size,mod) = 5:0.403, 2:0.471, 1:0.623
+//		String part_file = "_out/as20graph.louvain";
+//		Map<Integer, Integer> part = LouvainDP.initEqualCommunityFromFile(G.V(), size, part_file);
+//		EdgeWeightedGraph graph_new = getGraphByPartition(G, part);
+//		
+//		Louvain lv = new Louvain();
+//		lv.best_partition(graph_new, null);
 		
-		Louvain lv = new Louvain();
-		lv.best_partition(graph_new, null);
+		
+		// TEST NodeSetLouvain + louvainAfterFirstPass()
+	    String[] dataname_list = new String[]{"com_amazon_ungraph", "com_dblp_ungraph", "com_youtube_ungraph"};
+	    double[][] eps_list = new double[][]{{5.0, 10.0, 20.0, 30.0, 50.0}, {5.0, 10.0, 20.0, 30.0, 50.0}, {10.0, 20.0, 30.0, 50.0, 80.0}};
+	    int[][] num_part_list = new int[][]{{5, 10, 20, 40, 80}, {5, 10, 20, 40, 80}, {5, 10, 20, 40, 80}};
+	    
+	    double[] eps2_list = new double[]{1.0, 2.0, 4.0};
+	    
+	    for (int i = 0; i < dataname_list.length; i++){
+	    	dataname = dataname_list[i];
+	    	
+	    	System.out.println("dataname = " + dataname);
+	    	
+	    	String filename = prefix + "_data/" + dataname + ".gr";
+			long start = System.currentTimeMillis();
+			EdgeWeightedGraph G = EdgeWeightedGraph.readEdgeList(filename);
+			System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
+			
+			System.out.println("#nodes = " + G.V());
+			System.out.println("#edges = " + G.E());	    	
+			
+	    	for (double eps : eps_list[i])
+	    		for (int num_part : num_part_list[i]){
+	    			
+	    			System.out.println("eps = " + eps);
+	    			System.out.println("num_part = " + num_part);	 
+	    			String part_file = prefix + "_out/" + dataname + "_nodesetlv_" + burn_factor + "_" + num_part + "_" 
+	    							+ String.format("%.1f", eps) + ".part";
+	    			
+	    			//
+//					NodeSetLouvain R = new NodeSetLouvain(G, num_part);
+//					
+//					start = System.currentTimeMillis();
+//					R.partitionMod(G, eps, burn_factor*G.V(), n_samples, 0);
+//					System.out.println("recursiveMod - DONE, elapsed " + (System.currentTimeMillis() - start));
+//					
+//					System.out.println("modularity = " + R.modularity(G.E()));
+//					
+//					R.writePart(part_file);
+					
+					//
+	    			for (double eps2 : eps2_list){
+	    				
+	    				LouvainDP.louvainAfterFirstPass(G, part_file, eps2);
+	    			}
+	    			
+	    	}
+	    }
+	    
+	    
 	}
 
 }

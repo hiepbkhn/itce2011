@@ -1,0 +1,1989 @@
+dataname = com_amazon_ungraph
+readGraph - DONE, elapsed 609
+#nodes = 334863
+#edges = 925872
+eps = 5.0
+num_part = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 925875.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.07769193414196712
+current_graph: #nodes = 5 #edges = 15 mod = 0.07769193414196712
+current_graph: #nodes = 5 #edges = 15 mod = 0.07769193414196712
+current_graph: #nodes = 5 #edges = 15 mod = 0.07769193414196712
+modularity = 0.07769193414196712
+#communitites = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 925871.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.07769097093636325
+current_graph: #nodes = 5 #edges = 15 mod = 0.07769097093636325
+current_graph: #nodes = 5 #edges = 15 mod = 0.07769097093636325
+current_graph: #nodes = 5 #edges = 15 mod = 0.07769097093636325
+modularity = 0.07769097093636325
+#communitites = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 925871.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.0776931347560128
+current_graph: #nodes = 5 #edges = 15 mod = 0.0776931347560128
+current_graph: #nodes = 5 #edges = 15 mod = 0.0776931347560128
+current_graph: #nodes = 5 #edges = 15 mod = 0.0776931347560128
+modularity = 0.0776931347560128
+#communitites = 5
+eps = 5.0
+num_part = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 925876.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.03728404097568045
+current_graph: #nodes = 10 #edges = 55 mod = 0.03728404097568045
+current_graph: #nodes = 10 #edges = 55 mod = 0.03728404097568045
+current_graph: #nodes = 10 #edges = 55 mod = 0.03728404097568045
+modularity = 0.03728404097568045
+#communitites = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 925866.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.037274725253198526
+current_graph: #nodes = 10 #edges = 55 mod = 0.037274725253198526
+current_graph: #nodes = 10 #edges = 55 mod = 0.037274725253198526
+current_graph: #nodes = 10 #edges = 55 mod = 0.037274725253198526
+modularity = 0.037274725253198526
+#communitites = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 925872.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.03727383755655114
+current_graph: #nodes = 10 #edges = 55 mod = 0.03727383755655114
+current_graph: #nodes = 10 #edges = 55 mod = 0.03727383755655114
+current_graph: #nodes = 10 #edges = 55 mod = 0.03727383755655114
+modularity = 0.03727383755655114
+#communitites = 10
+eps = 5.0
+num_part = 20
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 925870.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.01816274323492539
+current_graph: #nodes = 20 #edges = 210 mod = 0.018542876909289657
+current_graph: #nodes = 13 #edges = 91 mod = 0.018542876909289657
+current_graph: #nodes = 13 #edges = 91 mod = 0.018542876909289657
+modularity = 0.018542876909289664
+#communitites = 13
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 925862.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.018165523695053455
+current_graph: #nodes = 20 #edges = 210 mod = 0.018539894349188124
+current_graph: #nodes = 13 #edges = 91 mod = 0.018539894349188124
+current_graph: #nodes = 13 #edges = 91 mod = 0.018539894349188124
+modularity = 0.018539894349188124
+#communitites = 13
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 925872.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.018163702026591445
+current_graph: #nodes = 20 #edges = 210 mod = 0.018539094484670872
+current_graph: #nodes = 13 #edges = 91 mod = 0.018539094484670872
+current_graph: #nodes = 13 #edges = 91 mod = 0.018539094484670872
+modularity = 0.018539094484670865
+#communitites = 13
+eps = 5.0
+num_part = 40
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 925887.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.009092865479511138
+current_graph: #nodes = 40 #edges = 820 mod = 0.011275848647682597
+current_graph: #nodes = 9 #edges = 45 mod = 0.011275848647682597
+current_graph: #nodes = 8 #edges = 36 mod = 0.011316899675898894
+current_graph: #nodes = 8 #edges = 36 mod = 0.011316899675898894
+modularity = 0.011316899675898894
+#communitites = 8
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 925870.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.009098881723211591
+current_graph: #nodes = 40 #edges = 820 mod = 0.011118130385194604
+current_graph: #nodes = 8 #edges = 36 mod = 0.011118130385194604
+current_graph: #nodes = 8 #edges = 36 mod = 0.011118130385194604
+modularity = 0.011118130385194606
+#communitites = 8
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 925871.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.009095596883761735
+current_graph: #nodes = 40 #edges = 820 mod = 0.011193733665720887
+current_graph: #nodes = 9 #edges = 45 mod = 0.011193733665720887
+current_graph: #nodes = 8 #edges = 36 mod = 0.01120791519890168
+current_graph: #nodes = 8 #edges = 36 mod = 0.01120791519890168
+modularity = 0.011207915198901677
+#communitites = 8
+eps = 5.0
+num_part = 80
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 925738.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.0048177611923206996
+current_graph: #nodes = 80 #edges = 3240 mod = 0.0087672804668306
+current_graph: #nodes = 12 #edges = 78 mod = 0.0087672804668306
+current_graph: #nodes = 7 #edges = 28 mod = 0.009102400883571228
+current_graph: #nodes = 7 #edges = 28 mod = 0.009102400883571228
+modularity = 0.009102400883571218
+#communitites = 7
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 925809.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.004778661593668505
+current_graph: #nodes = 80 #edges = 3240 mod = 0.00859889652208132
+current_graph: #nodes = 13 #edges = 91 mod = 0.00859889652208132
+current_graph: #nodes = 8 #edges = 36 mod = 0.008972289017325968
+current_graph: #nodes = 8 #edges = 36 mod = 0.008972289017325968
+modularity = 0.008972289017325968
+#communitites = 8
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 925852.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.004797267523825579
+current_graph: #nodes = 80 #edges = 3240 mod = 0.008870932538422239
+current_graph: #nodes = 11 #edges = 66 mod = 0.008870932538422239
+current_graph: #nodes = 8 #edges = 36 mod = 0.009027144647207212
+current_graph: #nodes = 8 #edges = 36 mod = 0.009027144647207212
+modularity = 0.009027144647207205
+#communitites = 8
+eps = 10.0
+num_part = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 925867.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.3045494091503317
+current_graph: #nodes = 5 #edges = 15 mod = 0.3045494091503317
+current_graph: #nodes = 5 #edges = 15 mod = 0.3045494091503317
+current_graph: #nodes = 5 #edges = 15 mod = 0.3045494091503317
+modularity = 0.3045494091503317
+#communitites = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 925872.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.30454775761772845
+current_graph: #nodes = 5 #edges = 15 mod = 0.30454775761772845
+current_graph: #nodes = 5 #edges = 15 mod = 0.30454775761772845
+current_graph: #nodes = 5 #edges = 15 mod = 0.30454775761772845
+modularity = 0.30454775761772845
+#communitites = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 925871.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.30454722426141784
+current_graph: #nodes = 5 #edges = 15 mod = 0.30454722426141784
+current_graph: #nodes = 5 #edges = 15 mod = 0.30454722426141784
+current_graph: #nodes = 5 #edges = 15 mod = 0.30454722426141784
+modularity = 0.30454722426141784
+#communitites = 5
+eps = 10.0
+num_part = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 925858.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.14349534369594766
+current_graph: #nodes = 10 #edges = 55 mod = 0.14349534369594766
+current_graph: #nodes = 10 #edges = 55 mod = 0.14349534369594766
+current_graph: #nodes = 10 #edges = 55 mod = 0.14349534369594766
+modularity = 0.14349534369594766
+#communitites = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 925862.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.14348459483681106
+current_graph: #nodes = 10 #edges = 55 mod = 0.14348459483681106
+current_graph: #nodes = 10 #edges = 55 mod = 0.14348459483681106
+current_graph: #nodes = 10 #edges = 55 mod = 0.14348459483681106
+modularity = 0.14348459483681106
+#communitites = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 925871.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.14348547332720668
+current_graph: #nodes = 10 #edges = 55 mod = 0.14348547332720668
+current_graph: #nodes = 10 #edges = 55 mod = 0.14348547332720668
+current_graph: #nodes = 10 #edges = 55 mod = 0.14348547332720668
+modularity = 0.14348547332720668
+#communitites = 10
+eps = 10.0
+num_part = 20
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 925851.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.05438647124179824
+current_graph: #nodes = 20 #edges = 210 mod = 0.05438647124179824
+current_graph: #nodes = 20 #edges = 210 mod = 0.05438647124179824
+current_graph: #nodes = 20 #edges = 210 mod = 0.05438647124179824
+modularity = 0.05438647124179824
+#communitites = 20
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 925868.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.054391031947861816
+current_graph: #nodes = 20 #edges = 210 mod = 0.054391031947861816
+current_graph: #nodes = 20 #edges = 210 mod = 0.054391031947861816
+current_graph: #nodes = 20 #edges = 210 mod = 0.054391031947861816
+modularity = 0.054391031947861816
+#communitites = 20
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 925873.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.05438831540545448
+current_graph: #nodes = 20 #edges = 210 mod = 0.05438831540545448
+current_graph: #nodes = 20 #edges = 210 mod = 0.05438831540545448
+current_graph: #nodes = 20 #edges = 210 mod = 0.05438831540545448
+modularity = 0.05438831540545448
+#communitites = 20
+eps = 10.0
+num_part = 40
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 925871.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.023072180850704314
+current_graph: #nodes = 40 #edges = 820 mod = 0.02433353806692909
+current_graph: #nodes = 14 #edges = 105 mod = 0.02433353806692909
+current_graph: #nodes = 14 #edges = 105 mod = 0.02433353806692909
+modularity = 0.02433353806692909
+#communitites = 14
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 925873.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.023062374197280928
+current_graph: #nodes = 40 #edges = 820 mod = 0.02437969565879118
+current_graph: #nodes = 15 #edges = 120 mod = 0.02437969565879118
+current_graph: #nodes = 15 #edges = 120 mod = 0.02437969565879118
+modularity = 0.02437969565879117
+#communitites = 15
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 925869.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.02305933217720026
+current_graph: #nodes = 40 #edges = 820 mod = 0.024371197062223956
+current_graph: #nodes = 15 #edges = 120 mod = 0.024371197062223956
+current_graph: #nodes = 15 #edges = 120 mod = 0.024371197062223956
+modularity = 0.02437119706222395
+#communitites = 15
+eps = 10.0
+num_part = 80
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 925744.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.01113885272619626
+current_graph: #nodes = 80 #edges = 3240 mod = 0.015063456757870415
+current_graph: #nodes = 13 #edges = 91 mod = 0.015063456757870415
+current_graph: #nodes = 10 #edges = 55 mod = 0.015134155631134365
+current_graph: #nodes = 10 #edges = 55 mod = 0.015134155631134365
+modularity = 0.015134155631134367
+#communitites = 10
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 925903.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.011147735497444432
+current_graph: #nodes = 80 #edges = 3240 mod = 0.015018460958197874
+current_graph: #nodes = 13 #edges = 91 mod = 0.015018460958197874
+current_graph: #nodes = 11 #edges = 66 mod = 0.015070367688816946
+current_graph: #nodes = 11 #edges = 66 mod = 0.015070367688816946
+modularity = 0.015070367688816944
+#communitites = 11
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 925866.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.011143278481316613
+current_graph: #nodes = 80 #edges = 3240 mod = 0.015018120365152389
+current_graph: #nodes = 12 #edges = 78 mod = 0.015018120365152389
+current_graph: #nodes = 9 #edges = 45 mod = 0.015184198445218625
+current_graph: #nodes = 9 #edges = 45 mod = 0.015184198445218625
+modularity = 0.015184198445218618
+#communitites = 9
+eps = 20.0
+num_part = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 925879.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.5428939759822492
+current_graph: #nodes = 5 #edges = 15 mod = 0.5428939759822492
+current_graph: #nodes = 5 #edges = 15 mod = 0.5428939759822492
+current_graph: #nodes = 5 #edges = 15 mod = 0.5428939759822492
+modularity = 0.5428939759822492
+#communitites = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 925873.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.5428966234606506
+current_graph: #nodes = 5 #edges = 15 mod = 0.5428966234606506
+current_graph: #nodes = 5 #edges = 15 mod = 0.5428966234606506
+current_graph: #nodes = 5 #edges = 15 mod = 0.5428966234606506
+modularity = 0.5428966234606506
+#communitites = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 925872.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.5428963444685574
+current_graph: #nodes = 5 #edges = 15 mod = 0.5428963444685574
+current_graph: #nodes = 5 #edges = 15 mod = 0.5428963444685574
+current_graph: #nodes = 5 #edges = 15 mod = 0.5428963444685574
+modularity = 0.5428963444685574
+#communitites = 5
+eps = 20.0
+num_part = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 925885.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.4139857668321424
+current_graph: #nodes = 10 #edges = 55 mod = 0.4139857668321424
+current_graph: #nodes = 10 #edges = 55 mod = 0.4139857668321424
+current_graph: #nodes = 10 #edges = 55 mod = 0.4139857668321424
+modularity = 0.4139857668321424
+#communitites = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 925876.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.41400048313454774
+current_graph: #nodes = 10 #edges = 55 mod = 0.41400048313454774
+current_graph: #nodes = 10 #edges = 55 mod = 0.41400048313454774
+current_graph: #nodes = 10 #edges = 55 mod = 0.41400048313454774
+modularity = 0.41400048313454774
+#communitites = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 925873.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.41399674848144585
+current_graph: #nodes = 10 #edges = 55 mod = 0.41399674848144585
+current_graph: #nodes = 10 #edges = 55 mod = 0.41399674848144585
+current_graph: #nodes = 10 #edges = 55 mod = 0.41399674848144585
+modularity = 0.41399674848144585
+#communitites = 10
+eps = 20.0
+num_part = 20
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 925874.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.21863301068402086
+current_graph: #nodes = 20 #edges = 210 mod = 0.21863301068402086
+current_graph: #nodes = 20 #edges = 210 mod = 0.21863301068402086
+current_graph: #nodes = 20 #edges = 210 mod = 0.21863301068402086
+modularity = 0.21863301068402086
+#communitites = 20
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 925864.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.21864019682496727
+current_graph: #nodes = 20 #edges = 210 mod = 0.21864019682496727
+current_graph: #nodes = 20 #edges = 210 mod = 0.21864019682496727
+current_graph: #nodes = 20 #edges = 210 mod = 0.21864019682496727
+modularity = 0.21864019682496727
+#communitites = 20
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 925871.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.21863817181763084
+current_graph: #nodes = 20 #edges = 210 mod = 0.21863817181763084
+current_graph: #nodes = 20 #edges = 210 mod = 0.21863817181763084
+current_graph: #nodes = 20 #edges = 210 mod = 0.21863817181763084
+modularity = 0.21863817181763084
+#communitites = 20
+eps = 20.0
+num_part = 40
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 925890.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.09739509986782646
+current_graph: #nodes = 40 #edges = 820 mod = 0.09746780170955671
+current_graph: #nodes = 36 #edges = 666 mod = 0.09746780170955671
+current_graph: #nodes = 36 #edges = 666 mod = 0.09746780170955671
+modularity = 0.09746780170955671
+#communitites = 36
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 925857.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.09738759221061793
+current_graph: #nodes = 40 #edges = 820 mod = 0.0974576923505719
+current_graph: #nodes = 36 #edges = 666 mod = 0.0974576923505719
+current_graph: #nodes = 36 #edges = 666 mod = 0.0974576923505719
+modularity = 0.09745769235057193
+#communitites = 36
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 925870.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.09738693203298647
+current_graph: #nodes = 40 #edges = 820 mod = 0.09745590446911075
+current_graph: #nodes = 36 #edges = 666 mod = 0.09745590446911075
+current_graph: #nodes = 36 #edges = 666 mod = 0.09745590446911075
+modularity = 0.09745590446911073
+#communitites = 36
+eps = 20.0
+num_part = 80
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 925769.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.04073551654403835
+current_graph: #nodes = 80 #edges = 3240 mod = 0.042791182687407656
+current_graph: #nodes = 23 #edges = 276 mod = 0.042791182687407656
+current_graph: #nodes = 22 #edges = 253 mod = 0.04282186199369529
+current_graph: #nodes = 22 #edges = 253 mod = 0.04282186199369529
+modularity = 0.042821861993695295
+#communitites = 22
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 925908.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.040730811980653564
+current_graph: #nodes = 80 #edges = 3240 mod = 0.042765863067120914
+current_graph: #nodes = 22 #edges = 253 mod = 0.042765863067120914
+current_graph: #nodes = 22 #edges = 253 mod = 0.042765863067120914
+modularity = 0.0427658630671209
+#communitites = 22
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 925875.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.04072189618273478
+current_graph: #nodes = 80 #edges = 3240 mod = 0.04283892483316228
+current_graph: #nodes = 23 #edges = 276 mod = 0.04283892483316228
+current_graph: #nodes = 22 #edges = 253 mod = 0.04287887940198801
+current_graph: #nodes = 22 #edges = 253 mod = 0.04287887940198801
+modularity = 0.04287887940198799
+#communitites = 22
+eps = 30.0
+num_part = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 925878.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.5915826903327531
+current_graph: #nodes = 5 #edges = 15 mod = 0.5915826903327531
+current_graph: #nodes = 5 #edges = 15 mod = 0.5915826903327531
+current_graph: #nodes = 5 #edges = 15 mod = 0.5915826903327531
+modularity = 0.5915826903327531
+#communitites = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 925870.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.5915873197702118
+current_graph: #nodes = 5 #edges = 15 mod = 0.5915873197702118
+current_graph: #nodes = 5 #edges = 15 mod = 0.5915873197702118
+current_graph: #nodes = 5 #edges = 15 mod = 0.5915873197702118
+modularity = 0.5915873197702118
+#communitites = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 925872.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.5915888713682937
+current_graph: #nodes = 5 #edges = 15 mod = 0.5915888713682937
+current_graph: #nodes = 5 #edges = 15 mod = 0.5915888713682937
+current_graph: #nodes = 5 #edges = 15 mod = 0.5915888713682937
+modularity = 0.5915888713682937
+#communitites = 5
+eps = 30.0
+num_part = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 925875.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.5085727502953367
+current_graph: #nodes = 10 #edges = 55 mod = 0.5085727502953367
+current_graph: #nodes = 10 #edges = 55 mod = 0.5085727502953367
+current_graph: #nodes = 10 #edges = 55 mod = 0.5085727502953367
+modularity = 0.5085727502953367
+#communitites = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 925870.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.5085781887542661
+current_graph: #nodes = 10 #edges = 55 mod = 0.5085781887542661
+current_graph: #nodes = 10 #edges = 55 mod = 0.5085781887542661
+current_graph: #nodes = 10 #edges = 55 mod = 0.5085781887542661
+modularity = 0.5085781887542661
+#communitites = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 925874.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.508575553334293
+current_graph: #nodes = 10 #edges = 55 mod = 0.508575553334293
+current_graph: #nodes = 10 #edges = 55 mod = 0.508575553334293
+current_graph: #nodes = 10 #edges = 55 mod = 0.508575553334293
+modularity = 0.508575553334293
+#communitites = 10
+eps = 30.0
+num_part = 20
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 925874.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.3346533899157368
+current_graph: #nodes = 20 #edges = 210 mod = 0.3346533899157368
+current_graph: #nodes = 20 #edges = 210 mod = 0.3346533899157368
+current_graph: #nodes = 20 #edges = 210 mod = 0.3346533899157368
+modularity = 0.3346533899157368
+#communitites = 20
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 925867.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.33465196441079065
+current_graph: #nodes = 20 #edges = 210 mod = 0.33465196441079065
+current_graph: #nodes = 20 #edges = 210 mod = 0.33465196441079065
+current_graph: #nodes = 20 #edges = 210 mod = 0.33465196441079065
+modularity = 0.33465196441079065
+#communitites = 20
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 925869.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.33465222688576973
+current_graph: #nodes = 20 #edges = 210 mod = 0.33465222688576973
+current_graph: #nodes = 20 #edges = 210 mod = 0.33465222688576973
+current_graph: #nodes = 20 #edges = 210 mod = 0.33465222688576973
+modularity = 0.33465222688576973
+#communitites = 20
+eps = 30.0
+num_part = 40
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 925949.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.18225160842330557
+current_graph: #nodes = 40 #edges = 820 mod = 0.18225160842330557
+current_graph: #nodes = 40 #edges = 820 mod = 0.18225160842330557
+current_graph: #nodes = 40 #edges = 820 mod = 0.18225160842330557
+modularity = 0.18225160842330557
+#communitites = 40
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 925876.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.18226805141067134
+current_graph: #nodes = 40 #edges = 820 mod = 0.18226805141067134
+current_graph: #nodes = 40 #edges = 820 mod = 0.18226805141067134
+current_graph: #nodes = 40 #edges = 820 mod = 0.18226805141067134
+modularity = 0.18226805141067134
+#communitites = 40
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 925876.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.18226909514854414
+current_graph: #nodes = 40 #edges = 820 mod = 0.18226909514854414
+current_graph: #nodes = 40 #edges = 820 mod = 0.18226909514854414
+current_graph: #nodes = 40 #edges = 820 mod = 0.18226909514854414
+modularity = 0.18226909514854414
+#communitites = 40
+eps = 30.0
+num_part = 80
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 925946.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.08946780278005725
+current_graph: #nodes = 80 #edges = 3240 mod = 0.09053419536209996
+current_graph: #nodes = 37 #edges = 703 mod = 0.09053419536209996
+current_graph: #nodes = 37 #edges = 703 mod = 0.09053419536209996
+modularity = 0.09053419536210001
+#communitites = 37
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 925871.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.08947066357182168
+current_graph: #nodes = 80 #edges = 3240 mod = 0.09048499733926486
+current_graph: #nodes = 37 #edges = 703 mod = 0.09048499733926486
+current_graph: #nodes = 35 #edges = 630 mod = 0.09050218553591606
+current_graph: #nodes = 35 #edges = 630 mod = 0.09050218553591606
+modularity = 0.09050218553591606
+#communitites = 35
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 925867.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.08947327715824553
+current_graph: #nodes = 80 #edges = 3240 mod = 0.09049455652686166
+current_graph: #nodes = 37 #edges = 703 mod = 0.09049455652686166
+current_graph: #nodes = 35 #edges = 630 mod = 0.09051050149642244
+current_graph: #nodes = 35 #edges = 630 mod = 0.09051050149642244
+modularity = 0.09051050149642244
+#communitites = 35
+eps = 50.0
+num_part = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 925884.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.6118907735552507
+current_graph: #nodes = 5 #edges = 15 mod = 0.6118907735552507
+current_graph: #nodes = 5 #edges = 15 mod = 0.6118907735552507
+current_graph: #nodes = 5 #edges = 15 mod = 0.6118907735552507
+modularity = 0.6118907735552507
+#communitites = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 925873.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.6118983503926608
+current_graph: #nodes = 5 #edges = 15 mod = 0.6118983503926608
+current_graph: #nodes = 5 #edges = 15 mod = 0.6118983503926608
+current_graph: #nodes = 5 #edges = 15 mod = 0.6118983503926608
+modularity = 0.6118983503926608
+#communitites = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 925871.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.6119001008928233
+current_graph: #nodes = 5 #edges = 15 mod = 0.6119001008928233
+current_graph: #nodes = 5 #edges = 15 mod = 0.6119001008928233
+current_graph: #nodes = 5 #edges = 15 mod = 0.6119001008928233
+modularity = 0.6119001008928233
+#communitites = 5
+eps = 50.0
+num_part = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 925858.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.5587589848404539
+current_graph: #nodes = 10 #edges = 55 mod = 0.5587589848404539
+current_graph: #nodes = 10 #edges = 55 mod = 0.5587589848404539
+current_graph: #nodes = 10 #edges = 55 mod = 0.5587589848404539
+modularity = 0.5587589848404539
+#communitites = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 925880.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.5587454024361074
+current_graph: #nodes = 10 #edges = 55 mod = 0.5587454024361074
+current_graph: #nodes = 10 #edges = 55 mod = 0.5587454024361074
+current_graph: #nodes = 10 #edges = 55 mod = 0.5587454024361074
+modularity = 0.5587454024361074
+#communitites = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 925871.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.5587496589016553
+current_graph: #nodes = 10 #edges = 55 mod = 0.5587496589016553
+current_graph: #nodes = 10 #edges = 55 mod = 0.5587496589016553
+current_graph: #nodes = 10 #edges = 55 mod = 0.5587496589016553
+modularity = 0.5587496589016553
+#communitites = 10
+eps = 50.0
+num_part = 20
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 925849.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.4110217700190116
+current_graph: #nodes = 20 #edges = 210 mod = 0.4110217700190116
+current_graph: #nodes = 20 #edges = 210 mod = 0.4110217700190116
+current_graph: #nodes = 20 #edges = 210 mod = 0.4110217700190116
+modularity = 0.4110217700190116
+#communitites = 20
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 925845.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.41101504540978273
+current_graph: #nodes = 20 #edges = 210 mod = 0.41101504540978273
+current_graph: #nodes = 20 #edges = 210 mod = 0.41101504540978273
+current_graph: #nodes = 20 #edges = 210 mod = 0.41101504540978273
+modularity = 0.41101504540978273
+#communitites = 20
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 925874.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.41100491529953126
+current_graph: #nodes = 20 #edges = 210 mod = 0.41100491529953126
+current_graph: #nodes = 20 #edges = 210 mod = 0.41100491529953126
+current_graph: #nodes = 20 #edges = 210 mod = 0.41100491529953126
+modularity = 0.41100491529953126
+#communitites = 20
+eps = 50.0
+num_part = 40
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 925867.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.2697171031235242
+current_graph: #nodes = 40 #edges = 820 mod = 0.2697171031235242
+current_graph: #nodes = 40 #edges = 820 mod = 0.2697171031235242
+current_graph: #nodes = 40 #edges = 820 mod = 0.2697171031235242
+modularity = 0.2697171031235242
+#communitites = 40
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 925893.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.2696883666234641
+current_graph: #nodes = 40 #edges = 820 mod = 0.2696883666234641
+current_graph: #nodes = 40 #edges = 820 mod = 0.2696883666234641
+current_graph: #nodes = 40 #edges = 820 mod = 0.2696883666234641
+modularity = 0.2696883666234641
+#communitites = 40
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 925872.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.26970688645606195
+current_graph: #nodes = 40 #edges = 820 mod = 0.26970688645606195
+current_graph: #nodes = 40 #edges = 820 mod = 0.26970688645606195
+current_graph: #nodes = 40 #edges = 820 mod = 0.26970688645606195
+modularity = 0.26970688645606195
+#communitites = 40
+eps = 50.0
+num_part = 80
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 925935.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.16406485323187825
+current_graph: #nodes = 80 #edges = 3240 mod = 0.16451627257242304
+current_graph: #nodes = 51 #edges = 1326 mod = 0.16451627257242304
+current_graph: #nodes = 51 #edges = 1326 mod = 0.16451627257242304
+modularity = 0.16451627257242307
+#communitites = 51
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 925874.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.16406667432542096
+current_graph: #nodes = 80 #edges = 3240 mod = 0.16448821313669074
+current_graph: #nodes = 51 #edges = 1326 mod = 0.16448821313669074
+current_graph: #nodes = 51 #edges = 1326 mod = 0.16448821313669074
+modularity = 0.16448821313669063
+#communitites = 51
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 925861.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.1640670141186129
+current_graph: #nodes = 80 #edges = 3240 mod = 0.16450092285877077
+current_graph: #nodes = 50 #edges = 1275 mod = 0.16450092285877077
+current_graph: #nodes = 50 #edges = 1275 mod = 0.16450092285877077
+modularity = 0.16450092285877077
+#communitites = 50
+dataname = com_dblp_ungraph
+readGraph - DONE, elapsed 499
+#nodes = 317080
+#edges = 1049866
+eps = 5.0
+num_part = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 1049865.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.18399747384306625
+current_graph: #nodes = 5 #edges = 15 mod = 0.18399747384306625
+current_graph: #nodes = 5 #edges = 15 mod = 0.18399747384306625
+current_graph: #nodes = 5 #edges = 15 mod = 0.18399747384306625
+modularity = 0.18399747384306625
+#communitites = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 1049864.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.18399673130544877
+current_graph: #nodes = 5 #edges = 15 mod = 0.18399673130544877
+current_graph: #nodes = 5 #edges = 15 mod = 0.18399673130544877
+current_graph: #nodes = 5 #edges = 15 mod = 0.18399673130544877
+modularity = 0.18399673130544877
+#communitites = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 1049866.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.18399609466821382
+current_graph: #nodes = 5 #edges = 15 mod = 0.18399609466821382
+current_graph: #nodes = 5 #edges = 15 mod = 0.18399609466821382
+current_graph: #nodes = 5 #edges = 15 mod = 0.18399609466821382
+modularity = 0.18399609466821382
+#communitites = 5
+eps = 5.0
+num_part = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 1049867.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.10460070899114675
+current_graph: #nodes = 10 #edges = 55 mod = 0.10460070899114675
+current_graph: #nodes = 10 #edges = 55 mod = 0.10460070899114675
+current_graph: #nodes = 10 #edges = 55 mod = 0.10460070899114675
+modularity = 0.10460070899114675
+#communitites = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 1049868.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.10460722969106032
+current_graph: #nodes = 10 #edges = 55 mod = 0.10460722969106032
+current_graph: #nodes = 10 #edges = 55 mod = 0.10460722969106032
+current_graph: #nodes = 10 #edges = 55 mod = 0.10460722969106032
+modularity = 0.10460722969106032
+#communitites = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 1049866.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.10460761234583205
+current_graph: #nodes = 10 #edges = 55 mod = 0.10460761234583205
+current_graph: #nodes = 10 #edges = 55 mod = 0.10460761234583205
+current_graph: #nodes = 10 #edges = 55 mod = 0.10460761234583205
+modularity = 0.10460761234583205
+#communitites = 10
+eps = 5.0
+num_part = 20
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 1049886.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.05211300483591574
+current_graph: #nodes = 20 #edges = 210 mod = 0.053452172838107034
+current_graph: #nodes = 12 #edges = 78 mod = 0.053452172838107034
+current_graph: #nodes = 12 #edges = 78 mod = 0.053452172838107034
+modularity = 0.053452172838107034
+#communitites = 12
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 1049886.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.05211305980249923
+current_graph: #nodes = 20 #edges = 210 mod = 0.053453663991361186
+current_graph: #nodes = 12 #edges = 78 mod = 0.053453663991361186
+current_graph: #nodes = 12 #edges = 78 mod = 0.053453663991361186
+modularity = 0.05345366399136119
+#communitites = 12
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 1049861.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.052115499958289575
+current_graph: #nodes = 20 #edges = 210 mod = 0.05345453216883907
+current_graph: #nodes = 12 #edges = 78 mod = 0.05345453216883907
+current_graph: #nodes = 12 #edges = 78 mod = 0.05345453216883907
+modularity = 0.05345453216883907
+#communitites = 12
+eps = 5.0
+num_part = 40
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 1049868.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.026681477968067732
+current_graph: #nodes = 40 #edges = 820 mod = 0.032438248130319924
+current_graph: #nodes = 9 #edges = 45 mod = 0.032438248130319924
+current_graph: #nodes = 9 #edges = 45 mod = 0.032438248130319924
+modularity = 0.032438248130319945
+#communitites = 9
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 1049876.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.026680077182190814
+current_graph: #nodes = 40 #edges = 820 mod = 0.03226094076547037
+current_graph: #nodes = 9 #edges = 45 mod = 0.03226094076547037
+current_graph: #nodes = 8 #edges = 36 mod = 0.03236718406217866
+current_graph: #nodes = 8 #edges = 36 mod = 0.03236718406217866
+modularity = 0.03236718406217866
+#communitites = 8
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 1049867.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.026682461297917858
+current_graph: #nodes = 40 #edges = 820 mod = 0.031807628365040544
+current_graph: #nodes = 12 #edges = 78 mod = 0.031807628365040544
+current_graph: #nodes = 8 #edges = 36 mod = 0.032054052409826665
+current_graph: #nodes = 8 #edges = 36 mod = 0.032054052409826665
+modularity = 0.032054052409826686
+#communitites = 8
+eps = 5.0
+num_part = 80
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 1049795.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.015248936767747794
+current_graph: #nodes = 80 #edges = 3240 mod = 0.02223897729853424
+current_graph: #nodes = 8 #edges = 36 mod = 0.02223897729853424
+current_graph: #nodes = 8 #edges = 36 mod = 0.02223897729853424
+modularity = 0.022238977298534225
+#communitites = 8
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 1049901.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.015246047877485005
+current_graph: #nodes = 80 #edges = 3240 mod = 0.02173350539706301
+current_graph: #nodes = 12 #edges = 78 mod = 0.02173350539706301
+current_graph: #nodes = 7 #edges = 28 mod = 0.02243855011941005
+current_graph: #nodes = 7 #edges = 28 mod = 0.02243855011941005
+modularity = 0.022438550119410074
+#communitites = 7
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 1049870.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.015252572611840869
+current_graph: #nodes = 80 #edges = 3240 mod = 0.022087274843770877
+current_graph: #nodes = 11 #edges = 66 mod = 0.022087274843770877
+current_graph: #nodes = 8 #edges = 36 mod = 0.022423983139167047
+current_graph: #nodes = 8 #edges = 36 mod = 0.022423983139167047
+modularity = 0.022423983139167047
+#communitites = 8
+eps = 10.0
+num_part = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 1049864.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.3655324028107532
+current_graph: #nodes = 5 #edges = 15 mod = 0.3655324028107532
+current_graph: #nodes = 5 #edges = 15 mod = 0.3655324028107532
+current_graph: #nodes = 5 #edges = 15 mod = 0.3655324028107532
+modularity = 0.3655324028107532
+#communitites = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 1049867.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.36553283693736627
+current_graph: #nodes = 5 #edges = 15 mod = 0.36553283693736627
+current_graph: #nodes = 5 #edges = 15 mod = 0.36553283693736627
+current_graph: #nodes = 5 #edges = 15 mod = 0.36553283693736627
+modularity = 0.36553283693736627
+#communitites = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 1049866.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.3655333460708097
+current_graph: #nodes = 5 #edges = 15 mod = 0.3655333460708097
+current_graph: #nodes = 5 #edges = 15 mod = 0.3655333460708097
+current_graph: #nodes = 5 #edges = 15 mod = 0.3655333460708097
+modularity = 0.3655333460708097
+#communitites = 5
+eps = 10.0
+num_part = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 1049850.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.25272650561988563
+current_graph: #nodes = 10 #edges = 55 mod = 0.25272650561988563
+current_graph: #nodes = 10 #edges = 55 mod = 0.25272650561988563
+current_graph: #nodes = 10 #edges = 55 mod = 0.25272650561988563
+modularity = 0.25272650561988563
+#communitites = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 1049860.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.2527230776589201
+current_graph: #nodes = 10 #edges = 55 mod = 0.2527230776589201
+current_graph: #nodes = 10 #edges = 55 mod = 0.2527230776589201
+current_graph: #nodes = 10 #edges = 55 mod = 0.2527230776589201
+modularity = 0.2527230776589201
+#communitites = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 1049865.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.2527212439794318
+current_graph: #nodes = 10 #edges = 55 mod = 0.2527212439794318
+current_graph: #nodes = 10 #edges = 55 mod = 0.2527212439794318
+current_graph: #nodes = 10 #edges = 55 mod = 0.2527212439794318
+modularity = 0.2527212439794318
+#communitites = 10
+eps = 10.0
+num_part = 20
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 1049886.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.13542788649116114
+current_graph: #nodes = 20 #edges = 210 mod = 0.13654963986638086
+current_graph: #nodes = 15 #edges = 120 mod = 0.13654963986638086
+current_graph: #nodes = 15 #edges = 120 mod = 0.13654963986638086
+modularity = 0.13654963986638086
+#communitites = 15
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 1049871.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.1354170689478481
+current_graph: #nodes = 20 #edges = 210 mod = 0.13654219452226526
+current_graph: #nodes = 15 #edges = 120 mod = 0.13654219452226526
+current_graph: #nodes = 15 #edges = 120 mod = 0.13654219452226526
+modularity = 0.13654219452226526
+#communitites = 15
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 1049858.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.13542042495791837
+current_graph: #nodes = 20 #edges = 210 mod = 0.1365445654164377
+current_graph: #nodes = 15 #edges = 120 mod = 0.1365445654164377
+current_graph: #nodes = 15 #edges = 120 mod = 0.1365445654164377
+modularity = 0.13654456541643767
+#communitites = 15
+eps = 10.0
+num_part = 40
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 1049840.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.0697690853134483
+current_graph: #nodes = 40 #edges = 820 mod = 0.07465999631153267
+current_graph: #nodes = 16 #edges = 136 mod = 0.07465999631153267
+current_graph: #nodes = 16 #edges = 136 mod = 0.07465999631153267
+modularity = 0.07465999631153268
+#communitites = 16
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 1049856.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.06977831420933676
+current_graph: #nodes = 40 #edges = 820 mod = 0.07467443488495251
+current_graph: #nodes = 16 #edges = 136 mod = 0.07467443488495251
+current_graph: #nodes = 16 #edges = 136 mod = 0.07467443488495251
+modularity = 0.07467443488495247
+#communitites = 16
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 1049872.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.06977494343002387
+current_graph: #nodes = 40 #edges = 820 mod = 0.07467247560454297
+current_graph: #nodes = 16 #edges = 136 mod = 0.07467247560454297
+current_graph: #nodes = 16 #edges = 136 mod = 0.07467247560454297
+modularity = 0.07467247560454301
+#communitites = 16
+eps = 10.0
+num_part = 80
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 1049860.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.03690019962988415
+current_graph: #nodes = 80 #edges = 3240 mod = 0.0448328240177214
+current_graph: #nodes = 14 #edges = 105 mod = 0.0448328240177214
+current_graph: #nodes = 14 #edges = 105 mod = 0.0448328240177214
+modularity = 0.0448328240177214
+#communitites = 14
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 1049923.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.036894464549360864
+current_graph: #nodes = 80 #edges = 3240 mod = 0.04480914625603279
+current_graph: #nodes = 13 #edges = 91 mod = 0.04480914625603279
+current_graph: #nodes = 13 #edges = 91 mod = 0.04480914625603279
+modularity = 0.044809146256032786
+#communitites = 13
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 1049881.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.03689644045258831
+current_graph: #nodes = 80 #edges = 3240 mod = 0.04470497733947389
+current_graph: #nodes = 13 #edges = 91 mod = 0.04470497733947389
+current_graph: #nodes = 13 #edges = 91 mod = 0.04470497733947389
+modularity = 0.044704977339473886
+#communitites = 13
+eps = 20.0
+num_part = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 1049871.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.5104119500517041
+current_graph: #nodes = 5 #edges = 15 mod = 0.5104119500517041
+current_graph: #nodes = 5 #edges = 15 mod = 0.5104119500517041
+current_graph: #nodes = 5 #edges = 15 mod = 0.5104119500517041
+modularity = 0.5104119500517041
+#communitites = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 1049867.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.5104131942366906
+current_graph: #nodes = 5 #edges = 15 mod = 0.5104131942366906
+current_graph: #nodes = 5 #edges = 15 mod = 0.5104131942366906
+current_graph: #nodes = 5 #edges = 15 mod = 0.5104131942366906
+modularity = 0.5104131942366906
+#communitites = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 1049867.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.5104141551463188
+current_graph: #nodes = 5 #edges = 15 mod = 0.5104141551463188
+current_graph: #nodes = 5 #edges = 15 mod = 0.5104141551463188
+current_graph: #nodes = 5 #edges = 15 mod = 0.5104141551463188
+modularity = 0.5104141551463188
+#communitites = 5
+eps = 20.0
+num_part = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 1049867.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.43239531275347964
+current_graph: #nodes = 10 #edges = 55 mod = 0.43239531275347964
+current_graph: #nodes = 10 #edges = 55 mod = 0.43239531275347964
+current_graph: #nodes = 10 #edges = 55 mod = 0.43239531275347964
+modularity = 0.43239531275347964
+#communitites = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 1049870.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.43238975073883446
+current_graph: #nodes = 10 #edges = 55 mod = 0.43238975073883446
+current_graph: #nodes = 10 #edges = 55 mod = 0.43238975073883446
+current_graph: #nodes = 10 #edges = 55 mod = 0.43238975073883446
+modularity = 0.43238975073883446
+#communitites = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 1049865.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.43239232201173716
+current_graph: #nodes = 10 #edges = 55 mod = 0.43239232201173716
+current_graph: #nodes = 10 #edges = 55 mod = 0.43239232201173716
+current_graph: #nodes = 10 #edges = 55 mod = 0.43239232201173716
+modularity = 0.43239232201173716
+#communitites = 10
+eps = 20.0
+num_part = 20
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 1049845.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.29608395270085
+current_graph: #nodes = 20 #edges = 210 mod = 0.29737328588994466
+current_graph: #nodes = 17 #edges = 153 mod = 0.29737328588994466
+current_graph: #nodes = 17 #edges = 153 mod = 0.29737328588994466
+modularity = 0.29737328588994466
+#communitites = 17
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 1049861.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.29607875107201836
+current_graph: #nodes = 20 #edges = 210 mod = 0.2973665213634171
+current_graph: #nodes = 17 #edges = 153 mod = 0.2973665213634171
+current_graph: #nodes = 17 #edges = 153 mod = 0.2973665213634171
+modularity = 0.29736652136341707
+#communitites = 17
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 1049868.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.2960784039507529
+current_graph: #nodes = 20 #edges = 210 mod = 0.297366769803874
+current_graph: #nodes = 17 #edges = 153 mod = 0.297366769803874
+current_graph: #nodes = 17 #edges = 153 mod = 0.297366769803874
+modularity = 0.297366769803874
+#communitites = 17
+eps = 20.0
+num_part = 40
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 1049827.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.17792259148293924
+current_graph: #nodes = 40 #edges = 820 mod = 0.1840891713522426
+current_graph: #nodes = 25 #edges = 325 mod = 0.1840891713522426
+current_graph: #nodes = 25 #edges = 325 mod = 0.1840891713522426
+modularity = 0.18408917135224262
+#communitites = 25
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 1049861.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.17792704131485843
+current_graph: #nodes = 40 #edges = 820 mod = 0.18410030070501038
+current_graph: #nodes = 25 #edges = 325 mod = 0.18410030070501038
+current_graph: #nodes = 25 #edges = 325 mod = 0.18410030070501038
+modularity = 0.18410030070501038
+#communitites = 25
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 1049867.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.1779229188053912
+current_graph: #nodes = 40 #edges = 820 mod = 0.1840970320853234
+current_graph: #nodes = 25 #edges = 325 mod = 0.1840970320853234
+current_graph: #nodes = 25 #edges = 325 mod = 0.1840970320853234
+modularity = 0.18409703208532338
+#communitites = 25
+eps = 20.0
+num_part = 80
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 1049836.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.10507352539917456
+current_graph: #nodes = 80 #edges = 3240 mod = 0.11423640751405477
+current_graph: #nodes = 27 #edges = 378 mod = 0.11423640751405477
+current_graph: #nodes = 23 #edges = 276 mod = 0.11434244495844831
+current_graph: #nodes = 23 #edges = 276 mod = 0.11434244495844831
+modularity = 0.11434244495844834
+#communitites = 23
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 1049877.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.10504765819986125
+current_graph: #nodes = 80 #edges = 3240 mod = 0.11422711313258974
+current_graph: #nodes = 26 #edges = 351 mod = 0.11422711313258974
+current_graph: #nodes = 23 #edges = 276 mod = 0.11429977020943662
+current_graph: #nodes = 23 #edges = 276 mod = 0.11429977020943662
+modularity = 0.11429977020943662
+#communitites = 23
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 1049878.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.10504836503136611
+current_graph: #nodes = 80 #edges = 3240 mod = 0.11421530172546168
+current_graph: #nodes = 26 #edges = 351 mod = 0.11421530172546168
+current_graph: #nodes = 23 #edges = 276 mod = 0.11428942484676821
+current_graph: #nodes = 23 #edges = 276 mod = 0.11428942484676821
+modularity = 0.11428942484676823
+#communitites = 23
+eps = 30.0
+num_part = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 1049870.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.5490472938991702
+current_graph: #nodes = 5 #edges = 15 mod = 0.5490472938991702
+current_graph: #nodes = 5 #edges = 15 mod = 0.5490472938991702
+current_graph: #nodes = 5 #edges = 15 mod = 0.5490472938991702
+modularity = 0.5490472938991702
+#communitites = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 1049869.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.5490466874689638
+current_graph: #nodes = 5 #edges = 15 mod = 0.5490466874689638
+current_graph: #nodes = 5 #edges = 15 mod = 0.5490466874689638
+current_graph: #nodes = 5 #edges = 15 mod = 0.5490466874689638
+modularity = 0.5490466874689638
+#communitites = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 1049869.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.5490488996059443
+current_graph: #nodes = 5 #edges = 15 mod = 0.5490488996059443
+current_graph: #nodes = 5 #edges = 15 mod = 0.5490488996059443
+current_graph: #nodes = 5 #edges = 15 mod = 0.5490488996059443
+modularity = 0.5490488996059443
+#communitites = 5
+eps = 30.0
+num_part = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 1049874.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.4978560362283207
+current_graph: #nodes = 10 #edges = 55 mod = 0.4978560362283207
+current_graph: #nodes = 10 #edges = 55 mod = 0.4978560362283207
+current_graph: #nodes = 10 #edges = 55 mod = 0.4978560362283207
+modularity = 0.4978560362283207
+#communitites = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 1049866.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.49785805038443465
+current_graph: #nodes = 10 #edges = 55 mod = 0.49785805038443465
+current_graph: #nodes = 10 #edges = 55 mod = 0.49785805038443465
+current_graph: #nodes = 10 #edges = 55 mod = 0.49785805038443465
+modularity = 0.49785805038443465
+#communitites = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 1049868.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.49785482021364247
+current_graph: #nodes = 10 #edges = 55 mod = 0.49785482021364247
+current_graph: #nodes = 10 #edges = 55 mod = 0.49785482021364247
+current_graph: #nodes = 10 #edges = 55 mod = 0.49785482021364247
+modularity = 0.49785482021364247
+#communitites = 10
+eps = 30.0
+num_part = 20
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 1049897.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.3764392057288486
+current_graph: #nodes = 20 #edges = 210 mod = 0.37726618169721915
+current_graph: #nodes = 17 #edges = 153 mod = 0.37726618169721915
+current_graph: #nodes = 17 #edges = 153 mod = 0.37726618169721915
+modularity = 0.37726618169721915
+#communitites = 17
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 1049851.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.37644859400410763
+current_graph: #nodes = 20 #edges = 210 mod = 0.37727600251227345
+current_graph: #nodes = 17 #edges = 153 mod = 0.37727600251227345
+current_graph: #nodes = 17 #edges = 153 mod = 0.37727600251227345
+modularity = 0.37727600251227345
+#communitites = 17
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 1049867.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.3764423297195486
+current_graph: #nodes = 20 #edges = 210 mod = 0.37726796429200343
+current_graph: #nodes = 17 #edges = 153 mod = 0.37726796429200343
+current_graph: #nodes = 17 #edges = 153 mod = 0.37726796429200343
+modularity = 0.37726796429200343
+#communitites = 17
+eps = 30.0
+num_part = 40
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 1049861.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.2529873411205484
+current_graph: #nodes = 40 #edges = 820 mod = 0.2599269132502765
+current_graph: #nodes = 27 #edges = 378 mod = 0.2599269132502765
+current_graph: #nodes = 27 #edges = 378 mod = 0.2599269132502765
+modularity = 0.2599269132502765
+#communitites = 27
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 1049899.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.2529854424908371
+current_graph: #nodes = 40 #edges = 820 mod = 0.25992656569303635
+current_graph: #nodes = 27 #edges = 378 mod = 0.25992656569303635
+current_graph: #nodes = 27 #edges = 378 mod = 0.25992656569303635
+modularity = 0.25992656569303635
+#communitites = 27
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 1049880.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.2529884458565282
+current_graph: #nodes = 40 #edges = 820 mod = 0.2599287037005526
+current_graph: #nodes = 27 #edges = 378 mod = 0.2599287037005526
+current_graph: #nodes = 27 #edges = 378 mod = 0.2599287037005526
+modularity = 0.25992870370055265
+#communitites = 27
+eps = 30.0
+num_part = 80
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 1049886.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.16411132079674196
+current_graph: #nodes = 80 #edges = 3240 mod = 0.1737859004893929
+current_graph: #nodes = 27 #edges = 378 mod = 0.1737859004893929
+current_graph: #nodes = 27 #edges = 378 mod = 0.1737859004893929
+modularity = 0.17378590048939288
+#communitites = 27
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 1049912.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.16411095675050544
+current_graph: #nodes = 80 #edges = 3240 mod = 0.17382908219025522
+current_graph: #nodes = 29 #edges = 435 mod = 0.17382908219025522
+current_graph: #nodes = 29 #edges = 435 mod = 0.17382908219025522
+modularity = 0.17382908219025525
+#communitites = 29
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 1049871.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.16411310695570802
+current_graph: #nodes = 80 #edges = 3240 mod = 0.17378512062015217
+current_graph: #nodes = 28 #edges = 406 mod = 0.17378512062015217
+current_graph: #nodes = 28 #edges = 406 mod = 0.17378512062015217
+modularity = 0.17378512062015222
+#communitites = 28
+eps = 50.0
+num_part = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 1049865.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.568353248944524
+current_graph: #nodes = 5 #edges = 15 mod = 0.568353248944524
+current_graph: #nodes = 5 #edges = 15 mod = 0.568353248944524
+current_graph: #nodes = 5 #edges = 15 mod = 0.568353248944524
+modularity = 0.568353248944524
+#communitites = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 1049862.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.5683510296205959
+current_graph: #nodes = 5 #edges = 15 mod = 0.5683510296205959
+current_graph: #nodes = 5 #edges = 15 mod = 0.5683510296205959
+current_graph: #nodes = 5 #edges = 15 mod = 0.5683510296205959
+modularity = 0.5683510296205959
+#communitites = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 1049866.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.5683509215460443
+current_graph: #nodes = 5 #edges = 15 mod = 0.5683509215460443
+current_graph: #nodes = 5 #edges = 15 mod = 0.5683509215460443
+current_graph: #nodes = 5 #edges = 15 mod = 0.5683509215460443
+modularity = 0.5683509215460443
+#communitites = 5
+eps = 50.0
+num_part = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 1049893.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.5372755983829374
+current_graph: #nodes = 10 #edges = 55 mod = 0.5372755983829374
+current_graph: #nodes = 10 #edges = 55 mod = 0.5372755983829374
+current_graph: #nodes = 10 #edges = 55 mod = 0.5372755983829374
+modularity = 0.5372755983829374
+#communitites = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 1049864.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.537280880800462
+current_graph: #nodes = 10 #edges = 55 mod = 0.537280880800462
+current_graph: #nodes = 10 #edges = 55 mod = 0.537280880800462
+current_graph: #nodes = 10 #edges = 55 mod = 0.537280880800462
+modularity = 0.537280880800462
+#communitites = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 1049867.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.5372790753186457
+current_graph: #nodes = 10 #edges = 55 mod = 0.5372790753186457
+current_graph: #nodes = 10 #edges = 55 mod = 0.5372790753186457
+current_graph: #nodes = 10 #edges = 55 mod = 0.5372790753186457
+modularity = 0.5372790753186457
+#communitites = 10
+eps = 50.0
+num_part = 20
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 1049866.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.43063511463108667
+current_graph: #nodes = 20 #edges = 210 mod = 0.4316469354621194
+current_graph: #nodes = 19 #edges = 190 mod = 0.4316469354621194
+current_graph: #nodes = 19 #edges = 190 mod = 0.4316469354621194
+modularity = 0.4316469354621194
+#communitites = 19
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 1049857.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.43063854640349863
+current_graph: #nodes = 20 #edges = 210 mod = 0.43164782838693705
+current_graph: #nodes = 19 #edges = 190 mod = 0.43164782838693705
+current_graph: #nodes = 19 #edges = 190 mod = 0.43164782838693705
+modularity = 0.43164782838693705
+#communitites = 19
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 1049869.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.4306322178322414
+current_graph: #nodes = 20 #edges = 210 mod = 0.43164168276737086
+current_graph: #nodes = 19 #edges = 190 mod = 0.43164168276737086
+current_graph: #nodes = 19 #edges = 190 mod = 0.43164168276737086
+modularity = 0.43164168276737086
+#communitites = 19
+eps = 50.0
+num_part = 40
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 1049841.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.318598952581648
+current_graph: #nodes = 40 #edges = 820 mod = 0.32585393817464225
+current_graph: #nodes = 32 #edges = 528 mod = 0.32585393817464225
+current_graph: #nodes = 32 #edges = 528 mod = 0.32585393817464225
+modularity = 0.32585393817464225
+#communitites = 32
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 1049882.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.3185922999073359
+current_graph: #nodes = 40 #edges = 820 mod = 0.3258482738717951
+current_graph: #nodes = 32 #edges = 528 mod = 0.3258482738717951
+current_graph: #nodes = 32 #edges = 528 mod = 0.3258482738717951
+modularity = 0.3258482738717951
+#communitites = 32
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 1049865.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.318600156421186
+current_graph: #nodes = 40 #edges = 820 mod = 0.3258580180406823
+current_graph: #nodes = 32 #edges = 528 mod = 0.3258580180406823
+current_graph: #nodes = 32 #edges = 528 mod = 0.3258580180406823
+modularity = 0.32585801804068226
+#communitites = 32
+eps = 50.0
+num_part = 80
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 1049980.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.22780950584319418
+current_graph: #nodes = 80 #edges = 3240 mod = 0.2392347469121782
+current_graph: #nodes = 32 #edges = 528 mod = 0.2392347469121782
+current_graph: #nodes = 32 #edges = 528 mod = 0.2392347469121782
+modularity = 0.23923474691217816
+#communitites = 32
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 1049899.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.22783647082431033
+current_graph: #nodes = 80 #edges = 3240 mod = 0.23928552358739344
+current_graph: #nodes = 32 #edges = 528 mod = 0.23928552358739344
+current_graph: #nodes = 32 #edges = 528 mod = 0.23928552358739344
+modularity = 0.2392855235873935
+#communitites = 32
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 1049864.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.2278365312591957
+current_graph: #nodes = 80 #edges = 3240 mod = 0.23929360158016946
+current_graph: #nodes = 32 #edges = 528 mod = 0.23929360158016946
+current_graph: #nodes = 32 #edges = 528 mod = 0.23929360158016946
+modularity = 0.2392936015801695
+#communitites = 32
+dataname = com_youtube_ungraph
+readGraph - DONE, elapsed 3479
+#nodes = 1134890
+#edges = 2987624
+eps = 10.0
+num_part = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 2987628.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.29611395519165706
+current_graph: #nodes = 5 #edges = 15 mod = 0.29611395519165706
+current_graph: #nodes = 5 #edges = 15 mod = 0.29611395519165706
+current_graph: #nodes = 5 #edges = 15 mod = 0.29611395519165706
+modularity = 0.29611395519165706
+#communitites = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 2987623.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.2961146682616911
+current_graph: #nodes = 5 #edges = 15 mod = 0.2961146682616911
+current_graph: #nodes = 5 #edges = 15 mod = 0.2961146682616911
+current_graph: #nodes = 5 #edges = 15 mod = 0.2961146682616911
+modularity = 0.2961146682616911
+#communitites = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 2987623.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.2961151577486686
+current_graph: #nodes = 5 #edges = 15 mod = 0.2961151577486686
+current_graph: #nodes = 5 #edges = 15 mod = 0.2961151577486686
+current_graph: #nodes = 5 #edges = 15 mod = 0.2961151577486686
+modularity = 0.2961151577486686
+#communitites = 5
+eps = 10.0
+num_part = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 2987620.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.20670594100934994
+current_graph: #nodes = 10 #edges = 55 mod = 0.23255176822898022
+current_graph: #nodes = 4 #edges = 10 mod = 0.23255176822898022
+current_graph: #nodes = 4 #edges = 10 mod = 0.23255176822898022
+modularity = 0.23255176822898022
+#communitites = 4
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 2987627.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.20670507373643746
+current_graph: #nodes = 10 #edges = 55 mod = 0.23255039976634498
+current_graph: #nodes = 4 #edges = 10 mod = 0.23255039976634498
+current_graph: #nodes = 4 #edges = 10 mod = 0.23255039976634498
+modularity = 0.23255039976634495
+#communitites = 4
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 2987623.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.2067056479776934
+current_graph: #nodes = 10 #edges = 55 mod = 0.23255162173800828
+current_graph: #nodes = 4 #edges = 10 mod = 0.23255162173800828
+current_graph: #nodes = 4 #edges = 10 mod = 0.23255162173800828
+modularity = 0.23255162173800828
+#communitites = 4
+eps = 10.0
+num_part = 20
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 2987604.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.15783927219851937
+current_graph: #nodes = 20 #edges = 210 mod = 0.18580160840673307
+current_graph: #nodes = 6 #edges = 21 mod = 0.18580160840673307
+current_graph: #nodes = 6 #edges = 21 mod = 0.18580160840673307
+modularity = 0.18580160840673304
+#communitites = 6
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 2987628.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.15784038702968853
+current_graph: #nodes = 20 #edges = 210 mod = 0.185804408091676
+current_graph: #nodes = 6 #edges = 21 mod = 0.185804408091676
+current_graph: #nodes = 6 #edges = 21 mod = 0.185804408091676
+modularity = 0.18580440809167595
+#communitites = 6
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 2987623.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.1578400813802817
+current_graph: #nodes = 20 #edges = 210 mod = 0.1858051036180098
+current_graph: #nodes = 6 #edges = 21 mod = 0.1858051036180098
+current_graph: #nodes = 6 #edges = 21 mod = 0.1858051036180098
+modularity = 0.1858051036180098
+#communitites = 6
+eps = 10.0
+num_part = 40
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 2987614.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.09390194905994484
+current_graph: #nodes = 40 #edges = 820 mod = 0.12698540909738032
+current_graph: #nodes = 6 #edges = 21 mod = 0.12698540909738032
+current_graph: #nodes = 5 #edges = 15 mod = 0.12728998076995435
+current_graph: #nodes = 5 #edges = 15 mod = 0.12728998076995435
+modularity = 0.12728998076995435
+#communitites = 5
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 2987655.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.09389787474486579
+current_graph: #nodes = 40 #edges = 820 mod = 0.12698054176150167
+current_graph: #nodes = 6 #edges = 21 mod = 0.12698054176150167
+current_graph: #nodes = 5 #edges = 15 mod = 0.12728459688486649
+current_graph: #nodes = 5 #edges = 15 mod = 0.12728459688486649
+modularity = 0.12728459688486649
+#communitites = 5
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 2987618.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.09389843564570718
+current_graph: #nodes = 40 #edges = 820 mod = 0.12698185622192049
+current_graph: #nodes = 6 #edges = 21 mod = 0.12698185622192049
+current_graph: #nodes = 5 #edges = 15 mod = 0.1272860098074982
+current_graph: #nodes = 5 #edges = 15 mod = 0.1272860098074982
+modularity = 0.1272860098074982
+#communitites = 5
+eps = 10.0
+num_part = 80
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 2987584.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.0554262415238155
+current_graph: #nodes = 80 #edges = 3240 mod = 0.09340424259744247
+current_graph: #nodes = 4 #edges = 10 mod = 0.09340424259744247
+current_graph: #nodes = 4 #edges = 10 mod = 0.09340424259744247
+modularity = 0.09340424259744246
+#communitites = 4
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 2987687.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.055420484459552465
+current_graph: #nodes = 80 #edges = 3240 mod = 0.0933973701086668
+current_graph: #nodes = 4 #edges = 10 mod = 0.0933973701086668
+current_graph: #nodes = 4 #edges = 10 mod = 0.0933973701086668
+modularity = 0.09339737010866687
+#communitites = 4
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 2987594.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.05542367814579668
+current_graph: #nodes = 80 #edges = 3240 mod = 0.09340041798186503
+current_graph: #nodes = 4 #edges = 10 mod = 0.09340041798186503
+current_graph: #nodes = 4 #edges = 10 mod = 0.09340041798186503
+modularity = 0.0934004179818651
+#communitites = 4
+eps = 20.0
+num_part = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 2987630.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.362996249879073
+current_graph: #nodes = 5 #edges = 15 mod = 0.362996249879073
+current_graph: #nodes = 5 #edges = 15 mod = 0.362996249879073
+current_graph: #nodes = 5 #edges = 15 mod = 0.362996249879073
+modularity = 0.362996249879073
+#communitites = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 2987626.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.362995552761296
+current_graph: #nodes = 5 #edges = 15 mod = 0.362995552761296
+current_graph: #nodes = 5 #edges = 15 mod = 0.362995552761296
+current_graph: #nodes = 5 #edges = 15 mod = 0.362995552761296
+modularity = 0.362995552761296
+#communitites = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 2987623.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.3629957512758649
+current_graph: #nodes = 5 #edges = 15 mod = 0.3629957512758649
+current_graph: #nodes = 5 #edges = 15 mod = 0.3629957512758649
+current_graph: #nodes = 5 #edges = 15 mod = 0.3629957512758649
+modularity = 0.3629957512758649
+#communitites = 5
+eps = 20.0
+num_part = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 2987629.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.2833952953026769
+current_graph: #nodes = 10 #edges = 55 mod = 0.29010797556339124
+current_graph: #nodes = 6 #edges = 21 mod = 0.29010797556339124
+current_graph: #nodes = 6 #edges = 21 mod = 0.29010797556339124
+modularity = 0.29010797556339124
+#communitites = 6
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 2987628.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.28339677537606356
+current_graph: #nodes = 10 #edges = 55 mod = 0.290108989939907
+current_graph: #nodes = 6 #edges = 21 mod = 0.290108989939907
+current_graph: #nodes = 6 #edges = 21 mod = 0.290108989939907
+modularity = 0.290108989939907
+#communitites = 6
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 2987625.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.28339687894964954
+current_graph: #nodes = 10 #edges = 55 mod = 0.29010920958231257
+current_graph: #nodes = 6 #edges = 21 mod = 0.29010920958231257
+current_graph: #nodes = 6 #edges = 21 mod = 0.29010920958231257
+modularity = 0.29010920958231257
+#communitites = 6
+eps = 20.0
+num_part = 20
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 2987599.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.22834840932662998
+current_graph: #nodes = 20 #edges = 210 mod = 0.2514133209079391
+current_graph: #nodes = 6 #edges = 21 mod = 0.2514133209079391
+current_graph: #nodes = 6 #edges = 21 mod = 0.2514133209079391
+modularity = 0.25141332090793905
+#communitites = 6
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 2987635.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.22834495127937815
+current_graph: #nodes = 20 #edges = 210 mod = 0.25141092956792466
+current_graph: #nodes = 6 #edges = 21 mod = 0.25141092956792466
+current_graph: #nodes = 6 #edges = 21 mod = 0.25141092956792466
+modularity = 0.25141092956792466
+#communitites = 6
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 2987627.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.2283456276467557
+current_graph: #nodes = 20 #edges = 210 mod = 0.25141194754000923
+current_graph: #nodes = 6 #edges = 21 mod = 0.25141194754000923
+current_graph: #nodes = 6 #edges = 21 mod = 0.25141194754000923
+modularity = 0.25141194754000923
+#communitites = 6
+eps = 20.0
+num_part = 40
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 2987634.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.1403854259932892
+current_graph: #nodes = 40 #edges = 820 mod = 0.1778500609391274
+current_graph: #nodes = 5 #edges = 15 mod = 0.1778500609391274
+current_graph: #nodes = 5 #edges = 15 mod = 0.1778500609391274
+modularity = 0.1778500609391274
+#communitites = 5
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 2987610.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.14038467808411476
+current_graph: #nodes = 40 #edges = 820 mod = 0.17784461350700195
+current_graph: #nodes = 5 #edges = 15 mod = 0.17784461350700195
+current_graph: #nodes = 5 #edges = 15 mod = 0.17784461350700195
+modularity = 0.17784461350700195
+#communitites = 5
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 2987612.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.14038412807422998
+current_graph: #nodes = 40 #edges = 820 mod = 0.17784047203535322
+current_graph: #nodes = 5 #edges = 15 mod = 0.17784047203535322
+current_graph: #nodes = 5 #edges = 15 mod = 0.17784047203535322
+modularity = 0.17784047203535322
+#communitites = 5
+eps = 20.0
+num_part = 80
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 2987568.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.08699315541788942
+current_graph: #nodes = 80 #edges = 3240 mod = 0.13338659626212812
+current_graph: #nodes = 5 #edges = 15 mod = 0.13338659626212812
+current_graph: #nodes = 5 #edges = 15 mod = 0.13338659626212812
+modularity = 0.13338659626212812
+#communitites = 5
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 2987609.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.08699576739734852
+current_graph: #nodes = 80 #edges = 3240 mod = 0.13338319734648035
+current_graph: #nodes = 5 #edges = 15 mod = 0.13338319734648035
+current_graph: #nodes = 5 #edges = 15 mod = 0.13338319734648035
+modularity = 0.1333831973464803
+#communitites = 5
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 2987605.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.08699622035525949
+current_graph: #nodes = 80 #edges = 3240 mod = 0.13338795900790143
+current_graph: #nodes = 5 #edges = 15 mod = 0.13338795900790143
+current_graph: #nodes = 5 #edges = 15 mod = 0.13338795900790143
+modularity = 0.13338795900790149
+#communitites = 5
+eps = 30.0
+num_part = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 2987626.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.41190938044075837
+current_graph: #nodes = 5 #edges = 15 mod = 0.41190938044075837
+current_graph: #nodes = 5 #edges = 15 mod = 0.41190938044075837
+current_graph: #nodes = 5 #edges = 15 mod = 0.41190938044075837
+modularity = 0.41190938044075837
+#communitites = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 2987625.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.41190840171430054
+current_graph: #nodes = 5 #edges = 15 mod = 0.41190840171430054
+current_graph: #nodes = 5 #edges = 15 mod = 0.41190840171430054
+current_graph: #nodes = 5 #edges = 15 mod = 0.41190840171430054
+modularity = 0.41190840171430054
+#communitites = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 2987624.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.4119086670276603
+current_graph: #nodes = 5 #edges = 15 mod = 0.4119086670276603
+current_graph: #nodes = 5 #edges = 15 mod = 0.4119086670276603
+current_graph: #nodes = 5 #edges = 15 mod = 0.4119086670276603
+modularity = 0.4119086670276603
+#communitites = 5
+eps = 30.0
+num_part = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 2987628.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.3451664171703931
+current_graph: #nodes = 10 #edges = 55 mod = 0.34518950441466373
+current_graph: #nodes = 9 #edges = 45 mod = 0.34518950441466373
+current_graph: #nodes = 9 #edges = 45 mod = 0.34518950441466373
+modularity = 0.34518950441466373
+#communitites = 9
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 2987626.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.34516639444089103
+current_graph: #nodes = 10 #edges = 55 mod = 0.3451895630462752
+current_graph: #nodes = 9 #edges = 45 mod = 0.3451895630462752
+current_graph: #nodes = 9 #edges = 45 mod = 0.3451895630462752
+modularity = 0.3451895630462752
+#communitites = 9
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 2987624.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.34516617423753587
+current_graph: #nodes = 10 #edges = 55 mod = 0.34518935814719404
+current_graph: #nodes = 9 #edges = 45 mod = 0.34518935814719404
+current_graph: #nodes = 9 #edges = 45 mod = 0.34518935814719404
+modularity = 0.34518935814719404
+#communitites = 9
+eps = 30.0
+num_part = 20
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 2987630.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.27704960754571667
+current_graph: #nodes = 20 #edges = 210 mod = 0.2864036377187996
+current_graph: #nodes = 6 #edges = 21 mod = 0.2864036377187996
+current_graph: #nodes = 6 #edges = 21 mod = 0.2864036377187996
+modularity = 0.2864036377187996
+#communitites = 6
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 2987633.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.2770507439810117
+current_graph: #nodes = 20 #edges = 210 mod = 0.2863979937270276
+current_graph: #nodes = 6 #edges = 21 mod = 0.2863979937270276
+current_graph: #nodes = 6 #edges = 21 mod = 0.2863979937270276
+modularity = 0.2863979937270276
+#communitites = 6
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 2987626.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.27705212955216185
+current_graph: #nodes = 20 #edges = 210 mod = 0.28639998592828086
+current_graph: #nodes = 6 #edges = 21 mod = 0.28639998592828086
+current_graph: #nodes = 6 #edges = 21 mod = 0.28639998592828086
+modularity = 0.28639998592828075
+#communitites = 6
+eps = 30.0
+num_part = 40
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 2987629.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.18044769984052936
+current_graph: #nodes = 40 #edges = 820 mod = 0.210345457648377
+current_graph: #nodes = 5 #edges = 15 mod = 0.210345457648377
+current_graph: #nodes = 5 #edges = 15 mod = 0.210345457648377
+modularity = 0.210345457648377
+#communitites = 5
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 2987597.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.18045190123315435
+current_graph: #nodes = 40 #edges = 820 mod = 0.2103563364545642
+current_graph: #nodes = 5 #edges = 15 mod = 0.2103563364545642
+current_graph: #nodes = 5 #edges = 15 mod = 0.2103563364545642
+modularity = 0.21035633645456417
+#communitites = 5
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 2987629.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.18044922209636208
+current_graph: #nodes = 40 #edges = 820 mod = 0.21035289260473394
+current_graph: #nodes = 5 #edges = 15 mod = 0.21035289260473394
+current_graph: #nodes = 5 #edges = 15 mod = 0.21035289260473394
+modularity = 0.210352892604734
+#communitites = 5
+eps = 30.0
+num_part = 80
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 2987491.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.11470720828006052
+current_graph: #nodes = 80 #edges = 3240 mod = 0.1610860229791874
+current_graph: #nodes = 5 #edges = 15 mod = 0.1610860229791874
+current_graph: #nodes = 5 #edges = 15 mod = 0.1610860229791874
+modularity = 0.16108602297918742
+#communitites = 5
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 2987652.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.1147017220868186
+current_graph: #nodes = 80 #edges = 3240 mod = 0.16107573088428756
+current_graph: #nodes = 5 #edges = 15 mod = 0.16107573088428756
+current_graph: #nodes = 5 #edges = 15 mod = 0.16107573088428756
+modularity = 0.1610757308842876
+#communitites = 5
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 2987617.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.11470213242923503
+current_graph: #nodes = 80 #edges = 3240 mod = 0.16108084117579669
+current_graph: #nodes = 5 #edges = 15 mod = 0.16108084117579669
+current_graph: #nodes = 5 #edges = 15 mod = 0.16108084117579669
+modularity = 0.1610808411757967
+#communitites = 5
+eps = 50.0
+num_part = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 2987630.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.45351948039348056
+current_graph: #nodes = 5 #edges = 15 mod = 0.45351948039348056
+current_graph: #nodes = 5 #edges = 15 mod = 0.45351948039348056
+current_graph: #nodes = 5 #edges = 15 mod = 0.45351948039348056
+modularity = 0.45351948039348056
+#communitites = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 2987622.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.45352167626430856
+current_graph: #nodes = 5 #edges = 15 mod = 0.45352167626430856
+current_graph: #nodes = 5 #edges = 15 mod = 0.45352167626430856
+current_graph: #nodes = 5 #edges = 15 mod = 0.45352167626430856
+modularity = 0.45352167626430856
+#communitites = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 2987622.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.4535207419563045
+current_graph: #nodes = 5 #edges = 15 mod = 0.4535207419563045
+current_graph: #nodes = 5 #edges = 15 mod = 0.4535207419563045
+current_graph: #nodes = 5 #edges = 15 mod = 0.4535207419563045
+modularity = 0.4535207419563045
+#communitites = 5
+eps = 50.0
+num_part = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 2987637.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.4162322955944183
+current_graph: #nodes = 10 #edges = 55 mod = 0.4162322955944183
+current_graph: #nodes = 10 #edges = 55 mod = 0.4162322955944183
+current_graph: #nodes = 10 #edges = 55 mod = 0.4162322955944183
+modularity = 0.4162322955944183
+#communitites = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 2987621.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.4162309697135143
+current_graph: #nodes = 10 #edges = 55 mod = 0.4162309697135143
+current_graph: #nodes = 10 #edges = 55 mod = 0.4162309697135143
+current_graph: #nodes = 10 #edges = 55 mod = 0.4162309697135143
+modularity = 0.4162309697135143
+#communitites = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 2987621.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.4162312894936081
+current_graph: #nodes = 10 #edges = 55 mod = 0.4162312894936081
+current_graph: #nodes = 10 #edges = 55 mod = 0.4162312894936081
+current_graph: #nodes = 10 #edges = 55 mod = 0.4162312894936081
+modularity = 0.4162312894936081
+#communitites = 10
+eps = 50.0
+num_part = 20
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 2987634.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.35483404723661593
+current_graph: #nodes = 20 #edges = 210 mod = 0.3574899054056502
+current_graph: #nodes = 14 #edges = 105 mod = 0.3574899054056502
+current_graph: #nodes = 14 #edges = 105 mod = 0.3574899054056502
+modularity = 0.3574899054056502
+#communitites = 14
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 2987623.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.35483431665468534
+current_graph: #nodes = 20 #edges = 210 mod = 0.35749250431697044
+current_graph: #nodes = 14 #edges = 105 mod = 0.35749250431697044
+current_graph: #nodes = 14 #edges = 105 mod = 0.35749250431697044
+modularity = 0.35749250431697044
+#communitites = 14
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 2987625.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.3548345569806652
+current_graph: #nodes = 20 #edges = 210 mod = 0.3574933614188386
+current_graph: #nodes = 14 #edges = 105 mod = 0.3574933614188386
+current_graph: #nodes = 14 #edges = 105 mod = 0.3574933614188386
+modularity = 0.35749336141883864
+#communitites = 14
+eps = 50.0
+num_part = 40
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 2987713.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.24146117446654605
+current_graph: #nodes = 40 #edges = 820 mod = 0.2571483864533135
+current_graph: #nodes = 15 #edges = 120 mod = 0.2571483864533135
+current_graph: #nodes = 15 #edges = 120 mod = 0.2571483864533135
+modularity = 0.2571483864533135
+#communitites = 15
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 2987611.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.24147013893565736
+current_graph: #nodes = 40 #edges = 820 mod = 0.2571528399604587
+current_graph: #nodes = 15 #edges = 120 mod = 0.2571528399604587
+current_graph: #nodes = 15 #edges = 120 mod = 0.2571528399604587
+modularity = 0.2571528399604586
+#communitites = 15
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 2987623.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.24147165966587933
+current_graph: #nodes = 40 #edges = 820 mod = 0.257155037689388
+current_graph: #nodes = 15 #edges = 120 mod = 0.257155037689388
+current_graph: #nodes = 15 #edges = 120 mod = 0.257155037689388
+modularity = 0.2571550376893881
+#communitites = 15
+eps = 50.0
+num_part = 80
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 2987695.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.16319104632670262
+current_graph: #nodes = 80 #edges = 3240 mod = 0.19539967741873146
+current_graph: #nodes = 12 #edges = 78 mod = 0.19539967741873146
+current_graph: #nodes = 11 #edges = 66 mod = 0.19557953924542498
+current_graph: #nodes = 11 #edges = 66 mod = 0.19557953924542498
+modularity = 0.195579539245425
+#communitites = 11
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 2987645.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.1631989926823921
+current_graph: #nodes = 80 #edges = 3240 mod = 0.19545202717645152
+current_graph: #nodes = 12 #edges = 78 mod = 0.19545202717645152
+current_graph: #nodes = 11 #edges = 66 mod = 0.19561669042303811
+current_graph: #nodes = 11 #edges = 66 mod = 0.19561669042303811
+modularity = 0.19561669042303811
+#communitites = 11
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 2987638.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.16320159296931142
+current_graph: #nodes = 80 #edges = 3240 mod = 0.19551347887378845
+current_graph: #nodes = 11 #edges = 66 mod = 0.19551347887378845
+current_graph: #nodes = 11 #edges = 66 mod = 0.19551347887378845
+modularity = 0.19551347887378845
+#communitites = 11
+eps = 80.0
+num_part = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 2987626.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.4749106805900945
+current_graph: #nodes = 5 #edges = 15 mod = 0.4749106805900945
+current_graph: #nodes = 5 #edges = 15 mod = 0.4749106805900945
+current_graph: #nodes = 5 #edges = 15 mod = 0.4749106805900945
+modularity = 0.4749106805900945
+#communitites = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 2987623.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.47490985765324306
+current_graph: #nodes = 5 #edges = 15 mod = 0.47490985765324306
+current_graph: #nodes = 5 #edges = 15 mod = 0.47490985765324306
+current_graph: #nodes = 5 #edges = 15 mod = 0.47490985765324306
+modularity = 0.47490985765324306
+#communitites = 5
+graph_new.V = 5 graph_new.E = 15
+graph_new.totalWeight = 2987625.0
+current_graph: #nodes = 5 #edges = 15 mod = 0.47491021540826195
+current_graph: #nodes = 5 #edges = 15 mod = 0.47491021540826195
+current_graph: #nodes = 5 #edges = 15 mod = 0.47491021540826195
+current_graph: #nodes = 5 #edges = 15 mod = 0.47491021540826195
+modularity = 0.47491021540826195
+#communitites = 5
+eps = 80.0
+num_part = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 2987620.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.45401726355156913
+current_graph: #nodes = 10 #edges = 55 mod = 0.45401726355156913
+current_graph: #nodes = 10 #edges = 55 mod = 0.45401726355156913
+current_graph: #nodes = 10 #edges = 55 mod = 0.45401726355156913
+modularity = 0.45401726355156913
+#communitites = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 2987620.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.4540183622054722
+current_graph: #nodes = 10 #edges = 55 mod = 0.4540183622054722
+current_graph: #nodes = 10 #edges = 55 mod = 0.4540183622054722
+current_graph: #nodes = 10 #edges = 55 mod = 0.4540183622054722
+modularity = 0.4540183622054722
+#communitites = 10
+graph_new.V = 10 graph_new.E = 55
+graph_new.totalWeight = 2987622.0
+current_graph: #nodes = 10 #edges = 55 mod = 0.45401798642653357
+current_graph: #nodes = 10 #edges = 55 mod = 0.45401798642653357
+current_graph: #nodes = 10 #edges = 55 mod = 0.45401798642653357
+current_graph: #nodes = 10 #edges = 55 mod = 0.45401798642653357
+modularity = 0.45401798642653357
+#communitites = 10
+eps = 80.0
+num_part = 20
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 2987617.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.39826487047213616
+current_graph: #nodes = 20 #edges = 210 mod = 0.3989722107142678
+current_graph: #nodes = 18 #edges = 171 mod = 0.3989722107142678
+current_graph: #nodes = 18 #edges = 171 mod = 0.3989722107142678
+modularity = 0.3989722107142678
+#communitites = 18
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 2987624.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.3982644006446778
+current_graph: #nodes = 20 #edges = 210 mod = 0.3989712110122645
+current_graph: #nodes = 18 #edges = 171 mod = 0.3989712110122645
+current_graph: #nodes = 18 #edges = 171 mod = 0.3989712110122645
+modularity = 0.3989712110122645
+#communitites = 18
+graph_new.V = 20 graph_new.E = 210
+graph_new.totalWeight = 2987626.0
+current_graph: #nodes = 20 #edges = 210 mod = 0.39826292302900307
+current_graph: #nodes = 20 #edges = 210 mod = 0.39897007496569187
+current_graph: #nodes = 18 #edges = 171 mod = 0.39897007496569187
+current_graph: #nodes = 18 #edges = 171 mod = 0.39897007496569187
+modularity = 0.39897007496569187
+#communitites = 18
+eps = 80.0
+num_part = 40
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 2987610.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.2833000935833545
+current_graph: #nodes = 40 #edges = 820 mod = 0.29825991994198126
+current_graph: #nodes = 20 #edges = 210 mod = 0.29825991994198126
+current_graph: #nodes = 20 #edges = 210 mod = 0.29825991994198126
+modularity = 0.2982599199419812
+#communitites = 20
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 2987593.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.28330238065404706
+current_graph: #nodes = 40 #edges = 820 mod = 0.29825917575828054
+current_graph: #nodes = 20 #edges = 210 mod = 0.29825917575828054
+current_graph: #nodes = 20 #edges = 210 mod = 0.29825917575828054
+modularity = 0.29825917575828054
+#communitites = 20
+graph_new.V = 40 graph_new.E = 820
+graph_new.totalWeight = 2987620.0
+current_graph: #nodes = 40 #edges = 820 mod = 0.2833011703160206
+current_graph: #nodes = 40 #edges = 820 mod = 0.2982583086949033
+current_graph: #nodes = 20 #edges = 210 mod = 0.2982583086949033
+current_graph: #nodes = 20 #edges = 210 mod = 0.2982583086949033
+modularity = 0.2982583086949033
+#communitites = 20
+eps = 80.0
+num_part = 80
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 2987589.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.19722480155581984
+current_graph: #nodes = 80 #edges = 3240 mod = 0.23119752829224444
+current_graph: #nodes = 19 #edges = 190 mod = 0.23119752829224444
+current_graph: #nodes = 17 #edges = 153 mod = 0.23121684513301494
+current_graph: #nodes = 17 #edges = 153 mod = 0.23121684513301494
+modularity = 0.23121684513301494
+#communitites = 17
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 2987587.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.19722784595644008
+current_graph: #nodes = 80 #edges = 3240 mod = 0.23119610967879278
+current_graph: #nodes = 19 #edges = 190 mod = 0.23119610967879278
+current_graph: #nodes = 17 #edges = 153 mod = 0.23121184472930342
+current_graph: #nodes = 17 #edges = 153 mod = 0.23121184472930342
+modularity = 0.23121184472930342
+#communitites = 17
+graph_new.V = 80 graph_new.E = 3240
+graph_new.totalWeight = 2987619.0
+current_graph: #nodes = 80 #edges = 3240 mod = 0.19722471230237956
+current_graph: #nodes = 80 #edges = 3240 mod = 0.23119240879352915
+current_graph: #nodes = 19 #edges = 190 mod = 0.23119240879352915
+current_graph: #nodes = 17 #edges = 153 mod = 0.23120859820065542
+current_graph: #nodes = 17 #edges = 153 mod = 0.23120859820065542
+modularity = 0.23120859820065542
+#communitites = 17

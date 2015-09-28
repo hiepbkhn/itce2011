@@ -38,7 +38,7 @@ dataname = com_youtube_ungraph
 readGraph - DONE, elapsed 1201
 #nodes = 1134890
 #edges = 2987624
-modularity = 0.8506970022546622
+modularity = 0.8506970022546622 ??
 #communitites = 13490
 best_partition - DONE, elapsed 668308
 ----
@@ -46,7 +46,7 @@ dataname = com_youtube_ungraph
 readGraph - DONE, elapsed 3309
 #nodes = 1134890
 #edges = 2987624
-modularity = 0.8505605539989366
+modularity = 0.8505605539989366 ??
 #communitites = 13481
 best_partition - DONE, elapsed 42153 !!
 
@@ -125,65 +125,73 @@ best_partition - DONE, elapsed 584210
 
 ///// Sep 27, 2015
 dataname = ca-AstroPh
-readGraph - DONE, elapsed 282
+readGraph - DONE, elapsed 140
 #nodes = 18771
 #edges = 198050
-current_graph: #nodes = 18771 #edges = 396100
-current_graph: #nodes = 2003 #edges = 14119
-current_graph: #nodes = 471 #edges = 2398
-current_graph: #nodes = 335 #edges = 836
-current_graph: #nodes = 328 #edges = 696
-current_graph: #nodes = 328 #edges = 696
+current_graph: #nodes = 18771 #edges = 198050 mod = -1.6504557404906978E-4
+current_graph: #nodes = 18771 #edges = 198050 mod = 0.5603724605869278
+current_graph: #nodes = 2003 #edges = 14119 mod = 0.5603724605869278
+current_graph: #nodes = 471 #edges = 2398 mod = 0.62437943232302
+current_graph: #nodes = 335 #edges = 836 mod = 0.6295880041717069
+current_graph: #nodes = 328 #edges = 696 mod = 0.629707795578979
+current_graph: #nodes = 328 #edges = 696 mod = 0.629707795578979
 modularity = 0.6297077955789789
 #communitites = 328
-best_partition - DONE, elapsed 2591
+best_partition - DONE, elapsed 1811
+
 
 dataname = com_amazon_ungraph
-readGraph - DONE, elapsed 3044
+readGraph - DONE, elapsed 561
 #nodes = 334863
 #edges = 925872
-current_graph: #nodes = 334863 #edges = 1851744
-current_graph: #nodes = 52655 #edges = 223345
-current_graph: #nodes = 9906 #edges = 75134
-current_graph: #nodes = 1183 #edges = 15740
-current_graph: #nodes = 306 #edges = 5391
-current_graph: #nodes = 258 #edges = 4521
-current_graph: #nodes = 257 #edges = 4493
-current_graph: #nodes = 257 #edges = 4493
+current_graph: #nodes = 334863 #edges = 925872 mod = -6.2281688615726065E-6
+current_graph: #nodes = 334863 #edges = 925872 mod = 0.6779372525520518
+current_graph: #nodes = 52655 #edges = 223345 mod = 0.6779372525520518
+current_graph: #nodes = 9906 #edges = 75134 mod = 0.8573896572471026
+current_graph: #nodes = 1183 #edges = 15740 mod = 0.9175556802343173
+current_graph: #nodes = 306 #edges = 5391 mod = 0.925437845684979
+current_graph: #nodes = 258 #edges = 4521 mod = 0.9256780573750867
+current_graph: #nodes = 257 #edges = 4493 mod = 0.9256792135707865
+current_graph: #nodes = 257 #edges = 4493 mod = 0.9256792135707865
 modularity = 0.9256792135707866
 #communitites = 257
-best_partition - DONE, elapsed 26748
+best_partition - DONE, elapsed 19909
 
 
 dataname = com_dblp_ungraph
-readGraph - DONE, elapsed 2434
+readGraph - DONE, elapsed 562
 #nodes = 317080
 #edges = 1049866
-current_graph: #nodes = 317080 #edges = 2099732
-current_graph: #nodes = 58394 #edges = 242581
-current_graph: #nodes = 9324 #edges = 72982
-current_graph: #nodes = 1411 #edges = 24155
-current_graph: #nodes = 427 #edges = 8300
-current_graph: #nodes = 375 #edges = 6620
-current_graph: #nodes = 375 #edges = 6620
+current_graph: #nodes = 317080 #edges = 1049866 mod = -1.035672716287857E-5
+current_graph: #nodes = 317080 #edges = 1049866 mod = 0.6185588423645637
+current_graph: #nodes = 58394 #edges = 242581 mod = 0.6185588423645637
+current_graph: #nodes = 9324 #edges = 72982 mod = 0.7816861840478482
+current_graph: #nodes = 1411 #edges = 24155 mod = 0.8136880677815782
+current_graph: #nodes = 427 #edges = 8300 mod = 0.8182103663227204
+current_graph: #nodes = 375 #edges = 6620 mod = 0.8182948655395567
+current_graph: #nodes = 375 #edges = 6620 mod = 0.8182948655395567
 modularity = 0.8182948655395561
 #communitites = 375
-best_partition - DONE, elapsed 25496
+best_partition - DONE, elapsed 19567
 
 
 dataname = com_youtube_ungraph
-readGraph - DONE, elapsed 5577
+readGraph - DONE, elapsed 3526
 #nodes = 1134890
 #edges = 2987624
-current_graph: #nodes = 1134890 #edges = 5975248
-current_graph: #nodes = 147361 #edges = 477315
-current_graph: #nodes = 35410 #edges = 136035
-current_graph: #nodes = 17996 #edges = 67506
-current_graph: #nodes = 14284 #edges = 42638
-current_graph: #nodes = 13627 #edges = 35845
-current_graph: #nodes = 13493 #edges = 33537
-current_graph: #nodes = 13485 #edges = 33306
-current_graph: #nodes = 13485 #edges = 33306
+current_graph: #nodes = 1134890 #edges = 2987624 mod = -8.276311930060965E-5
+current_graph: #nodes = 1134890 #edges = 2987624 mod = 0.6435379168946044
+current_graph: #nodes = 147361 #edges = 477315 mod = 0.6435379168946044
+current_graph: #nodes = 35410 #edges = 136035 mod = 0.6996708809171165
+current_graph: #nodes = 17996 #edges = 67506 mod = 0.7082190529777773
+current_graph: #nodes = 14284 #edges = 42638 mod = 0.7101218772168234
+current_graph: #nodes = 13627 #edges = 35845 mod = 0.7103772557026928
+current_graph: #nodes = 13493 #edges = 33537 mod = 0.7104176049739575
+current_graph: #nodes = 13485 #edges = 33306 mod = 0.7104183177339616
+current_graph: #nodes = 13485 #edges = 33306 mod = 0.7104183177339616
 modularity = 0.7104183177339617
 #communitites = 13485
-best_partition - DONE, elapsed 53858
+best_partition - DONE, elapsed 48167
+
+
+

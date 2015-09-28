@@ -416,6 +416,7 @@ public class Louvain {
 	    //debug
 //	    status.print();
 //    	System.out.println(current_graph);
+	    System.out.println("current_graph: #nodes = " + current_graph.V() + " #edges = " + current_graph.E() + " mod = " + mod);
 
 	    List<Status> status_all = new ArrayList<Status>();			// for logLK()
 	    List<EdgeWeightedGraph> graph_all = new ArrayList<EdgeWeightedGraph>();			// for logLK()
@@ -437,7 +438,7 @@ public class Louvain {
 	    mod = new_mod;
 	    
 	    // debug
-	    System.out.println("current_graph: #nodes = " + current_graph.V() + " #edges = " + current_graph.E());
+	    System.out.println("current_graph: #nodes = " + current_graph.V() + " #edges = " + current_graph.E() + " mod = " + mod);
 	    
 	    current_graph = induced_graph(partition, current_graph);
 	    status.init(current_graph, null, status);
@@ -449,7 +450,7 @@ public class Louvain {
 	    	// debug
 //	    	status.print();
 //	    	System.out.println(current_graph);
-		    System.out.println("current_graph: #nodes = " + current_graph.V() + " #edges = " + current_graph.E());
+		    System.out.println("current_graph: #nodes = " + current_graph.V() + " #edges = " + current_graph.E() + " mod = " + mod);
 	    	
 	    	one_level(current_graph, status);
 		    
@@ -469,7 +470,7 @@ public class Louvain {
 	    }
 	    
 	    // debug
-	    System.out.println("current_graph: #nodes = " + current_graph.V() + " #edges = " + current_graph.E());
+	    System.out.println("current_graph: #nodes = " + current_graph.V() + " #edges = " + current_graph.E() + " mod = " + mod);
 	    
 	  	//debug
 	    System.out.println("modularity = " + new_mod);
@@ -887,11 +888,11 @@ public class Louvain {
 //		String dataname = "as20graph";		// (6474,12572)		ok
 //		String dataname = "wiki-Vote";		// (7115,100762)	ok
 //		String dataname = "ca-HepPh";		// (12006,118489) 	ok
-		String dataname = "ca-AstroPh";		// (18771,198050) 	ok		1.56s
+//		String dataname = "ca-AstroPh";		// (18771,198050) 	ok		1.56s
 		// LARGE
 //		String dataname = "com_amazon_ungraph";		// (334863,925872)	17.8s
 //		String dataname = "com_dblp_ungraph";		// (317080,1049866)	27.2s 			(new : 20s, Mem 1.5GB)
-//		String dataname = "com_youtube_ungraph";	// (1134890,2987624) 670s, 2.2GB)	(new : 42s, Mem 2.7GB)
+		String dataname = "com_youtube_ungraph";	// (1134890,2987624) 670s, 2.2GB)	(new : 42s, Mem 2.7GB)
 													//						
 		// COMMAND-LINE <prefix> <dataname> <n_samples> <eps>
 		String prefix = "";

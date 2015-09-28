@@ -36,13 +36,14 @@
 [dp.combined]
 - AutoPart.java: AutoPart algorithm
 
-- NodeSetDiv.java: private (copied from NodeSet.java and NodePriv.java)
+- NodeSetDiv.java: private (copied from NodeSet.java and NodePriv.java), use log-likelihood
 - DivisiveTmF.java: use NodeSetDiv.java
 
 - Louvain.java: converted from Python 'community'
 - LouvainInt.java: use EdgeInt, EdgeIntGraph
 
 - LouvainDP.java: e-DP by input perturbation
+- NodeSetLouvain.java:  MCMC at the first level
 
 - Scan.java: SCAN algorithm
 
@@ -51,7 +52,7 @@
 - HRGCut.java: find the good cuts of HRG (high modularity)
 
 - HRGDivisiveGreedy.java: combine HRG-Divisive and modularity
-- NodeSetDivGreedy.java
+- NodeSetDivGreedy.java: use log-likelihood
 
 - NodeDivisiveDP.java: exponential mechanism with modularity Q
 - NodeSetMod.java
