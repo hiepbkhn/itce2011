@@ -263,9 +263,9 @@ public class LouvainDP {
 		String dataname = "com_youtube_ungraph";	// (1134890,2987624) 
 													//						
 		// COMMAND-LINE <prefix> <dataname> <n_samples> <eps>
-		String prefix = "";
-		int burn_factor = 20;
-	    int n_samples = 1;
+//		String prefix = "";
+//		int burn_factor = 20;
+//	    int n_samples = 1;
 //	    int num_part = 10;
 //	    double eps = 30.0;
 //	    
@@ -283,7 +283,7 @@ public class LouvainDP {
 //		System.out.println("#nodes = " + G.V());
 //		System.out.println("#edges = " + G.E());
 		
-		// TEST partitionEqual()
+		// 1 - TEST partitionEqual()
 //		int k = 0;
 //		
 //		for (double eps = 2.0; eps < 32.0; eps = eps*2){
@@ -311,53 +311,130 @@ public class LouvainDP {
 //		lv.best_partition(graph_new, null);
 		
 		
-		// TEST NodeSetLouvain + louvainAfterFirstPass()
-	    String[] dataname_list = new String[]{"com_amazon_ungraph", "com_dblp_ungraph", "com_youtube_ungraph"};
-	    double[][] eps_list = new double[][]{{5.0, 10.0, 20.0, 30.0, 50.0}, {5.0, 10.0, 20.0, 30.0, 50.0}, {10.0, 20.0, 30.0, 50.0, 80.0}};
-	    int[][] num_part_list = new int[][]{{5, 10, 20, 40, 80}, {5, 10, 20, 40, 80}, {5, 10, 20, 40, 80}};
+		// 2 - TEST NodeSetLouvain + louvainAfterFirstPass()
+//	    String[] dataname_list = new String[]{"com_amazon_ungraph", "com_dblp_ungraph", "com_youtube_ungraph"};
+//	    double[][] eps_list = new double[][]{{5.0, 10.0, 20.0, 30.0, 50.0}, {5.0, 10.0, 20.0, 30.0, 50.0}, {10.0, 20.0, 30.0, 50.0, 80.0}};
+//	    int[][] num_part_list = new int[][]{{5, 10, 20, 40, 80}, {5, 10, 20, 40, 80}, {5, 10, 20, 40, 80}};
+//	    
+//	    double[] eps2_list = new double[]{1.0, 2.0, 4.0};
+//	    
+//	    for (int i = 0; i < dataname_list.length; i++){
+//	    	dataname = dataname_list[i];
+//	    	
+//	    	System.out.println("dataname = " + dataname);
+//	    	
+//	    	String filename = prefix + "_data/" + dataname + ".gr";
+//			long start = System.currentTimeMillis();
+//			EdgeWeightedGraph G = EdgeWeightedGraph.readEdgeList(filename);
+//			System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
+//			
+//			System.out.println("#nodes = " + G.V());
+//			System.out.println("#edges = " + G.E());	    	
+//			
+//	    	for (double eps : eps_list[i])
+//	    		for (int num_part : num_part_list[i]){
+//	    			
+//	    			System.out.println("eps = " + eps);
+//	    			System.out.println("num_part = " + num_part);	 
+//	    			String part_file = prefix + "_out/" + dataname + "_nodesetlv_" + burn_factor + "_" + num_part + "_" 
+//	    							+ String.format("%.1f", eps) + ".part";
+//	    			
+//	    			//
+////					NodeSetLouvain R = new NodeSetLouvain(G, num_part);
+////					
+////					start = System.currentTimeMillis();
+////					R.partitionMod(G, eps, burn_factor*G.V(), n_samples, 0);
+////					System.out.println("recursiveMod - DONE, elapsed " + (System.currentTimeMillis() - start));
+////					
+////					System.out.println("modularity = " + R.modularity(G.E()));
+////					
+////					R.writePart(part_file);
+//					
+//					//
+//	    			for (double eps2 : eps2_list){
+//	    				
+//	    				LouvainDP.louvainAfterFirstPass(G, part_file, eps2);
+//	    			}
+//	    			
+//	    	}
+//	    }
 	    
-	    double[] eps2_list = new double[]{1.0, 2.0, 4.0};
 	    
-	    for (int i = 0; i < dataname_list.length; i++){
-	    	dataname = dataname_list[i];
-	    	
-	    	System.out.println("dataname = " + dataname);
-	    	
-	    	String filename = prefix + "_data/" + dataname + ".gr";
-			long start = System.currentTimeMillis();
-			EdgeWeightedGraph G = EdgeWeightedGraph.readEdgeList(filename);
-			System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
-			
-			System.out.println("#nodes = " + G.V());
-			System.out.println("#edges = " + G.E());	    	
-			
-	    	for (double eps : eps_list[i])
-	    		for (int num_part : num_part_list[i]){
-	    			
-	    			System.out.println("eps = " + eps);
-	    			System.out.println("num_part = " + num_part);	 
-	    			String part_file = prefix + "_out/" + dataname + "_nodesetlv_" + burn_factor + "_" + num_part + "_" 
-	    							+ String.format("%.1f", eps) + ".part";
-	    			
-	    			//
-//					NodeSetLouvain R = new NodeSetLouvain(G, num_part);
-//					
-//					start = System.currentTimeMillis();
-//					R.partitionMod(G, eps, burn_factor*G.V(), n_samples, 0);
-//					System.out.println("recursiveMod - DONE, elapsed " + (System.currentTimeMillis() - start));
-//					
-//					System.out.println("modularity = " + R.modularity(G.E()));
-//					
-//					R.writePart(part_file);
-					
-					//
-	    			for (double eps2 : eps2_list){
-	    				
-	    				LouvainDP.louvainAfterFirstPass(G, part_file, eps2);
-	    			}
-	    			
-	    	}
-	    }
+	    ///////////
+	    // 3 - TEST NodeSetLouvain (new: k-ary tree)
+		// ca-AstroPh		:	eps=10 ratio=1						 (3,3,0.518)
+		//						eps=10 ratio=2						 (3,3,0.545), (3,4,0.542)
+		// com_amazon_ungraph:	eps=20 ratio=2 (k, max_level, mod) = (5,4,0.478), (6,3,0.450), (4,5,0.515), (3,6,0.540)
+		//						eps=20 ratio=1						 (5,4,0.263)
+		//						eps=30 ratio=2						 (3,7,0.590) 44s Acer
+		// com_youtube_ungraph	eps=20 ratio=2						 (3,7,0.493) 
+		//						eps=30 ratio=2						 (3,7,0.519) 172s Acer	
+		//
+	    // COMMAND-LINE <prefix> <dataname> <n_samples> <burn_factor>
+ 		String prefix = "";
+ 		int n_samples = 1;
+ 		int burn_factor = 20;
+ 		int limit_size = 40;		// at least 4*lower_size
+ 		int lower_size = 10;		// at least 2
+ 		int max_level = 7;
+ 		double eps1 = 20.0;	// 1, 10, 50, 80, 100 for polbooks: interesting prob values and final results
+ 		double ratio = 2.0; // 1.26 = 2^(1/3)
+ 		int k = 3;
+ 		
+ 		if(args.length >= 4){
+ 			prefix = args[0];
+ 			dataname = args[1];
+ 			n_samples = Integer.parseInt(args[2]);
+ 			burn_factor = Integer.parseInt(args[3]);
+ 		}
+ 		if(args.length >= 5)
+ 			limit_size = Integer.parseInt(args[4]);
+ 		
+ 		System.out.println("dataname = " + dataname);
+ 		System.out.println("burn_factor = " + burn_factor + " n_samples = " + n_samples);
+ 		System.out.println("limit_size = " + limit_size);
+ 		System.out.println("lower_size = " + lower_size);
+ 		System.out.println("max_level = " + max_level);
+ 		System.out.println("eps1 = " + eps1);
+ 		System.out.println("ratio = " + ratio);
+ 		System.out.println("k = " + k);
+ 		
+ 		//
+ 		String filename = prefix + "_data/" + dataname + ".gr";	// EdgeListReader
+ 		String part_file = prefix + "_out/" + dataname +"_nodesetlv2_" + burn_factor + "_" + limit_size + "_" + lower_size + "_" 
+ 						+ max_level + "_" + String.format("%.2f", ratio) + "_" + String.format("%.1f", eps1) + "_" + k + ".part";
+ 		
+ 		EdgeWeightedGraph G = EdgeWeightedGraph.readEdgeList(filename);
+ 		
+ 		System.out.println("#nodes = " + G.V());
+ 		System.out.println("#edges = " + G.E());
+ 		
+ 		//
+ 		NodeSetLouvain R = new NodeSetLouvain(G, k);
+ 		System.out.println("mod = " + R.modularity(G.E()));
+ 		
+ 		// TEST recursiveMod()
+ 		for (int i = 0; i < n_samples; i++){
+ 			System.out.println("sample i = " + i);
+ 			
+ 			long start = System.currentTimeMillis();
+ 			NodeSetLouvain root_set = NodeSetLouvain.recursiveMod(G, eps1, burn_factor, limit_size, lower_size, max_level, ratio, k);	
+ 			System.out.println("recursiveMod - DONE, elapsed " + (System.currentTimeMillis() - start));
+ 			
+ 			
+ 			NodeSetLouvain.printSetIds(root_set, G.E());
+ 			System.out.println("final modularity = " + root_set.modularityAll(G.E()));
+ 			
+//	 			NodeSetLouvain.writePart(root_set, part_file);
+//	 			System.out.println("writePart - DONE");
+ 			
+ 			List<NodeSetLouvain> best_cut = NodeSetLouvain.bestCut(root_set, G.E());
+ 			System.out.println("best_cut.size = " + best_cut.size());
+ 			NodeSetLouvain.writeBestCut(best_cut, part_file);
+ 			
+ 		}
+		
+		
 	    
 	    
 	}

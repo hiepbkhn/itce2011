@@ -90,7 +90,7 @@ public class NodeSetMod {
 	}
 	
 	////
-	public static NodeSetMod getSubSet(EdgeWeightedGraph G, NodeSetMod R, NodeSetMod ret, boolean val, List<Int2> e_list){
+	public static void getSubSet(EdgeWeightedGraph G, NodeSetMod R, NodeSetMod ret, boolean val, List<Int2> e_list){
 //		NodeSetMod ret = new NodeSetMod();
 		
 		ret.node2ind = new HashMap<Integer, Integer>();
@@ -153,7 +153,7 @@ public class NodeSetMod {
 		}
 		
 		//
-		return ret;
+//		return ret;
 	}
 	
 	////
