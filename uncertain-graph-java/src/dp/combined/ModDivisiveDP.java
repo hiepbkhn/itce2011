@@ -9,6 +9,7 @@
 package dp.combined;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import algs4.EdgeWeightedGraph;
@@ -29,7 +30,7 @@ public class ModDivisiveDP {
 											// recursiveLK		
 //		String dataname = "polblogs";		// (1224,16715) 	eps = 50, max_level = 4, 		final modularity = 0.37
 											// recursiveLK		
-		String dataname = "as20graph";		// (6474,12572)		eps = 50, max_level = 4, 		final modularity = 0.23 (6s pc)
+//		String dataname = "as20graph";		// (6474,12572)		eps = 50, max_level = 4, 		final modularity = 0.23 (6s pc)
 											// recursiveLK		eps = 30, max_level = 6, ratio=2, final modularity = 0.23 (3s pc)
 											//					eps = 30, max_level = 6, ratio=3, final modularity = 0.24 (3s pc)
 											//					eps = 20, max_level = 6, ratio=3, final modularity = 0.20 (3s pc)
@@ -43,7 +44,7 @@ public class ModDivisiveDP {
 											//					eps = 20, burn=20, ratio=2, max_level=6, (40,10), bestCut=0.391 (2s)
 //		String dataname = "ca-HepPh";		// (12006,118489) 	eps = 50, max_level = 5, final modularity = 0.382 0.47 (24s pc) 
 															
-//		String dataname = "ca-AstroPh";		// (18771,198050) 	eps = 50, max_level = 4, final mod = 0.503 (compare mod/modSelf) 0.43 (compare mod) (23s pc)
+		String dataname = "ca-AstroPh";		// (18771,198050) 	eps = 50, max_level = 4, final mod = 0.503 (compare mod/modSelf) 0.43 (compare mod) (23s pc)
 											//	Sep 25			eps = 10, burn=20, ratio=2, max_level=6, (40,10), bestCut=0.380 (4s)
 											//					eps = 15, burn=20, ratio=2, max_level=6, (40,10), bestCut=0.420 (4s)
 											//					eps = 20, burn=20, ratio=2, max_level=6, (40,10), bestCut=0.445 (4s)
@@ -78,9 +79,9 @@ public class ModDivisiveDP {
 		int burn_factor = 20;
 		int limit_size = 40;		// at least 4*lower_size
 		int lower_size = 10;		// at least 2
-		int max_level = 8;
-		double eps1 = 20.0;	// 1, 10, 50, 80, 100 for polbooks: interesting prob values and final results
-		double ratio = 2.0; // 1.26 = 2^(1/3)
+		int max_level = 6;
+		double eps1 = 10.0;	// 1, 10, 50, 80, 100 for polbooks: interesting prob values and final results
+		double ratio = 1.0; // 1.26 = 2^(1/3)
 		
 		if(args.length >= 4){
 			prefix = args[0];
@@ -140,10 +141,13 @@ public class ModDivisiveDP {
 			NodeSetMod.printSetIds(root_set, G.E());
 			System.out.println("final modularity = " + root_set.modularityAll(G.E()));
 			
-			NodeSetMod.writePart(root_set, part_file);
-			System.out.println("writePart - DONE");
+//			NodeSetMod.writePart(root_set, part_file);
+//			System.out.println("writePart - DONE");
 			
-			NodeSetMod.bestCut(root_set, G.E());
+			List<NodeSetMod> best_cut = NodeSetMod.bestCut(root_set, G.E());
+			System.out.println("best_cut.size = " + best_cut.size());
+			NodeSetMod.writeBestCut(best_cut, part_file);
+			
 		}
 		
 		// TEST readPart()

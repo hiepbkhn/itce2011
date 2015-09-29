@@ -11,6 +11,8 @@ use IGRAPH functions
     - normalize_graph(): add param is_directed
     Sep 9
     - add "oned_as='column'" to compute_utility_and_export_matlab()
+    Sep 29
+    - run test_normalize_graphs() to convert synthetic graphs (Lancichinetti)
 '''
 
 
@@ -94,20 +96,35 @@ def test_normalize_graphs():
 #    outfile = "../_data/polblogs.gr"
 #    filename = "../_data/polbooks.gml"    # 
 #    outfile = "../_data/polbooks.gr"
-    filename = "../_data/karate.gml"    # 
-    outfile = "../_data/karate.gr"
-    filename = "../_data/adjnoun.gml"    # 
-    outfile = "../_data/adjnoun.gr"
-    filename = "../_data/keystone.gml"    # DIRECTED
-    outfile = "../_data/keystone.gr"
-    G = nx.read_gml(filename)
+#    filename = "../_data/karate.gml"    # 
+#    outfile = "../_data/karate.gr"
+#    filename = "../_data/adjnoun.gml"    # 
+#    outfile = "../_data/adjnoun.gr"
+#    filename = "../_data/keystone.gml"    # DIRECTED
+#    outfile = "../_data/keystone.gr"
+#    G = nx.read_gml(filename)
+
+#    filename = "../_data/network10k.dat"    # 2 components
+#    outfile = "../_data/network10k.gr"
+#    filename = "../_data/network100k.dat"   # 383 components
+#    outfile = "../_data/network100k.gr"
+#    filename = "../_data/network100k2.dat"   # 1 component
+#    outfile = "../_data/network100k2.gr"
+#    filename = "../_data/network300k.dat"   # 1 component
+#    outfile = "../_data/network300k.gr"
+    filename = "../_data/network.dat"   # 1 component
+    outfile = "../_data/network300k2.gr"
+#    filename = "E:/Tailieu/Paper-code/Social Network/Community/Lancichinetti/Benchmark/binary_networks/1m/network.dat"   # (4.8GB/graph) 1 component
+#    outfile = "../_data/network1m.gr"          
+    G = nx.read_edgelist(filename, '#', '\t', None, nodetype=int) 
 
     print "is_directed =", G.is_directed()
     print "#nodes =", G.number_of_nodes()
     print "#edges =", G.number_of_edges()
 
-    # normalize G 
-    G = normalize_graph(G, is_directed = True)
+    # normalize G
+#    G = normalize_graph(G, is_directed = True) 
+    G = normalize_graph(G, is_directed = False)
     
     print "normalize_graph: DONE"
     print "#nodes =", G.number_of_nodes()
@@ -646,7 +663,7 @@ if __name__ == '__main__':
     
     
     # TEST test_normalize_graphs()
-#    test_normalize_graphs()
+    test_normalize_graphs()
 
     # TEST convert_directed_graph()
 #    convert_directed_graph() 
@@ -657,11 +674,11 @@ if __name__ == '__main__':
     
     
     ## TEST compute_utility_and_export_matlab()
-    compute_utility_and_export_matlab("../../uncertain-graph-java/_data/polbooks.gr", 
-                                      "../../uncertain-graph-java/_data/polbooks.cut", 
-                                      "../../uncertain-graph-java/_matlab/polbooks.mat", 
-                                      1000, 105)   
-    
+#    compute_utility_and_export_matlab("../../uncertain-graph-java/_data/polbooks.gr", 
+#                                      "../../uncertain-graph-java/_data/polbooks.cut", 
+#                                      "../../uncertain-graph-java/_matlab/polbooks.mat", 
+#                                      1000, 105)   
+#    
 #    compute_utility_and_export_matlab("../../uncertain-graph-java/_data/polblogs.gr", 
 #                                      "../../uncertain-graph-java/_data/polblogs.cut", 
 #                                      "../../uncertain-graph-java/_matlab/polblogs.mat", 

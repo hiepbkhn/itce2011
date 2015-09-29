@@ -70,7 +70,7 @@ public class EdgeFlip {
 	}
 	
 	////
-	public static void perturbGraphAndLouvain(Grph G, double eps, String sample_file, int n_samples) throws IOException{
+	public static void perturbGraphAndLouvain(Grph G, double eps, String sample_file, String part_file, int n_samples) throws IOException{
 		
 		RegularFile f;
 		Map<Integer, Integer> part;
@@ -96,6 +96,9 @@ public class EdgeFlip {
 			// compute modularity using G and part
 			System.out.println("real modularity = " + GreedyReconstruct.modularity(G, part));
 			
+			//
+			Louvain.writePart(part, part_file + "-" + i + ".part");
+			System.out.println("writePart - DONE");
 			
 		}
 		
@@ -108,8 +111,8 @@ public class EdgeFlip {
 		
 		String dataname;
 		int n_samples = 1;
-		String[] dataname_list = new String[]{"ca-AstroPh"}; //com_amazon_ungraph, "com_dblp_ungraph", "com_youtube_ungraph"};
-		double[][] eps_list = new double[][]{{2.5, 5.0, 7.5, 10.0}, {10.0, 20.0, 30.0}, {10.0, 20.0, 30.0}};
+		String[] dataname_list = new String[]{"com_amazon_ungraph"}; //com_amazon_ungraph, "com_dblp_ungraph", "com_youtube_ungraph"};
+		double[][] eps_list = new double[][]{{12.72, 1.5*12.72, 2*12.72}, {10.0, 20.0, 30.0}, {10.0, 20.0, 30.0}};
 	    
 	    Grph G;
 	    
@@ -132,6 +135,7 @@ public class EdgeFlip {
 	    	for (double eps : eps_list[i]){
 	    		
 	    		String sample_file = "_sample/" + dataname + "_edgeflip_" + String.format("%.1f", eps);
+	    		String part_file = "_out/" + dataname + "_edgeflip_" + String.format("%.1f", eps);
 	    		
 	    		System.out.println("eps = " + eps);
 	    		
@@ -142,7 +146,7 @@ public class EdgeFlip {
 //				System.out.println("#edges = " + aG.getNumberOfEdges());
 	    		
 	    		//
-	    		perturbGraphAndLouvain(G, eps, sample_file, n_samples);
+	    		perturbGraphAndLouvain(G, eps, sample_file, part_file, n_samples);
 	    		
 	    	}
 	    }

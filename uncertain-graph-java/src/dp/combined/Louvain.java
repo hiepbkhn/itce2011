@@ -895,8 +895,15 @@ public class Louvain {
 //		String dataname = "wiki-Vote";		// (7115,100762)	ok
 //		String dataname = "ca-HepPh";		// (12006,118489) 	ok
 //		String dataname = "ca-AstroPh";		// (18771,198050) 	ok		1.56s
+		// SYNTHETIC
+//		String dataname = "network10k";		// (10000,34810) 	ok
+//		String dataname = "network100k";	// (100000,232732) 	ok
+//		String dataname = "network1m";		// (1000000,7817896) 	ok		(407s, Mem 4.3GB)
+//		String dataname = "network100k2";	// (100000,501834) 	ok			(7s)
+//		String dataname = "network300k";	// (300000,1519558) ok			(26s)
+		String dataname = "network300k2";	// (300000,1522207) ok			(26s)
 		// LARGE
-		String dataname = "com_amazon_ungraph";		// (334863,925872)	17.8s
+//		String dataname = "com_amazon_ungraph";		// (334863,925872)	17.8s
 //		String dataname = "com_dblp_ungraph";		// (317080,1049866)	27.2s 			(new : 20s, Mem 1.5GB)
 //		String dataname = "com_youtube_ungraph";	// (1134890,2987624) 670s, 2.2GB)	(new : 42s, Mem 2.7GB)
 													//						

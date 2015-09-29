@@ -9,11 +9,15 @@
  * 	- add writePart(), readPart()
  * 	- fix recursiveMod(): correct order for checking limit_size, lower_size
  * 	- use epsilonByLevel() in recursiveMod()
+ * Sep 23
+ * 	- add bestCut(): dynamic programming
  * Sep 24
  * 	- not use IntHashSet.pickRandomElement, copied from NodeSetMod.java
  * 	- use EdgeWeightedGraph in place of EdgeWeightedGraph
  * Sep 25
  * 	- faster getSubSet()
+ * Sep 29
+ * 	- add writeBestCut()
  */
 
 package dp.combined;
@@ -681,7 +685,7 @@ public class NodeSetMod {
 			NodeSetMod R = stack.pop();
 			
 			double mod = R.modularitySelf(m);			// non-private, need modularitySelfDP() !
-			boolean self = false;
+			boolean self = true;
 			if (R.left == null){	// leaf nodes
 				sol.put(R.id, new CutNode(mod, true));
 			}else{
@@ -689,7 +693,7 @@ public class NodeSetMod {
 				double mod_opt = sol.get(R.left.id).mod + sol.get(R.right.id).mod;
 				if (mod < mod_opt){
 					mod = mod_opt;
-					self = true;
+					self = false;
 				}
 					
 				sol.put(R.id, new CutNode(mod, self));
@@ -717,5 +721,23 @@ public class NodeSetMod {
 		return ret;
 	}
 	
+	////
+	public static void writeBestCut(List<NodeSetMod> best_cut, String part_file) throws IOException{
+		BufferedWriter bw = new BufferedWriter(new FileWriter(part_file));
+
+		for (NodeSetMod R : best_cut){
+			for (int s = 0; s < R.ind.length; s++)
+				if (R.ind[s] == true)
+					bw.write(R.ind2node[s] + ",");
+			bw.write("\n");
+			
+			for (int s = 0; s < R.ind.length; s++)
+				if (R.ind[s] == false)
+					bw.write(R.ind2node[s] + ",");
+			bw.write("\n");
+		}
+		
+		bw.close();
+	}
 	
 }

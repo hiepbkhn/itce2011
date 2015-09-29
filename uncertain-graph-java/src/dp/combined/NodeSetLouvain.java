@@ -1,6 +1,8 @@
 /*
  * Sep 28, 2015
  * 	- exponential mechanism via MCMC on K groups of nodes (first pass of Louvain method)
+ * Sep 29, 2015
+ * 	- apply tree structure (not binary)
  */
 
 package dp.combined;
@@ -36,16 +38,61 @@ import dp.mcmc.Node;
 
 public class NodeSetLouvain {
 
+	public int k = 5;	// 	fan-out
 	//
 	public int[] part;	//	part[i] = 0 -> K-1 is the partition of the node i 
 	public int[] size;	//	number of nodes in partition k
 	public int[] lc;	// 	number of intra-edges
 	public int[] dc;	// 	
+	//
+	public List<Int2> e_list;	
+	public int[] ind2node;	// 
+	public Map<Integer, Integer> node2ind;
+	//
+	public NodeSetLouvain[] children;
+	public int id;
+	public int level = 0;
+	
+	//// for the case number of parts < k
+	public void normalizePart(){
+		boolean[] mark = new boolean[this.k];
+		for (int i = 0; i < this.k; i++)
+			mark[i] = false;
+		
+		for (int p : this.part)
+			mark[p] = true;
+		
+		int[] map = new int[this.k];
+		int count = 0;
+		for (int i = 0; i < this.k; i++){
+			map[i] = count;
+			if (mark[i] == true)
+				count += 1;
+		}
+		
+		//
+		for (int i = 0; i < this.part.length; i++)
+			this.part[i] = map[this.part[i]];
+		
+	}
+	
+	////
+	public static void getSubEgdeLists(NodeSetLouvain R, List<List<Int2>> e_list){
+		int u = 0;
+		int v = 0;
+		for (Int2 e : R.e_list){
+			u = R.node2ind.get(e.val0);
+			v = R.node2ind.get(e.val1);
+			if (R.part[u] == R.part[v])
+				e_list.get(R.part[u]).add(e);
+		}
+	}
 	
 	////
 	public NodeSetLouvain(EdgeWeightedGraph G, int k){
 		int n = G.V();
 		
+		this.k = k;
 		this.part = new int[n];
 		this.size = new int[k];
 		this.lc = new int[k];
@@ -107,11 +154,11 @@ public class NodeSetLouvain {
 	
 	
 	////
-	public void partitionMod(EdgeWeightedGraph G, double eps_p, int n_steps, int n_samples, int sample_freq){
+	public static void partitionMod(NodeSetLouvain R, EdgeWeightedGraph G, double eps_p, int n_steps, int n_samples, int sample_freq){
 		
 		int n_nodes = G.V();
 		int n_edges = G.E();
-		int k = this.lc.length;
+		int k = R.lc.length;
 		
 		// compute dU
 	    double dU = 8.0/n_edges;
@@ -125,7 +172,7 @@ public class NodeSetLouvain {
 		int dest = -1;
 		int old_dest = -1;
 		
-		double modT = this.modularity(n_edges);
+		double modT = R.modularity(n_edges);
 		double modT2;
 		
 		for (int i = 0; i < n_steps + n_samples * sample_freq; i++) {
@@ -133,14 +180,14 @@ public class NodeSetLouvain {
 			// decide (u, dest)
 			u = random.nextInt(n_nodes);
 			dest = random.nextInt(k);
-			while (dest == this.part[u])
+			while (dest == R.part[u])
 				dest = random.nextInt(k);
 			
-			old_dest = this.part[u];
-			move(u, dest, G);
+			old_dest = R.part[u];
+			R.move(u, dest, G);
 			
 			// MCMC
-			modT2 = this.modularity(n_edges);
+			modT2 = R.modularity(n_edges);
 			
 			if (modT2 > modT){
 				n_accept += 1;
@@ -154,7 +201,7 @@ public class NodeSetLouvain {
 				
 				if (prob_val > prob){
 					// reverse
-					move(u, old_dest, G);
+					R.move(u, old_dest, G);
 					
 				}else {
 					n_accept += 1;
@@ -165,6 +212,42 @@ public class NodeSetLouvain {
 			
 			
 		}
+	}
+	
+	////
+	public static NodeSetLouvain recursiveMod(EdgeWeightedGraph G, double eps1, int burn_factor, int limit_size, int lower_size, int max_level, double ratio, int k){
+		int n_nodes = G.V();
+		int n_edges = G.E();
+		int id = -1;
+		
+		//
+		double[] epsArr = DPUtil.epsilonByLevel(eps1, max_level, ratio); 
+		
+		// root node
+		NodeSetLouvain root = new NodeSetLouvain(G, k);
+		root.id = id--;
+		root.level = 0;
+		
+		// 
+		Queue<NodeSetLouvain> queue = new LinkedList<NodeSetLouvain>();
+		queue.add(root);
+		while(queue.size() > 0){
+			NodeSetLouvain R = queue.remove();
+			System.out.println("R.level = " + R.level + " R.size = " + R.part.length);
+			
+			if (R.part.length <= limit_size || R.level == max_level){
+				continue;
+			}
+			
+			long start = System.currentTimeMillis();
+			NodeSetLouvain.partitionMod(R, G, epsArr[R.level], burn_factor*R.part.length, 0, 0);
+			System.out.println("elapsed " + (System.currentTimeMillis() - start));
+			
+			
+		}
+		
+		//
+		return root;
 	}
 	
 	////

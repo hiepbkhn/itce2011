@@ -65,3 +65,9 @@
 - NodeSetModOpt.java
 - NodeSetModOpt2.java: do not use IntSet !
 
+- EdgeFlip: implement paper EDBTw'15
+
+- CommunityMeasure: clustering metrics
+
+
+
