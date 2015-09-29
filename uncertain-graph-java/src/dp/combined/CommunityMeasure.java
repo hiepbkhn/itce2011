@@ -23,7 +23,31 @@ import toools.io.file.RegularFile;
 
 public class CommunityMeasure {
 
-	
+	//// for testing
+	public static double modularitySet(Grph G, int[] node_set){
+		double mod = 0.0;
+		int m = G.getNumberOfEdges();
+		System.out.println("m = " + m);
+		
+		double lc = 0;
+		double dc = 0;
+		
+		for (int i = 0; i < node_set.length; i++)
+			for (int j = i+1; j < node_set.length; j++)
+				if (G.areVerticesAdjacent(node_set[i], node_set[j]))
+					lc += 1;
+		
+		for (int i = 0; i < node_set.length; i++)
+			dc += G.getVertexDegree(node_set[i]);
+		
+		System.out.println("lc = " + lc);
+		System.out.println("dc = " + dc);
+		
+		mod = lc/m - (dc/(2*m))*(dc/(2*m));
+		
+		//
+		return mod;
+	}
 	
 	////
 	public static double modularity(Grph G, int[] part){
@@ -227,21 +251,34 @@ public class CommunityMeasure {
 	////////////////////////////////////////////////
 	public static void main(String[] args) throws Exception{
 		
+//		int n_nodes = 18771;
 		int n_nodes = 334863;
 		int num_pair = 100000;
 		
+//		String filename = "_data/karate.gr";
+		
+//		String filename = "_data/ca-AstroPh.gr";
 		String filename = "_data/com_amazon_ungraph.gr";
 		
 		String path = "_out/";
+//		String louvain_file = "ca-AstroPh.louvain";	
 		String louvain_file = "com_amazon_ungraph.louvain";						// aIntra = 1, aInter = 1, ARI = 1
 		//
-		String compare_file = "com_amazon_ungraph_moddivdp_20_40_10_8_2.00_20.0.part";
+//		String compare_file = "ca-AstroPh_nodesetlv2_20_40_10_3_1.00_10.0_3.part";
+//		String compare_file = "ca-AstroPh_nodesetlv2_20_40_10_3_2.00_10.0_3.part";
+//		String compare_file = "ca-AstroPh_nodesetlv2_20_40_10_4_2.00_10.0_3.part";
+//		String compare_file = "ca-AstroPh_temp.part";
+		
+//		String compare_file = "com_amazon_ungraph_moddivdp_20_40_10_8_2.00_20.0.part";
 //		String compare_file = "com_amazon_ungraph_moddivopt_1_100_20_8.part";
 //		String compare_file = "com_amazon_ungraph_nodesetlv_20_5_5.0.part";		//
 //		String compare_file = "com_amazon_ungraph_nodesetlv_20_10_10.0.part";	//				
 //		String compare_file = "com_amazon_ungraph_edgeflip_12.7-0.part";		// EdgeFlip		aIntra = 0.4181, aInter = 0.9935, ARI = 0.4416
 //		String compare_file = "com_amazon_ungraph_filter_6.4-0.part";			// TmF
 //		String compare_file = "com_amazon_ungraph_filter_12.7-0.part";			// TmF			aIntra = 0.2427, aInter = 0.9925, ARI = 0.2691
+		String compare_file = "com_amazon_ungraph_nodesetlv2_20_40_10_1_2.00_20.0_5.part";
+		
+		
 		
 		//
 		EdgeListReader reader = new EdgeListReader();
@@ -272,6 +309,12 @@ public class CommunityMeasure {
 		
 		double ARI = adjustedRandIndex(louvain_part, compare_part);
 		System.out.println("ARI = " + ARI);
+		
+		// TEST modularitySet() ok
+//		int[] node_set = new int[]{10,11,15,16,18,20,23,24,27,28,31,32,33};
+//		System.out.println("modSet = " + modularitySet(G, node_set));
+//		node_set = new int[]{0,1,2,3,4,5,6,7,8,9,12,13,14,17,19,21,22,25,26,29,30};
+//		System.out.println("modSet = " + modularitySet(G, node_set));
 	}
 
 }
