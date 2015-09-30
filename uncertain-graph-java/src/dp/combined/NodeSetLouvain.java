@@ -224,7 +224,6 @@ public class NodeSetLouvain {
 	////m : number of edges in G
 	public double modularitySelf(int m){
 		double mod = 0.0;
-		
 		double lc = this.e_list.size();
 		double dc = 0;
 		for (int val : this.dc)
@@ -281,7 +280,6 @@ public class NodeSetLouvain {
 		}
 		
 		//
-		
 		this.size[part[u_id]] -= 1;
 		this.size[dest] += 1;
 		
