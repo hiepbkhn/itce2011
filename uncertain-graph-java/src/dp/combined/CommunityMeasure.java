@@ -284,32 +284,31 @@ public class CommunityMeasure {
 //		String filename = "_data/karate.gr";
 //		String filename = "_data/polbooks.gr";
 		
-		int n_nodes = 6474;
-		String filename = "_data/as20graph.gr";
+//		int n_nodes = 6474;
+//		String filename = "_data/as20graph.gr";
+//		String louvain_file = "as20graph.louvain";	
 		
 //		int n_nodes = 18771;
 //		String filename = "_data/ca-AstroPh.gr";
+//		String louvain_file = "ca-AstroPh.louvain";	
 		
-//		int n_nodes = 334863;
-//		String filename = "_data/com_amazon_ungraph.gr";
-		
+		int n_nodes = 334863;
+		String filename = "_data/com_amazon_ungraph.gr";
+		String louvain_file = "com_amazon_ungraph.louvain";						// aIntra = 1, aInter = 1, ARI = 1		
 		
 		
 		String path = "_out/";
-		
-		String louvain_file = "as20graph.louvain";	
-//		String louvain_file = "ca-AstroPh.louvain";	
-//		String louvain_file = "com_amazon_ungraph.louvain";						// aIntra = 1, aInter = 1, ARI = 1
 		
 		//
 //		String compare_file = "as20graph_multioptlouvain_20_40_6_2.part";		// LouvainOpt
 //		String compare_file = "as20graph_multioptlouvain_20_40_4_5.part";		// LouvainOpt
 //		String compare_file = "as20graph_partoptlouvain_20_40_6_3.part";		// LouvainOpt
-		String compare_file = "as20graph_partoptlouvain_20_40_5_4.part";		// LouvainOpt
+//		String compare_file = "as20graph_partoptlouvain_20_40_5_4.part";		// LouvainOpt
 //		String compare_file = "as20graph_moddivoptlouvain_30_50_10.part";		// ModDivisiveOpt
 //		String compare_file = "as20graph_edgeflip_8.8-0.part";					// EdgeFlip
 //		String compare_file = "as20graph_edgeflip_6.0-0.part";					// EdgeFlip
 		
+//		String compare_file = "ca-AstroPh_nodesetlv2_20_40_10_6_1.00_20.0_3.part";
 //		String compare_file = "ca-AstroPh_nodesetlv2_20_40_10_3_1.00_10.0_3.part";
 //		String compare_file = "ca-AstroPh_nodesetlv2_20_40_10_3_2.00_10.0_3.part";
 //		String compare_file = "ca-AstroPh_nodesetlv2_20_40_10_4_2.00_10.0_3.part";
@@ -323,6 +322,7 @@ public class CommunityMeasure {
 //		String compare_file = "com_amazon_ungraph_filter_6.4-0.part";			// TmF
 //		String compare_file = "com_amazon_ungraph_filter_12.7-0.part";			// TmF			aIntra = 0.2427, aInter = 0.9925, ARI = 0.2691
 //		String compare_file = "com_amazon_ungraph_nodesetlv2_20_40_10_1_2.00_20.0_5.part";
+		String compare_file = "com_amazon_ungraph_hrgdivgreedy_20_40_10_8_2.00_20.0.part";	// 
 		
 		
 		

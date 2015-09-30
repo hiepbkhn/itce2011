@@ -891,7 +891,7 @@ public class Louvain {
 //		String dataname = "karate";			// (34, 78) 		ok
 //		String dataname = "polbooks";		// (105, 441)		ok
 //		String dataname = "polblogs";		// (1224,16715)		ok 	
-		String dataname = "as20graph";		// (6474,12572)		ok
+//		String dataname = "as20graph";		// (6474,12572)		ok
 //		String dataname = "wiki-Vote";		// (7115,100762)	ok
 //		String dataname = "ca-HepPh";		// (12006,118489) 	ok
 //		String dataname = "ca-AstroPh";		// (18771,198050) 	ok		1.56s
@@ -904,7 +904,7 @@ public class Louvain {
 //		String dataname = "network300k2";	// (300000,1522207) ok			(26s)
 		// LARGE
 //		String dataname = "com_amazon_ungraph";		// (334863,925872)	17.8s
-//		String dataname = "com_dblp_ungraph";		// (317080,1049866)	27.2s 			(new : 20s, Mem 1.5GB)
+		String dataname = "com_dblp_ungraph";		// (317080,1049866)	27.2s 			(new : 20s, Mem 1.5GB)
 //		String dataname = "com_youtube_ungraph";	// (1134890,2987624) 670s, 2.2GB)	(new : 42s, Mem 2.7GB)
 													//						
 		// COMMAND-LINE <prefix> <dataname> <n_samples> <eps>

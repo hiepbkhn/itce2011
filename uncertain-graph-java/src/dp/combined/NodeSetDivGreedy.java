@@ -591,7 +591,7 @@ public class NodeSetDivGreedy {
 	}
 	
 	////
-	public static void printSetIds(NodeSetDivGreedy root_set){
+	public static void printSetIds(NodeSetDivGreedy root_set, int m){
 		System.out.println("printSetIds");
 		
 		Queue<NodeSetDivGreedy> queue_set = new LinkedList<NodeSetDivGreedy>();
@@ -600,7 +600,8 @@ public class NodeSetDivGreedy {
 			NodeSetDivGreedy R = queue_set.remove();
 			if (R.left != null)
 				System.out.println("R.id = " + R.id + " left.id = " + R.left.id + " right.id = " + R.right.id + 
-						" left.size = " + R.n_s + " right.size = " + R.n_t);
+						" left.size = " + R.n_s + " right.size = " + R.n_t + " mod = " + String.format("%.4f", R.modularity(m)) + 
+						" modSelf = " + String.format("%.4f", R.modularitySelf(m)));
 			else
 				System.out.println("LEAF R.id = " + R.id);
 			if (R.left != null){
@@ -740,9 +741,10 @@ public class NodeSetDivGreedy {
 		while (queue.size() > 0){
 			NodeSetDivGreedy R = queue.remove();
 			
-			if (sol.get(R.id).self == true)
+			if (sol.get(R.id).self == true){
 				ret.add(R);
-			else if (R.left != null){
+				System.out.print(R.id + " ");
+			}else if (R.left != null){
 				queue.add(R.left);
 				queue.add(R.right);
 			}
@@ -750,6 +752,26 @@ public class NodeSetDivGreedy {
 		
 		//
 		return ret;
+	}
+	
+	////
+	public static void writeBestCut(List<NodeSetDivGreedy> best_cut, String part_file) throws IOException{
+		BufferedWriter bw = new BufferedWriter(new FileWriter(part_file));
+
+		for (NodeSetDivGreedy R : best_cut){
+//				for (int i = 0; i < R.k; i++){
+//					for (int s = 0; s < R.part.length; s++)
+//						if (R.part[s] == i)
+//							bw.write(R.ind2node[s] + ",");
+//					bw.write("\n");
+//				}
+			
+			for (int s = 0; s < R.ind.length; s++)
+				bw.write(R.ind2node[s] + ",");
+			bw.write("\n");
+		}
+		
+		bw.close();
 	}
 	
 }

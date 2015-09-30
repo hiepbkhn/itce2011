@@ -7,6 +7,8 @@
 
 package dp.combined;
 
+import java.util.List;
+
 import algs4.EdgeWeightedGraph;
 import grph.Grph;
 import grph.io.EdgeListReader;
@@ -45,7 +47,7 @@ public class HRGDivisiveGreedy {
 		int limit_size = 40;		// at least 4*lower_size
 		int lower_size = 10;		// at least 2
 		int max_level = 8;
-		double eps1 = 30.0;
+		double eps1 = 20.0;
 		double ratio = 2.0; // 1.26 = 2^(1/3)
 		
 		if(args.length >= 4){
@@ -102,13 +104,14 @@ public class HRGDivisiveGreedy {
 			NodeSetDivGreedy root_set = NodeSetDivGreedy.recursiveLK(G, eps1, burn_factor, limit_size, lower_size, max_level, ratio);	
 			System.out.println("recursiveLK - DONE, elapsed " + (System.currentTimeMillis() - start));
 			
-			NodeSetDivGreedy.printSetIds(root_set);
+			NodeSetDivGreedy.printSetIds(root_set, G.E());
 			System.out.println("final modularity = " + root_set.modularityAll(G.E()));
 			
-			NodeSetDivGreedy.writePart(root_set, part_file);
-			System.out.println("writePart - DONE");
+//			NodeSetDivGreedy.writePart(root_set, part_file);
+//			System.out.println("writePart - DONE");
 			
-			NodeSetDivGreedy.bestCut(root_set, G.E());
+			List<NodeSetDivGreedy> best_cut = NodeSetDivGreedy.bestCut(root_set, G.E());
+			NodeSetDivGreedy.writeBestCut(best_cut, part_file);
 		}
 
 	}

@@ -105,16 +105,16 @@ if __name__ == '__main__':
 #    FILE_NAME = PATH + "adjnoun.gml"
 #    G = ig.Graph.Read(FILE_NAME, format="gml")
     
-    FILE_NAME = PATH + "karate.gr"
-    FILE_NAME = PATH + "polbooks.gr"
-#    FILE_NAME = PATH + "polblogs.gr"
-    FILE_NAME = PATH + "as20graph.gr"
-#    FILE_NAME = PATH + "wiki-Vote.gr"
-#    FILE_NAME = PATH + "ca-HepPh.gr"
-#    FILE_NAME = PATH + "ca-AstroPh.gr"
-#    FILE_NAME = PATH + "com_amazon_ungraph.gr"
-#    FILE_NAME = PATH + "com_dblp_ungraph.gr"
-#    FILE_NAME = PATH + "com_youtube_ungraph.gr"
+#    FILE_NAME = PATH + "karate.gr"            # 1 component
+#    FILE_NAME = PATH + "polbooks.gr"            # 1 component
+#    FILE_NAME = PATH + "polblogs.gr"            # 2 components
+#    FILE_NAME = PATH + "as20graph.gr"           # 1 component
+#    FILE_NAME = PATH + "wiki-Vote.gr"           # 24 components
+#    FILE_NAME = PATH + "ca-HepPh.gr"            # 276 components
+#    FILE_NAME = PATH + "ca-AstroPh.gr"          # 289 components
+#    FILE_NAME = PATH + "com_amazon_ungraph.gr"  # 1 component
+#    FILE_NAME = PATH + "com_dblp_ungraph.gr"    # 1 component
+    FILE_NAME = PATH + "com_youtube_ungraph.gr" # 1 component
     G = ig.Graph.Read_Edgelist(FILE_NAME, directed=False)
 
 #    G = ig.Graph.Read_Edgelist("../_data/com_amazon_ungraph.gr", directed=False)    # 254 clusters, 6.3s
@@ -125,6 +125,8 @@ if __name__ == '__main__':
     
     print "#nodes", G.vcount()
     print "#edges", G.ecount()   
+    vertex_cluster = G.components();
+    print "#components", vertex_cluster.summary()
     
     
     # TEST community detection algorithms
@@ -148,9 +150,9 @@ if __name__ == '__main__':
 #    clusters = test_label_propagation(G)        #
 #    print "elapsed", time.clock() - start 
     
-    start = time.clock() 
-    clusters = test_spin_glass(G)        #
-    print "elapsed", time.clock() - start 
+#    start = time.clock() 
+#    clusters = test_spin_glass(G)        #
+#    print "elapsed", time.clock() - start 
     
 #    print clusters
     

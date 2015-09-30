@@ -256,9 +256,9 @@ public class LouvainDP {
 //		String dataname = "as20graph";		// (6474,12572)		
 //		String dataname = "wiki-Vote";		// (7115,100762)
 //		String dataname = "ca-HepPh";		// (12006,118489) 	
-//		String dataname = "ca-AstroPh";		// (18771,198050) 			
+		String dataname = "ca-AstroPh";		// (18771,198050) 			
 		// LARGE
-		String dataname = "com_amazon_ungraph";		// (334863,925872)	
+//		String dataname = "com_amazon_ungraph";		// (334863,925872)	
 //		String dataname = "com_dblp_ungraph";		// (317080,1049866)	
 //		String dataname = "com_youtube_ungraph";	// (1134890,2987624) 
 													//						
@@ -364,6 +364,7 @@ public class LouvainDP {
 	    // 3 - TEST NodeSetLouvain (new: k-ary tree)
 		// ca-AstroPh		:	eps=10 ratio=1						 (3,3,0.380)
 		//						eps=10 ratio=2						 (3,3,0.391), (3,4,0.395)
+		//						eps=20 ratio=1						 (3,6,0.387)
 		//						eps=20 ratio=2						 (3,6,0.457)
 		// com_amazon_ungraph:	eps=20 ratio=2 (k, max_level, mod) = (5,4,0.335), (6,3,0.), (4,5,0.), (3,6,0.373)
 		//						eps=20 ratio=1						 (5,4,0.)
@@ -377,10 +378,10 @@ public class LouvainDP {
  		int burn_factor = 20;
  		int limit_size = 40;		// at least 4*lower_size
  		int lower_size = 10;		// at least 2
- 		int max_level = 1;
+ 		int max_level = 6;
  		double eps1 = 20.0;	// 1, 10, 50, 80, 100 for polbooks: interesting prob values and final results
- 		double ratio = 2.0; // 1.26 = 2^(1/3)
- 		int k = 5;
+ 		double ratio = 1.0; // 1.26 = 2^(1/3)
+ 		int k = 3;
  		
  		if(args.length >= 4){
  			prefix = args[0];
