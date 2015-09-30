@@ -4,9 +4,13 @@
  * Sep 24
  * - replace EdgeWeightedGraph by EdgeWeightedGraph	
  * - add partitionLouvain(), recursiveLouvain(): apply Louvain to each node, move nodes between S and T
+ * Sep 30
+ * - copy getSubEgdeLists() from NodeSetMod
  */
 
 package dp.combined;
+
+import hist.Int2;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -42,15 +46,29 @@ public class NodeSetModOpt2{
 	public int e_t;			// number of edges inside T
 	public int d_s = 0; 	// total degree of nodes in S
 	public int d_t = 0;		// total degree of nodes in T
+	public List<Int2> e_list;
 	
 	public NodeSetModOpt2 parent, left, right;		// for recursive partitioning
 	public int id;
 	public int level = 0;
 	
-	////
-	public static NodeSetModOpt2 getSubSet(EdgeWeightedGraph G, NodeSetModOpt2 R, boolean val){
-		NodeSetModOpt2 ret = new NodeSetModOpt2();
+	////return e_listS, e_listT (they MUST be initialized outside !)
+	public static void getSubEgdeLists(NodeSetModOpt2 R, List<Int2> e_listS, List<Int2> e_listT){
 		
+		int u = 0;
+		int v = 0;
+		for (Int2 e : R.e_list){
+			u = R.node2ind.get(e.val0);
+			v = R.node2ind.get(e.val1);
+			if (R.ind[u] == true && R.ind[v] == true)
+				e_listS.add(e);
+			if (R.ind[u] == false && R.ind[v] == false)
+				e_listT.add(e);
+		}
+	}
+	
+	////
+	public static void getSubSet(EdgeWeightedGraph G, NodeSetModOpt2 R, NodeSetModOpt2 ret, boolean val, List<Int2> e_list){
 		ret.node2ind = new HashMap<Integer, Integer>();
 		int count = 0;
 		for (int i = 0; i < R.ind.length; i++)
@@ -78,48 +96,42 @@ public class NodeSetModOpt2{
 		ret.n_s = n_nodes/2;
 		ret.n_t = n_nodes - n_nodes/2;
 		//
-		int n = G.V();
-		int[] node2Set = new int[n]; // 1:S, 2:T
+		int[] node2Set = new int[n_nodes]; // 1:S, 2:T
 		
 		// d_s, d_t
 		ret.d_s = 0;
 		ret.d_t = 0;
-		for (int u = 0; u < n; u++)
-			if (ret.node2ind.containsKey(u)){
-				if (ret.ind[ret.node2ind.get(u)] == true){
-					ret.d_s += G.degree(u);
-					node2Set[u] = 1;
-				}else{
-					ret.d_t += G.degree(u);
-					node2Set[u] = 2;
-				}
+		for (int i = 0; i < n_nodes; i++)
+			if (ret.ind[i] == true){
+				ret.d_s += G.degree(ret.ind2node[i]);
+				node2Set[i] = 1;
+			}else{
+				ret.d_t += G.degree(ret.ind2node[i]);
+				node2Set[i] = 2;
 			}
-		
+	
 		// e_st, e_s, e_t
 		ret.e_st = 0;
 		ret.e_s = 0;
 		ret.e_t = 0;
 		
-		int u; 
-		int v;
-		for (Edge e : G.edges()){
-			u = e.either();
-			v = e.other(u);
-			if (node2Set[u] + node2Set[v] == 3)	//  
+		int u_id; 
+		int v_id;
+		for (Int2 e : e_list){
+			u_id = ret.node2ind.get(e.val0);
+			v_id = ret.node2ind.get(e.val1);
+			if (node2Set[u_id] + node2Set[v_id] == 3)	//  
 				ret.e_st += 1;
-			if (node2Set[u] == 1 && node2Set[v] == 1)
+			if (node2Set[u_id] == 1 && node2Set[v_id] == 1)
 				ret.e_s += 1;
-			if (node2Set[u] == 2 && node2Set[v] == 2)
+			if (node2Set[u_id] == 2 && node2Set[v_id] == 2)
 				ret.e_t += 1;
 		}
-		
-		//
-		return ret;
 	}
 	
 	////
 	public NodeSetModOpt2(){
-		
+		this.e_list = new ArrayList<Int2>();
 	}
 	
 	////
@@ -164,12 +176,14 @@ public class NodeSetModOpt2{
 		this.e_st = 0;
 		this.e_s = 0;
 		this.e_t = 0;
+		this.e_list = new ArrayList<Int2>();
 		
 		int u; 
 		int v;
 		for (Edge e : G.edges()){
 			u = e.either();
 			v = e.other(u);
+			this.e_list.add(new Int2(u, v));
 			if (node2Set[u] + node2Set[v] == 3)	//  
 				this.e_st += 1;
 			if (node2Set[u] == 1 && node2Set[v] == 1)
@@ -483,13 +497,19 @@ public class NodeSetModOpt2{
 			NodeSetModOpt2.partitionMod(R, G, burn_factor* R.ind.length, 0, 0, false, lower_size);
 			System.out.println("elapsed " + (System.currentTimeMillis() - start));
 			
-			NodeSetModOpt2 RS = getSubSet(G, R, true);
+			NodeSetModOpt2 RS = new NodeSetModOpt2();
+			NodeSetModOpt2 RT = new NodeSetModOpt2();
+			
+			getSubEgdeLists(R, RS.e_list, RT.e_list);
+			
+			getSubSet(G, R, RS, true, RS.e_list);
+			getSubSet(G, R, RT, false, RT.e_list);
+					
 			RS.id = id--;
 			R.left = RS;
 			RS.parent = R;
 			RS.level = R.level + 1;
 			
-			NodeSetModOpt2 RT = getSubSet(G, R, false);
 			RT.id = id--;
 			R.right = RT;
 			RT.parent = R;
@@ -519,7 +539,7 @@ public class NodeSetModOpt2{
 //						" left.size = " + R.S.size() + " right.size = " + R.T.size() + " mod = " + R.modularity(m) + " modSelf = " + R.modularitySelf(m));
 				System.out.println("R.id = " + R.id + " left.id = " + R.left.id + " right.id = " + R.right.id + 
 					" left.size = " + R.n_s + " right.size = " + R.n_t + " (" + R.e_st + "," + R.e_s + "," + R.e_t + "," + R.d_s + "," + R.d_t + "," + m + ")" + 
-					" mod = " + R.modularity(m) + " modSelf = " + R.modularitySelf(m));
+					" mod = " + String.format("%.4f", R.modularity(m)) + " modSelf = " + String.format("%.4f", R.modularitySelf(m)) );
 			}else{
 				System.out.println("LEAF R.id = " + R.id + " modSelf = " + R.modularitySelf(m)); // + " left.size = " + R.S.size() + " right.size = " + R.T.size());
 				//
@@ -589,7 +609,7 @@ public class NodeSetModOpt2{
 			NodeSetModOpt2 R = stack.pop();
 			
 			double mod = R.modularitySelf(m);			// non-private, need modularitySelfDP() !
-			boolean self = false;
+			boolean self = true;
 			if (R.left == null){	// leaf nodes
 				sol.put(R.id, new CutNode(mod, true));
 			}else{
@@ -597,7 +617,7 @@ public class NodeSetModOpt2{
 				double mod_opt = sol.get(R.left.id).mod + sol.get(R.right.id).mod;
 				if (mod < mod_opt){
 					mod = mod_opt;
-					self = true;
+					self = false;
 				}
 					
 				sol.put(R.id, new CutNode(mod, self));
@@ -613,16 +633,38 @@ public class NodeSetModOpt2{
 		while (queue.size() > 0){
 			NodeSetModOpt2 R = queue.remove();
 			
-			if (sol.get(R.id).self == true)
+			if (sol.get(R.id).self == true){
 				ret.add(R);
-			else if (R.left != null){
+				System.out.print(R.id + " ");
+			}else if (R.left != null){
 				queue.add(R.left);
 				queue.add(R.right);
 			}
 		}
+		System.out.println();
 		
 		//
 		return ret;
+	}
+	
+	////
+	public static void writeBestCut(List<NodeSetModOpt2> best_cut, String part_file) throws IOException{
+		BufferedWriter bw = new BufferedWriter(new FileWriter(part_file));
+
+		for (NodeSetModOpt2 R : best_cut){
+//				for (int i = 0; i < R.k; i++){
+//					for (int s = 0; s < R.part.length; s++)
+//						if (R.part[s] == i)
+//							bw.write(R.ind2node[s] + ",");
+//					bw.write("\n");
+//				}
+			
+			for (int s = 0; s < R.ind.length; s++)
+				bw.write(R.ind2node[s] + ",");
+			bw.write("\n");
+		}
+		
+		bw.close();
 	}
 	
 	
@@ -697,13 +739,19 @@ public class NodeSetModOpt2{
 			NodeSetModOpt2.partitionLouvain(R, G, burn_factor);
 			System.out.println("elapsed " + (System.currentTimeMillis() - start));
 			
-			NodeSetModOpt2 RS = getSubSet(G, R, true);
+			NodeSetModOpt2 RS = new NodeSetModOpt2();
+			NodeSetModOpt2 RT = new NodeSetModOpt2();
+			
+			getSubEgdeLists(R, RS.e_list, RT.e_list);
+			
+			getSubSet(G, R, RS, true, RS.e_list);
+			getSubSet(G, R, RT, false, RT.e_list);
+					
 			RS.id = id--;
 			R.left = RS;
 			RS.parent = R;
 			RS.level = R.level + 1;
 			
-			NodeSetModOpt2 RT = getSubSet(G, R, false);
 			RT.id = id--;
 			R.right = RT;
 			RT.parent = R;

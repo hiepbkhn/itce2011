@@ -891,10 +891,10 @@ public class Louvain {
 //		String dataname = "karate";			// (34, 78) 		ok
 //		String dataname = "polbooks";		// (105, 441)		ok
 //		String dataname = "polblogs";		// (1224,16715)		ok 	
-//		String dataname = "as20graph";		// (6474,12572)		ok
+		String dataname = "as20graph";		// (6474,12572)		ok
 //		String dataname = "wiki-Vote";		// (7115,100762)	ok
 //		String dataname = "ca-HepPh";		// (12006,118489) 	ok
-		String dataname = "ca-AstroPh";		// (18771,198050) 	ok		1.56s
+//		String dataname = "ca-AstroPh";		// (18771,198050) 	ok		1.56s
 		// SYNTHETIC
 //		String dataname = "network10k";		// (10000,34810) 	ok
 //		String dataname = "network100k";	// (100000,232732) 	ok

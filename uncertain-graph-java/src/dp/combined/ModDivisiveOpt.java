@@ -6,6 +6,8 @@
 
 package dp.combined;
 
+import java.util.List;
+
 import algs4.EdgeWeightedGraph;
 import grph.Grph;
 import grph.io.EdgeListReader;
@@ -38,23 +40,23 @@ public class ModDivisiveOpt {
 													//					burn = 5, max_level = 8, (100,20) final mod = 0.399, bestCut=0.524 ()
 													//					burn = 20, max_level = 8, (100,20) final mod = 0.584, bestCut=0.674 (359s)
 													//					burn = 50, max_level = 8, (100,20) final mod = 0.541, bestCut=0.624 (834s)
-													//					burn = 20, max_level = 8, (100) final mod = 0.687, bestCut=0.693 (100s) recursiveLouvain
+													//					burn = 20, max_level = 8, (100) final mod = 0.687, bestCut=0.693 (23s) recursiveLouvain
 //		String dataname = "com_dblp_ungraph";  		// (317080,1049866) 
 //		String dataname = "com_youtube_ungraph"; 	// (1134890,2987624)burn = 10, max_level = 8, (100,20) final mod = 0.356, bestCut=0.494 (840s)
 													// 					burn = 20, max_level = 8, (100,20) final mod = 0.357, bestCut=0.538 (1500s)
 													//					burn = 30, max_level = 8, (100,20) final mod = 0.360, bestCut=0.538 (2261s)
-													//					burn = 20, max_level = 8, (100) final mod = 0.544, bestCut=0.566 (308s) recursiveLouvain
-													// 					burn = 30, max_level = 10, (50) final mod = 0.535, bestCut=0.566 (1000s) recursiveLouvain
+													//					burn = 20, max_level = 8, (100) final mod = 0.544, bestCut=0.566 (74s) recursiveLouvain
+													// 					burn = 30, max_level = 10, (50) final mod = 0.535, bestCut=0.566 (81s) recursiveLouvain
 													 
 		
 		
 		// COMMAND-LINE <prefix> <dataname> <n_samples> <burn_factor>
 		String prefix = "";
 		int n_samples = 1;
-		int burn_factor = 20;
-		int limit_size = 40;		// at least 4*lower_size
+		int burn_factor = 30;
+		int limit_size = 50;		// at least 4*lower_size
 		int lower_size = 10;		// at least 2
-		int max_level = 8;
+		int max_level = 10;
 		
 		if(args.length >= 4){
 			prefix = args[0];
@@ -114,13 +116,14 @@ public class ModDivisiveOpt {
 			System.out.println("recursiveMod - DONE, elapsed " + (System.currentTimeMillis() - start));
 			
 			
-//			NodeSetModOpt2.printSetIds(root_set, G.getNumberOfEdges());
+			NodeSetModOpt2.printSetIds(root_set, G.E());
 			System.out.println("final modularity = " + root_set.modularityAll(G.E()));
 			
 			NodeSetModOpt2.writePart(root_set, part_file);
 			System.out.println("writePart - DONE");
 			
-			NodeSetModOpt2.bestCut(root_set, G.E());
+			List<NodeSetModOpt2> best_cut = NodeSetModOpt2.bestCut(root_set, G.E());
+			NodeSetModOpt2.writeBestCut(best_cut, part_file);
 		}
 		
 	}

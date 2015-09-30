@@ -111,8 +111,8 @@ public class EdgeFlip {
 		
 		String dataname;
 		int n_samples = 1;
-		String[] dataname_list = new String[]{"com_amazon_ungraph"}; //com_amazon_ungraph, "com_dblp_ungraph", "com_youtube_ungraph"};
-		double[][] eps_list = new double[][]{{12.72, 1.5*12.72, 2*12.72}, {10.0, 20.0, 30.0}, {10.0, 20.0, 30.0}};
+		String[] dataname_list = new String[]{"as20graph"}; //com_amazon_ungraph, "com_dblp_ungraph", "com_youtube_ungraph"};
+		double[][] eps_list = new double[][]{{6.0, 8.78, 1.5*8.78}, {10.0, 20.0, 30.0}, {10.0, 20.0, 30.0}};
 	    
 	    Grph G;
 	    

@@ -23,7 +23,6 @@
 package dp.combined;
 
 import hist.Int2;
-
 import hist.Int2;
 
 import java.io.BufferedReader;
@@ -581,13 +580,18 @@ public class NodeSetMod {
 		while (queue_set.size() > 0){
 			NodeSetMod R = queue_set.remove();
 			if (R.left != null){
-//				System.out.println("R.id = " + R.id + " left.id = " + R.left.id + " right.id = " + R.right.id + 
-//						" left.size = " + R.n_s + " right.size = " + R.n_t + " mod = " + R.modularity(m) + " modSelf = " + R.modularitySelf(m));
+				
+				System.out.print("{");
+				for (int i = 0; i < R.ind.length; i++)
+					System.out.print(R.ind2node[i] + " ");
+				System.out.println("}");
+				
+				// " (" + R.e_st + "," + R.e_s + "," + R.e_t + "," + R.d_s + "," + R.d_t + "," + m + ")" + 
 				System.out.println("R.id = " + R.id + " left.id = " + R.left.id + " right.id = " + R.right.id + 
-						" left.size = " + R.n_s + " right.size = " + R.n_t + " (" + R.e_st + "," + R.e_s + "," + R.e_t + "," + R.d_s + "," + R.d_t + "," + m + ")" + 
-						" mod = " + R.modularity(m) + " modSelf = " + R.modularitySelf(m));
+						" left.size = " + R.n_s + " right.size = " + R.n_t + 
+						" mod = " + String.format("%.4f", R.modularity(m)) + " modSelf = " + String.format("%.4f", R.modularitySelf(m)) );
 			}else{
-				System.out.println("LEAF R.id = " + R.id + " modSelf = " + R.modularitySelf(m)); // + " left.size = " + R.S.size() + " right.size = " + R.T.size());
+				System.out.println("LEAF R.id = " + R.id + " modSelf = " + String.format("%.4f", R.modularitySelf(m)) ); // + " left.size = " + R.S.size() + " right.size = " + R.T.size());
 				//
 //				System.out.print("LEAF R.id = " + R.id + " : {");
 //				for (IntCursor t : R.S)
@@ -709,13 +713,15 @@ public class NodeSetMod {
 		while (queue.size() > 0){
 			NodeSetMod R = queue.remove();
 			
-			if (sol.get(R.id).self == true)
+			if (sol.get(R.id).self == true){
 				ret.add(R);
-			else if (R.left != null){
+				System.out.print(R.id + " ");
+			}else if (R.left != null){
 				queue.add(R.left);
 				queue.add(R.right);
 			}
 		}
+		System.out.println();
 		
 		//
 		return ret;
@@ -729,7 +735,7 @@ public class NodeSetMod {
 			for (int s = 0; s < R.ind.length; s++)
 				if (R.ind[s] == true)
 					bw.write(R.ind2node[s] + ",");
-			bw.write("\n");
+//			bw.write("\n");
 			
 			for (int s = 0; s < R.ind.length; s++)
 				if (R.ind[s] == false)

@@ -5,6 +5,7 @@
  * 		+ Normalized mutual information [NMI] (Lancichinetti)
  * 		+ inter/intra-cluster accuracy [A-inter, A-intra](ICML'07)
  * 		+ Adjusted Rand Index [ARI]	(KDD'07)
+ * 	- modularitySet(Grph), modularitySet(EdgeWeightedGraph) for checking every modularity function
  */
 
 package dp.combined;
@@ -19,11 +20,12 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Random;
 
+import algs4.EdgeWeightedGraph;
 import toools.io.file.RegularFile;
 
 public class CommunityMeasure {
 
-	//// for testing
+	//// for testing (Grph)
 	public static double modularitySet(Grph G, int[] node_set){
 		double mod = 0.0;
 		int m = G.getNumberOfEdges();
@@ -39,6 +41,32 @@ public class CommunityMeasure {
 		
 		for (int i = 0; i < node_set.length; i++)
 			dc += G.getVertexDegree(node_set[i]);
+		
+		System.out.println("lc = " + lc);
+		System.out.println("dc = " + dc);
+		
+		mod = lc/m - (dc/(2*m))*(dc/(2*m));
+		
+		//
+		return mod;
+	}
+	
+	////for testing (EdgeWeightedGraph)
+	public static double modularitySet(EdgeWeightedGraph G, int[] node_set){
+		double mod = 0.0;
+		int m = G.E();
+		System.out.println("m = " + m);
+		
+		double lc = 0;
+		double dc = 0;
+		
+		for (int i = 0; i < node_set.length; i++)
+			for (int j = i+1; j < node_set.length; j++)
+				if (G.areEdgesAdjacent(node_set[i], node_set[j]))
+					lc += 1;
+		
+		for (int i = 0; i < node_set.length; i++)
+			dc += G.degree(node_set[i]);
 		
 		System.out.println("lc = " + lc);
 		System.out.println("dc = " + dc);
@@ -251,19 +279,37 @@ public class CommunityMeasure {
 	////////////////////////////////////////////////
 	public static void main(String[] args) throws Exception{
 		
-//		int n_nodes = 18771;
-		int n_nodes = 334863;
 		int num_pair = 100000;
 		
 //		String filename = "_data/karate.gr";
+//		String filename = "_data/polbooks.gr";
 		
+		int n_nodes = 6474;
+		String filename = "_data/as20graph.gr";
+		
+//		int n_nodes = 18771;
 //		String filename = "_data/ca-AstroPh.gr";
-		String filename = "_data/com_amazon_ungraph.gr";
+		
+//		int n_nodes = 334863;
+//		String filename = "_data/com_amazon_ungraph.gr";
+		
+		
 		
 		String path = "_out/";
+		
+		String louvain_file = "as20graph.louvain";	
 //		String louvain_file = "ca-AstroPh.louvain";	
-		String louvain_file = "com_amazon_ungraph.louvain";						// aIntra = 1, aInter = 1, ARI = 1
+//		String louvain_file = "com_amazon_ungraph.louvain";						// aIntra = 1, aInter = 1, ARI = 1
+		
 		//
+//		String compare_file = "as20graph_multioptlouvain_20_40_6_2.part";		// LouvainOpt
+//		String compare_file = "as20graph_multioptlouvain_20_40_4_5.part";		// LouvainOpt
+//		String compare_file = "as20graph_partoptlouvain_20_40_6_3.part";		// LouvainOpt
+		String compare_file = "as20graph_partoptlouvain_20_40_5_4.part";		// LouvainOpt
+//		String compare_file = "as20graph_moddivoptlouvain_30_50_10.part";		// ModDivisiveOpt
+//		String compare_file = "as20graph_edgeflip_8.8-0.part";					// EdgeFlip
+//		String compare_file = "as20graph_edgeflip_6.0-0.part";					// EdgeFlip
+		
 //		String compare_file = "ca-AstroPh_nodesetlv2_20_40_10_3_1.00_10.0_3.part";
 //		String compare_file = "ca-AstroPh_nodesetlv2_20_40_10_3_2.00_10.0_3.part";
 //		String compare_file = "ca-AstroPh_nodesetlv2_20_40_10_4_2.00_10.0_3.part";
@@ -276,7 +322,7 @@ public class CommunityMeasure {
 //		String compare_file = "com_amazon_ungraph_edgeflip_12.7-0.part";		// EdgeFlip		aIntra = 0.4181, aInter = 0.9935, ARI = 0.4416
 //		String compare_file = "com_amazon_ungraph_filter_6.4-0.part";			// TmF
 //		String compare_file = "com_amazon_ungraph_filter_12.7-0.part";			// TmF			aIntra = 0.2427, aInter = 0.9925, ARI = 0.2691
-		String compare_file = "com_amazon_ungraph_nodesetlv2_20_40_10_1_2.00_20.0_5.part";
+//		String compare_file = "com_amazon_ungraph_nodesetlv2_20_40_10_1_2.00_20.0_5.part";
 		
 		
 		
@@ -311,10 +357,17 @@ public class CommunityMeasure {
 		System.out.println("ARI = " + ARI);
 		
 		// TEST modularitySet() ok
-//		int[] node_set = new int[]{10,11,15,16,18,20,23,24,27,28,31,32,33};
+//		int[] node_set = new int[]{0,1,2,3,4,5,6,7,10,14,15,16,18,19,22,25,29,55,8,9,11,12,13,17,20,21,23,24,26,27,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,53,54,56,57};
 //		System.out.println("modSet = " + modularitySet(G, node_set));
-//		node_set = new int[]{0,1,2,3,4,5,6,7,8,9,12,13,14,17,19,21,22,25,26,29,30};
+//		
+////		node_set = new int[]{};
+////		System.out.println("modSet = " + modularitySet(G, node_set));
+//		
+//		node_set = new int[]{51,52,58,64,65,67,68,69,85,103,104,28,30,31,59,60,61,62,63,66,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102};
 //		System.out.println("modSet = " + modularitySet(G, node_set));
+//		
+////		node_set = new int[]{51,52,58,64,65,67,68,69,85,103,104};
+////		System.out.println("modSet = " + modularitySet(G, node_set));
 	}
 
 }

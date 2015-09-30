@@ -43,7 +43,7 @@
 - LouvainInt.java: use EdgeInt, EdgeIntGraph
 
 - LouvainDP.java: e-DP by input perturbation
-- NodeSetLouvain.java:  MCMC at the first level
+- NodeSetLouvain.java:  MCMC at the first level, used in LouvainDP
 
 - Scan.java: SCAN algorithm
 
@@ -54,8 +54,8 @@
 - HRGDivisiveGreedy.java: combine HRG-Divisive and modularity
 - NodeSetDivGreedy.java: use log-likelihood
 
-- NodeDivisiveDP.java: exponential mechanism with modularity Q
-- NodeSetMod.java
+- ModDivisiveDP.java: exponential mechanism with modularity Q
+- NodeSetMod.java: used in ModDivisiveDP
 - CutNode.java: used in NodeSetMod.bestCut()
 
 - NodeDivisiveDP2.java: allow to fix nodes to groups (reduce MCMC space)
@@ -64,6 +64,9 @@
 - NodeDivisiveOpt.java: non-private, try to find the best partition at each level
 - NodeSetModOpt.java
 - NodeSetModOpt2.java: do not use IntSet !
+
+- LouvainOpt.java
+- NodeSetLouvainOpt.java: k-ary tree, copy from NodeSetLouvain, used in LouvainOpt
 
 - EdgeFlip: implement paper EDBTw'15
 

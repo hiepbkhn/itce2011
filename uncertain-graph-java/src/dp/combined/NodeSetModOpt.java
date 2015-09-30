@@ -541,7 +541,7 @@ public class NodeSetModOpt{
 			NodeSetModOpt R = stack.pop();
 			
 			double mod = R.modularitySelf(m);			// non-private, need modularitySelfDP() !
-			boolean self = false;
+			boolean self = true;
 			if (R.left == null){	// leaf nodes
 				sol.put(R.id, new CutNode(mod, true));
 			}else{
@@ -549,7 +549,7 @@ public class NodeSetModOpt{
 				double mod_opt = sol.get(R.left.id).mod + sol.get(R.right.id).mod;
 				if (mod < mod_opt){
 					mod = mod_opt;
-					self = true;
+					self = false;
 				}
 					
 				sol.put(R.id, new CutNode(mod, self));
