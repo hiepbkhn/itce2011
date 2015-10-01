@@ -173,6 +173,8 @@ void dkShuffleList(std::list<T> &theList) {
 
 bool read2kDistribution(const std::string& filename, NKKMap& nkkmap);
 bool read1kDistribution(const std::string& fileName, NKMap& degNumNodesMap);
+//bool read1kSequence(const std::string& fileName, int degSeq[]);
+bool read1kSequence(const std::string& fileName, std::vector<int>& degSeq);
 
 template<class VertexListGraph>
 bool readInputGraph(VertexListGraph& g, const std::string& filename) {

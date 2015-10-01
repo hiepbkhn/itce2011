@@ -110,6 +110,64 @@ int dkTopoGen1k(VertexListGraph& g, const NKMap &nkmap) {
 	return dkTopoGen1k_stublist(g, freeStubList, adjacencyMap);
 }
 
+// hiepnh Oct 1, 2015
+template<class VertexListGraph>
+int dkTopoGen1kSequence(VertexListGraph& g, std::vector<int>& degSeq, int n_nodes) {
+	typedef boost::graph_traits<VertexListGraph> GraphTraits;
+	typedef typename GraphTraits::edge_iterator edge_iterator;
+	typedef typename GraphTraits::edge_descriptor edge_descriptor;
+	typedef typename GraphTraits::vertex_descriptor vertex_descriptor;
+	typedef typename GraphTraits::degree_size_type degree_size_type;
+
+	boost::function_requires<boost::VertexAndEdgeListGraphConcept<VertexListGraph> >();
+	boost::function_requires<boost::MutableGraphConcept<VertexListGraph> >();
+
+	// AdjacencyMap: Used to do quick lookups of edges existing in
+	// constant time.  This can be be a slow operation depending on
+	// what the underlying representation of the graph is.  This way
+	// checking existing edges is independent of the graph
+	// representation.  Typically edge is either O(E/V) or O(log(E/V))
+	// depending on what choice of adjacency list is used.  Constant
+	// time for an adjacency matrix
+
+	AdjacencyMap adjacencyMap;
+
+	// Update our adjacency map with the existing edges so far.  This
+	// in case someone wants to re-wire the graph and continue
+	// connecting stubs
+
+	edge_iterator edgeIter, edgeIterEnd;
+	for (tie(edgeIter, edgeIterEnd) = edges(g); edgeIter != edgeIterEnd;
+			++edgeIter) {
+		vertex_descriptor v1, v2;
+		v1 = source(*edgeIter, g);
+		v2 = target(*edgeIter, g);
+
+		adjacencyMap[NodeIdPair(v1, v2)] = 1;
+		adjacencyMap[NodeIdPair(v2, v1)] = 1;
+	}
+
+	// Create a random list of all the free stubs
+
+	StubList freeStubList;
+	vertex_descriptor nodeId = 0;
+
+	for (int i = 0; i < n_nodes; i++) {
+		int degree = degSeq[i];
+		for (int k = 0; k < degree; k++) {
+			Stub stub;
+			stub.nodeid = i;
+			stub.degree = degree;
+
+			freeStubList.push_back(stub);
+		}
+	}
+	dkShuffleList(freeStubList);
+	std::cerr <<"freeStubList.size = " << freeStubList.size() << std::endl;
+
+	return dkTopoGen1k_stublist(g, freeStubList, adjacencyMap);
+}
+
 template<class VertexListGraph>
 int dkTopoGen1k_stublist(VertexListGraph& g, StubList& freeStubList,
 		AdjacencyMap& adjacencyMap) {

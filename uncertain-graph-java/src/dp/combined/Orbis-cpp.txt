@@ -1,0 +1,190 @@
+=================================== AMAZON ===========================================
+dataname = com_amazon_ungraph
+readGraph - DONE, elapsed 1467
+#nodes = 334863
+#edges = 925872
+readGraph - DONE, elapsed 1156
+#nodes = 334863
+#edges = 925872
+deg_diff = 0
+#components = 172
+current_graph: #nodes = 334863 #edges = 925872 mod = -6.2281688615726065E-6
+?PASS_MAX = false
+current_graph: #nodes = 334863 #edges = 925872 mod = -6.2281688615726065E-6
+?PASS_MAX = false
+current_graph: #nodes = 96113 #edges = 782172 mod = 0.25852329718156697
+?PASS_MAX = true
+current_graph: #nodes = 14986 #edges = 258043 mod = 0.5346238876247458
+?PASS_MAX = true
+current_graph: #nodes = 180 #edges = 192 mod = 0.6833790203318388
+modularity = 0.68337902033184
+#communitites = 180
+
+
+dataname = com_amazon_ungraph
+readGraph - DONE, elapsed 1467
+#nodes = 334863
+#edges = 925872
+readGraph - DONE, elapsed 1108
+#nodes = 334863
+#edges = 925872
+deg_diff = 0
+#components = 166
+current_graph: #nodes = 334863 #edges = 925872 mod = -6.2281688615726065E-6
+?PASS_MAX = false
+current_graph: #nodes = 334863 #edges = 925872 mod = -6.2281688615726065E-6
+?PASS_MAX = false
+current_graph: #nodes = 96914 #edges = 783746 mod = 0.2576766166285987
+?PASS_MAX = false
+current_graph: #nodes = 22820 #edges = 432027 mod = 0.4370232998748481
+?PASS_MAX = true
+current_graph: #nodes = 176 #edges = 192 mod = 0.693128113839273
+modularity = 0.6931281138392754
+#communitites = 176
+
+
+dataname = com_amazon_ungraph
+readGraph - DONE, elapsed 1436
+#nodes = 334863
+#edges = 925872
+readGraph - DONE, elapsed 1077
+#nodes = 334863
+#edges = 925872
+deg_diff = 0
+#components = 174
+current_graph: #nodes = 334863 #edges = 925872 mod = -6.2281688615726065E-6
+?PASS_MAX = false
+current_graph: #nodes = 334863 #edges = 925872 mod = -6.2281688615726065E-6
+?PASS_MAX = false
+current_graph: #nodes = 96210 #edges = 782348 mod = 0.2584520311427787
+?PASS_MAX = false
+current_graph: #nodes = 15481 #edges = 265762 mod = 0.5338562084694397
+?PASS_MAX = true
+current_graph: #nodes = 186 #edges = 202 mod = 0.6922752454924244
+modularity = 0.6922752454924249
+#communitites = 186
+
+
+dataname = com_amazon_ungraph
+readGraph - DONE, elapsed 1560
+#nodes = 334863
+#edges = 925872
+readGraph - DONE, elapsed 1124
+#nodes = 334863
+#edges = 925872
+deg_diff = 0
+#components = 206
+current_graph: #nodes = 334863 #edges = 925872 mod = -6.2281688615726065E-6
+?PASS_MAX = false
+current_graph: #nodes = 334863 #edges = 925872 mod = -6.2281688615726065E-6
+?PASS_MAX = false
+current_graph: #nodes = 96534 #edges = 783021 mod = 0.25807300034155045
+?PASS_MAX = false
+current_graph: #nodes = 22926 #edges = 437907 mod = 0.4370733024120534
+?PASS_MAX = true
+current_graph: #nodes = 212 #edges = 221 mod = 0.6978488978056104
+modularity = 0.697848897805613
+#communitites = 212
+
+
+=================================== DBLP ===========================================
+dataname = com_dblp_ungraph
+readGraph - DONE, elapsed 1607
+#nodes = 317080
+#edges = 1049866
+readGraph - DONE, elapsed 1202
+#nodes = 317080
+#edges = 1049866
+deg_diff = 0
+#components = 558
+current_graph: #nodes = 317080 #edges = 1049866 mod = -1.035672716287857E-5
+?PASS_MAX = false
+current_graph: #nodes = 317080 #edges = 1049866 mod = -1.035672716287857E-5
+?PASS_MAX = false
+current_graph: #nodes = 52950 #edges = 285046 mod = 0.5691108417889964
+?PASS_MAX = true
+current_graph: #nodes = 1272 #edges = 2353 mod = 0.7213527410800288
+?PASS_MAX = true
+current_graph: #nodes = 878 #edges = 1349 mod = 0.7218313414011485
+?PASS_MAX = true
+current_graph: #nodes = 867 #edges = 1323 mod = 0.7218406164109665
+modularity = 0.7218406164109666
+#communitites = 867
+
+
+dataname = com_dblp_ungraph
+readGraph - DONE, elapsed 1592
+#nodes = 317080
+#edges = 1049866
+readGraph - DONE, elapsed 1249
+#nodes = 317080
+#edges = 1049866
+deg_diff = 0
+#components = 593
+current_graph: #nodes = 317080 #edges = 1049866 mod = -1.035672716287857E-5
+?PASS_MAX = false
+current_graph: #nodes = 317080 #edges = 1049866 mod = -1.035672716287857E-5
+?PASS_MAX = false
+current_graph: #nodes = 76728 #edges = 528053 mod = 0.4475689799406558
+?PASS_MAX = false
+current_graph: #nodes = 4131 #edges = 20935 mod = 0.7156204433755958
+?PASS_MAX = true
+current_graph: #nodes = 2142 #edges = 14913 mod = 0.7175604614338643
+?PASS_MAX = true
+current_graph: #nodes = 696 #edges = 827 mod = 0.7267038425574643
+modularity = 0.726703842557464
+#communitites = 696
+
+
+dataname = com_dblp_ungraph
+readGraph - DONE, elapsed 1669
+#nodes = 317080
+#edges = 1049866
+readGraph - DONE, elapsed 1249
+#nodes = 317080
+#edges = 1049866
+deg_diff = 0
+#components = 561
+current_graph: #nodes = 317080 #edges = 1049866 mod = -1.035672716287857E-5
+?PASS_MAX = false
+current_graph: #nodes = 317080 #edges = 1049866 mod = -1.035672716287857E-5
+?PASS_MAX = false
+current_graph: #nodes = 75250 #edges = 510862 mod = 0.45751175624925366
+?PASS_MAX = true
+current_graph: #nodes = 1298 #edges = 2310 mod = 0.7317200095913254
+?PASS_MAX = true
+current_graph: #nodes = 817 #edges = 1101 mod = 0.7322352386695218
+?PASS_MAX = true
+current_graph: #nodes = 783 #edges = 1028 mod = 0.7322639082977475
+?PASS_MAX = true
+current_graph: #nodes = 780 #edges = 1022 mod = 0.7322667128303054
+modularity = 0.7322667128303055
+#communitites = 780
+
+
+dataname = com_dblp_ungraph
+readGraph - DONE, elapsed 1607
+#nodes = 317080
+#edges = 1049866
+readGraph - DONE, elapsed 1234
+#nodes = 317080
+#edges = 1049866
+deg_diff = 0
+#components = 569
+current_graph: #nodes = 317080 #edges = 1049866 mod = -1.035672716287857E-5
+?PASS_MAX = false
+current_graph: #nodes = 317080 #edges = 1049866 mod = -1.035672716287857E-5
+?PASS_MAX = false
+current_graph: #nodes = 76877 #edges = 531322 mod = 0.4458482380441802
+?PASS_MAX = true
+current_graph: #nodes = 940 #edges = 1413 mod = 0.7451059633509871
+?PASS_MAX = true
+current_graph: #nodes = 690 #edges = 823 mod = 0.7454163310937613
+?PASS_MAX = true
+current_graph: #nodes = 679 #edges = 801 mod = 0.7454263683126232
+modularity = 0.7454263683126232
+#communitites = 679
+real modularity = 0.19680873520515552
+
+============================================================================
+

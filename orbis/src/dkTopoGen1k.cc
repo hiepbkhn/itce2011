@@ -104,6 +104,8 @@ int main(int argc, char *argv[]) {
 	} else
 		srand(time(NULL));
 
+	cerr<< "opt_infile = " << opt_infile << endl;
+
 	NKMap degNumNodesMap;
 
 	if (!read1kDistribution(opt_infile, degNumNodesMap)

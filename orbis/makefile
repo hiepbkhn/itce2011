@@ -69,13 +69,18 @@ dkTopoGen2k:
 	g++ -L$(BOOST_LIB) -o out2/dkTopoGen2k.exe out2/dkUtils.o out2/dkTopoGen2k.o ${LIBS}
 	@echo 'Done';	
 
+dkTopoGen1k_new: dkUtils	
+	@echo 'Compiling dkTopoGen1k_new ...';
+	g++ -I$(INCLUDE_DIR) -I$(BOOST_INCLUDE) ${OPT} -o out2/dkTopoGen1k_new.o $(SRC_DIR)/dkTopoGen1k_new.cc
+	g++ -L$(BOOST_LIB) -o out2/dkTopoGen1k_new.exe out2/dkUtils.o out2/dkTopoGen1k_new.o ${LIBS}
+	@echo 'Done';	
 
 clean:	
 	@echo 'Cleaning...';
 	-$(RM) out2/dkUtils.o out2/dkRewire.o out2/dkDist.o out2/dkRescale.o out2/dkMetrics.o out2/dkTopoGen0k.o \
-	out2/dkTopoGen1k.o out2/dkTopoGen2k.o;
+	out2/dkTopoGen1k.o out2/dkTopoGen2k.o out2/dkTopoGen1k_new.o;
 	-$(RM) out2/dkRewire.exe out2/dkDist.exe out2/dkRescale.exe out2/dkMetrics.exe out2/dkTopoGen0k.exe \
-	out2/dkTopoGen1k.exe out2/dkTopoGen2k.exe;
+	out2/dkTopoGen1k.exe out2/dkTopoGen2k.exe out2/dkTopoGen1k_new.exe;
 	@echo 'Done';
 
 

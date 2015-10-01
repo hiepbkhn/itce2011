@@ -135,6 +135,47 @@ bool read1kDistribution(const std::string& fileName, NKMap& degNumNodesMap) {
 	return true;
 }
 
+// hiepnh Oct 1, 2015
+// returns true on success, false
+//bool read1kSequence(const std::string& fileName, int degSeq[]) {
+bool read1kSequence(const std::string& fileName, std::vector<int>& degSeq) {
+	std::ifstream inFile;
+	inFile.open(fileName.c_str(), std::ios::in);
+	if (!inFile.is_open()) {
+		std::cerr << "Could not open " << fileName << std::endl;
+		return false;
+	}
+
+	char inLine[10];
+	int degree;
+	unsigned int lineNumber = 0;
+
+	while (!inFile.eof()) {
+
+		inFile.getline(inLine, 10);
+		if (inFile.fail() && !inFile.eof()) {
+			std::cerr << "Error - long line, # " << lineNumber+1 << std::endl;
+			return false;
+		}
+
+		int scanfResult = sscanf(inLine, "%d", &degree);
+//		std::cerr << "lineNumber " << lineNumber << " deg " << degree << std::endl;
+
+		if (scanfResult == EOF)
+			break;
+//		if (scanfResult != 2) {
+//			std::cerr << "Error(2) on line: " << inLine << ", line #"
+//					<< lineNumber << std::endl;
+//			continue;
+//		}
+		degSeq[lineNumber] = degree;
+
+		lineNumber++;
+	}
+
+	return true;
+}
+
 // Read a 2k distribution off disk, store in the nkk map
 bool read2kDistribution(const std::string& filename, NKKMap& nkkmap) {
 	std::ifstream inFile;

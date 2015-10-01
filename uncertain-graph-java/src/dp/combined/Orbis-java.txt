@@ -1,0 +1,76 @@
+=================================== AMAZON ===========================================
+degList.length = 334863
+BEFORE: freeStubList.size = 1851744
+AFTER : freeStubList.size = 1851744
+count = 925872
+dkTopoGen1k - DONE, elapsed 2278
+#nodes = 334863
+#edges = 925872
+#components = 193
+need2Rewire = 0
+readGraph - DONE, elapsed 1483
+#nodes = 334863
+#edges = 925872
+deg_diff = 0
+current_graph: #nodes = 334863 #edges = 925872 mod = -6.2281688615726065E-6
+?PASS_MAX = false
+current_graph: #nodes = 334863 #edges = 925872 mod = -6.2281688615726065E-6
+?PASS_MAX = false
+current_graph: #nodes = 94862 #edges = 780410 mod = 0.25928052152568604
+?PASS_MAX = false
+current_graph: #nodes = 29864 #edges = 650036 mod = 0.329923253790637
+?PASS_MAX = false
+current_graph: #nodes = 11579 #edges = 483792 mod = 0.35656051995302174
+?PASS_MAX = true
+current_graph: #nodes = 345 #edges = 8838 mod = 0.3864082307698878
+?PASS_MAX = true
+current_graph: #nodes = 260 #edges = 2538 mod = 0.38663793673473534
+?PASS_MAX = true
+current_graph: #nodes = 258 #edges = 2403 mod = 0.38663880936247946
+modularity = 0.3866388093624795
+#communitites = 258
+best_partition - DONE, elapsed 57257
+writePart - DONE
+real modularity = -1.0579464325720469E-4
+
+
+
+
+
+
+
+
+=================================== DBLP ===========================================
+degList.length = 317080
+BEFORE: freeStubList.size = 2099732
+AFTER : freeStubList.size = 2099732
+count = 1049866
+dkTopoGen1k - DONE, elapsed 2481
+#nodes = 317080
+#edges = 1049866
+#components = 537
+need2Rewire = 0
+readGraph - DONE, elapsed 1296
+#nodes = 317080
+#edges = 1049866
+deg_diff = 0
+current_graph: #nodes = 317080 #edges = 1049866 mod = -1.035672716287857E-5
+?PASS_MAX = false
+current_graph: #nodes = 317080 #edges = 1049866 mod = -1.035672716287857E-5
+?PASS_MAX = false
+current_graph: #nodes = 103757 #edges = 940139 mod = 0.20324475123514285
+?PASS_MAX = false
+current_graph: #nodes = 25876 #edges = 782915 mod = 0.27841371997514625
+?PASS_MAX = true
+current_graph: #nodes = 1084 #edges = 12226 mod = 0.33620618191943435
+?PASS_MAX = true
+current_graph: #nodes = 687 #edges = 4146 mod = 0.336729976938495
+?PASS_MAX = true
+current_graph: #nodes = 585 #edges = 1616 mod = 0.3368541486847087
+?PASS_MAX = true
+current_graph: #nodes = 582 #edges = 1522 mod = 0.3368550942235365
+modularity = 0.3368550942235365
+#communitites = 582
+best_partition - DONE, elapsed 64293
+writePart - DONE
+real modularity = 1.845095965418664E-4
