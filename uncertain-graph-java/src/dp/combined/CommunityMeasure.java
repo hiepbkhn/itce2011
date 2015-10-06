@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Random;
 
+import algs4.Edge;
 import algs4.EdgeWeightedGraph;
 import toools.io.file.RegularFile;
 
@@ -104,6 +105,40 @@ public class CommunityMeasure {
 		
 		//
 		int m = G.getNumberOfEdges();
+		for (int i = 0; i < k; i++)
+			mod += lc[i]/m - (dc[i]/(2*m))*(dc[i]/(2*m));
+		
+		//
+		return mod;
+	}
+	
+	////
+	public static double modularity(EdgeWeightedGraph G, int[] part){
+		double mod = 0.0;
+		
+		int k = 0;
+		for (int com : part)
+			if (k < com)
+				k = com;
+		k += 1;
+		
+		double[] lc = new double[k];
+		double[] dc = new double[k];
+		
+		//
+		for (int u = 0; u < G.V(); u++)
+			dc[part[u]] += G.degree(u);
+		
+		for (Edge p : G.edges()){
+			int u = p.either();
+			int v = p.other(u);
+			
+			if (part[u] == part[v])
+				lc[part[u]] += 1;
+		}
+		
+		//
+		int m = G.E();
 		for (int i = 0; i < k; i++)
 			mod += lc[i]/m - (dc[i]/(2*m))*(dc[i]/(2*m));
 		

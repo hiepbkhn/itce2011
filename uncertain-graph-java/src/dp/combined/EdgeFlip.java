@@ -51,7 +51,7 @@ public class EdgeFlip {
 		}
 		
 		// 0-edges
-		int n_zeros = (int)((n/2.0*(n-1) - m)*s/2);		// int overflow !
+		int n_zeros = (int)((n/2.0*(n-1) - m)*s/2);		// int overflow !	// NOTE: m is not private
 		System.out.println("n_zeros = " + n_zeros);
 		
 		GraphIntSet I = new GraphIntSet(G);

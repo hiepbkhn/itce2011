@@ -253,10 +253,10 @@ public class LouvainDP {
 //		String dataname = "karate";			// (34, 78)
 //		String dataname = "polbooks";		// (105, 441)		
 //		String dataname = "polblogs";		// (1224,16715) 	
-//		String dataname = "as20graph";		// (6474,12572)		
+		String dataname = "as20graph";		// (6474,12572)		
 //		String dataname = "wiki-Vote";		// (7115,100762)
 //		String dataname = "ca-HepPh";		// (12006,118489) 	
-		String dataname = "ca-AstroPh";		// (18771,198050) 			
+//		String dataname = "ca-AstroPh";		// (18771,198050) 			
 		// LARGE
 //		String dataname = "com_amazon_ungraph";		// (334863,925872)	
 //		String dataname = "com_dblp_ungraph";		// (317080,1049866)	
@@ -378,9 +378,9 @@ public class LouvainDP {
  		int burn_factor = 20;
  		int limit_size = 40;		// at least 4*lower_size
  		int lower_size = 10;		// at least 2
- 		int max_level = 6;
+ 		int max_level = 8;
  		double eps1 = 20.0;	// 1, 10, 50, 80, 100 for polbooks: interesting prob values and final results
- 		double ratio = 1.0; // 1.26 = 2^(1/3)
+ 		double ratio = 2.0; // 1.26 = 2^(1/3)
  		int k = 3;
  		
  		if(args.length >= 4){
@@ -427,12 +427,16 @@ public class LouvainDP {
  			NodeSetLouvain.printSetIds(root_set, G.E());
  			System.out.println("final modularity = " + root_set.modularityAll(G.E()));
  			
-//	 			NodeSetLouvain.writePart(root_set, part_file);
-//	 			System.out.println("writePart - DONE");
+ 			// test call of louvainAfterFirstPass() on leaf nodes
+ 			NodeSetLouvain.writePart(root_set, part_file);
+ 			System.out.println("writePart - DONE");
  			
+ 			LouvainDP.louvainAfterFirstPass(G, part_file, 2.0);
+ 			
+ 			//
  			List<NodeSetLouvain> best_cut = NodeSetLouvain.bestCut(root_set, G.E());
  			System.out.println("best_cut.size = " + best_cut.size());
- 			NodeSetLouvain.writeBestCut(best_cut, part_file);
+// 			NodeSetLouvain.writeBestCut(best_cut, part_file);
  			
  		}
 		

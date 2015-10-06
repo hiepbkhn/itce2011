@@ -436,7 +436,7 @@ public class NodeSetLouvain {
 	}
 	
 	////
-	public void writePart(String part_file) throws IOException{
+	public void writeMyPart(String part_file) throws IOException{
 
 		List<List<Integer>> com = new ArrayList<List<Integer>>();
 		int k = this.lc.length;
@@ -452,6 +452,28 @@ public class NodeSetLouvain {
 			for (int u : list)
 				bw.write(u + ",");
 			bw.write("\n");
+		}
+		
+		bw.close();
+	}
+	
+	////
+	public static void writePart(NodeSetLouvain root_set, String part_file) throws IOException{
+		BufferedWriter bw = new BufferedWriter(new FileWriter(part_file));
+		
+		Queue<NodeSetLouvain> queue_set = new LinkedList<NodeSetLouvain>();
+		queue_set.add(root_set);
+		while (queue_set.size() > 0){
+			NodeSetLouvain R = queue_set.remove();
+			
+			if (R.children[0] != null){
+				for (int i = 0; i < R.children.length; i++)
+					queue_set.add(R.children[i]);
+			}else{	// leaf
+				for (int s = 0; s < R.part.length; s++)
+					bw.write(R.ind2node[s] + ",");
+				bw.write("\n");
+			}
 		}
 		
 		bw.close();
