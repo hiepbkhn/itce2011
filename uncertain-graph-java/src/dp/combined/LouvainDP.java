@@ -387,10 +387,11 @@ public class LouvainDP {
  		int burn_factor = 20;
  		int limit_size = 40;		// at least 4*lower_size
  		int lower_size = 10;		// at least 2
- 		int max_level = 3;
- 		double eps1 = 20.0;	// 1, 10, 50, 80, 100 for polbooks: interesting prob values and final results
+ 		int max_level = 4;
+ 		double eps1 = 10.0;	// 1, 10, 50, 80, 100 for polbooks: interesting prob values and final results
  		double ratio = 2.0; // 1.26 = 2^(1/3)
- 		int k = 5;
+ 		int k = 3;
+ 		double eps_mod = 0.1;		// epsilon used in bestCut()
  		
  		if(args.length >= 4){
  			prefix = args[0];
@@ -443,14 +444,13 @@ public class LouvainDP {
  			LouvainDP.louvainAfterFirstPass(G, part_file, 2.0);
  			
  			//
- 			List<NodeSetLouvain> best_cut = NodeSetLouvain.bestCut(root_set, G.E());
+ 			List<NodeSetLouvain> best_cut = NodeSetLouvain.bestCut(root_set, G.E(), eps_mod);
  			System.out.println("best_cut.size = " + best_cut.size());
 // 			NodeSetLouvain.writeBestCut(best_cut, part_file);
  			
  		}
 		
 		
-	    
 	    
 	}
 

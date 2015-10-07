@@ -482,7 +482,7 @@ public class NodeSetLouvain {
 	}
 	
 	////dynamic programming: opt(R) = max{mod(R), opt(R.left) + opt(R.right)}
-	public static List<NodeSetLouvain> bestCut(NodeSetLouvain root_set, int m){
+	public static List<NodeSetLouvain> bestCut(NodeSetLouvain root_set, int m, double eps_mod){
 		
 		List<NodeSetLouvain> ret = new ArrayList<NodeSetLouvain>();
 		Map<Integer, CutNode> sol = new HashMap<Integer, CutNode>();	// best solution node.id --> CutNode info
@@ -500,31 +500,38 @@ public class NodeSetLouvain {
 					queue.add(R.children[i]);
 		}
 		
+		double dU = 3.0/m;
 		// 
 		while (stack.size() > 0){
 			NodeSetLouvain R = stack.pop();
 			
 			double mod = R.modularitySelf(m);			// non-private, need modularitySelfDP() !
+			double mod_noisy = mod + DPUtil.laplaceMechanism(eps_mod/dU);
 			boolean self = true;
 			if (R.children[0] == null){	// leaf nodes
-				sol.put(R.id, new CutNode(mod, true));
+				sol.put(R.id, new CutNode(mod, mod_noisy, true));
 				
 			}else{
 				//
 				double mod_opt = 0.0;
-				for (int i = 0; i < R.children.length; i++)
+				double mod_noisy_opt = 0.0;
+				for (int i = 0; i < R.children.length; i++){
 					mod_opt += sol.get(R.children[i].id).mod;
-				if (mod < mod_opt){
+					mod_noisy_opt += sol.get(R.children[i].id).mod_noisy;
+				}
+				if (mod_noisy < mod_noisy_opt){
 					mod = mod_opt;
+					mod_noisy = mod_noisy_opt;
 					self = false;
 				}
 					
-				sol.put(R.id, new CutNode(mod, self));
+				sol.put(R.id, new CutNode(mod, mod_noisy, self));
 			}
 		}
 		
 		System.out.println("sol.size = " + sol.size());
-		System.out.println("best modularity = " + sol.get(-1).mod);
+		System.out.println("best modularity = " + sol.get(-1).mod);		
+		System.out.println("best mod_noisy = " + sol.get(-1).mod_noisy);
 		
 		// compute ret
 		queue = new LinkedList<NodeSetLouvain>();

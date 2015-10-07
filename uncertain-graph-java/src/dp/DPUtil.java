@@ -24,11 +24,12 @@ public class DPUtil {
         }
 	}
 	
-	////
-	public static double laplaceMechanism(double eps){
+	//// lambda = 1/b : f(x, eps) = lambda/2* exp(-lambda*|x|)	(see wikipedia)
+	//	b = delta_f/eps -> lambda = eps/delta_f
+	public static double laplaceMechanism(double lambda){
 		Random random = new Random();
 		double u = random.nextDouble();
-		double x = -Math.log(1-u)/eps;
+		double x = -Math.log(1-u)/lambda;
 		double s = random.nextDouble();
 		if (s < 0.5)
             return -x;
