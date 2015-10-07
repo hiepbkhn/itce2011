@@ -362,26 +362,35 @@ public class LouvainDP {
 	    
 	    ///////////
 	    // 3 - TEST NodeSetLouvain (new: k-ary tree)
-		// ca-AstroPh		:	eps=10 ratio=1						 (3,3,0.380)
-		//						eps=10 ratio=2						 (3,3,0.391), (3,4,0.395)
-		//						eps=20 ratio=1						 (3,6,0.387)
-		//						eps=20 ratio=2						 (3,6,0.457)
-		// com_amazon_ungraph:	eps=20 ratio=2 (k, max_level, mod) = (5,4,0.335), (6,3,0.), (4,5,0.), (3,6,0.373)
+		// as20graph 		:	eps=5  ratio=2						 (3,4,0.113), (2,7,0.111)
+		//						eps=10 ratio=2						 (3,4,0.270), (2,7,0.245)
+		//						eps=20 ratio=2						 (3,4,0.324), (2,7,0.313), (5,3,0.336)
+		// ca-AstroPh		:	eps=10 ratio=1						 (3,3,0.)
+		//						eps=10 ratio=2						 (3,3,0.498), (3,4,0.485)
+		//						eps=15 ratio=2						 (3,6,0.496)
+		//						eps=20 ratio=2						 (3,6,0.521)
+		// com_amazon_ungraph:	eps=10 ratio=2 (k, max_level, mod) = (3,6,0.451), (4,5,0.461), (2,10,0.389)
+		//						eps=20 ratio=2 (k, max_level, mod) = (5,4,0.586), (6,3,0.), (4,5,0.), (3,6,0.587)
 		//						eps=20 ratio=1						 (5,4,0.)
-		//						eps=30 ratio=2						 (3,7,0.472) 44s Acer
-		// com_youtube_ungraph	eps=20 ratio=2						 (3,7,0.) 
-		//						eps=30 ratio=2						 (3,7,0.) 172s Acer	
-		//
+		//						eps=30 ratio=2						 (3,7,0.655) 44s 
+		// com_dblp_ungraph:	eps=10 ratio=2 (k, max_level, mod) = (3,6,0.437), (2,10,0.416)
+		//						eps=20 ratio=2 (k, max_level, mod) = (5,4,0.546), (6,3,0.549), (4,5,0.), (3,6,0.542), (2,10,0.521)
+		//						eps=20 ratio=1						 (5,4,0.437)
+		//						eps=30 ratio=2						 (3,7,0.595) 40s 		
+		// com_youtube_ungraph	eps=10 ratio=2						 (3,7,0.339)
+		//						eps=20 ratio=2						 (3,7,0.415) 150s
+		//						eps=30 ratio=2						 (3,7,0.434) LouvainAfter: 0.451 
+		//						eps=40 ratio=2						 (3,7,0.462)
 	    // COMMAND-LINE <prefix> <dataname> <n_samples> <burn_factor>
  		String prefix = "";
  		int n_samples = 1;
  		int burn_factor = 20;
  		int limit_size = 40;		// at least 4*lower_size
  		int lower_size = 10;		// at least 2
- 		int max_level = 8;
+ 		int max_level = 3;
  		double eps1 = 20.0;	// 1, 10, 50, 80, 100 for polbooks: interesting prob values and final results
  		double ratio = 2.0; // 1.26 = 2^(1/3)
- 		int k = 3;
+ 		int k = 5;
  		
  		if(args.length >= 4){
  			prefix = args[0];

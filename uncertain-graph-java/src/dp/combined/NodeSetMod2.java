@@ -2,6 +2,8 @@
  * Sep 21, 2015
  * 	- copied from NodeSetMod.java, allow to fix nodes to groups (reduce MCMC space)
  * 	- use EdgeIntGraph (weighted graph) instead of Grph
+ * Oct 7
+ * 	- update dU = 3.0/n_edges
  */
 
 package dp.combined;
@@ -365,7 +367,7 @@ public class NodeSetMod2 {
 		int n_edges = G.E();
 		
 		// compute dU
-	    double dU = 8.0/n_edges;
+	    double dU = 3.0/n_edges;
 		
 //		if (print_out)
 			System.out.println("#steps = " + (n_steps + n_samples * sample_freq));

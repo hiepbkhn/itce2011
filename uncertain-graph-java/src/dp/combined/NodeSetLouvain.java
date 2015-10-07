@@ -1,8 +1,10 @@
 /*
  * Sep 28, 2015
  * 	- exponential mechanism via MCMC on K groups of nodes (first pass of Louvain method)
- * Sep 29, 2015
+ * Sep 29
  * 	- apply tree structure (not binary)
+ * Oct 7
+ * 	- update dU = 3.0/n_edges
  */
 
 package dp.combined;
@@ -296,7 +298,7 @@ public class NodeSetLouvain {
 		int k = R.lc.length;
 		
 		// compute dU
-	    double dU = 8.0/n_edges;
+	    double dU = 3.0/n_edges;
 	    
 	    System.out.println("#steps = " + (n_steps + n_samples * sample_freq));
 		//

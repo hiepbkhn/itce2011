@@ -25,7 +25,7 @@ public class LouvainOpt {
 											// 		
 //		String dataname = "polblogs";		// (1224,16715) 	
 											// 		
-		String dataname = "as20graph";		// (6474,12572)		burn = 20, max_level = 8, (40,10) final mod = 0.317, bestCut=0.451 (6s)
+//		String dataname = "as20graph";		// (6474,12572)		burn = 20, max_level = 8, (40,10) final mod = 0.317, bestCut=0.451 (6s)
 //		String dataname = "wiki-Vote";		// (7115,100762) 	
 											// 		
 //		String dataname = "ca-HepPh";		// (12006,118489) 	 
@@ -33,7 +33,8 @@ public class LouvainOpt {
 //		String dataname = "ca-AstroPh";		// (18771,198050) 	burn = 30, max_level = 8, (40,10) final mod = 0.412, bestCut=0.498 (95s)
 		
 		// LARGE
-//		String dataname = "com_amazon_ungraph"; 	// (334863,925872) 	burn = 1, max_level = 8, (100,20) final mod = 0.112, bestCut=0.256 ()
+		String dataname = "com_amazon_ungraph"; 	// (334863,925872) 	par.Louvain (k,max_level,mod): (3,6,0.711), (5,4,0.673), (6,3,0.641), (10,3,0.558), (20,2,0.427)
+													//					max.Louvain (k,max_level,mod): (3,6,0.451), (5,4,0.687), (6,3,0.706), (10,3,0.728), (20,2,0.743)
 //		String dataname = "com_dblp_ungraph";  		// (317080,1049866) 
 //		String dataname = "com_youtube_ungraph"; 	// (1134890,2987624)burn = 10, max_level = 8, (100,20) final mod = 0.356, bestCut=0.494 (840s)
 													 
@@ -86,12 +87,12 @@ public class LouvainOpt {
 			// type 1 - call partitionLouvain
 			String part_file = prefix + "_out/" + dataname +"_partoptlouvain_" + burn_factor + "_" + limit_size + "_" 
 					+ max_level + "_" + k + ".part";
-			NodeSetLouvainOpt root_set = NodeSetLouvainOpt.recursiveLouvain(G, burn_factor, limit_size, max_level, k, 1);
+			NodeSetLouvainOpt root_set = NodeSetLouvainOpt.recursiveLouvain(G, burn_factor, limit_size, max_level, k, 1);	// 1: partitionLouvain
 			
 			// type 2 - call maximizeLouvain
 //			String part_file = prefix + "_out/" + dataname +"_multioptlouvain_" + burn_factor + "_" + limit_size + "_" 
 //					+ max_level + "_" + k + ".part";
-//			NodeSetLouvainOpt root_set = NodeSetLouvainOpt.recursiveLouvain(G, burn_factor, limit_size, max_level, k, 2);
+//			NodeSetLouvainOpt root_set = NodeSetLouvainOpt.recursiveLouvain(G, burn_factor, limit_size, max_level, k, 2);	// 2: maximizeLouvain
 			
 			System.out.println("recursiveLouvain - DONE, elapsed " + (System.currentTimeMillis() - start));
 			
@@ -100,6 +101,7 @@ public class LouvainOpt {
 			System.out.println("final modularity = " + root_set.modularityAll(G.E()));
 			
 			List<NodeSetLouvainOpt> best_cut = NodeSetLouvainOpt.bestCut(root_set, G.E());
+			System.out.println("best_cut.size = " + best_cut.size());
 			NodeSetLouvainOpt.writeBestCut(best_cut, part_file);
 		}
 		
