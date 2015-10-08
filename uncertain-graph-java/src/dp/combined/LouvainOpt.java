@@ -26,6 +26,8 @@ public class LouvainOpt {
 //		String dataname = "polblogs";		// (1224,16715) 	
 											// 		
 //		String dataname = "as20graph";		// (6474,12572)		burn = 20, max_level = 8, (40,10) final mod = 0.317, bestCut=0.451 (6s)
+											//					par.Louvain (k,max_level,mod): (2,8,0.484), (3,5,0.499), (5,3,0.504), (6,3,0.472), (10,2,0.440), (20,2,0.387)
+											//					max.Louvain (k,max_level,mod): (2,8,0.323), (3,5,0.467), (5,4,0.514), (6,3,0.509), (10,2,0.527), (20,2,0.537)
 //		String dataname = "wiki-Vote";		// (7115,100762) 	
 											// 		
 //		String dataname = "ca-HepPh";		// (12006,118489) 	 
@@ -33,10 +35,10 @@ public class LouvainOpt {
 //		String dataname = "ca-AstroPh";		// (18771,198050) 	burn = 30, max_level = 8, (40,10) final mod = 0.412, bestCut=0.498 (95s)
 		
 		// LARGE
-		String dataname = "com_amazon_ungraph"; 	// (334863,925872) 	par.Louvain (k,max_level,mod): (3,6,0.711), (5,4,0.673), (6,3,0.641), (10,3,0.558), (20,2,0.427)
-													//					max.Louvain (k,max_level,mod): (3,6,0.451), (5,4,0.687), (6,3,0.706), (10,3,0.728), (20,2,0.743)
-//		String dataname = "com_dblp_ungraph";  		// (317080,1049866) 
-//		String dataname = "com_youtube_ungraph"; 	// (1134890,2987624)burn = 10, max_level = 8, (100,20) final mod = 0.356, bestCut=0.494 (840s)
+		String dataname = "com_amazon_ungraph"; // (334863,925872) 	par.Louvain (k,max_level,mod): (2,10,0.712), (3,6,0.711), (5,4,0.673), (6,3,0.641), (10,3,0.558), (20,2,0.427)
+												//					max.Louvain (k,max_level,mod): (2,10,0.307), (3,6,0.451), (5,4,0.687), (6,3,0.706), (10,3,0.728), (20,2,0.743)
+//		String dataname = "com_dblp_ungraph";  	// (317080,1049866) 
+//		String dataname = "com_youtube_ungraph";// (1134890,2987624)burn = 10, max_level = 8, (100,20) final mod = 0.356, bestCut=0.494 (840s)
 													 
 		
 		
@@ -46,8 +48,8 @@ public class LouvainOpt {
 		int burn_factor = 20;
 		int limit_size = 40;		// at least 4*lower_size
 		int lower_size = 10;		// at least 2
-		int max_level = 6;
-		int k = 3;
+		int max_level = 10;
+		int k = 2;
 		
 		if(args.length >= 4){
 			prefix = args[0];

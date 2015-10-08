@@ -6,6 +6,8 @@
  * 		+ inter/intra-cluster accuracy [A-inter, A-intra](ICML'07)
  * 		+ Adjusted Rand Index [ARI]	(KDD'07)
  * 	- modularitySet(Grph), modularitySet(EdgeWeightedGraph) for checking every modularity function
+ * Oct 8
+ * 	- implement NMI
  */
 
 package dp.combined;
@@ -256,7 +258,7 @@ public class CommunityMeasure {
 		return (n/2.0)*(n-1);
 	}
 	
-	////
+	//// ARI
 	public static double adjustedRandIndex(int[] part_org, int[] part){
 		double ret = 0.0;
 		int n = part_org.length;
@@ -310,6 +312,54 @@ public class CommunityMeasure {
 		return ret;
 	}
 	
+	//// NMI
+	public static double normalizedMutualInfo(int[] part_org, int[] part){
+		double ret = 0.0;
+		int n = part_org.length;
+		
+		int k_org = 0;
+		for (int com : part_org)
+			if (k_org < com)
+				k_org = com;
+		k_org += 1;
+		
+		int k = 0;
+		for (int com : part)
+			if (k < com)
+				k = com;
+		k += 1;
+		
+		System.out.println("k_org = " + k_org);
+		System.out.println("k = " + k);
+		// n_ij, n_i, n_j
+		int[][] n_ij = new int[k_org][k];
+		int[] n_i = new int[k_org];
+		int[] n_j = new int[k];
+		
+		for (int u = 0; u < n; u++){
+			n_ij[part_org[u]][part[u]] += 1;
+			n_i[part_org[u]] += 1;
+			n_j[part[u]] += 1;
+		}
+
+		//
+		double nominator = 0.0;
+		for (int i = 0; i < k_org; i++)
+			for (int j = 0; j < k; j++)
+				if (n_ij[i][j] > 0)
+					nominator += n_ij[i][j] * Math.log((double)n_ij[i][j]/n_i[i] * (double)n/n_j[j]);
+		nominator = -2*nominator;
+		
+		double denominator = 0.0;
+		for (int i = 0; i < k_org; i++)
+			denominator += n_i[i] * Math.log((double)n_i[i]/n);
+		for (int j = 0; j < k; j++)
+			denominator += n_j[j] * Math.log((double)n_j[j]/n);
+		
+		ret = nominator/denominator;
+		//
+		return ret;
+	}
 	
 	////////////////////////////////////////////////
 	public static void main(String[] args) throws Exception{
@@ -319,30 +369,33 @@ public class CommunityMeasure {
 //		String filename = "_data/karate.gr";
 //		String filename = "_data/polbooks.gr";
 		
-		int n_nodes = 6474;
-		String filename = "_data/as20graph.gr";
-		String louvain_file = "as20graph.louvain";	
+//		int n_nodes = 6474;
+//		String filename = "_data/as20graph.gr";
+//		String louvain_file = "as20graph.louvain";	
 		
 //		int n_nodes = 18771;
 //		String filename = "_data/ca-AstroPh.gr";
 //		String louvain_file = "ca-AstroPh.louvain";	
 		
-//		int n_nodes = 334863;
-//		String filename = "_data/com_amazon_ungraph.gr";
-//		String louvain_file = "com_amazon_ungraph.louvain";						// aIntra = 1, aInter = 1, ARI = 1		
+		int n_nodes = 334863;
+		String filename = "_data/com_amazon_ungraph.gr";
+		String louvain_file = "com_amazon_ungraph.louvain";						// aIntra = 1, aInter = 1, ARI = 1		
 		
 		
 		String path = "_out/";
 		
 		//
-//		String compare_file = "as20graph_multioptlouvain_20_40_6_2.part";		// LouvainOpt
-//		String compare_file = "as20graph_multioptlouvain_20_40_4_5.part";		// LouvainOpt
-//		String compare_file = "as20graph_partoptlouvain_20_40_6_3.part";		// LouvainOpt
-//		String compare_file = "as20graph_partoptlouvain_20_40_5_4.part";		// LouvainOpt
-//		String compare_file = "as20graph_moddivoptlouvain_30_50_10.part";		// ModDivisiveOpt
-//		String compare_file = "as20graph_edgeflip_8.8-0.part";					// EdgeFlip
-//		String compare_file = "as20graph_edgeflip_6.0-0.part";					// EdgeFlip
-		String compare_file = "as20graph_noisy.part";							// Orbis
+//		String compare_file = "as20graph_multioptlouvain_20_40_6_2.part";			// LouvainOpt
+//		String compare_file = "as20graph_multioptlouvain_20_40_4_5.part";			// LouvainOpt
+//		String compare_file = "as20graph_partoptlouvain_20_40_6_3.part";			// LouvainOpt
+//		String compare_file = "as20graph_partoptlouvain_20_40_5_3.part";			// LouvainOpt
+//		String compare_file = "as20graph_partoptlouvain_20_40_5_4.part";			// LouvainOpt
+//		String compare_file = "as20graph_moddivoptlouvain_30_50_10.part";			// ModDivisiveOpt
+//		String compare_file = "as20graph_edgeflip_8.8-0.part";						// EdgeFlip
+//		String compare_file = "as20graph_edgeflip_6.0-0.part";						// EdgeFlip
+//		String compare_file = "as20graph_noisy.part";								// Orbis
+//		String compare_file = "as20graph_nodesetlv2_20_40_10_4_2.00_10.0_3.leaf";	// NodeSetLouvain
+//		String compare_file = "as20graph_nodesetlv2_20_40_10_4_2.00_20.0_3.part";	// NodeSetLouvain
 		
 //		String compare_file = "ca-AstroPh_nodesetlv2_20_40_10_6_1.00_20.0_3.part";
 //		String compare_file = "ca-AstroPh_nodesetlv2_20_40_10_3_1.00_10.0_3.part";
@@ -350,6 +403,7 @@ public class CommunityMeasure {
 //		String compare_file = "ca-AstroPh_nodesetlv2_20_40_10_4_2.00_10.0_3.part";
 //		String compare_file = "ca-AstroPh_temp.part";
 		
+		String compare_file = "com_amazon_ungraph_partoptlouvain_20_40_10_2.part";			// LouvainOpt
 //		String compare_file = "com_amazon_ungraph_moddivdp_20_40_10_8_2.00_20.0.part";
 //		String compare_file = "com_amazon_ungraph_moddivopt_1_100_20_8.part";
 //		String compare_file = "com_amazon_ungraph_nodesetlv_20_5_5.0.part";		//
@@ -359,6 +413,9 @@ public class CommunityMeasure {
 //		String compare_file = "com_amazon_ungraph_filter_12.7-0.part";			// TmF			aIntra = 0.2427, aInter = 0.9925, ARI = 0.2691
 //		String compare_file = "com_amazon_ungraph_nodesetlv2_20_40_10_1_2.00_20.0_5.part";
 //		String compare_file = "com_amazon_ungraph_hrgdivgreedy_20_40_10_8_2.00_20.0.part";	// 
+//		String compare_file = "com_amazon_ungraph_nodesetlv2_20_40_10_4_2.00_20.0_5.part3";	// NodeSetLouvain
+//		String compare_file = "com_amazon_ungraph_nodesetlv2_20_40_10_3_2.00_20.0_10.best";	// NodeSetLouvain
+//		String compare_file = "com_amazon_ungraph_nodesetlv2_20_40_10_3_2.50_30.0_10.part3";	// NodeSetLouvain
 		
 		
 		
@@ -375,7 +432,9 @@ public class CommunityMeasure {
 		int[] louvain_part = readPart(path + louvain_file, n_nodes);
 		int[] compare_part = readPart(path + compare_file, n_nodes);
 		
+		System.out.println("louvain_file = " + louvain_file);
 		System.out.println("louvain mod = " + modularity(G, louvain_part));
+		System.out.println("compare_file = " + compare_file);
 		System.out.println("compare mod = " + modularity(G, compare_part));
 		
 		//
@@ -391,6 +450,9 @@ public class CommunityMeasure {
 		
 		double ARI = adjustedRandIndex(louvain_part, compare_part);
 		System.out.println("ARI = " + ARI);
+		
+		double NMI = normalizedMutualInfo(louvain_part, compare_part);
+		System.out.println("NMI = " + NMI);
 		
 		// TEST modularitySet() ok
 //		int[] node_set = new int[]{0,1,2,3,4,5,6,7,10,14,15,16,18,19,22,25,29,55,8,9,11,12,13,17,20,21,23,24,26,27,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,53,54,56,57};

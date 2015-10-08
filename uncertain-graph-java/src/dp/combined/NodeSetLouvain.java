@@ -5,6 +5,9 @@
  * 	- apply tree structure (not binary)
  * Oct 7
  * 	- update dU = 3.0/n_edges
+ * Oct 8
+ * 	- change writePart to writeLeaf (.leaf)
+ * 	- add writeLevel()
  */
 
 package dp.combined;
@@ -460,8 +463,8 @@ public class NodeSetLouvain {
 	}
 	
 	////
-	public static void writePart(NodeSetLouvain root_set, String part_file) throws IOException{
-		BufferedWriter bw = new BufferedWriter(new FileWriter(part_file));
+	public static void writeLeaf(NodeSetLouvain root_set, String leaf_file) throws IOException{
+		BufferedWriter bw = new BufferedWriter(new FileWriter(leaf_file));
 		
 		Queue<NodeSetLouvain> queue_set = new LinkedList<NodeSetLouvain>();
 		queue_set.add(root_set);
@@ -472,6 +475,28 @@ public class NodeSetLouvain {
 				for (int i = 0; i < R.children.length; i++)
 					queue_set.add(R.children[i]);
 			}else{	// leaf
+				for (int s = 0; s < R.part.length; s++)
+					bw.write(R.ind2node[s] + ",");
+				bw.write("\n");
+			}
+		}
+		
+		bw.close();
+	}
+	
+	//// write all nodes at level 'level'
+	public static void writeLevel(NodeSetLouvain root_set, String part_file, int level) throws IOException{
+		BufferedWriter bw = new BufferedWriter(new FileWriter(part_file));
+		
+		Queue<NodeSetLouvain> queue_set = new LinkedList<NodeSetLouvain>();
+		queue_set.add(root_set);
+		while (queue_set.size() > 0){
+			NodeSetLouvain R = queue_set.remove();
+			
+			if (R.level < level){
+				for (int i = 0; i < R.children.length; i++)
+					queue_set.add(R.children[i]);
+			}else{	// at level 
 				for (int s = 0; s < R.part.length; s++)
 					bw.write(R.ind2node[s] + ",");
 				bw.write("\n");
@@ -553,8 +578,8 @@ public class NodeSetLouvain {
 	}
 	
 	////
-	public static void writeBestCut(List<NodeSetLouvain> best_cut, String part_file) throws IOException{
-		BufferedWriter bw = new BufferedWriter(new FileWriter(part_file));
+	public static void writeBestCut(List<NodeSetLouvain> best_cut, String best_file) throws IOException{
+		BufferedWriter bw = new BufferedWriter(new FileWriter(best_file));
 
 		for (NodeSetLouvain R : best_cut){
 //			for (int i = 0; i < R.k; i++){

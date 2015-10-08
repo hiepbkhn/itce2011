@@ -253,12 +253,12 @@ public class LouvainDP {
 //		String dataname = "karate";			// (34, 78)
 //		String dataname = "polbooks";		// (105, 441)		
 //		String dataname = "polblogs";		// (1224,16715) 	
-		String dataname = "as20graph";		// (6474,12572)		
+//		String dataname = "as20graph";		// (6474,12572)		
 //		String dataname = "wiki-Vote";		// (7115,100762)
 //		String dataname = "ca-HepPh";		// (12006,118489) 	
 //		String dataname = "ca-AstroPh";		// (18771,198050) 			
 		// LARGE
-//		String dataname = "com_amazon_ungraph";		// (334863,925872)	
+		String dataname = "com_amazon_ungraph";		// (334863,925872)	
 //		String dataname = "com_dblp_ungraph";		// (317080,1049866)	
 //		String dataname = "com_youtube_ungraph";	// (1134890,2987624) 
 													//						
@@ -369,10 +369,10 @@ public class LouvainDP {
 		//						eps=10 ratio=2						 (3,3,0.498), (3,4,0.485)
 		//						eps=15 ratio=2						 (3,6,0.496)
 		//						eps=20 ratio=2						 (3,6,0.521)
-		// com_amazon_ungraph:	eps=10 ratio=2 (k, max_level, mod) = (3,6,0.451), (4,5,0.461), (2,10,0.389)
-		//						eps=20 ratio=2 (k, max_level, mod) = (5,4,0.586), (6,3,0.), (4,5,0.), (3,6,0.587)
+		// com_amazon_ungraph:	eps=10 ratio=2 (k, max_level, mod) = (3,6,0.451), (4,5,0.461), (2,10,0.389), (10,3,0.)
+		//						eps=20 ratio=2 (k, max_level, mod) = (6,3,0.588), (5,4,0.586), (4,5,0.), (3,6,0.587), (10,3,0.512), (20,2,0.366)
 		//						eps=20 ratio=1						 (5,4,0.)
-		//						eps=30 ratio=2						 (3,7,0.655) 44s 
+		//						eps=30 ratio=2						 (6,3,0.613), (3,7,0.655) 44s 
 		// com_dblp_ungraph:	eps=10 ratio=2 (k, max_level, mod) = (3,6,0.437), (2,10,0.416)
 		//						eps=20 ratio=2 (k, max_level, mod) = (5,4,0.546), (6,3,0.549), (4,5,0.), (3,6,0.542), (2,10,0.521)
 		//						eps=20 ratio=1						 (5,4,0.437)
@@ -387,8 +387,8 @@ public class LouvainDP {
  		int burn_factor = 20;
  		int limit_size = 40;		// at least 4*lower_size
  		int lower_size = 10;		// at least 2
- 		int max_level = 4;
- 		double eps1 = 10.0;	// 1, 10, 50, 80, 100 for polbooks: interesting prob values and final results
+ 		int max_level = 7;
+ 		double eps1 = 30.0;	// 1, 10, 50, 80, 100 for polbooks: interesting prob values and final results
  		double ratio = 2.0; // 1.26 = 2^(1/3)
  		int k = 3;
  		double eps_mod = 0.1;		// epsilon used in bestCut()
@@ -415,6 +415,8 @@ public class LouvainDP {
  		String filename = prefix + "_data/" + dataname + ".gr";	// EdgeListReader
  		String part_file = prefix + "_out/" + dataname +"_nodesetlv2_" + burn_factor + "_" + limit_size + "_" + lower_size + "_" 
  						+ max_level + "_" + String.format("%.2f", ratio) + "_" + String.format("%.1f", eps1) + "_" + k + ".part";
+ 		String leaf_file = part_file.substring(0, part_file.length()-5) + ".leaf";
+ 		String best_file = part_file.substring(0, part_file.length()-5) + ".best";
  		
  		EdgeWeightedGraph G = EdgeWeightedGraph.readEdgeList(filename);
  		
@@ -438,15 +440,22 @@ public class LouvainDP {
  			System.out.println("final modularity = " + root_set.modularityAll(G.E()));
  			
  			// test call of louvainAfterFirstPass() on leaf nodes
- 			NodeSetLouvain.writePart(root_set, part_file);
- 			System.out.println("writePart - DONE");
+ 			NodeSetLouvain.writeLeaf(root_set, leaf_file);
+ 			System.out.println("writeLeaf - DONE");
  			
- 			LouvainDP.louvainAfterFirstPass(G, part_file, 2.0);
+ 			LouvainDP.louvainAfterFirstPass(G, leaf_file, 2.0);
  			
  			//
  			List<NodeSetLouvain> best_cut = NodeSetLouvain.bestCut(root_set, G.E(), eps_mod);
  			System.out.println("best_cut.size = " + best_cut.size());
-// 			NodeSetLouvain.writeBestCut(best_cut, part_file);
+ 			NodeSetLouvain.writeBestCut(best_cut, best_file);
+ 			
+ 			//
+ 			int level = 2;
+ 			NodeSetLouvain.writeLevel(root_set, part_file + level, level);
+ 			level = 3;
+ 			NodeSetLouvain.writeLevel(root_set, part_file + level, level);
+ 			System.out.println("writeLevel - DONE");
  			
  		}
 		
