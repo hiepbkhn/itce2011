@@ -1,13 +1,15 @@
 /*
  * Sep 29, 2015
  * 	- community measures: 
- * 		+ F1-score (EDBTw'15)
+ * 		+ F1-score (WWW'14, EDBTw'15)
  * 		+ Normalized mutual information [NMI] (Lancichinetti)
  * 		+ inter/intra-cluster accuracy [A-inter, A-intra](ICML'07)
  * 		+ Adjusted Rand Index [ARI]	(KDD'07)
  * 	- modularitySet(Grph), modularitySet(EdgeWeightedGraph) for checking every modularity function
  * Oct 8
  * 	- implement NMI
+ * Oct 8
+ * 	- implement F1
  */
 
 package dp.combined;
@@ -17,8 +19,14 @@ import grph.VertexPair;
 import grph.io.EdgeListReader;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -361,6 +369,170 @@ public class CommunityMeasure {
 		return ret;
 	}
 	
+	//// average F1 score
+	// A, B already sorted
+	public static int intersect(Integer[] A, Integer[] B){
+		int ret = 0;
+		
+		int iA = 0;
+		int iB = 0;
+		while (iA < A.length && iB < B.length){
+			if (A[iA] == B[iB]){
+				ret += 1;
+				iA ++;
+				iB ++;
+				
+			}else if (A[iA] > B[iB]){
+				iB ++;
+			}else{
+				iA ++;
+			}
+		}
+		
+		
+		
+		//
+		return ret;
+	}
+	
+	//
+	public static double avgF1Score(List<Integer []> C1, List<Integer []> C2){
+		double ret = 0.0;
+		
+		// 1. sort sets in each list
+		for (Integer[] A : C1)
+			 Arrays.sort(A);
+		for (Integer[] B : C2)
+			 Arrays.sort(B);
+		
+		// 
+		int[] sizeC1 = new int[C1.size()];
+		int[] sizeC2 = new int[C2.size()];
+		
+		for (int i = 0; i < C1.size(); i++)
+			sizeC1[i] = C1.get(i).length;
+		for (int j = 0; j < C2.size(); j++)
+			sizeC2[j] = C2.get(j).length;
+
+		// intersection
+		int[][] inter = new int[C1.size()][C2.size()];
+		double[][] prec = new double[C1.size()][C2.size()];
+		double[][] recall = new double[C1.size()][C2.size()];
+		double[][] H = new double[C1.size()][C2.size()];
+		
+		for (int i = 0; i < C1.size(); i++)
+			for (int j = 0; j < C2.size(); j++){
+				inter[i][j] = intersect(C1.get(i), C2.get(j));
+				prec[i][j] = (double)inter[i][j] / sizeC1[i];
+				recall[i][j] = (double)inter[i][j] / sizeC2[j];
+				H[i][j] = 2*prec[i][j]*recall[i][j]/(prec[i][j] + recall[i][j]);
+			}
+		
+		double[] F1 = new double[C1.size()];
+		double[] F2 = new double[C2.size()];
+		
+		// F1(C1[i], C2)
+		for (int i = 0; i < C1.size(); i++)
+			for (int j = 0; j < C2.size(); j++)
+				if (F1[i] < H[i][j])
+					F1[i] = H[i][j];
+		// F1(C2[j], C1)
+		for (int j = 0; j < C2.size(); j++)
+			for (int i = 0; i < C1.size(); i++)
+				if (F2[j] < H[i][j])
+					F2[j] = H[i][j];
+		
+		double sum1 = 0.0;
+		double sum2 = 0.0;
+		for (int i = 0; i < C1.size(); i++)
+			sum1 += F1[i];
+		for (int j = 0; j < C2.size(); j++)
+			sum2 += F2[j];
+		
+		ret = sum1/(2*C1.size()) + sum2/(2*C2.size()); 
+		//
+		return ret;
+	}
+	
+	//// relabel node ids in community file (e.g. com-amazon.top5000.cmty.txt)
+	// read .nodemap computed by graph-dp/compare/graph_generator.normalize_and_save_graph()
+	public static void relabelCommunity(String graph_file, String nodemap_file, String com_file, String outcom_file, int m) throws IOException{
+		
+		// read nodemap_file 
+		BufferedReader br = new BufferedReader(new FileReader(nodemap_file));
+		Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+		while (true){
+        	String str = br.readLine();
+        	if (str == null)
+        		break;
+        	String[] items = str.split(" ");
+        	map.put(Integer.parseInt(items[0]), Integer.parseInt(items[1]));
+		}
+		br.close();
+		
+		// read graph_file
+		br = new BufferedReader(new FileReader(graph_file));
+		int count = 0;
+		while (true){
+        	String str = br.readLine();
+        	if (str == null)
+        		break;
+        	String[] items = str.split("\t");
+//        	if (count < 20){
+//        		System.out.println(map.get(Integer.parseInt(items[0])) + " " + map.get(Integer.parseInt(items[1])));
+//        		count += 1;
+//        	}
+		}
+		br.close();
+		
+		// read com_file, write to outcom_file
+		br = new BufferedReader(new FileReader(com_file));
+		BufferedWriter bw = new BufferedWriter(new FileWriter(outcom_file));
+		while (true){
+			String str = br.readLine();
+        	if (str == null)
+        		break;
+        	String[] items = str.split("\t");
+        	for (String item : items){
+        		int u = Integer.parseInt(item);
+        		bw.write(map.get(u) + ",");
+        	}
+        	bw.write("\n");
+		}
+		
+		br.close();
+		bw.close();
+	}
+	
+	////
+	public static List<Integer[]> readGroundTruth(String file_name, int n) throws IOException{
+		List<Integer []> ret = new ArrayList<Integer[]>();
+		
+		boolean[] mark = new boolean[n];
+		BufferedReader br = new BufferedReader(new FileReader(file_name));
+		while (true){
+        	String str = br.readLine();
+        	if (str == null)
+        		break;
+        	String[] items = str.split(",");
+        	Integer[] A = new Integer[items.length];
+        	for (int i = 0; i < items.length; i++){
+        		A[i] = Integer.parseInt(items[i]);
+        		mark[A[i]] = true;
+        	}
+        	ret.add(A);
+		}
+		br.close();
+		
+		int count = 0;
+		for (int i = 0; i < mark.length; i++)
+			if (mark[i] == true)
+				count += 1;
+		System.out.println("count = " + count);
+		//
+		return ret;
+	}
+	
 	////////////////////////////////////////////////
 	public static void main(String[] args) throws Exception{
 		
@@ -378,6 +550,7 @@ public class CommunityMeasure {
 //		String louvain_file = "ca-AstroPh.louvain";	
 		
 		int n_nodes = 334863;
+		int n_edges = 925872;
 		String filename = "_data/com_amazon_ungraph.gr";
 		String louvain_file = "com_amazon_ungraph.louvain";						// aIntra = 1, aInter = 1, ARI = 1		
 		
@@ -403,12 +576,12 @@ public class CommunityMeasure {
 //		String compare_file = "ca-AstroPh_nodesetlv2_20_40_10_4_2.00_10.0_3.part";
 //		String compare_file = "ca-AstroPh_temp.part";
 		
-		String compare_file = "com_amazon_ungraph_partoptlouvain_20_40_10_2.part";			// LouvainOpt
+//		String compare_file = "com_amazon_ungraph_partoptlouvain_20_40_10_2.part";			// LouvainOpt
 //		String compare_file = "com_amazon_ungraph_moddivdp_20_40_10_8_2.00_20.0.part";
 //		String compare_file = "com_amazon_ungraph_moddivopt_1_100_20_8.part";
 //		String compare_file = "com_amazon_ungraph_nodesetlv_20_5_5.0.part";		//
 //		String compare_file = "com_amazon_ungraph_nodesetlv_20_10_10.0.part";	//				
-//		String compare_file = "com_amazon_ungraph_edgeflip_12.7-0.part";		// EdgeFlip		aIntra = 0.4181, aInter = 0.9935, ARI = 0.4416
+		String compare_file = "com_amazon_ungraph_edgeflip_12.7-0.part";		// EdgeFlip		aIntra = 0.4181, aInter = 0.9935, ARI = 0.4416
 //		String compare_file = "com_amazon_ungraph_filter_6.4-0.part";			// TmF
 //		String compare_file = "com_amazon_ungraph_filter_12.7-0.part";			// TmF			aIntra = 0.2427, aInter = 0.9925, ARI = 0.2691
 //		String compare_file = "com_amazon_ungraph_nodesetlv2_20_40_10_1_2.00_20.0_5.part";
@@ -454,6 +627,28 @@ public class CommunityMeasure {
 		double NMI = normalizedMutualInfo(louvain_part, compare_part);
 		System.out.println("NMI = " + NMI);
 		
+//		List<Integer[]> gt = readGroundTruth("_data/com_amazon_ungraph.top5000", n_nodes);
+		List<Integer[]> lv = readGroundTruth(path + louvain_file, n_nodes);
+		List<Integer[]> cp = readGroundTruth(path + compare_file, n_nodes);
+		System.out.println("lv.size = " + lv.size());
+		System.out.println("cp.size = " + cp.size());
+		System.out.println("Avg.F1 score (lv,cp) = " + avgF1Score(lv, cp));
+		
+		// Avg.F1 score
+//		List<Integer[]> gt = readGroundTruth("_data/com_amazon_ungraph.top5000", n_nodes);
+//		List<Integer[]> lv = readGroundTruth(path + louvain_file, n_nodes);
+//		System.out.println("lv.size = " + lv.size());
+//		System.out.println("gt.size = " + gt.size());
+//		System.out.println("Avg.F1 score (lv,gt) = " + avgF1Score(lv, gt));
+//		System.out.println("Avg.F1 score (gt,lv) = " + avgF1Score(gt,lv));
+//		
+//		gt = readGroundTruth("_data/com_amazon_ungraph.all.dedup", n_nodes);
+//		System.out.println("gt.size = " + gt.size());
+//		System.out.println("Avg.F1 score (lv,gt) = " + avgF1Score(lv, gt));
+//		System.out.println("Avg.F1 score (gt,lv) = " + avgF1Score(gt,lv));
+		
+		
+		/////////////////////////
 		// TEST modularitySet() ok
 //		int[] node_set = new int[]{0,1,2,3,4,5,6,7,10,14,15,16,18,19,22,25,29,55,8,9,11,12,13,17,20,21,23,24,26,27,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,53,54,56,57};
 //		System.out.println("modSet = " + modularitySet(G, node_set));
@@ -466,6 +661,53 @@ public class CommunityMeasure {
 //		
 ////		node_set = new int[]{51,52,58,64,65,67,68,69,85,103,104};
 ////		System.out.println("modSet = " + modularitySet(G, node_set));
+		
+		
+		// TEST avgF1Score()
+//		List<Integer []> C1 = new ArrayList<Integer[]>();
+//		Integer[] A1 = new Integer[]{1,3,2};
+//		Integer[] A2 = new Integer[]{4,3,2};
+//		Integer[] A3 = new Integer[]{1,2,6,5};
+//		C1.add(A1); C1.add(A2); C1.add(A3);
+//	
+//		List<Integer []> C2 = new ArrayList<Integer[]>();
+//		C2.add(A3); C2.add(A2); C2.add(A1);	C2.add(A2);		// F1 = 1.0 regardless the order of sets and set duplication !
+////		Integer[] B1 = new Integer[]{1,3,2,4};
+////		Integer[] B2 = new Integer[]{4,3};
+////		Integer[] B3 = new Integer[]{1,2,6,5};
+////		C2.add(B1); C2.add(B2); C2.add(B3);		// F1 = 0.8952
+//		
+//		double ret = avgF1Score(C2, C1);
+//		System.out.println("ret = " + ret);
+//		ret = avgF1Score(C1, C2);	// symmetric
+//		System.out.println("ret = " + ret);
+		
+		
+		// TEST relabelCommunity() + readGroundTruth()
+//		relabelCommunity("_data/com-amazon.ungraph.txt", "D:/git/itce2011/graph-dp/data/com_amazon_ungraph.nodemap", 
+//				"_data/com-amazon.top5000.cmty.txt", "_data/com_amazon_ungraph.top5000", 925872);
+//		relabelCommunity("_data/com-dblp.ungraph.txt", "D:/git/itce2011/graph-dp/data/com_dblp_ungraph.nodemap", 
+//				"_data/com-dblp.top5000.cmty.txt", "_data/com_dblp_ungraph.top5000", 1049866);
+//		relabelCommunity("_data/com-youtube.ungraph.txt", "D:/git/itce2011/graph-dp/data/com_youtube_ungraph.nodemap", 
+//				"_data/com-youtube.top5000.cmty.txt", "_data/com_youtube_ungraph.top5000", 2987624);
+			
+//		readGroundTruth("_data/com_amazon_ungraph.top5000", 334863);
+//		readGroundTruth("_data/com_dblp_ungraph.top5000", 317080);
+//		readGroundTruth("_data/com_youtube_ungraph.top5000", 1134890);
+		
+//		relabelCommunity("_data/com-amazon.ungraph.txt", "D:/git/itce2011/graph-dp/data/com_amazon_ungraph.nodemap", 
+//				"_data/com-amazon.all.dedup.cmty.txt", "_data/com_amazon_ungraph.all.dedup", 925872);
+//		relabelCommunity("_data/com-dblp.ungraph.txt", "D:/git/itce2011/graph-dp/data/com_dblp_ungraph.nodemap", 
+//				"_data/com-dblp.all.cmty.txt", "_data/com_dblp_ungraph.all", 1049866);
+//		relabelCommunity("_data/com-youtube.ungraph.txt", "D:/git/itce2011/graph-dp/data/com_youtube_ungraph.nodemap", 
+//				"_data/com-youtube.all.cmty.txt", "_data/com_youtube_ungraph.all", 2987624);
+
+//		readGroundTruth("_data/com_amazon_ungraph.all", 334863);
+//		readGroundTruth("_data/com_dblp_ungraph.all", 317080);
+//		readGroundTruth("_data/com_youtube_ungraph.all", 1134890);
+		
+		
+		
 	}
 
 }

@@ -150,7 +150,7 @@ def convert_to_metis_file(G, out_file):
     
 #######################################################
 #
-def normalize_and_save_graph(G, new_file):
+def normalize_and_save_graph(G, new_file, node_map_file = None):
     newG = nx.Graph()
     
     min_id = min(G.nodes_iter())
@@ -164,6 +164,14 @@ def normalize_and_save_graph(G, new_file):
         id_dict[u] = i
         i += 1
     
+    # write to node_map_file
+    f = open(node_map_file, 'w')
+    for (u,i) in id_dict.iteritems():
+        f.write("%d %d\n"%(u,i)) 
+    f.close();   
+    print "write .nodemap file - DONE"
+    
+    #
     for (u,v) in G.edges_iter():
         if u != v:
             newG.add_edge(id_dict[u], id_dict[v])
@@ -297,19 +305,19 @@ if __name__ == '__main__':
     print "in_file =", in_file
     print "out_file =", out_file
     start = time.clock()
-#    G = nx.read_edgelist("../data/com_amazon_ungraph_org.gr", '#', '\t', None, nodetype=int, data=False)
-    G = nx.read_edgelist(in_file, '#', '\t', None, nodetype=int, data=False)        # undirected G even for directed graphs !
+    G = nx.read_edgelist("../data/com_youtube_ungraph_org.gr", '#', '\t', None, nodetype=int, data=False)
+#    G = nx.read_edgelist(in_file, '#', '\t', None, nodetype=int, data=False)        # undirected G even ?for directed graphs !
     print "#edges =", G.number_of_edges()
     print "#selfloops =", G.number_of_selfloops()
     print "Read graph - elapsed ", time.clock() - start
     
-#    start = time.clock()
-#    normalize_and_save_graph(G, "../data/com_amazon_ungraph.gr")   #zero-based node ids and remove selfloops
-#    print "Normalize and save graph - elapsed ", time.clock() - start
-    
     start = time.clock()
-    convert_to_metis_file(G, out_file)
-    print "Convert to METIS file - elapsed ", time.clock() - start
+    normalize_and_save_graph(G, "../data/com_youtube_ungraph-2.gr", "../data/com_youtube_ungraph.nodemap")   #zero-based node ids and remove selfloops
+    print "Normalize and save graph - elapsed ", time.clock() - start
+    
+#    start = time.clock()
+#    convert_to_metis_file(G, out_file)
+#    print "Convert to METIS file - elapsed ", time.clock() - start
 
     # TEST generate_samples_and_save()
     start = time.clock()
