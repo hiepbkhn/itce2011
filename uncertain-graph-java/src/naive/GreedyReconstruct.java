@@ -5,6 +5,8 @@
  * 	- 
  * Sep 28
  * 	- add filterLaplaceAndLouvain(), use Louvain.java
+ * Oct 11
+ * 	- COMMAND-LINE
  */
 
 package naive;
@@ -131,30 +133,32 @@ public class GreedyReconstruct {
 	public static Grph filterLaplace(Grph G, double eps){
 		int n = G.getNumberOfVertices();
 		int m = G.getNumberOfEdges();
-		int m_noisy = m + DPUtil.geometricMechanism(Math.exp(-1));
+		double eps2 = 0.5;
+		int m_noisy = m + DPUtil.geometricMechanism(Math.exp(-eps2));
+		eps = eps - eps2;
 		
 		Grph aG = new InMemoryGrph();
 		aG.addNVertices((int)n);
 		
 		//
-		double eps_threshold = Math.log((double)n*(n-1)/(2.0*m) - 1);			// 2.0 to avoid rounding, (double)
+		double eps_threshold = Math.log((double)n*(n-1)/(2.0*m_noisy) - 1);			// 2.0 to avoid rounding, (double)
 		double theta = 0;
 		long n1 = 0;		// number of passed 1-cells
 		long n2 = 0;		// number of passed 0-cells
 		if (eps > eps_threshold){
-			theta = 1/(2*eps)*Math.log((double)n*(n-1)/(2.0*m) - 1) + 0.5;		// 2.0 to avoid rounding
-			n1 = Math.round(m/2 * (2-Math.exp(-eps*(1-theta))));	
+			theta = 1/(2*eps)*Math.log((double)n*(n-1)/(2.0*m_noisy) - 1) + 0.5;		// 2.0 to avoid rounding
+			n1 = Math.round(m_noisy/2 * (2-Math.exp(-eps*(1-theta))));	
 		}else{
-			theta = 1/eps*Math.log( ((double)n*(n-1)/2 + m*(Math.exp(eps) - 1)) / (2*m));
-			n1 = Math.round(m/2 * Math.exp(-eps*(theta-1)));
+			theta = 1/eps*Math.log( ((double)n*(n-1)/2 + m_noisy*(Math.exp(eps) - 1)) / (2*m_noisy));
+			n1 = Math.round(m_noisy/2 * Math.exp(-eps*(theta-1)));
 		}
 //		n2 = m - n1;
 		n2 = m_noisy-n1;
 		
 		// gamma = (m-1)/m
-		double upper_eps1 = Math.log((double)n*(n-1)*m/8 - (double)m*m/4);
+		double upper_eps1 = Math.log((double)n*(n-1)*m_noisy/8 - (double)m_noisy*m_noisy/4);
 		// gamma = 0.9
-		double upper_eps2 = Math.log(((double)n*(n-1)/2 - m)/(0.04*m) );
+		double upper_eps2 = Math.log(((double)n*(n-1)/2 - m_noisy)/(0.04*m_noisy) );
 		System.out.println("upper_eps1 = " + upper_eps1);
 		System.out.println("upper_eps2 = " + upper_eps2);
 		
@@ -309,37 +313,37 @@ public class GreedyReconstruct {
 													//				edit.score: ?s(8.0), 8s (16.0)	upper_eps1 = 40.71, upper_eps2 = 15.49		
 		
 		// COMMAND-LINE <prefix> <dataname> <n_samples> <eps>
-//		String prefix = "";
-//	    int n_samples = 10;
-//	    double eps = 1.0;
-//		
-//		if(args.length >= 4){
-//			prefix = args[0];
-//			dataname = args[1];
-//			n_samples = Integer.parseInt(args[2]);
-//			eps = Double.parseDouble(args[3]);
-//		}
-//		System.out.println("dataname = " + dataname);
-//		
-//		System.out.println("n_samples = " + n_samples);
-//		System.out.println("eps_c = " + eps);
-//		
-//		String filename = prefix + "_data/" + dataname + ".gr";
-//		String sample_file = prefix + "_sample/" + dataname + "_filter_" + String.format("%.1f", eps);
-//		System.out.println("sample_file = " + sample_file);
-//
-//		
-////		GrphTextReader reader = new GrphTextReader();
-//		EdgeListReader reader = new EdgeListReader();
-//		Grph G;
-//		RegularFile f = new RegularFile(filename);
-//		
-//		long start = System.currentTimeMillis();
-//		G = reader.readGraph(f);
-//		System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
-//		
-//		System.out.println("#nodes = " + G.getNumberOfVertices());
-//		System.out.println("#edges = " + G.getNumberOfEdges());
+		String prefix = "";
+	    int n_samples = 10;
+	    double eps = 1.0;
+		
+		if(args.length >= 4){
+			prefix = args[0];
+			dataname = args[1];
+			n_samples = Integer.parseInt(args[2]);
+			eps = Double.parseDouble(args[3]);
+		}
+		System.out.println("dataname = " + dataname);
+		
+		System.out.println("n_samples = " + n_samples);
+		System.out.println("eps_c = " + eps);
+		
+		String filename = prefix + "_data/" + dataname + ".gr";
+		String sample_file = prefix + "_sample/" + dataname + "_tmf_" + String.format("%.1f", eps);		// Oct 11, _filter_ --> _tmf_
+		System.out.println("sample_file = " + sample_file);
+
+		
+//		GrphTextReader reader = new GrphTextReader();
+		EdgeListReader reader = new EdgeListReader();
+		Grph G;
+		RegularFile f = new RegularFile(filename);
+		
+		long start = System.currentTimeMillis();
+		G = reader.readGraph(f);
+		System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
+		
+		System.out.println("#nodes = " + G.getNumberOfVertices());
+		System.out.println("#edges = " + G.getNumberOfEdges());
 
 		// TEST addLaplaceNoise(), greeadyMapLaplace()
 //		int n_nodes = G.getNumberOfVertices();
@@ -375,60 +379,61 @@ public class GreedyReconstruct {
 		
 		
 		// TEST filterLaplace()
-//		for (int i = 0; i < n_samples; i++){
-//			System.out.println("sample i = " + i);
-//		
+		for (int i = 0; i < n_samples; i++){
+			System.out.println("sample i = " + i);
+		
+			start = System.currentTimeMillis();
+			Grph aG = filterLaplace(G, eps);
+			System.out.println("filterLaplace - DONE, elapsed " + (System.currentTimeMillis() - start));
+			System.out.println("#nodes = " + aG.getNumberOfVertices());
+			System.out.println("#edges = " + aG.getNumberOfEdges());
+			
 //			start = System.currentTimeMillis();
-//			Grph aG = filterLaplace(G, eps);
-//			System.out.println("filterLaplace - DONE, elapsed " + (System.currentTimeMillis() - start));
-//			System.out.println("#nodes = " + aG.getNumberOfVertices());
-//			System.out.println("#edges = " + aG.getNumberOfEdges());
-//			
-////			start = System.currentTimeMillis();
-////			System.out.println("edit distance (aG, G) = " + editScore(aG, G));
-////			System.out.println("editScore - DONE, elapsed " + (System.currentTimeMillis() - start));
-//			
-//			f = new RegularFile(sample_file + "." + i);
-//			EdgeListWriter writer = new EdgeListWriter();
-//	    	writer.writeGraph(aG, f);
-//		
-//		}
+//			System.out.println("edit distance (aG, G) = " + editScore(aG, G));
+//			System.out.println("editScore - DONE, elapsed " + (System.currentTimeMillis() - start));
+			
+			f = new RegularFile(sample_file + "." + i);
+			EdgeListWriter writer = new EdgeListWriter();
+	    	writer.writeGraph(aG, f);
+		
+		}
 		
 		
 		// TEST filterLaplaceAndLouvain()
-		int n_samples = 1;
-		String[] dataname_list = new String[]{"com_amazon_ungraph"}; //com_amazon_ungraph, "com_dblp_ungraph", "com_youtube_ungraph"};
-//		double[][] eps_list = new double[][]{{5.0, 10.0, 20.0, 30.0}, {5.0, 10.0, 20.0, 30.0}, {10.0, 20.0, 30.0, 50.0}};
-	    double[][] eps_list = new double[][]{{0.5*12.72, 12.72, 1.5*12.72, 2*12.72}, {5.0, 10.0}, {5.0, 10.0}};
-	    
-	    Grph G;
-	    
-	    for (int i = 0; i < dataname_list.length; i++){
-	    	dataname = dataname_list[i];
-	    	
-	    	System.out.println("dataname = " + dataname);
-	    	
-	    	String filename = "_data/" + dataname + ".gr";
-	    	
-			EdgeListReader reader = new EdgeListReader();
-			RegularFile f = new RegularFile(filename);
-			long start = System.currentTimeMillis();
-			G = reader.readGraph(f);
-			System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
-			
-			System.out.println("#nodes = " + G.getNumberOfVertices());
-			System.out.println("#edges = " + G.getNumberOfEdges());    	
-			
-	    	for (double eps : eps_list[i]){
-	    		
-	    		String sample_file = "_sample/" + dataname + "_filter_" + String.format("%.1f", eps);
-	    		String part_file = "_out/" + dataname + "_filter_" + String.format("%.1f", eps);
-	    		
-	    		System.out.println("eps = " + eps);
-	    		
-	    		filterLaplaceAndLouvain(G, eps, sample_file, part_file, n_samples);
-	    	}
-	    }
+//		int n_samples = 1;
+//		String[] dataname_list = new String[]{"com_amazon_ungraph"}; //com_amazon_ungraph, "com_dblp_ungraph", "com_youtube_ungraph"};
+////		double[][] eps_list = new double[][]{{5.0, 10.0, 20.0, 30.0}, {5.0, 10.0, 20.0, 30.0}, {10.0, 20.0, 30.0, 50.0}};
+//	    double[][] eps_list = new double[][]{{0.5*12.72, 12.72, 1.5*12.72, 2*12.72}, {5.0, 10.0}, {5.0, 10.0}};
+//	    
+//	    Grph G;
+//	    
+//	    for (int i = 0; i < dataname_list.length; i++){
+//	    	dataname = dataname_list[i];
+//	    	
+//	    	System.out.println("dataname = " + dataname);
+//	    	
+//	    	String filename = "_data/" + dataname + ".gr";
+//	    	
+//			EdgeListReader reader = new EdgeListReader();
+//			RegularFile f = new RegularFile(filename);
+//			long start = System.currentTimeMillis();
+//			G = reader.readGraph(f);
+//			System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
+//			
+//			System.out.println("#nodes = " + G.getNumberOfVertices());
+//			System.out.println("#edges = " + G.getNumberOfEdges());    	
+//			
+//	    	for (double eps : eps_list[i]){
+//	    		
+//	    		String sample_file = "_sample/" + dataname + "_filter_" + String.format("%.1f", eps);
+//	    		String part_file = "_out/" + dataname + "_filter_" + String.format("%.1f", eps);
+//	    		
+//	    		System.out.println("eps = " + eps);
+//	    		
+//	    		filterLaplaceAndLouvain(G, eps, sample_file, part_file, n_samples);
+//	    	}
+//	    }
+		
 	}
 
 }

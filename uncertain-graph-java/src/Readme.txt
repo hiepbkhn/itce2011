@@ -1,3 +1,5 @@
+CLASSPATH: D:\git\itce2011\uncertain-graph-java\bin;E:\caidat\Java\grph-1.6.29-selfcontained\*
+
 
 [algs4] http://algs4.cs.princeton.edu/
 - EdgeWeightedGraph.java: used in Louvain
@@ -42,7 +44,9 @@
 - Louvain.java: converted from Python 'community'
 - LouvainInt.java: use EdgeInt, EdgeIntGraph
 
-- LouvainDP.java: e-DP by input perturbation
+- LouvainDP.java: e-DP by input perturbation (equal-sized supernodes)
+
+- LouvainModDiv.java: call NodeSetLouvain
 - NodeSetLouvain.java:  MCMC at the first level, used in LouvainDP
 
 - Scan.java: SCAN algorithm

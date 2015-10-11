@@ -1,6 +1,7 @@
 /*
  * Sep 29, 2015
  * 	- community measures: 
+ * 		+ modularity
  * 		+ F1-score (WWW'14, EDBTw'15)
  * 		+ Normalized mutual information [NMI] (Lancichinetti)
  * 		+ inter/intra-cluster accuracy [A-inter, A-intra](ICML'07)
@@ -8,8 +9,8 @@
  * 	- modularitySet(Grph), modularitySet(EdgeWeightedGraph) for checking every modularity function
  * Oct 8
  * 	- implement NMI
- * Oct 8
- * 	- implement F1
+ * Oct 9
+ * 	- implement F1 (avgF1Score): two versions
  */
 
 package dp.combined;
@@ -26,6 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -374,36 +376,140 @@ public class CommunityMeasure {
 	public static int intersect(Integer[] A, Integer[] B){
 		int ret = 0;
 		
+		// WAY-1, if A, B are already sorted
 		int iA = 0;
 		int iB = 0;
+		
+		
 		while (iA < A.length && iB < B.length){
-			if (A[iA] == B[iB]){
+//			System.out.println(iA + " " + iB);
+			if (A[iA].compareTo(B[iB]) == 0){
 				ret += 1;
-				iA ++;
-				iB ++;
-				
-			}else if (A[iA] > B[iB]){
-				iB ++;
-			}else{
-				iA ++;
+				iA += 1;
+				iB += 1;
+				continue;
 			}
+			if (A[iA].compareTo(B[iB]) > 0){
+				iB += 1;
+				continue;
+			}
+			if (A[iA].compareTo(B[iB]) < 0){
+				iA += 1;
+				continue;
+			}
+			
 		}
 		
+		// WAY-2
+//		if (A.length < B.length){
+//			HashSet<Integer> setB = new HashSet<Integer>(Arrays.asList(B));
+//			for (int val : A)
+//				if (setB.contains(val))
+//					ret += 1;
+//		}else{
+//			HashSet<Integer> setA = new HashSet<Integer>(Arrays.asList(A));
+//			for (int val : B)
+//				if (setA.contains(val))
+//					ret += 1;
+//		}
 		
 		
 		//
 		return ret;
 	}
 	
-	//
+	// non-overlap communitites
+	public static double avgF1Score(int[] part_org, int[] part){
+		double ret = 0.0;
+		
+		int n = part_org.length;
+		
+		int k_org = 0;
+		for (int com : part_org)
+			if (k_org < com)
+				k_org = com;
+		k_org += 1;
+		
+		int k = 0;
+		for (int com : part)
+			if (k < com)
+				k = com;
+		k += 1;
+		
+		int[] sizeC1 = new int[k_org];
+		int[] sizeC2 = new int[k];
+		
+		// intersection
+		int[][] inter = new int[k_org][k];
+		
+		for (int u = 0; u < n; u++){
+			inter[part_org[u]][part[u]] += 1;
+			sizeC1[part_org[u]] += 1;
+			sizeC2[part[u]] += 1;
+		}
+		
+		// 
+		double[][] prec = new double[k_org][k];
+		double[][] recall = new double[k_org][k];
+		double[][] H = new double[k_org][k];
+		
+		for (int i = 0; i < k_org; i++){
+			for (int j = 0; j < k; j++){
+				if (inter[i][j] > 0){
+					prec[i][j] = (double)inter[i][j] / sizeC1[i];
+					recall[i][j] = (double)inter[i][j] / sizeC2[j];
+					H[i][j] = 2*prec[i][j]*recall[i][j]/(prec[i][j] + recall[i][j]);
+				}
+			}
+		}
+		
+		double[] F1 = new double[k_org];
+		double[] F2 = new double[k];
+		
+		// F1(C1[i], C2)
+		for (int i = 0; i < k_org; i++)
+			for (int j = 0; j < k; j++)
+				if (inter[i][j] > 0)
+					if (F1[i] < H[i][j])
+						F1[i] = H[i][j];
+		
+		// F1(C2[j], C1)
+		for (int j = 0; j < k; j++)
+			for (int i = 0; i < k_org; i++)
+				if (inter[i][j] > 0)
+					if (F2[j] < H[i][j])
+						F2[j] = H[i][j];
+		
+		double sum1 = 0.0;
+		double sum2 = 0.0;
+		for (int i = 0; i < k_org; i++)
+			sum1 += F1[i];
+		for (int j = 0; j < k; j++)
+			sum2 += F2[j];
+		
+		ret = sum1/(2*k_org) + sum2/(2*k); 
+		
+		
+		//
+		return ret;
+	}
+	
+	// allow overlap communitites
 	public static double avgF1Score(List<Integer []> C1, List<Integer []> C2){
 		double ret = 0.0;
 		
-		// 1. sort sets in each list
-		for (Integer[] A : C1)
-			 Arrays.sort(A);
-		for (Integer[] B : C2)
-			 Arrays.sort(B);
+		// 1. sort sets in each list --> 
+		for (int i = 0; i < C1.size(); i++){
+			Integer[] A = C1.get(i);
+			Arrays.sort(A);
+			C1.set(i, A);
+		}
+		for (int i = 0; i < C2.size(); i++){
+			Integer[] B = C2.get(i);
+			Arrays.sort(B);
+			C2.set(i, B);
+		}
+		
 		
 		// 
 		int[] sizeC1 = new int[C1.size()];
@@ -420,13 +526,16 @@ public class CommunityMeasure {
 		double[][] recall = new double[C1.size()][C2.size()];
 		double[][] H = new double[C1.size()][C2.size()];
 		
-		for (int i = 0; i < C1.size(); i++)
+		for (int i = 0; i < C1.size(); i++){
 			for (int j = 0; j < C2.size(); j++){
 				inter[i][j] = intersect(C1.get(i), C2.get(j));
-				prec[i][j] = (double)inter[i][j] / sizeC1[i];
-				recall[i][j] = (double)inter[i][j] / sizeC2[j];
-				H[i][j] = 2*prec[i][j]*recall[i][j]/(prec[i][j] + recall[i][j]);
+				if (inter[i][j] > 0){
+					prec[i][j] = (double)inter[i][j] / sizeC1[i];
+					recall[i][j] = (double)inter[i][j] / sizeC2[j];
+					H[i][j] = 2*prec[i][j]*recall[i][j]/(prec[i][j] + recall[i][j]);
+				}
 			}
+		}
 		
 		double[] F1 = new double[C1.size()];
 		double[] F2 = new double[C2.size()];
@@ -434,13 +543,16 @@ public class CommunityMeasure {
 		// F1(C1[i], C2)
 		for (int i = 0; i < C1.size(); i++)
 			for (int j = 0; j < C2.size(); j++)
-				if (F1[i] < H[i][j])
-					F1[i] = H[i][j];
+				if (inter[i][j] > 0)
+					if (F1[i] < H[i][j])
+						F1[i] = H[i][j];
+		
 		// F1(C2[j], C1)
 		for (int j = 0; j < C2.size(); j++)
 			for (int i = 0; i < C1.size(); i++)
-				if (F2[j] < H[i][j])
-					F2[j] = H[i][j];
+				if (inter[i][j] > 0)
+					if (F2[j] < H[i][j])
+						F2[j] = H[i][j];
 		
 		double sum1 = 0.0;
 		double sum2 = 0.0;
@@ -581,10 +693,10 @@ public class CommunityMeasure {
 //		String compare_file = "com_amazon_ungraph_moddivopt_1_100_20_8.part";
 //		String compare_file = "com_amazon_ungraph_nodesetlv_20_5_5.0.part";		//
 //		String compare_file = "com_amazon_ungraph_nodesetlv_20_10_10.0.part";	//				
-		String compare_file = "com_amazon_ungraph_edgeflip_12.7-0.part";		// EdgeFlip		aIntra = 0.4181, aInter = 0.9935, ARI = 0.4416
+//		String compare_file = "com_amazon_ungraph_edgeflip_12.7-0.part";		// EdgeFlip		aIntra = 0.4181, aInter = 0.9935, ARI = 0.4416
 //		String compare_file = "com_amazon_ungraph_filter_6.4-0.part";			// TmF
 //		String compare_file = "com_amazon_ungraph_filter_12.7-0.part";			// TmF			aIntra = 0.2427, aInter = 0.9925, ARI = 0.2691
-//		String compare_file = "com_amazon_ungraph_nodesetlv2_20_40_10_1_2.00_20.0_5.part";
+		String compare_file = "com_amazon_ungraph_nodesetlv2_20_40_10_1_2.00_20.0_5.part";
 //		String compare_file = "com_amazon_ungraph_hrgdivgreedy_20_40_10_8_2.00_20.0.part";	// 
 //		String compare_file = "com_amazon_ungraph_nodesetlv2_20_40_10_4_2.00_20.0_5.part3";	// NodeSetLouvain
 //		String compare_file = "com_amazon_ungraph_nodesetlv2_20_40_10_3_2.00_20.0_10.best";	// NodeSetLouvain
@@ -593,22 +705,22 @@ public class CommunityMeasure {
 		
 		
 		//
-		EdgeListReader reader = new EdgeListReader();
-		Grph G;
-		RegularFile f = new RegularFile(filename);
-		G = reader.readGraph(f);
-		
-		System.out.println("#nodes = " + G.getNumberOfVertices());
-		System.out.println("#edges = " + G.getNumberOfEdges());
+//		EdgeListReader reader = new EdgeListReader();
+//		Grph G;
+//		RegularFile f = new RegularFile(filename);
+//		G = reader.readGraph(f);
+//		
+//		System.out.println("#nodes = " + G.getNumberOfVertices());
+//		System.out.println("#edges = " + G.getNumberOfEdges());
 		
 		//
 		int[] louvain_part = readPart(path + louvain_file, n_nodes);
 		int[] compare_part = readPart(path + compare_file, n_nodes);
 		
-		System.out.println("louvain_file = " + louvain_file);
-		System.out.println("louvain mod = " + modularity(G, louvain_part));
-		System.out.println("compare_file = " + compare_file);
-		System.out.println("compare mod = " + modularity(G, compare_part));
+//		System.out.println("louvain_file = " + louvain_file);
+//		System.out.println("louvain mod = " + modularity(G, louvain_part));
+//		System.out.println("compare_file = " + compare_file);
+//		System.out.println("compare mod = " + modularity(G, compare_part));
 		
 		//
 		long start = System.currentTimeMillis();
@@ -633,6 +745,7 @@ public class CommunityMeasure {
 		System.out.println("lv.size = " + lv.size());
 		System.out.println("cp.size = " + cp.size());
 		System.out.println("Avg.F1 score (lv,cp) = " + avgF1Score(lv, cp));
+		System.out.println("Avg.F1 score (lv,cp) = " + avgF1Score(louvain_part, compare_part));
 		
 		// Avg.F1 score
 //		List<Integer[]> gt = readGroundTruth("_data/com_amazon_ungraph.top5000", n_nodes);

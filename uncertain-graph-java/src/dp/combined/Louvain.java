@@ -888,7 +888,7 @@ public class Louvain {
 	////////////////////////////////////////////////
 	public static void main(String[] args) throws Exception{
 		// load graph
-		String dataname = "example";			// 
+//		String dataname = "example";			// 
 //		String dataname = "karate";			// (34, 78) 		ok
 //		String dataname = "polbooks";		// (105, 441)		ok
 //		String dataname = "polblogs";		// (1224,16715)		ok 	
@@ -906,7 +906,7 @@ public class Louvain {
 		// LARGE
 //		String dataname = "com_amazon_ungraph";		// (334863,925872)	17.8s
 //		String dataname = "com_dblp_ungraph";		// (317080,1049866)	27.2s 			(new : 20s, Mem 1.5GB)
-//		String dataname = "com_youtube_ungraph";	// (1134890,2987624) 670s, 2.2GB)	(new : 42s, Mem 2.7GB)
+		String dataname = "com_youtube_ungraph";	// (1134890,2987624) 670s, 2.2GB)	(new : 42s, Mem 2.7GB)
 													//						
 		// COMMAND-LINE <prefix> <dataname> <n_samples> <eps>
 		String prefix = "";
@@ -933,9 +933,10 @@ public class Louvain {
 		Louvain.writePart(part, part_file);
 		System.out.println("writePart - DONE");
 		
-//		int[] part1 = new int[]{0,0,0,1,1,2,2,3,3,3,3,2,2};
-		int[] part1 = new int[]{0,0,0,2,2,2,2,3,3,3,3,2,2};
-		System.out.println(CommunityMeasure.modularity(G, part1));
+		// example.gr
+////		int[] part1 = new int[]{0,0,0,1,1,2,2,3,3,3,3,2,2};
+//		int[] part1 = new int[]{0,0,0,2,2,2,2,3,3,3,3,2,2};
+//		System.out.println(CommunityMeasure.modularity(G, part1));
 	}
 
 }

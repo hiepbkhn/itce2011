@@ -10,7 +10,9 @@ package algs4;
 import hist.Int2;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -331,6 +333,18 @@ public class EdgeWeightedGraph {
     		ret.addEdge(new Edge(e.val0, e.val1, 1.0));
     	
     	return ret;
+    }
+    
+    public static void writeGraph(EdgeWeightedGraph G, String filename) throws IOException{
+    	
+    	BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
+    	for (Edge e : G.edges()){
+    		int u = e.either();
+    		int v = e.other(u);
+    		bw.write(u + "\t" + v + "\t" + e.weight() + "\n");
+    	}
+    	
+    	bw.close();
     }
     
     /**
