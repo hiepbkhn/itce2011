@@ -114,7 +114,7 @@ public class LouvainOpt {
 //		NodeSetLouvainOpt root_set = NodeSetLouvainOpt.readTree("_sample/karate_nmd_20_3_2_tree.0");
 //		System.out.println("readTree - DONE");
 //		
-//		List<NodeSetLouvainOpt> best_cut = NodeSetLouvainOpt.bestCutOffline(root_set, G.E());
+//		List<NodeSetLouvainOpt> best_cut = NodeSetLouvainOpt.bestCutOffline(root_set);
 	}
 
 }

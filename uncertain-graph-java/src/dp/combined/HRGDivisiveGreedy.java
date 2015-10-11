@@ -47,30 +47,36 @@ public class HRGDivisiveGreedy {
 		int limit_size = 40;		// at least 4*lower_size
 		int lower_size = 10;		// at least 2
 		int max_level = 8;
-		double eps1 = 20.0;
+		double eps = 20.0;
 		double ratio = 2.0; // 1.26 = 2^(1/3)
+		double eps_mod = 0.1;		// epsilon used in bestCut()
 		
-		if(args.length >= 4){
+		if(args.length >= 7){
 			prefix = args[0];
 			dataname = args[1];
 			n_samples = Integer.parseInt(args[2]);
 			burn_factor = Integer.parseInt(args[3]);
+			max_level = Integer.parseInt(args[4]);
+			eps = Double.parseDouble(args[5]);
+			ratio = Double.parseDouble(args[6]);
 		}
-		if(args.length >= 5)
-			limit_size = Integer.parseInt(args[4]);
 		
 		System.out.println("dataname = " + dataname);
 		System.out.println("burn_factor = " + burn_factor + " n_samples = " + n_samples);
 		System.out.println("limit_size = " + limit_size);
 		System.out.println("lower_size = " + lower_size);
 		System.out.println("max_level = " + max_level);
-		System.out.println("eps1 = " + eps1);
+		System.out.println("eps = " + eps);
 		System.out.println("ratio = " + ratio);
+		
+		double eps1 = eps - eps_mod*max_level;
 		
 		//
 		String filename = prefix + "_data/" + dataname + ".gr";	// EdgeListReader
-		String part_file = prefix + "_out/" + dataname +"_hrgdivgreedy_" + burn_factor + "_" + limit_size + "_" + lower_size + "_" 
-				+ max_level + "_" + String.format("%.2f", ratio) + "_" + String.format("%.1f", eps1) + ".part";
+//		String part_file = prefix + "_out/" + dataname +"_hrgdivgreedy_" + burn_factor + "_" + limit_size + "_" + lower_size + "_" 
+//				+ max_level + "_" + String.format("%.2f", ratio) + "_" + String.format("%.1f", eps1) + ".part";
+		String tree_file = prefix + "_sample/" + dataname +"_hd_" + burn_factor + "_"
+				+ max_level + "_" + String.format("%.1f", eps) + "_" + String.format("%.2f", ratio) + "_tree";
 		
 		//
 		/*
@@ -104,14 +110,18 @@ public class HRGDivisiveGreedy {
 			NodeSetDivGreedy root_set = NodeSetDivGreedy.recursiveLK(G, eps1, burn_factor, limit_size, lower_size, max_level, ratio);	
 			System.out.println("recursiveLK - DONE, elapsed " + (System.currentTimeMillis() - start));
 			
-			NodeSetDivGreedy.printSetIds(root_set, G.E());
+//			NodeSetDivGreedy.printSetIds(root_set, G.E());
 			System.out.println("final modularity = " + root_set.modularityAll(G.E()));
 			
+			NodeSetDivGreedy.writeTree(root_set, tree_file + "." + i, G.E());
+			System.out.println("writeTree - DONE");
+			
+			//
 //			NodeSetDivGreedy.writePart(root_set, part_file);
 //			System.out.println("writePart - DONE");
 			
-			List<NodeSetDivGreedy> best_cut = NodeSetDivGreedy.bestCut(root_set, G.E());
-			NodeSetDivGreedy.writeBestCut(best_cut, part_file);
+//			List<NodeSetDivGreedy> best_cut = NodeSetDivGreedy.bestCut(root_set, G.E());
+//			NodeSetDivGreedy.writeBestCut(best_cut, part_file);
 		}
 
 	}

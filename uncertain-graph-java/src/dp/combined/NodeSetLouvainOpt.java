@@ -759,7 +759,7 @@ public class NodeSetLouvainOpt {
 	
 	
 	////dynamic programming: opt(R) = max{mod(R), opt(R.left) + opt(R.right)}
-	public static List<NodeSetLouvainOpt> bestCutOffline(NodeSetLouvainOpt root_set, int m){
+	public static List<NodeSetLouvainOpt> bestCutOffline(NodeSetLouvainOpt root_set){
 		
 		List<NodeSetLouvainOpt> ret = new ArrayList<NodeSetLouvainOpt>();
 		Map<Integer, CutNode> sol = new HashMap<Integer, CutNode>();	// best solution node.id --> CutNode info

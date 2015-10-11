@@ -12,6 +12,8 @@
  * Sep 24
  * 	- not use IntHashSet.pickRandomElement, copied from NodeSetDivGreedy.java
  * 	- use EdgeWeightedGraph in place of EdgeWeightedGraph
+ * Oct 11
+ * 	- copy writeTree, readTree, bestCutOffline from NodeSetLouvainOpt
  */
 
 package dp.combined;
@@ -65,6 +67,7 @@ public class NodeSetDivGreedy {
 	public NodeSetDivGreedy parent, left, right;		// for recursive partitioning
 	public int id;
 	public int level = 0;
+	public double modSelf = 0.0;	// see writeTree, readTree
 	
 	////
 	public static NodeSetDivGreedy getSubSet(EdgeWeightedGraph G, NodeSetDivGreedy R, boolean val){
@@ -418,7 +421,7 @@ public class NodeSetDivGreedy {
 	    double dU = Math.log(nMax) + (nMax-1)*Math.log(1+1.0/(nMax-1));
 		
 //		if (print_out)
-			System.out.println("#steps = " + (n_steps + n_samples * sample_freq));
+//			System.out.println("#steps = " + (n_steps + n_samples * sample_freq));
 
 		int out_freq = (n_steps + n_samples * sample_freq) / 10;
 		//
@@ -556,7 +559,7 @@ public class NodeSetDivGreedy {
 		queue.add(root);
 		while(queue.size() > 0){
 			NodeSetDivGreedy R = queue.remove();
-			System.out.println("R.level = " + R.level + " R.S.size() + R.T.size() = " + R.ind.length);
+//			System.out.println("R.level = " + R.level + " R.S.size() + R.T.size() = " + R.ind.length);
 			
 			// USE limit_size
 			if (R.ind.length <= limit_size || R.level == max_level)		// changed: < to <=
@@ -564,7 +567,7 @@ public class NodeSetDivGreedy {
 			
 			long start = System.currentTimeMillis();
 			NodeSetDivGreedy.partitionLK(R, G, epsArr[R.level], burn_factor*R.ind.length, 0, 0, false, lower_size);
-			System.out.println("elapsed " + (System.currentTimeMillis() - start));
+//			System.out.println("elapsed " + (System.currentTimeMillis() - start));
 			
 			
 			NodeSetDivGreedy RS = getSubSet(G, R, true);
@@ -773,5 +776,199 @@ public class NodeSetDivGreedy {
 		
 		bw.close();
 	}
+
+	////
+	public static void writeTree(NodeSetDivGreedy root_set, String tree_file, int m) throws IOException{
+		BufferedWriter bw = new BufferedWriter(new FileWriter(tree_file));
+		
+		Queue<NodeSetDivGreedy> queue = new LinkedList<NodeSetDivGreedy>();
+		queue.add(root_set);
+		while (queue.size() > 0){
+			NodeSetDivGreedy R = queue.remove();
+			bw.write(R.id + ":" + R.modularitySelf(m) + ";");
+			
+			if (R.left != null){
+				bw.write(R.left.id + "," + R.right.id);
+				queue.add(R.left);
+				queue.add(R.right);
+			}else{	// leaf
+				for (int s = 0; s < R.ind.length; s++)
+					if (R.ind[s] == true)
+						bw.write(R.ind2node[s] + ",");
+				for (int s = 0; s < R.ind.length; s++)
+					if (R.ind[s] == false)
+						bw.write(R.ind2node[s] + ",");
+				bw.write("\n");
+			}
+			
+			bw.write("\n");
+			
+		}
+		
+		bw.close();
+	}
 	
+	////
+	public static NodeSetDivGreedy readTree(String tree_file) throws IOException{
+		Map<Integer, NodeSetDivGreedy> map = new HashMap<Integer, NodeSetDivGreedy>();
+		
+		BufferedReader br = new BufferedReader(new FileReader(tree_file));
+		//
+		while (true){
+        	String str = br.readLine();
+        	if (str == null)
+        		break;
+        	int id = Integer.parseInt(str.substring(0, str.indexOf(":")));
+        	double modSelf = Double.parseDouble(str.substring(str.indexOf(":") + 1,str.indexOf(";")));
+        	
+        	NodeSetDivGreedy node = new NodeSetDivGreedy();	
+        	node.id = id;
+        	node.modSelf = modSelf;
+        	
+        	map.put(node.id, node);
+        	//
+        	String val = str.substring(str.indexOf(";") + 1);
+        	String[] items = val.split(",");
+        	int[] values = new int[items.length];
+        	for (int i = 0; i < items.length; i++)
+        		values[i] = Integer.parseInt(items[i]);
+
+        	if (values[0] >= 0){ // leaf node sets
+//	        		System.out.println("LEAF node.id = " + node.id);
+        		
+        		node.ind2node = new int[values.length];
+//	        		System.out.println("node.ind2node.length = " + node.ind2node.length);
+        		System.arraycopy(values, 0, node.ind2node, 0, values.length);
+        	}
+		}
+		br.close();
+		
+		// read again to build tree (compute node.children)
+		br = new BufferedReader(new FileReader(tree_file));
+		while (true){
+        	String str = br.readLine();
+        	if (str == null)
+        		break;
+        	
+        	int id = Integer.parseInt(str.substring(0, str.indexOf(":")));
+        	
+        	String val = str.substring(str.indexOf(";") + 1);
+        	String[] items = val.split(",");
+        	int[] values = new int[items.length];
+        	for (int i = 0; i < items.length; i++)
+        		values[i] = Integer.parseInt(items[i]);
+        	
+        	
+        	if (values[0] < 0){ // child node ids
+        		NodeSetDivGreedy cur_node = map.get(id);
+        		
+    			cur_node.left = map.get(values[0]);
+    			cur_node.right = map.get(values[0]);
+        		cur_node.left.level = cur_node.level + 1;
+        		cur_node.right.level = cur_node.level + 1;
+        	}
+		}
+		
+		br.close();
+		
+		// compute node.ind2node
+		NodeSetDivGreedy root_set = map.get(-1);
+		Queue<NodeSetDivGreedy> queue = new LinkedList<NodeSetDivGreedy>();
+		Stack<NodeSetDivGreedy> stack = new Stack<NodeSetDivGreedy>();
+		
+		// fill stack using queue
+		queue.add(root_set);
+		while (queue.size() > 0){
+			NodeSetDivGreedy R = queue.remove();
+			stack.push(R);
+			if (R.left != null){
+				queue.add(R.left);
+				queue.add(R.right);
+			}
+		}
+		
+		// 
+		while (stack.size() > 0){
+			NodeSetDivGreedy R = stack.pop();
+			
+			if (R.ind2node == null){	// not leaf
+				int len = R.left.ind2node.length + R.right.ind2node.length;
+				
+				R.ind2node = new int[len];
+				int count = 0;
+				for (int u : R.left.ind2node)
+					R.ind2node[count++] = u;
+				for (int u : R.right.ind2node)
+					R.ind2node[count++] = u;
+			}
+				
+		}
+		
+		//
+		return root_set;
+	}
+	
+	
+	////dynamic programming: opt(R) = max{mod(R), opt(R.left) + opt(R.right)}
+	public static List<NodeSetDivGreedy> bestCutOffline(NodeSetDivGreedy root_set){
+		
+		List<NodeSetDivGreedy> ret = new ArrayList<NodeSetDivGreedy>();
+		Map<Integer, CutNode> sol = new HashMap<Integer, CutNode>();	// best solution node.id --> CutNode info
+		
+		Queue<NodeSetDivGreedy> queue = new LinkedList<NodeSetDivGreedy>();
+		Stack<NodeSetDivGreedy> stack = new Stack<NodeSetDivGreedy>();
+		
+		// fill stack using queue
+		queue.add(root_set);
+		while (queue.size() > 0){
+			NodeSetDivGreedy R = queue.remove();
+			stack.push(R);
+			if (R.left != null){
+				queue.add(R.left);
+				queue.add(R.right);
+			}
+		}
+		
+		// 
+		while (stack.size() > 0){
+			NodeSetDivGreedy R = stack.pop();
+			
+			double mod = R.modSelf;			// non-private, need modularitySelfDP() !
+			boolean self = true;
+			if (R.left == null){	// leaf nodes
+				sol.put(R.id, new CutNode(mod, true));
+			}else{
+				//
+				double mod_opt = sol.get(R.left.id).mod + sol.get(R.right.id).mod;
+				if (mod < mod_opt){
+					mod = mod_opt;
+					self = false;
+				}
+					
+				sol.put(R.id, new CutNode(mod, self));
+			}
+		}
+		
+		System.out.println("sol.size = " + sol.size());
+		System.out.println("best modularity = " + sol.get(-1).mod);
+		
+		// compute ret
+		queue = new LinkedList<NodeSetDivGreedy>();
+		queue.add(root_set);
+		while (queue.size() > 0){
+			NodeSetDivGreedy R = queue.remove();
+			
+			if (sol.get(R.id).self == true){
+				ret.add(R);
+				System.out.print(R.id + " ");
+			}else if (R.left != null){
+				queue.add(R.left);
+				queue.add(R.right);
+			}
+		}
+		System.out.println();
+		
+		//
+		return ret;
+	}
 }
