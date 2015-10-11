@@ -20,7 +20,7 @@ public class LouvainOpt {
 		System.out.println("LouvainOpt");
 		
 		// load graph
-//		String dataname = "karate";			// (34, 78)	
+		String dataname = "karate";			// (34, 78)	
 //		String dataname = "polbooks";		// (105, 441)		
 											// 		
 //		String dataname = "polblogs";		// (1224,16715) 	
@@ -35,7 +35,7 @@ public class LouvainOpt {
 //		String dataname = "ca-AstroPh";		// (18771,198050) 	burn = 30, max_level = 8, (40,10) final mod = 0.412, bestCut=0.498 (95s)
 		
 		// LARGE
-		String dataname = "com_amazon_ungraph"; // (334863,925872) 	par.Louvain (k,max_level,mod): (2,10,0.712), (3,6,0.711), (5,4,0.673), (6,3,0.641), (10,3,0.558), (20,2,0.427)
+//		String dataname = "com_amazon_ungraph"; // (334863,925872) 	par.Louvain (k,max_level,mod): (2,10,0.712), (3,6,0.711), (5,4,0.673), (6,3,0.641), (10,3,0.558), (20,2,0.427)
 												//					max.Louvain (k,max_level,mod): (2,10,0.307), (3,6,0.451), (5,4,0.687), (6,3,0.706), (10,3,0.728), (20,2,0.743)
 //		String dataname = "com_dblp_ungraph";  	// (317080,1049866) 
 //		String dataname = "com_youtube_ungraph";// (1134890,2987624)burn = 10, max_level = 8, (100,20) final mod = 0.356, bestCut=0.494 (840s)
@@ -46,24 +46,22 @@ public class LouvainOpt {
 		String prefix = "";
 		int n_samples = 1;
 		int burn_factor = 20;
-		int limit_size = 40;		// at least 4*lower_size
-		int lower_size = 10;		// at least 2
-		int max_level = 10;
+		int limit_size = 40;		// NOT USE
+		int max_level = 3;
 		int k = 2;
 		
-		if(args.length >= 4){
+		if(args.length >= 6){
 			prefix = args[0];
 			dataname = args[1];
 			n_samples = Integer.parseInt(args[2]);
 			burn_factor = Integer.parseInt(args[3]);
+			max_level = Integer.parseInt(args[4]);
+			k = Integer.parseInt(args[5]);
 		}
-		if(args.length >= 5)
-			limit_size = Integer.parseInt(args[4]);
 		
 		System.out.println("dataname = " + dataname);
 		System.out.println("burn_factor = " + burn_factor + " n_samples = " + n_samples);
 		System.out.println("limit_size = " + limit_size);
-		System.out.println("lower_size = " + lower_size);
 		System.out.println("max_level = " + max_level);
 		System.out.println("k = " + k);
 		
@@ -87,8 +85,9 @@ public class LouvainOpt {
 			
 			long start = System.currentTimeMillis();
 			// type 1 - call partitionLouvain
-			String part_file = prefix + "_out/" + dataname +"_partoptlouvain_" + burn_factor + "_" + limit_size + "_" 
-					+ max_level + "_" + k + ".part";
+//			String part_file = prefix + "_out/" + dataname +"_nmd_" + burn_factor + "_" + limit_size + "_" + max_level + "_" + k + ".part";
+			String tree_file = prefix + "_sample/" + dataname +"_nmd_" + burn_factor + "_" + max_level + "_" + k + "_tree";
+			
 			NodeSetLouvainOpt root_set = NodeSetLouvainOpt.recursiveLouvain(G, burn_factor, limit_size, max_level, k, 1);	// 1: partitionLouvain
 			
 			// type 2 - call maximizeLouvain
@@ -98,15 +97,24 @@ public class LouvainOpt {
 			
 			System.out.println("recursiveLouvain - DONE, elapsed " + (System.currentTimeMillis() - start));
 			
+			NodeSetLouvainOpt.writeTree(root_set, tree_file + "." + i, G.E());
+			System.out.println("writeTree - DONE");
 			
-			NodeSetLouvainOpt.printSetIds(root_set, G.E());
-			System.out.println("final modularity = " + root_set.modularityAll(G.E()));
-			
-			List<NodeSetLouvainOpt> best_cut = NodeSetLouvainOpt.bestCut(root_set, G.E());
-			System.out.println("best_cut.size = " + best_cut.size());
-			NodeSetLouvainOpt.writeBestCut(best_cut, part_file);
+			//
+//			NodeSetLouvainOpt.printSetIds(root_set, G.E());
+//			System.out.println("final modularity = " + root_set.modularityAll(G.E()));
+//			
+//			List<NodeSetLouvainOpt> best_cut = NodeSetLouvainOpt.bestCut(root_set, G.E());
+//			System.out.println("best_cut.size = " + best_cut.size());
+//			NodeSetLouvainOpt.writeBestCut(best_cut, part_file);
 		}
 		
+		
+		// TEST readTree() ok
+//		NodeSetLouvainOpt root_set = NodeSetLouvainOpt.readTree("_sample/karate_nmd_20_3_2_tree.0");
+//		System.out.println("readTree - DONE");
+//		
+//		List<NodeSetLouvainOpt> best_cut = NodeSetLouvainOpt.bestCutOffline(root_set, G.E());
 	}
 
 }

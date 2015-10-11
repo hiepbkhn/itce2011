@@ -32,7 +32,7 @@ public class BatchGenerator {
 		
 		BufferedWriter bw = new BufferedWriter(new FileWriter(batch_file));
 		for (double eps : epsArr){
-			String cmd = "java dp.naive.GreedyReconstruct " + prefix + " " + dataname + " " + n_samples + " " + String.format("%.2f", eps) + 
+			String cmd = "java naive.GreedyReconstruct " + prefix + " " + dataname + " " + n_samples + " " + String.format("%.2f", eps) + 
 					" > ../_console/" + dataname + "_tmf_" + String.format("%.1f", eps) + "-CONSOLE.txt";
 			bw.write(cmd + "\n");
 		}
@@ -53,6 +53,23 @@ public class BatchGenerator {
 			}
 			bw.write("\n");
 		}
+		bw.close();
+	}
+	
+	////LouvainOpt
+	public static void generateLouvainOpt(String batch_file, String prefix, String dataname, int n_samples, 
+			int burn_factor, int[] maxLevelArr, int[] kArr) throws IOException{
+		
+		BufferedWriter bw = new BufferedWriter(new FileWriter(batch_file));
+		for (int i = 0; i < kArr.length; i++){
+			int k = kArr[i];
+			int max_level = maxLevelArr[i];
+			String cmd = "java dp.combined.LouvainOpt " + prefix + " " + dataname + " " + n_samples + " " + 
+					burn_factor + " " + max_level + " " + k + 
+					" > ../_console/" + dataname + "_nmd_" + burn_factor + "_" + max_level + "_" + k + "-CONSOLE.txt";
+			bw.write(cmd + "\n");
+		}
+		
 		bw.close();
 	}
 	
@@ -100,21 +117,39 @@ public class BatchGenerator {
 //		}
 		
 		// LouvainDP
+//		for (int i = 0; i < n_list.length; i++){
+//			String dataname = dataname_list[i];
+//			int n = n_list[i];
+//			
+//			//
+//			String batch_file = "_cmd/LouvainDP_" + dataname + ".cmd";
+//			double log_n = Math.log(n);
+//			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
+//			int[] kArr = new int[]{2,4,8,16,32,64,128};
+//			
+//			
+//			
+//			generateLouvainDP(batch_file, prefix, dataname, n_samples, epsArr, kArr);
+//			System.out.println("DONE.");
+//		}
+		
+		// LouvainOpt
 		for (int i = 0; i < n_list.length; i++){
 			String dataname = dataname_list[i];
 			int n = n_list[i];
 			
 			//
-			String batch_file = "_cmd/LouvainDP_" + dataname + ".cmd";
+			String batch_file = "_cmd/LouvainOpt_" + dataname + ".cmd";
 			double log_n = Math.log(n);
-			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
-			int[] kArr = new int[]{2,4,8,16,32,64,128};
+			int[] kArr = new int[]{2,3,4,5,6,10};
+			int[] maxLevelArr = new int[]{10,7,5,4,4,3};
+			int burn_factor = 20;
 			
-			
-			
-			generateLouvainDP(batch_file, prefix, dataname, n_samples, epsArr, kArr);
+			generateLouvainOpt(batch_file, prefix, dataname, n_samples, burn_factor, maxLevelArr, kArr);
 			System.out.println("DONE.");
 		}
+		
+		
 	}
 
 }

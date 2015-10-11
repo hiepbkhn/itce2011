@@ -2,6 +2,8 @@
  * Sep 30, 2015
  * 	- non-private, k-ary tree, copied from NodeSetLouvain.java
  * 	- maximizeLouvain(): move node to the best group 
+ * Oct 11
+ * 	- add writeTree(), readTree(), bestCutOffline()
  */
 
 package dp.combined;
@@ -52,6 +54,7 @@ public class NodeSetLouvainOpt {
 	public NodeSetLouvainOpt parent;
 	public int id;
 	public int level = 0;
+	public double modSelf = 0.0;	// see writeTree, readTree
 	
 	//// for the case number of parts < k
 	public int normalizePart(){
@@ -424,9 +427,9 @@ public class NodeSetLouvainOpt {
 		queue.add(root);
 		while(queue.size() > 0){
 			NodeSetLouvainOpt R = queue.remove();
-			System.out.println("R.level = " + R.level + " R.size = " + R.part.length + " mod = " + String.format("%.4f", R.modularity(n_edges)) + 
-					" modSelf = " + String.format("%.4f", R.modularitySelf(n_edges)) ); 
-//					" check mod = " + String.format("%.4f", CommunityMeasure.modularitySet(G, R.ind2node)) );
+//			System.out.println("R.level = " + R.level + " R.size = " + R.part.length + " mod = " + String.format("%.4f", R.modularity(n_edges)) + 
+//					" modSelf = " + String.format("%.4f", R.modularitySelf(n_edges)) ); 
+////					" check mod = " + String.format("%.4f", CommunityMeasure.modularitySet(G, R.ind2node)) );
 			
 			if (R.part.length <= limit_size || R.level == max_level){
 				continue;
@@ -601,6 +604,222 @@ public class NodeSetLouvainOpt {
 		}
 		
 		bw.close();
+	}
+	
+	////
+	public static void writeTree(NodeSetLouvainOpt root_set, String tree_file, int m) throws IOException{
+		BufferedWriter bw = new BufferedWriter(new FileWriter(tree_file));
+		
+		Queue<NodeSetLouvainOpt> queue = new LinkedList<NodeSetLouvainOpt>();
+		queue.add(root_set);
+		while (queue.size() > 0){
+			NodeSetLouvainOpt R = queue.remove();
+			bw.write(R.id + ":" + R.modularitySelf(m) + ";");
+			
+			if (R.children[0] != null){
+				for (int i = 0; i < R.children.length; i++){
+					bw.write(R.children[i].id + ",");
+					queue.add(R.children[i]);
+				}
+			}else{	// leaf
+				for (int s = 0; s < R.part.length; s++)
+					bw.write(R.ind2node[s] + ",");
+			}
+			
+			bw.write("\n");
+			
+		}
+		
+		bw.close();
+	}
+	
+	////
+	public static NodeSetLouvainOpt readTree(String tree_file) throws IOException{
+		Map<Integer, NodeSetLouvainOpt> map = new HashMap<Integer, NodeSetLouvainOpt>();
+		
+		BufferedReader br = new BufferedReader(new FileReader(tree_file));
+		//
+		while (true){
+        	String str = br.readLine();
+        	if (str == null)
+        		break;
+        	int id = Integer.parseInt(str.substring(0, str.indexOf(":")));
+        	double modSelf = Double.parseDouble(str.substring(str.indexOf(":") + 1,str.indexOf(";")));
+        	
+        	NodeSetLouvainOpt node = new NodeSetLouvainOpt(0);	// temporarily no child
+        	node.id = id;
+        	node.modSelf = modSelf;
+        	
+        	map.put(node.id, node);
+        	//
+        	String val = str.substring(str.indexOf(";") + 1);
+        	String[] items = val.split(",");
+        	int[] values = new int[items.length];
+        	for (int i = 0; i < items.length; i++)
+        		values[i] = Integer.parseInt(items[i]);
+
+        	if (values[0] >= 0){ // leaf node sets
+//        		System.out.println("LEAF node.id = " + node.id);
+        		
+        		node.ind2node = new int[values.length];
+//        		System.out.println("node.ind2node.length = " + node.ind2node.length);
+        		System.arraycopy(values, 0, node.ind2node, 0, values.length);
+        	}
+		}
+		br.close();
+		
+		// read again to build tree (compute node.children)
+		br = new BufferedReader(new FileReader(tree_file));
+		while (true){
+        	String str = br.readLine();
+        	if (str == null)
+        		break;
+        	
+        	int id = Integer.parseInt(str.substring(0, str.indexOf(":")));
+        	
+        	String val = str.substring(str.indexOf(";") + 1);
+        	String[] items = val.split(",");
+        	int[] values = new int[items.length];
+        	for (int i = 0; i < items.length; i++)
+        		values[i] = Integer.parseInt(items[i]);
+        	
+        	
+        	if (values[0] < 0){ // child node ids
+        		NodeSetLouvainOpt cur_node = map.get(id);
+        		
+        		cur_node.k = items.length;
+        		cur_node.children = new NodeSetLouvainOpt[items.length];
+        		
+        		for (int i = 0; i < values.length; i++){
+        			cur_node.children[i] = map.get(values[i]);
+        			cur_node.children[i].level = cur_node.level + 1;
+        		}
+        	}
+		}
+		
+		br.close();
+		
+		// compute node.ind2node
+		NodeSetLouvainOpt root_set = map.get(-1);
+		Queue<NodeSetLouvainOpt> queue = new LinkedList<NodeSetLouvainOpt>();
+		Stack<NodeSetLouvainOpt> stack = new Stack<NodeSetLouvainOpt>();
+		
+		// fill stack using queue
+		queue.add(root_set);
+		while (queue.size() > 0){
+			NodeSetLouvainOpt R = queue.remove();
+			stack.push(R);
+			if (R.children != null)
+				for (int i = 0; i < R.children.length; i++)
+					queue.add(R.children[i]);
+		}
+		
+		// 
+		while (stack.size() > 0){
+			NodeSetLouvainOpt R = stack.pop();
+			
+			if (R.ind2node == null){	// not leaf
+				int len = 0;
+				for (NodeSetLouvainOpt child : R.children)
+					len += child.ind2node.length;
+				
+				R.ind2node = new int[len];
+				int count = 0;
+				for (NodeSetLouvainOpt child : R.children)
+					for (int u : child.ind2node)
+						R.ind2node[count++] = u;
+			}
+				
+		}
+		
+		// debug, the same as _tree file
+//		queue = new LinkedList<NodeSetLouvainOpt>();
+//		queue.add(root_set);
+//		while (queue.size() > 0){
+//			NodeSetLouvainOpt R = queue.remove();
+//			System.out.print(R.id + ":" + R.modSelf + ";");
+//			
+//			if (R.children.length > 0){
+//				for (int i = 0; i < R.children.length; i++){
+//					System.out.print(R.children[i].id + ",");
+//					queue.add(R.children[i]);
+//				}
+//			}else{	// leaf
+//				for (int s = 0; s < R.ind2node.length; s++)
+//					System.out.print(R.ind2node[s] + ",");
+//			}
+//			
+//			System.out.println();
+//			
+//		}
+		
+		//
+		return root_set;
+	}
+	
+	
+	////dynamic programming: opt(R) = max{mod(R), opt(R.left) + opt(R.right)}
+	public static List<NodeSetLouvainOpt> bestCutOffline(NodeSetLouvainOpt root_set, int m){
+		
+		List<NodeSetLouvainOpt> ret = new ArrayList<NodeSetLouvainOpt>();
+		Map<Integer, CutNode> sol = new HashMap<Integer, CutNode>();	// best solution node.id --> CutNode info
+		
+		Queue<NodeSetLouvainOpt> queue = new LinkedList<NodeSetLouvainOpt>();
+		Stack<NodeSetLouvainOpt> stack = new Stack<NodeSetLouvainOpt>();
+		
+		// fill stack using queue
+		queue.add(root_set);
+		while (queue.size() > 0){
+			NodeSetLouvainOpt R = queue.remove();
+			stack.push(R);
+			if (R.children.length > 0)
+				for (int i = 0; i < R.children.length; i++)
+					queue.add(R.children[i]);
+		}
+		
+		// 
+		while (stack.size() > 0){
+			NodeSetLouvainOpt R = stack.pop();
+			
+			double mod = R.modSelf;			// non-private, need modularitySelfDP() !
+			boolean self = true;
+			if (R.children.length == 0){	// leaf nodes
+				sol.put(R.id, new CutNode(mod, true));
+				
+			}else{
+				//
+				double mod_opt = 0.0;
+				for (int i = 0; i < R.children.length; i++)
+					mod_opt += sol.get(R.children[i].id).mod;
+				if (mod < mod_opt){
+					mod = mod_opt;
+					self = false;
+				}
+					
+				sol.put(R.id, new CutNode(mod, self));
+			}
+		}
+		
+		System.out.println("sol.size = " + sol.size());
+		System.out.println("best modularity = " + sol.get(-1).mod);
+		
+		// compute ret
+		queue = new LinkedList<NodeSetLouvainOpt>();
+		queue.add(root_set);
+		while (queue.size() > 0){
+			NodeSetLouvainOpt R = queue.remove();
+			
+			if (sol.get(R.id).self == true){
+				ret.add(R);
+				System.out.print(R.id + " ");
+			}else if (R.children.length > 0)
+				for (int i = 0; i < R.children.length; i++)
+					queue.add(R.children[i]);
+		}
+		System.out.println();
+		
+		//
+		return ret;
 	}
 	
 }

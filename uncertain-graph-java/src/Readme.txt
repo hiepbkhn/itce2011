@@ -76,5 +76,7 @@ CLASSPATH: D:\git\itce2011\uncertain-graph-java\bin;E:\caidat\Java\grph-1.6.29-s
 
 - CommunityMeasure: clustering metrics
 
+- BatchGenerator: generate .cmd files
+
 
 
