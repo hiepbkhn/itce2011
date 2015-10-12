@@ -47,7 +47,7 @@ CLASSPATH: D:\git\itce2011\uncertain-graph-java\bin;E:\caidat\Java\grph-1.6.29-s
 - LouvainDP.java: e-DP by input perturbation (equal-sized supernodes)
 
 - LouvainModDiv.java: call NodeSetLouvain
-- NodeSetLouvain.java:  MCMC at the first level, used in LouvainDP
+- NodeSetLouvain.java:  MCMC at the first level, used in LouvainDP (k-ary tree)
 
 - Scan.java: SCAN algorithm
 
@@ -56,16 +56,15 @@ CLASSPATH: D:\git\itce2011\uncertain-graph-java\bin;E:\caidat\Java\grph-1.6.29-s
 - HRGCut.java: find the good cuts of HRG (high modularity)
 
 - HRGDivisiveGreedy.java: combine HRG-Divisive and modularity
-- NodeSetDivGreedy.java: use log-likelihood
+- NodeSetDivGreedy.java: use log-likelihood (binary tree)
 
 - ModDivisiveDP.java: exponential mechanism with modularity Q
-- NodeSetMod.java: used in ModDivisiveDP
+- NodeSetMod.java: used in ModDivisiveDP (binary tree)
 - CutNode.java: used in NodeSetMod.bestCut()
 
 - NodeDivisiveDP2.java: allow to fix nodes to groups (reduce MCMC space)
 - NodeSetMod2.java
 
-- NodeDivisiveOpt.java: non-private, try to find the best partition at each level
 - NodeSetModOpt.java
 - NodeSetModOpt2.java: do not use IntSet !
 

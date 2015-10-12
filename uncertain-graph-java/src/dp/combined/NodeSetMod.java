@@ -2,7 +2,7 @@
  * Sep 18, 2015
  * 	- copied from NodeSetDiv, exponential mechanism with modularity Q
  * Sep 21
- * 	- faster constructors NodeSetMod(EdgeWeightedGraph G, IntSet A), NodeSetMod(EdgeWeightedGraph G)
+ * 	- faster constructors NodeSetMod(Grph G, IntSet A), NodeSetMod(Grph G)
  * 	- fix error "this.d_t = this.T.size()" in constructors 
  * 	- getRandomItem(): use fast IntHashSet.pickRandomElement(random)
  * Sep 22
@@ -13,7 +13,7 @@
  * 	- add bestCut(): dynamic programming
  * Sep 24
  * 	- not use IntHashSet.pickRandomElement, copied from NodeSetMod.java
- * 	- use EdgeWeightedGraph in place of EdgeWeightedGraph
+ * 	- use EdgeWeightedGraph in place of Grph
  * Sep 25
  * 	- faster getSubSet()
  * Sep 29

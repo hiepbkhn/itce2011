@@ -14,6 +14,7 @@
  * 	- use EdgeWeightedGraph in place of EdgeWeightedGraph
  * Oct 11
  * 	- copy writeTree, readTree, bestCutOffline from NodeSetLouvainOpt
+ * 	- copy getSubEgdeLists() from NodeSetMod
  */
 
 package dp.combined;
@@ -42,6 +43,7 @@ import dp.mcmc.Node;
 import algs4.Edge;
 import algs4.EdgeWeightedGraph;
 import grph.VertexPair;
+import hist.Int2;
 import toools.set.BitVectorSet;
 import toools.set.IntHashSet;
 import toools.set.IntSet;
@@ -63,15 +65,32 @@ public class NodeSetDivGreedy {
 	public int n_t = 0;
 	public int d_s = 0; 	// total degree of nodes in S
 	public int d_t = 0;		// total degree of nodes in T
+	public List<Int2> e_list;	
 	
 	public NodeSetDivGreedy parent, left, right;		// for recursive partitioning
 	public int id;
 	public int level = 0;
 	public double modSelf = 0.0;	// see writeTree, readTree
 	
+	
+	////return e_listS, e_listT (they MUST be initialized outside !)
+	public static void getSubEgdeLists(NodeSetDivGreedy R, List<Int2> e_listS, List<Int2> e_listT){
+		
+		int u = 0;
+		int v = 0;
+		for (Int2 e : R.e_list){
+			u = R.node2ind.get(e.val0);
+			v = R.node2ind.get(e.val1);
+			if (R.ind[u] == true && R.ind[v] == true)
+				e_listS.add(e);
+			if (R.ind[u] == false && R.ind[v] == false)
+				e_listT.add(e);
+		}
+	}
+	
 	////
-	public static NodeSetDivGreedy getSubSet(EdgeWeightedGraph G, NodeSetDivGreedy R, boolean val){
-		NodeSetDivGreedy ret = new NodeSetDivGreedy();
+	public static void getSubSet(EdgeWeightedGraph G, NodeSetDivGreedy R, NodeSetDivGreedy ret, boolean val, List<Int2> e_list){
+//		NodeSetDivGreedy ret = new NodeSetDivGreedy();
 		
 		ret.node2ind = new HashMap<Integer, Integer>();
 		int count = 0;
@@ -122,26 +141,26 @@ public class NodeSetDivGreedy {
 		ret.e_s = 0;
 		ret.e_t = 0;
 		
-		int u; 
-		int v;
-		for (Edge e : G.edges()){
-			u = e.either();
-			v = e.other(u);
-			if (node2Set[u] + node2Set[v] == 3)	//  
+		int u_id; 
+		int v_id;
+		for (Int2 e : e_list){
+			u_id = ret.node2ind.get(e.val0);
+			v_id = ret.node2ind.get(e.val1);
+			if (node2Set[u_id] + node2Set[v_id] == 3)	//  
 				ret.e_st += 1;
-			if (node2Set[u] == 1 && node2Set[v] == 1)
+			if (node2Set[u_id] == 1 && node2Set[v_id] == 1)
 				ret.e_s += 1;
-			if (node2Set[u] == 2 && node2Set[v] == 2)
+			if (node2Set[u_id] == 2 && node2Set[v_id] == 2)
 				ret.e_t += 1;
 		}
 		
 		//
-		return ret;
+//		return ret;
 	}
 	
 	////
 	public NodeSetDivGreedy(){
-		
+		this.e_list = new ArrayList<Int2>();
 	}
 	
 	////
@@ -186,12 +205,14 @@ public class NodeSetDivGreedy {
 		this.e_st = 0;
 		this.e_s = 0;
 		this.e_t = 0;
+		this.e_list = new ArrayList<Int2>();
 		
 		int u; 
 		int v;
 		for (Edge e : G.edges()){
 			u = e.either();
 			v = e.other(u);
+			this.e_list.add(new Int2(u, v));
 			if (node2Set[u] + node2Set[v] == 3)	//  
 				this.e_st += 1;
 			if (node2Set[u] == 1 && node2Set[v] == 1)
@@ -504,43 +525,43 @@ public class NodeSetDivGreedy {
 	
 	
 	////
-	public static int binaryPartition(EdgeWeightedGraph G, NodeSetDivGreedy root, int id){
-		
-		int cur_id = id;
-		Queue<NodeSetDivGreedy> queue = new LinkedList<NodeSetDivGreedy>();
-		queue.add(root);
-		while(queue.size() > 0){
-			NodeSetDivGreedy R = queue.remove();
-			
-			if (R.n_s >= 2){
-				NodeSetDivGreedy RS = getSubSet(G, R, true);;
-				RS.id = cur_id--;
-				R.left = RS;
-				RS.parent = R;
-				queue.add(RS);
-			}else{
-				NodeSetDivGreedy RS = getSubSet(G, R, true);;		// RS.id is the remaining item in S
-				R.left = RS;
-				RS.parent = R;
-			}
-			
-			if (R.n_t >= 2){
-				NodeSetDivGreedy RT = getSubSet(G, R, false);
-				RT.id = cur_id--;
-				R.right = RT;
-				RT.parent = R;
-				queue.add(RT);
-			}else{
-				NodeSetDivGreedy RT = getSubSet(G, R, false);		// RT.id is the remaining item in T
-				R.right = RT;
-				RT.parent = R;
-			}
-				
-		}
-		
-		//
-		return cur_id;
-	}
+//	public static int binaryPartition(EdgeWeightedGraph G, NodeSetDivGreedy root, int id){
+//		
+//		int cur_id = id;
+//		Queue<NodeSetDivGreedy> queue = new LinkedList<NodeSetDivGreedy>();
+//		queue.add(root);
+//		while(queue.size() > 0){
+//			NodeSetDivGreedy R = queue.remove();
+//			
+//			if (R.n_s >= 2){
+//				NodeSetDivGreedy RS = getSubSet(G, R, true);;
+//				RS.id = cur_id--;
+//				R.left = RS;
+//				RS.parent = R;
+//				queue.add(RS);
+//			}else{
+//				NodeSetDivGreedy RS = getSubSet(G, R, true);;		// RS.id is the remaining item in S
+//				R.left = RS;
+//				RS.parent = R;
+//			}
+//			
+//			if (R.n_t >= 2){
+//				NodeSetDivGreedy RT = getSubSet(G, R, false);
+//				RT.id = cur_id--;
+//				R.right = RT;
+//				RT.parent = R;
+//				queue.add(RT);
+//			}else{
+//				NodeSetDivGreedy RT = getSubSet(G, R, false);		// RT.id is the remaining item in T
+//				R.right = RT;
+//				RT.parent = R;
+//			}
+//				
+//		}
+//		
+//		//
+//		return cur_id;
+//	}
 	
 	//////////////////////////////
 	// limit_size = 32: i.e. for NodeSet having size <= limit_size, call 
@@ -570,13 +591,19 @@ public class NodeSetDivGreedy {
 //			System.out.println("elapsed " + (System.currentTimeMillis() - start));
 			
 			
-			NodeSetDivGreedy RS = getSubSet(G, R, true);
+			NodeSetDivGreedy RS = new NodeSetDivGreedy();
+			NodeSetDivGreedy RT = new NodeSetDivGreedy();
+			
+			getSubEgdeLists(R, RS.e_list, RT.e_list);
+			
+			getSubSet(G, R, RS, true, RS.e_list);
+			getSubSet(G, R, RT, false, RT.e_list);
+					
 			RS.id = id--;
 			R.left = RS;
 			RS.parent = R;
 			RS.level = R.level + 1;
 			
-			NodeSetDivGreedy RT = getSubSet(G, R, false);
 			RT.id = id--;
 			R.right = RT;
 			RT.parent = R;
@@ -800,9 +827,6 @@ public class NodeSetDivGreedy {
 						bw.write(R.ind2node[s] + ",");
 				bw.write("\n");
 			}
-			
-			bw.write("\n");
-			
 		}
 		
 		bw.close();

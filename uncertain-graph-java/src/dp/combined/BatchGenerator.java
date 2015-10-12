@@ -96,15 +96,19 @@ public class BatchGenerator {
 	
 	////HRGDivisiveGreedy
 	public static void generateHRGDiv(String batch_file, String prefix, String dataname, int n_samples, 
-			int burn_factor, int max_level, double[] epsArr, double ratio) throws IOException{
+			int burn_factor, int max_level, double[] epsArr, double[] ratioArr) throws IOException{
 		
 		BufferedWriter bw = new BufferedWriter(new FileWriter(batch_file));
-		for (double eps : epsArr){
-			String cmd = "java dp.combined.HRGDivisiveGreedy " + prefix + " " + dataname + " " + n_samples + " " + 
-					burn_factor + " " + max_level + " " + String.format("%.1f", eps) + " " + String.format("%.2f", ratio) + 
-					" > ../_console/" + dataname + "_hd_" + burn_factor + "_" + 
-					max_level + "_" + String.format("%.1f", eps) + "_" + String.format("%.2f", ratio) + "-CONSOLE.txt";
-			bw.write(cmd + "\n");
+		
+		for (double ratio : ratioArr){
+			for (double eps : epsArr){
+				String cmd = "java dp.combined.HRGDivisiveGreedy " + prefix + " " + dataname + " " + n_samples + " " + 
+						burn_factor + " " + max_level + " " + String.format("%.1f", eps) + " " + String.format("%.2f", ratio) + 
+						" > ../_console/" + dataname + "_hd_" + burn_factor + "_" + 
+						max_level + "_" + String.format("%.1f", eps) + "_" + String.format("%.2f", ratio) + "-CONSOLE.txt";
+				bw.write(cmd + "\n");
+			}
+			bw.write("\n");
 		}
 		
 		bw.close();
@@ -214,9 +218,9 @@ public class BatchGenerator {
 			int max_level = 10;
 			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
 			int burn_factor = 20;
-			double ratio = 2.0;
+			double[] ratioArr = new double[]{2.0, 1.5, 1.0};
 			
-			generateHRGDiv(batch_file, prefix, dataname, n_samples, burn_factor, max_level, epsArr, ratio);
+			generateHRGDiv(batch_file, prefix, dataname, n_samples, burn_factor, max_level, epsArr, ratioArr);
 			System.out.println("DONE.");
 		}
 		

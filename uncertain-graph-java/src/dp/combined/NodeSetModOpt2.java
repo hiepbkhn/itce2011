@@ -2,7 +2,7 @@
  * Sep 23, 2015
  * 	- copied from NodeSetModOpt, use boolean array for both S and T, much faster
  * Sep 24
- * - replace EdgeWeightedGraph by EdgeWeightedGraph	
+ * - replace Grph by EdgeWeightedGraph	
  * - add partitionLouvain(), recursiveLouvain(): apply Louvain to each node, move nodes between S and T
  * Sep 30
  * - copy getSubEgdeLists() from NodeSetMod
