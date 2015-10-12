@@ -15,7 +15,9 @@ package dp.combined;
 
 import hist.Int2;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -885,6 +887,30 @@ public class Louvain {
 		bw.close();
 	}
 	
+	////
+	public static Map<Integer, Integer> readNodeMap(String nodemap_file)  throws IOException{
+		Map<Integer, Integer> nodemap = new HashMap<Integer, Integer>();
+		
+		BufferedReader br = new BufferedReader(new FileReader(nodemap_file));
+		//
+		int count = 0;
+		while (true){
+        	String str = br.readLine();
+        	if (str == null)
+        		break;
+        	
+        	String[] items = str.split(",");
+        	for (String item : items)
+        		nodemap.put(Integer.parseInt(item), count);
+        	
+        	count += 1;
+        	
+		}
+		
+		//
+		return nodemap;
+	}
+	
 	////////////////////////////////////////////////
 	public static void main(String[] args) throws Exception{
 		// load graph
@@ -911,28 +937,99 @@ public class Louvain {
 		// COMMAND-LINE <prefix> <dataname> <n_samples> <eps>
 		String prefix = "";
 	    int n_samples = 1;
+	    int type = 1;	// 1:EdgeFlip, TmF, 2:LouvainDP
+	    String sample_file = "";
 	    
-	    System.out.println("dataname = " + dataname);
+	    if(args.length >= 4){
+			prefix = args[0];
+			n_samples = Integer.parseInt(args[1]);
+			type = Integer.parseInt(args[2]);
+			sample_file = args[3];
+	    }
 	    
-		String filename = prefix + "_data/" + dataname + ".gr";
-		String part_file = prefix + "_out/" + dataname + ".louvain";
+		System.out.println("n_samples = " + n_samples);
+		System.out.println("type = " + type);
+		System.out.println("sample_file = " + sample_file);
 		
-		long start = System.currentTimeMillis();
-		EdgeWeightedGraph G = EdgeWeightedGraph.readEdgeList(filename);
-		System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
+		if (type == 1)
+			for (int i = 0; i < n_samples; i++){
+		    	System.out.println("sample i = " + i);
+		    	
+		    	String part_file = prefix + "_louvain/" + sample_file + "." + i + ".part";
+		    	
+				long start = System.currentTimeMillis();
+				EdgeWeightedGraph G = EdgeWeightedGraph.readEdgeList(prefix + "_sample/" + sample_file + "." + i);
+				System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
+				
+				System.out.println("#nodes = " + G.V());
+				System.out.println("#edges = " + G.E());
+				
+				// 
+				Louvain lv = new Louvain();
+				start = System.currentTimeMillis();
+				Map<Integer, Integer> part = lv.best_partition(G, null);
+				System.out.println("best_partition - DONE, elapsed " + (System.currentTimeMillis() - start));
 		
-		System.out.println("#nodes = " + G.V());
-		System.out.println("#edges = " + G.E());
+				Louvain.writePart(part, part_file);
+				System.out.println("writePart - DONE");
+		    	
+			}
+		else	// LouvainDP
+			for (int i = 0; i < n_samples; i++){
+		    	System.out.println("sample i = " + i);
+		    	
+		    	String part_file = prefix + "_louvain/" + sample_file + "." + i + ".part";
+		    	
+				long start = System.currentTimeMillis();
+				EdgeWeightedGraph G = EdgeWeightedGraph.readEdgeList(prefix + "_sample/" + sample_file + "." + i);
+				System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
+				
+				System.out.println("#nodes = " + G.V());
+				System.out.println("#edges = " + G.E());
+				
+				// 
+				Louvain lv = new Louvain();
+				start = System.currentTimeMillis();
+				Map<Integer, Integer> part = lv.best_partition(G, null);
+				System.out.println("best_partition - DONE, elapsed " + (System.currentTimeMillis() - start));
 		
-		// TEST best_partition()
-		Louvain lv = new Louvain();
-		start = System.currentTimeMillis();
-		Map<Integer, Integer> part = lv.best_partition(G, null);
-		System.out.println("best_partition - DONE, elapsed " + (System.currentTimeMillis() - start));
-
-		Louvain.writePart(part, part_file);
-		System.out.println("writePart - DONE");
+				// remap
+				String nodemap_file = prefix + "_sample/" + sample_file + "_nodemap." + i;
+				Map<Integer, Integer> nodemap = readNodeMap(nodemap_file);
+				
+				for (Map.Entry<Integer, Integer> entry : nodemap.entrySet()){
+					nodemap.put(entry.getKey(), part.get(entry.getValue()));
+				}
+				
+				Louvain.writePart(nodemap, part_file);
+				System.out.println("writePart - DONE");
+			}
+			
+	    
+	    
+	    // Louvain on true graphs
+//	    System.out.println("dataname = " + dataname);
+//	    
+//		String filename = prefix + "_data/" + dataname + ".gr";
+//		String part_file = prefix + "_out/" + dataname + ".louvain";
+//		
+//		long start = System.currentTimeMillis();
+//		EdgeWeightedGraph G = EdgeWeightedGraph.readEdgeList(filename);
+//		System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
+//		
+//		System.out.println("#nodes = " + G.V());
+//		System.out.println("#edges = " + G.E());
+//		
+//		// TEST best_partition()
+//		Louvain lv = new Louvain();
+//		start = System.currentTimeMillis();
+//		Map<Integer, Integer> part = lv.best_partition(G, null);
+//		System.out.println("best_partition - DONE, elapsed " + (System.currentTimeMillis() - start));
+//
+//		Louvain.writePart(part, part_file);
+//		System.out.println("writePart - DONE");
 		
+	    
 		// example.gr
 ////		int[] part1 = new int[]{0,0,0,1,1,2,2,3,3,3,3,2,2};
 //		int[] part1 = new int[]{0,0,0,2,2,2,2,3,3,3,3,2,2};

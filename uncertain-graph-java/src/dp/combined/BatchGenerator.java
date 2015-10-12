@@ -114,13 +114,34 @@ public class BatchGenerator {
 		bw.close();
 	}
 	
+	/////////
+	// algo = "_ef_", "_tmf_", "_ldp_"
+	public static void generateLouvain(String batch_file, String prefix, String dataname, int n_samples, double[] epsArr, String algo, int type) 
+			throws IOException{
+		
+		BufferedWriter bw = new BufferedWriter(new FileWriter(batch_file));
+		for (double eps : epsArr){
+			String sample_name = dataname + algo + String.format("%.1f", eps);
+			
+			String cmd = "java dp.combined.Louvain " + prefix + " " + n_samples + " " + type + " " + sample_name + 
+					" > ../_console/" + dataname + "_ef_" + String.format("%.1f", eps) + "-LOUVAIN.txt";
+			bw.write(cmd + "\n");
+		}
+    	bw.close();
+	}
+	
 	////////////////////////////////////////////////
 	public static void main(String[] args) throws Exception{
 		
 		String prefix = "../";		// run in D:/git/itce2011/uncertain-graph-java/_cmd
 		String[] dataname_list = new String[]{"com_amazon_ungraph", "com_dblp_ungraph", "com_youtube_ungraph"};
-		int n_samples = 20;
 		int[] n_list = new int[]{334863, 317080, 1134890};
+		// for TEST
+//		String[] dataname_list = new String[]{"karate"};
+//		int[] n_list = new int[]{34};
+		
+		int n_samples = 20;
+		
 		
 		
 		
@@ -208,19 +229,58 @@ public class BatchGenerator {
 //		}
 		
 		// HRGDivisiveGreedy
+//		for (int i = 0; i < n_list.length; i++){
+//			String dataname = dataname_list[i];
+//			int n = n_list[i];
+//			
+//			//
+//			String batch_file = "_cmd/HRGDivisiveGreedy_" + dataname + ".cmd";
+//			double log_n = Math.log(n);
+//			int max_level = 10;
+//			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
+//			int burn_factor = 20;
+//			double[] ratioArr = new double[]{2.0, 1.5, 1.0};
+//			
+//			generateHRGDiv(batch_file, prefix, dataname, n_samples, burn_factor, max_level, epsArr, ratioArr);
+//			System.out.println("DONE.");
+//		}
+		
+		
+		//////////////////////////////// LOUVAIN
 		for (int i = 0; i < n_list.length; i++){
 			String dataname = dataname_list[i];
 			int n = n_list[i];
-			
-			//
-			String batch_file = "_cmd/HRGDivisiveGreedy_" + dataname + ".cmd";
 			double log_n = Math.log(n);
-			int max_level = 10;
 			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
-			int burn_factor = 20;
-			double[] ratioArr = new double[]{2.0, 1.5, 1.0};
 			
-			generateHRGDiv(batch_file, prefix, dataname, n_samples, burn_factor, max_level, epsArr, ratioArr);
+			String batch_file = "_cmd/Louvain_" + dataname + ".cmd";
+			generateLouvain(batch_file, prefix, dataname, n_samples, epsArr, "_ef_", 1);
+			
+			System.out.println("DONE.");
+		}
+		
+		for (int i = 0; i < n_list.length; i++){
+			String dataname = dataname_list[i];
+			int n = n_list[i];
+			double log_n = Math.log(n);
+			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
+			
+			String batch_file = "_cmd/Louvain_" + dataname + ".cmd";
+			generateLouvain(batch_file, prefix, dataname, n_samples, epsArr, "_tmf_", 1);
+			
+			System.out.println("DONE.");
+		}
+		
+		for (int i = 0; i < n_list.length; i++){
+			String dataname = dataname_list[i];
+			int n = n_list[i];
+			double log_n = Math.log(n);
+			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
+			int[] kArr = new int[]{2,4,8,16,32,64,128};
+			
+			String batch_file = "_cmd/Louvain_" + dataname + ".cmd";
+			generateLouvain(batch_file, prefix, dataname, n_samples, epsArr, "_ldp_", 1);
+			
 			System.out.println("DONE.");
 		}
 		
