@@ -32,6 +32,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import com.jmatio.io.MatFileWriter;
+import com.jmatio.types.MLArray;
+import com.jmatio.types.MLDouble;
+import com.jmatio.types.MLInt32;
+
 import algs4.Edge;
 import algs4.EdgeWeightedGraph;
 import toools.io.file.RegularFile;
@@ -339,8 +344,8 @@ public class CommunityMeasure {
 				k = com;
 		k += 1;
 		
-		System.out.println("k_org = " + k_org);
-		System.out.println("k = " + k);
+//		System.out.println("k_org = " + k_org);
+//		System.out.println("k = " + k);
 		// n_ij, n_i, n_j
 		int[][] n_ij = new int[k_org][k];
 		int[] n_i = new int[k_org];
@@ -645,6 +650,57 @@ public class CommunityMeasure {
 		return ret;
 	}
 	
+	////
+	public static void computeAndExport(String prefix, String dataname, String sample_file, int n_samples) throws Exception{
+		
+		EdgeListReader reader = new EdgeListReader();
+		Grph G;
+		RegularFile f = new RegularFile(prefix + "_data/" + dataname + ".gr");
+		G = reader.readGraph(f);
+		
+		int n_nodes = G.getNumberOfVertices();
+		
+		String louvain_file = prefix + "_data/" + dataname + ".louvain";
+		int[] louvain_part = readPart(louvain_file, n_nodes);
+		
+		int[] comArr = new int[n_samples];
+		double[] modArr = new double[n_samples];
+		double[] nmiArr = new double[n_samples];
+		double[] f1Arr = new double[n_samples];
+		
+		for (int i = 0; i < n_samples; i++){
+			String compare_file = prefix + "_louvain/" + sample_file + "." + i + ".part";
+			int[] compare_part = readPart(compare_file, n_nodes);
+			
+			int k = 0;
+			for (int com : compare_part)
+				if (k < com)
+					k = com;
+			
+			//
+			comArr[i] = k+1;
+			modArr[i] = modularity(G, compare_part);
+			nmiArr[i] = normalizedMutualInfo(louvain_part, compare_part);
+			f1Arr[i] = avgF1Score(louvain_part, compare_part);
+			
+		}
+		// write to MATLAB
+		String matlab_file = prefix + "_matlab/" + sample_file + ".mat";
+		
+		MLDouble modA = new MLDouble("modArr", modArr, 1);
+		MLDouble nmiA = new MLDouble("nmiArr", nmiArr, 1);
+		MLDouble f1A = new MLDouble("f1Arr", f1Arr, 1);
+		MLInt32 comA = new MLInt32("comArr", comArr, 1);
+        ArrayList<MLArray> towrite = new ArrayList<MLArray>();
+        towrite.add(modA); 
+        towrite.add(nmiA);
+        towrite.add(f1A);
+        towrite.add(comA);
+        
+        new MatFileWriter(matlab_file, towrite );
+        System.out.println("Written to MATLAB file.");
+	}
+	
 	////////////////////////////////////////////////
 	public static void main(String[] args) throws Exception{
 		
@@ -703,49 +759,71 @@ public class CommunityMeasure {
 //		String compare_file = "com_amazon_ungraph_nodesetlv2_20_40_10_3_2.50_30.0_10.part3";	// NodeSetLouvain
 		
 		
+		// COMMAND-LINE <prefix> <dataname> <n_samples> <eps>
+		String prefix = "";
+		String dataname = "karate";
+	    int n_samples = 1;
+	    String sample_file = "";
+	    
+	    if(args.length >= 4){
+	    	prefix = args[0];
+			dataname = args[1];
+			n_samples = Integer.parseInt(args[2]);
+			sample_file = args[3];
+	    }
+	    
+	    System.out.println("dataname = " + dataname);
+		System.out.println("n_samples = " + n_samples);
+		System.out.println("sample_file = " + sample_file);
+		
+		computeAndExport(prefix, dataname, sample_file, n_samples);
+		System.out.println("computeAndExport - DONE.");
+		
+		
 		
 		//
-//		EdgeListReader reader = new EdgeListReader();
-//		Grph G;
-//		RegularFile f = new RegularFile(filename);
-//		G = reader.readGraph(f);
+////		EdgeListReader reader = new EdgeListReader();
+////		Grph G;
+////		RegularFile f = new RegularFile(filename);
+////		G = reader.readGraph(f);
+////		
+////		System.out.println("#nodes = " + G.getNumberOfVertices());
+////		System.out.println("#edges = " + G.getNumberOfEdges());
 //		
-//		System.out.println("#nodes = " + G.getNumberOfVertices());
-//		System.out.println("#edges = " + G.getNumberOfEdges());
+//		//
+//		int[] louvain_part = readPart(path + louvain_file, n_nodes);
+//		int[] compare_part = readPart(path + compare_file, n_nodes);
+//		
+////		System.out.println("louvain_file = " + louvain_file);
+////		System.out.println("louvain mod = " + modularity(G, louvain_part));
+////		System.out.println("compare_file = " + compare_file);
+////		System.out.println("compare mod = " + modularity(G, compare_part));
+//		
+//		//
+//		long start = System.currentTimeMillis();
+//		double aIntra = intraRatio(louvain_part, compare_part, num_pair);
+//		System.out.println("aIntra = " + aIntra);
+//		System.out.println("intraRatio - DONE, elapsed " + (System.currentTimeMillis() - start));
+//		
+//		start = System.currentTimeMillis();
+//		double aInter = interRatio(louvain_part, compare_part, num_pair);
+//		System.out.println("aInter = " + aInter);
+//		System.out.println("interRatio - DONE, elapsed " + (System.currentTimeMillis() - start));
+//		
+//		double ARI = adjustedRandIndex(louvain_part, compare_part);
+//		System.out.println("ARI = " + ARI);
+//		
+//		double NMI = normalizedMutualInfo(louvain_part, compare_part);
+//		System.out.println("NMI = " + NMI);
+//		
+////		List<Integer[]> gt = readGroundTruth("_data/com_amazon_ungraph.top5000", n_nodes);
+//		List<Integer[]> lv = readGroundTruth(path + louvain_file, n_nodes);
+//		List<Integer[]> cp = readGroundTruth(path + compare_file, n_nodes);
+//		System.out.println("lv.size = " + lv.size());
+//		System.out.println("cp.size = " + cp.size());
+//		System.out.println("Avg.F1 score (lv,cp) = " + avgF1Score(lv, cp));
+//		System.out.println("Avg.F1 score (lv,cp) = " + avgF1Score(louvain_part, compare_part));
 		
-		//
-		int[] louvain_part = readPart(path + louvain_file, n_nodes);
-		int[] compare_part = readPart(path + compare_file, n_nodes);
-		
-//		System.out.println("louvain_file = " + louvain_file);
-//		System.out.println("louvain mod = " + modularity(G, louvain_part));
-//		System.out.println("compare_file = " + compare_file);
-//		System.out.println("compare mod = " + modularity(G, compare_part));
-		
-		//
-		long start = System.currentTimeMillis();
-		double aIntra = intraRatio(louvain_part, compare_part, num_pair);
-		System.out.println("aIntra = " + aIntra);
-		System.out.println("intraRatio - DONE, elapsed " + (System.currentTimeMillis() - start));
-		
-		start = System.currentTimeMillis();
-		double aInter = interRatio(louvain_part, compare_part, num_pair);
-		System.out.println("aInter = " + aInter);
-		System.out.println("interRatio - DONE, elapsed " + (System.currentTimeMillis() - start));
-		
-		double ARI = adjustedRandIndex(louvain_part, compare_part);
-		System.out.println("ARI = " + ARI);
-		
-		double NMI = normalizedMutualInfo(louvain_part, compare_part);
-		System.out.println("NMI = " + NMI);
-		
-//		List<Integer[]> gt = readGroundTruth("_data/com_amazon_ungraph.top5000", n_nodes);
-		List<Integer[]> lv = readGroundTruth(path + louvain_file, n_nodes);
-		List<Integer[]> cp = readGroundTruth(path + compare_file, n_nodes);
-		System.out.println("lv.size = " + lv.size());
-		System.out.println("cp.size = " + cp.size());
-		System.out.println("Avg.F1 score (lv,cp) = " + avgF1Score(lv, cp));
-		System.out.println("Avg.F1 score (lv,cp) = " + avgF1Score(louvain_part, compare_part));
 		
 		// Avg.F1 score
 //		List<Integer[]> gt = readGroundTruth("_data/com_amazon_ungraph.top5000", n_nodes);
