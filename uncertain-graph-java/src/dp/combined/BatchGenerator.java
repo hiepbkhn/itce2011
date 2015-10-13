@@ -116,16 +116,35 @@ public class BatchGenerator {
 	
 	/////////
 	// algo = "_ef_", "_tmf_", "_ldp_"
-	public static void generateLouvain(String batch_file, String prefix, String dataname, int n_samples, double[] epsArr, String algo, int type) 
+	public static void generateLouvain1(String batch_file, String prefix, String dataname, int n_samples, double[] epsArr, String algo) 
 			throws IOException{
 		
 		BufferedWriter bw = new BufferedWriter(new FileWriter(batch_file));
 		for (double eps : epsArr){
 			String sample_name = dataname + algo + String.format("%.1f", eps);
 			
-			String cmd = "java dp.combined.Louvain " + prefix + " " + n_samples + " " + type + " " + sample_name + 
-					" > ../_console/" + dataname + "_ef_" + String.format("%.1f", eps) + "-LOUVAIN.txt";
+			String cmd = "java dp.combined.Louvain " + prefix + " " + n_samples + " " + 1 + " " + sample_name + 
+					" > ../_console/" + dataname + algo + String.format("%.1f", eps) + "-LOUVAIN.txt";
+			
 			bw.write(cmd + "\n");
+		}
+    	bw.close();
+	}
+	
+	public static void generateLouvain2(String batch_file, String prefix, String dataname, int n_samples, double[] epsArr, String algo, int[] kArr) 
+			throws IOException{
+		
+		BufferedWriter bw = new BufferedWriter(new FileWriter(batch_file));
+		for (double eps : epsArr){
+			for (int k : kArr){
+				String sample_name = dataname + algo + String.format("%.1f", eps) + "_" + k;
+				
+				String cmd = "java dp.combined.Louvain " + prefix + " " + n_samples + " " + 2 + " " + sample_name + 
+						" > ../_console/" + dataname + algo + String.format("%.1f", eps) + "_" + k + "-LOUVAIN.txt";
+				
+				bw.write(cmd + "\n");
+			}
+			bw.write("\n");
 		}
     	bw.close();
 	}
@@ -253,8 +272,8 @@ public class BatchGenerator {
 			double log_n = Math.log(n);
 			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
 			
-			String batch_file = "_cmd/Louvain_" + dataname + ".cmd";
-			generateLouvain(batch_file, prefix, dataname, n_samples, epsArr, "_ef_", 1);
+			String batch_file = "_cmd/Louvain_ef_" + dataname + ".cmd";
+			generateLouvain1(batch_file, prefix, dataname, n_samples, epsArr, "_ef_");
 			
 			System.out.println("DONE.");
 		}
@@ -265,8 +284,8 @@ public class BatchGenerator {
 			double log_n = Math.log(n);
 			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
 			
-			String batch_file = "_cmd/Louvain_" + dataname + ".cmd";
-			generateLouvain(batch_file, prefix, dataname, n_samples, epsArr, "_tmf_", 1);
+			String batch_file = "_cmd/Louvain_tmf_" + dataname + ".cmd";
+			generateLouvain1(batch_file, prefix, dataname, n_samples, epsArr, "_tmf_");
 			
 			System.out.println("DONE.");
 		}
@@ -278,8 +297,8 @@ public class BatchGenerator {
 			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
 			int[] kArr = new int[]{2,4,8,16,32,64,128};
 			
-			String batch_file = "_cmd/Louvain_" + dataname + ".cmd";
-			generateLouvain(batch_file, prefix, dataname, n_samples, epsArr, "_ldp_", 1);
+			String batch_file = "_cmd/Louvain_ldp_" + dataname + ".cmd";
+			generateLouvain2(batch_file, prefix, dataname, n_samples, epsArr, "_ldp_", kArr);
 			
 			System.out.println("DONE.");
 		}
