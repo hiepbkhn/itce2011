@@ -136,7 +136,7 @@ public class BatchGenerator {
 		
 		BufferedWriter bw = new BufferedWriter(new FileWriter(batch_file));
 		for (double eps : epsArr){
-			String sample_file = prefix + "_sample/" + dataname + "_ef_" + String.format("%.1f", eps);
+			String sample_file = dataname + "_ef_" + String.format("%.1f", eps);
 			String cmd = "java dp.combined.CommunityMeasure " + prefix + " " + dataname + " " + n_samples + " " + sample_file;
 					
 			bw.write(cmd + "\n");

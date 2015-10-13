@@ -651,16 +651,16 @@ public class CommunityMeasure {
 	}
 	
 	////
-	public static void computeAndExport(String dataname, String sample_file, int n_samples) throws Exception{
+	public static void computeAndExport(String prefix, String dataname, String sample_file, int n_samples) throws Exception{
 		
 		EdgeListReader reader = new EdgeListReader();
 		Grph G;
-		RegularFile f = new RegularFile("_data/" + dataname + ".gr");
+		RegularFile f = new RegularFile(prefix + "_data/" + dataname + ".gr");
 		G = reader.readGraph(f);
 		
 		int n_nodes = G.getNumberOfVertices();
 		
-		String louvain_file = "_data/" + dataname + ".louvain";
+		String louvain_file = prefix + "_data/" + dataname + ".louvain";
 		int[] louvain_part = readPart(louvain_file, n_nodes);
 		
 		int[] comArr = new int[n_samples];
@@ -669,7 +669,7 @@ public class CommunityMeasure {
 		double[] f1Arr = new double[n_samples];
 		
 		for (int i = 0; i < n_samples; i++){
-			String compare_file = "_louvain/" + sample_file + "." + i + ".part";
+			String compare_file = prefix + "_louvain/" + sample_file + "." + i + ".part";
 			int[] compare_part = readPart(compare_file, n_nodes);
 			
 			int k = 0;
@@ -685,7 +685,7 @@ public class CommunityMeasure {
 			
 		}
 		// write to MATLAB
-		String matlab_file = "_matlab/" + sample_file + ".mat";
+		String matlab_file = prefix + "_matlab/" + sample_file + ".mat";
 		
 		MLDouble modA = new MLDouble("modArr", modArr, 1);
 		MLDouble nmiA = new MLDouble("nmiArr", nmiArr, 1);
@@ -760,21 +760,23 @@ public class CommunityMeasure {
 		
 		
 		// COMMAND-LINE <prefix> <dataname> <n_samples> <eps>
+		String prefix= "";
 		String dataname = "karate";
 	    int n_samples = 1;
 	    String sample_file = "";
 	    
-	    if(args.length >= 3){
-			dataname = args[0];
-			n_samples = Integer.parseInt(args[1]);
-			sample_file = args[2];
+	    if(args.length >= 4){
+	    	prefix = args[0];
+			dataname = args[1];
+			n_samples = Integer.parseInt(args[2]);
+			sample_file = args[3];
 	    }
 	    
 	    System.out.println("dataname = " + dataname);
 		System.out.println("n_samples = " + n_samples);
 		System.out.println("sample_file = " + sample_file);
 		
-		computeAndExport(dataname, sample_file, n_samples);
+		computeAndExport(prefix, dataname, sample_file, n_samples);
 		System.out.println("computeAndExport - DONE.");
 		
 		
