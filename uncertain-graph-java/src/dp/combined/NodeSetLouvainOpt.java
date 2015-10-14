@@ -598,7 +598,7 @@ public class NodeSetLouvainOpt {
 //				bw.write("\n");
 //			}
 			
-			for (int s = 0; s < R.part.length; s++)
+			for (int s = 0; s < R.ind2node.length; s++)
 				bw.write(R.ind2node[s] + ",");
 			bw.write("\n");
 		}
