@@ -230,11 +230,12 @@ public class TreeCutter {
 			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
 			int burn_factor = 20;
 			double[] ratioArr = new double[]{2.0, 1.5, 1.0};
+			int max_level = 10;
 			
 			for (double ratio : ratioArr){
 				for (double eps : epsArr){
 						
-					String tree_file = dataname + "_hd_" + burn_factor +
+					String tree_file = dataname + "_hd_" + burn_factor + "_" + max_level + 
 							"_" + String.format("%.1f", eps) + "_" + String.format("%.2f", ratio) + "_tree";
 					
 					cutTreeHD(tree_file, n_samples);

@@ -134,7 +134,7 @@ public class BatchGenerator {
     	bw.close();
 	}
 	
-	//////to automate CoomunityMeasure.computeAndExport()
+	//////to automate CommunityMeasure.computeAndExport()
 	public static void measureEdgeFlip(String batch_file, String prefix, String dataname, int n_samples, double[] epsArr) 
 			throws IOException{
 		
@@ -175,6 +175,44 @@ public class BatchGenerator {
 			}
 			bw.write("\n");
 		}
+		bw.close();
+	}
+	
+	public static void measureLouvainOpt(String batch_file, String prefix, String dataname, int n_samples, 
+			int burn_factor, int[] maxLevelArr, int[] kArr) throws IOException{
+		
+		BufferedWriter bw = new BufferedWriter(new FileWriter(batch_file));
+		for (int i = 0; i < kArr.length; i++){
+			int k = kArr[i];
+			int max_level = maxLevelArr[i];
+			
+			String sample_file = dataname + "_nmd_" + burn_factor + "_" + max_level + "_" + k;
+			String cmd = "java dp.combined.CommunityMeasure " + prefix + " " + dataname + " " + n_samples + " " + sample_file;
+			
+			bw.write(cmd + "\n");
+		}
+		
+		bw.close();
+	}
+	
+	public static void measureLouvainModDiv(String batch_file, String prefix, String dataname, int n_samples, 
+			int burn_factor, int[] maxLevelArr, int[] kArr, double[] epsArr, double ratio) throws IOException{
+		
+		BufferedWriter bw = new BufferedWriter(new FileWriter(batch_file));
+		for (double eps : epsArr){
+			for (int i = 0; i < kArr.length; i++){
+				int k = kArr[i];
+				int max_level = maxLevelArr[i];
+				
+				String sample_file = dataname + "_md_" + burn_factor + "_" + 
+						max_level + "_" + k + "_" + String.format("%.1f", eps) + "_" + String.format("%.2f", ratio);
+				String cmd = "java dp.combined.CommunityMeasure " + prefix + " " + dataname + " " + n_samples + " " + sample_file;
+				
+				bw.write(cmd + "\n");
+			}
+			bw.write("\n");
+		}
+		
 		bw.close();
 	}
 	
@@ -341,21 +379,39 @@ public class BatchGenerator {
 			double log_n = Math.log(n);
 			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
 
-			//
-			String batch_file = "_cmd/Metric_EdgeFlip_" + dataname + ".cmd";
-			measureEdgeFlip(batch_file, prefix, dataname, n_samples, epsArr);
-			System.out.println("measureEdgeFlip - DONE.");
+//			//
+//			String batch_file = "_cmd/Metric_EdgeFlip_" + dataname + ".cmd";
+//			measureEdgeFlip(batch_file, prefix, dataname, n_samples, epsArr);
+//			System.out.println("measureEdgeFlip - DONE.");
+//			
+//			//
+//			batch_file = "_cmd/Metric_TmF_" + dataname + ".cmd";
+//			measureTmF(batch_file, prefix, dataname, n_samples, epsArr);
+//			System.out.println("measureTmF - DONE.");
+//			
+//			//
+//			batch_file = "_cmd/Metric_LouvainDP_" + dataname + ".cmd";
+//			int[] kArr = new int[]{2,4,8,16,32,64,128};
+//			measureLouvainDP(batch_file, prefix, dataname, n_samples, epsArr, kArr);
+//			System.out.println("measureLouvainDP - DONE.");
+			
 			
 			//
-			batch_file = "_cmd/Metric_TmF_" + dataname + ".cmd";
-			measureTmF(batch_file, prefix, dataname, n_samples, epsArr);
-			System.out.println("measureTmF - DONE.");
+			String batch_file = "_cmd/Metric_LouvainOpt_" + dataname + ".cmd";
+			int[] kArr = new int[]{2,3,4,5,6,10};
+			int[] maxLevelArr = new int[]{10,7,5,4,4,3};
+			int burn_factor = 20;
+			measureLouvainOpt(batch_file, prefix, dataname, n_samples, burn_factor, maxLevelArr, kArr);
+			System.out.println("measureLouvainOpt - DONE.");
 			
-			//
-			batch_file = "_cmd/Metric_LouvainDP_" + dataname + ".cmd";
-			int[] kArr = new int[]{2,4,8,16,32,64,128};
-			measureLouvainDP(batch_file, prefix, dataname, n_samples, epsArr, kArr);
-			System.out.println("measureLouvainDP - DONE.");
+//			//
+//			String batch_file = "_cmd/Metric_LouvainModDiv_" + dataname + ".cmd";
+//			int[] kArr = new int[]{2,3,4,5,6,10};
+//			int[] maxLevelArr = new int[]{10,7,5,4,4,3};
+//			int burn_factor = 20;
+//			double ratio = 2.0;
+//			measureLouvainModDiv(batch_file, prefix, dataname, n_samples, burn_factor, maxLevelArr, kArr, epsArr, ratio);
+//			System.out.println("measureLouvainModDiv - DONE.");
 		}
 		
 	}
