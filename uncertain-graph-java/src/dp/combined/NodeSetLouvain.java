@@ -796,4 +796,26 @@ public class NodeSetLouvain {
 		return ret;
 	}
 	
+	////write all nodes at level 'level'
+	public static List<NodeSetLouvain> cutLevel(NodeSetLouvain root_set, int level){
+		
+		List<NodeSetLouvain> ret = new ArrayList<NodeSetLouvain>();
+		
+		Queue<NodeSetLouvain> queue_set = new LinkedList<NodeSetLouvain>();
+		queue_set.add(root_set);
+		while (queue_set.size() > 0){
+			NodeSetLouvain R = queue_set.remove();
+			
+			if (R.level < level){
+				for (int i = 0; i < R.children.length; i++)
+					queue_set.add(R.children[i]);
+			}else{	// at level 
+				ret.add(R);
+			}
+		}
+		
+		//
+		return ret;
+	}
+	
 }
