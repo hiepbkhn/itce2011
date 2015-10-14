@@ -11,6 +11,8 @@
  * 	- implement NMI
  * Oct 9
  * 	- implement F1 (avgF1Score): two versions
+ * Oct 14
+ * 	- fastNormalizedMutualInfo(), fastAvgF1Score()
  */
 
 package dp.combined;
@@ -18,6 +20,7 @@ package dp.combined;
 import grph.Grph;
 import grph.VertexPair;
 import grph.io.EdgeListReader;
+import hist.Int2;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -376,8 +379,65 @@ public class CommunityMeasure {
 		return ret;
 	}
 	
+	// fast version
+	public static double fastNormalizedMutualInfo(int[] part_org, int[] part){
+		double ret = 0.0;
+		int n = part_org.length;
+		
+		int k_org = 0;
+		for (int com : part_org)
+			if (k_org < com)
+				k_org = com;
+		k_org += 1;
+		
+		int k = 0;
+		for (int com : part)
+			if (k < com)
+				k = com;
+		k += 1;
+		
+//		System.out.println("k_org = " + k_org);
+//		System.out.println("k = " + k);
+		// n_ij, n_i, n_j
+		Map<Int2, Integer> n_ij = new HashMap<Int2, Integer>();
+		int[] n_i = new int[k_org];
+		int[] n_j = new int[k];
+		
+		for (int u = 0; u < n; u++){
+			Int2 key = new Int2(part_org[u], part[u]);
+			if (n_ij.containsKey(key))
+				n_ij.put(key, n_ij.get(key) + 1);
+			else
+				n_ij.put(key, 1);
+				
+			n_i[part_org[u]] += 1;
+			n_j[part[u]] += 1;
+		}
+
+		//
+		double nominator = 0.0;
+		for (Map.Entry<Int2, Integer> entry : n_ij.entrySet()){
+			int i = entry.getKey().val0;
+			int j = entry.getKey().val1;
+			int n_ij_val = entry.getValue();
+			nominator += n_ij_val * Math.log((double)n_ij_val/n_i[i] * (double)n/n_j[j]);
+		}
+		nominator = -2*nominator;
+		
+		double denominator = 0.0;
+		for (int i = 0; i < k_org; i++)
+			denominator += n_i[i] * Math.log((double)n_i[i]/n);
+		for (int j = 0; j < k; j++)
+			denominator += n_j[j] * Math.log((double)n_j[j]/n);
+		
+		ret = nominator/denominator;
+		//
+		return ret;
+	}
+	
+	
 	//// average F1 score
-	// A, B already sorted
+	// A, B already sorted, used in avgF1Score(List<Integer []> C1, List<Integer []> C2)
 	public static int intersect(Integer[] A, Integer[] B){
 		int ret = 0;
 		
@@ -441,6 +501,9 @@ public class CommunityMeasure {
 				k = com;
 		k += 1;
 		
+//		System.out.println("k_org = " + k_org);
+//		System.out.println("k = " + k);
+		
 		int[] sizeC1 = new int[k_org];
 		int[] sizeC2 = new int[k];
 		
@@ -453,37 +516,117 @@ public class CommunityMeasure {
 			sizeC2[part[u]] += 1;
 		}
 		
-		// 
-		double[][] prec = new double[k_org][k];
-		double[][] recall = new double[k_org][k];
-		double[][] H = new double[k_org][k];
+		// Out Of Memory on 'youtube'
+//		double[][] prec = new double[k_org][k];
+//		double[][] recall = new double[k_org][k];
+//		double[][] H = new double[k_org][k];
+//		
+//		for (int i = 0; i < k_org; i++){
+//			for (int j = 0; j < k; j++){
+//				if (inter[i][j] > 0){
+//					prec[i][j] = (double)inter[i][j] / sizeC1[i];
+//					recall[i][j] = (double)inter[i][j] / sizeC2[j];
+//					H[i][j] = 2*prec[i][j]*recall[i][j]/(prec[i][j] + recall[i][j]);
+//				}
+//			}
+//		}
+//		
+//		double[] F1 = new double[k_org];
+//		double[] F2 = new double[k];
+//		
+//		// F1(C1[i], C2)
+//		for (int i = 0; i < k_org; i++)
+//			for (int j = 0; j < k; j++)
+//				if (inter[i][j] > 0)
+//					if (F1[i] < H[i][j])
+//						F1[i] = H[i][j];
+//		
+//		// F1(C2[j], C1)
+//		for (int j = 0; j < k; j++)
+//			for (int i = 0; i < k_org; i++)
+//				if (inter[i][j] > 0)
+//					if (F2[j] < H[i][j])
+//						F2[j] = H[i][j];
+
+		// fixed 
+		double[] F1 = new double[k_org];
+		double[] F2 = new double[k];
 		
 		for (int i = 0; i < k_org; i++){
 			for (int j = 0; j < k; j++){
 				if (inter[i][j] > 0){
-					prec[i][j] = (double)inter[i][j] / sizeC1[i];
-					recall[i][j] = (double)inter[i][j] / sizeC2[j];
-					H[i][j] = 2*prec[i][j]*recall[i][j]/(prec[i][j] + recall[i][j]);
+					double H_ij = 2*((double)inter[i][j] / sizeC1[i])*((double)inter[i][j] / sizeC2[j])/((double)inter[i][j] / sizeC1[i] + (double)inter[i][j] / sizeC2[j]);
+					if (F1[i] < H_ij)
+						F1[i] = H_ij;
+					if (F2[j] < H_ij)
+						F2[j] = H_ij;
 				}
 			}
+		}
+		
+		double sum1 = 0.0;
+		double sum2 = 0.0;
+		for (int i = 0; i < k_org; i++)
+			sum1 += F1[i];
+		for (int j = 0; j < k; j++)
+			sum2 += F2[j];
+		
+		ret = sum1/(2*k_org) + sum2/(2*k); 
+		
+		
+		//
+		return ret;
+	}
+	
+	// fast version
+	public static double fastAvgF1Score(int[] part_org, int[] part){
+		double ret = 0.0;
+		
+		int n = part_org.length;
+		
+		int k_org = 0;
+		for (int com : part_org)
+			if (k_org < com)
+				k_org = com;
+		k_org += 1;
+		
+		int k = 0;
+		for (int com : part)
+			if (k < com)
+				k = com;
+		k += 1;
+		
+//		System.out.println("k_org = " + k_org);
+//		System.out.println("k = " + k);
+		
+		Map<Int2, Integer> inter = new HashMap<Int2, Integer>();
+		int[] sizeC1 = new int[k_org];
+		int[] sizeC2 = new int[k];
+		
+		for (int u = 0; u < n; u++){
+			Int2 key = new Int2(part_org[u], part[u]);
+			if (inter.containsKey(key))
+				inter.put(key, inter.get(key) + 1);
+			else
+				inter.put(key, 1);
+				
+			sizeC1[part_org[u]] += 1;
+			sizeC2[part[u]] += 1;
 		}
 		
 		double[] F1 = new double[k_org];
 		double[] F2 = new double[k];
 		
-		// F1(C1[i], C2)
-		for (int i = 0; i < k_org; i++)
-			for (int j = 0; j < k; j++)
-				if (inter[i][j] > 0)
-					if (F1[i] < H[i][j])
-						F1[i] = H[i][j];
-		
-		// F1(C2[j], C1)
-		for (int j = 0; j < k; j++)
-			for (int i = 0; i < k_org; i++)
-				if (inter[i][j] > 0)
-					if (F2[j] < H[i][j])
-						F2[j] = H[i][j];
+		for (Map.Entry<Int2, Integer> entry : inter.entrySet()){
+			int i = entry.getKey().val0;
+			int j = entry.getKey().val1;
+			int inter_ij = entry.getValue();
+			double H_ij = 2*((double)inter_ij / sizeC1[i])*((double)inter_ij / sizeC2[j])/((double)inter_ij / sizeC1[i] + (double)inter_ij / sizeC2[j]);
+			if (F1[i] < H_ij)
+				F1[i] = H_ij;
+			if (F2[j] < H_ij)
+				F2[j] = H_ij;
+		}
 		
 		double sum1 = 0.0;
 		double sum2 = 0.0;
@@ -669,6 +812,8 @@ public class CommunityMeasure {
 		double[] f1Arr = new double[n_samples];
 		
 		for (int i = 0; i < n_samples; i++){
+//			System.out.println("sample " + i);
+			
 			String compare_file = prefix + "_louvain/" + sample_file + "." + i + ".part";
 			int[] compare_part = readPart(compare_file, n_nodes);
 			
@@ -680,8 +825,8 @@ public class CommunityMeasure {
 			//
 			comArr[i] = k+1;
 			modArr[i] = modularity(G, compare_part);
-			nmiArr[i] = normalizedMutualInfo(louvain_part, compare_part);
-			f1Arr[i] = avgF1Score(louvain_part, compare_part);
+			nmiArr[i] = fastNormalizedMutualInfo(louvain_part, compare_part);
+			f1Arr[i] = fastAvgF1Score(louvain_part, compare_part);
 			
 		}
 		// write to MATLAB
@@ -752,10 +897,10 @@ public class CommunityMeasure {
 //		String compare_file = "com_amazon_ungraph_edgeflip_12.7-0.part";		// EdgeFlip		aIntra = 0.4181, aInter = 0.9935, ARI = 0.4416
 //		String compare_file = "com_amazon_ungraph_filter_6.4-0.part";			// TmF
 //		String compare_file = "com_amazon_ungraph_filter_12.7-0.part";			// TmF			aIntra = 0.2427, aInter = 0.9925, ARI = 0.2691
-		String compare_file = "com_amazon_ungraph_nodesetlv2_20_40_10_1_2.00_20.0_5.part";
+//		String compare_file = "com_amazon_ungraph_nodesetlv2_20_40_10_1_2.00_20.0_5.part";
 //		String compare_file = "com_amazon_ungraph_hrgdivgreedy_20_40_10_8_2.00_20.0.part";	// 
 //		String compare_file = "com_amazon_ungraph_nodesetlv2_20_40_10_4_2.00_20.0_5.part3";	// NodeSetLouvain
-//		String compare_file = "com_amazon_ungraph_nodesetlv2_20_40_10_3_2.00_20.0_10.best";	// NodeSetLouvain
+		String compare_file = "com_amazon_ungraph_nodesetlv2_20_40_10_3_2.00_20.0_10.best";	// NodeSetLouvain
 //		String compare_file = "com_amazon_ungraph_nodesetlv2_20_40_10_3_2.50_30.0_10.part3";	// NodeSetLouvain
 		
 		
@@ -815,6 +960,7 @@ public class CommunityMeasure {
 //		
 //		double NMI = normalizedMutualInfo(louvain_part, compare_part);
 //		System.out.println("NMI = " + NMI);
+//		System.out.println("NMI [fast] = " + fastNormalizedMutualInfo(louvain_part, compare_part));
 //		
 ////		List<Integer[]> gt = readGroundTruth("_data/com_amazon_ungraph.top5000", n_nodes);
 //		List<Integer[]> lv = readGroundTruth(path + louvain_file, n_nodes);
@@ -823,6 +969,7 @@ public class CommunityMeasure {
 //		System.out.println("cp.size = " + cp.size());
 //		System.out.println("Avg.F1 score (lv,cp) = " + avgF1Score(lv, cp));
 //		System.out.println("Avg.F1 score (lv,cp) = " + avgF1Score(louvain_part, compare_part));
+//		System.out.println("Avg.F1 score [fast] (lv,cp) = " + fastAvgF1Score(louvain_part, compare_part));
 		
 		
 		// Avg.F1 score

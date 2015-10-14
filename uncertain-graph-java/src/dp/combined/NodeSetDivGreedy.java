@@ -816,6 +816,8 @@ public class NodeSetDivGreedy {
 			
 			if (R.left != null){
 				bw.write(R.left.id + "," + R.right.id);
+				bw.write("\n");
+				
 				queue.add(R.left);
 				queue.add(R.right);
 			}else{	// leaf
