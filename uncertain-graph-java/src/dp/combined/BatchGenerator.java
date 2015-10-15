@@ -216,6 +216,33 @@ public class BatchGenerator {
 		bw.close();
 	}
 	
+	// against LouvainOpt
+	public static void measureLouvainModDivAgainstOpt(String batch_file, String prefix, String dataname, int n_samples, 
+			int burn_factor, int[] maxLevelArr, int[] kArr, double[] epsArr, double ratio) throws IOException{
+		
+		BufferedWriter bw = new BufferedWriter(new FileWriter(batch_file));
+		for (double eps : epsArr){
+			for (int i = 0; i < kArr.length; i++){
+				int k = kArr[i];
+				int max_level = maxLevelArr[i];
+				
+				String louvainopt_file = dataname + "_nmd_" + burn_factor + "_" + 
+						max_level + "_" + k;
+				
+				String sample_file = dataname + "_md_" + burn_factor + "_" + 
+						max_level + "_" + k + "_" + String.format("%.1f", eps) + "_" + String.format("%.2f", ratio);
+				
+				String cmd = "java dp.combined.CommunityMeasure " + prefix + " " + dataname + " " + n_samples + " " + 
+						louvainopt_file + " " + sample_file;
+				
+				bw.write(cmd + "\n");
+			}
+			bw.write("\n");
+		}
+		
+		bw.close();
+	}
+	
 	////////////////////////////////////////////////
 	public static void main(String[] args) throws Exception{
 		
@@ -397,14 +424,14 @@ public class BatchGenerator {
 			
 			
 			//
-			String batch_file = "_cmd/Metric_LouvainOpt_" + dataname + ".cmd";
-			int[] kArr = new int[]{2,3,4,5,6,10};
-			int[] maxLevelArr = new int[]{10,7,5,4,4,3};
-			int burn_factor = 20;
-			measureLouvainOpt(batch_file, prefix, dataname, n_samples, burn_factor, maxLevelArr, kArr);
-			System.out.println("measureLouvainOpt - DONE.");
+//			String batch_file = "_cmd/Metric_LouvainOpt_" + dataname + ".cmd";
+//			int[] kArr = new int[]{2,3,4,5,6,10};
+//			int[] maxLevelArr = new int[]{10,7,5,4,4,3};
+//			int burn_factor = 20;
+//			measureLouvainOpt(batch_file, prefix, dataname, n_samples, burn_factor, maxLevelArr, kArr);
+//			System.out.println("measureLouvainOpt - DONE.");
 			
-//			//
+			//
 //			String batch_file = "_cmd/Metric_LouvainModDiv_" + dataname + ".cmd";
 //			int[] kArr = new int[]{2,3,4,5,6,10};
 //			int[] maxLevelArr = new int[]{10,7,5,4,4,3};
@@ -412,6 +439,15 @@ public class BatchGenerator {
 //			double ratio = 2.0;
 //			measureLouvainModDiv(batch_file, prefix, dataname, n_samples, burn_factor, maxLevelArr, kArr, epsArr, ratio);
 //			System.out.println("measureLouvainModDiv - DONE.");
+			
+			//
+			String batch_file = "_cmd/Metric_LouvainModDiv_Opt_" + dataname + ".cmd";
+			int[] kArr = new int[]{2,3,4,5,6,10};
+			int[] maxLevelArr = new int[]{10,7,5,4,4,3};
+			int burn_factor = 20;
+			double ratio = 2.0;
+			measureLouvainModDivAgainstOpt(batch_file, prefix, dataname, n_samples, burn_factor, maxLevelArr, kArr, epsArr, ratio);
+			System.out.println("measureLouvainModDivAgainstOpt - DONE.");
 		}
 		
 	}

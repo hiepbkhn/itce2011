@@ -8,7 +8,7 @@ m_list = [925872, 1049866, 2987624];
 
 
 
-for i=1:1
+for i=2:2
     n = n_list(i);
     m = m_list(i);
     log_n = log(n);
@@ -37,7 +37,14 @@ for i=1:1
     % EdgeFlip
     n_edge1_EF = (1-sArr/2)*m;
     n_edge_total_EF = (1-sArr)*m + n*(n-1)/4*sArr;
-    plot (epsArr, n_edge1_EF, '-', epsArr, n_edge_total_EF ,'-', epsArr, n_edge1_TmF ,'--', epsArr, n_edge_total_TmF ,'--');
-    axis([0 epsArr(length(epsArr)) 0 3*m])
+    plot (epsArr/log_n, n_edge1_EF/m, '-', epsArr/log_n, n_edge_total_EF/m ,'-', epsArr/log_n, n_edge1_TmF/m ,'--', epsArr/log_n, n_edge_total_TmF/m ,'--');
+%     axis([0 epsArr(length(epsArr)) 0 3])
+    axis([0 3 0 3])
+    h = legend('n_1 (EF)','total-edges (EF)', 'n_1 (TmF)','total-edges (TmF)');
+    xlabel('\epsilon / ln(n)');
+    ylabel('normalized number of edges');
+    line([1 1], [0 3], 'LineStyle', '--');
+    line([2 2], [0 3], 'LineStyle', '--');
+%     set(h,'Interpreter','latex');
 %     hold on
 end

@@ -922,6 +922,92 @@ public class CommunityMeasure {
 		
 	}
 	
+	//// applied to LouvainModDiv against LouvainOpt !
+	public static void computeAndExport2(String prefix, String dataname, String louvainopt_file, String sample_file, int n_samples) throws Exception{
+		
+		EdgeListReader reader = new EdgeListReader();
+		Grph G;
+		RegularFile f = new RegularFile(prefix + "_data/" + dataname + ".gr");
+		G = reader.readGraph(f);
+		
+		int n_nodes = G.getNumberOfVertices();
+		
+		String louvain_file = prefix + "_data/" + louvainopt_file + ".part";
+		int[] louvain_part = readPart(louvain_file, n_nodes);
+		
+		
+		
+		
+		int[] comArrBest = new int[n_samples];
+		double[] modArrBest = new double[n_samples];
+		double[] nmiArrBest = new double[n_samples];
+		double[] f1ArrBest = new double[n_samples];
+		int[] comArrPart2 = new int[n_samples];
+		double[] modArrPart2 = new double[n_samples];
+		double[] nmiArrPart2 = new double[n_samples];
+		double[] f1ArrPart2 = new double[n_samples];
+		
+		for (int i = 0; i < n_samples; i++){
+//			System.out.println("sample " + i);
+			
+			// .best
+			String compare_file = prefix + "_louvain/" + sample_file + "." + i + ".best";
+			int[] compare_part = readPart(compare_file, n_nodes);
+			
+			int k = 0;
+			for (int com : compare_part)
+				if (k < com)
+					k = com;
+			
+			//
+			comArrBest[i] = k+1;
+			modArrBest[i] = modularity(G, compare_part);
+			nmiArrBest[i] = fastNormalizedMutualInfo(louvain_part, compare_part);
+			f1ArrBest[i] = fastAvgF1Score(louvain_part, compare_part);
+			
+			
+			// .part2
+			compare_file = prefix + "_louvain/" + sample_file + "." + i + ".part2";
+			compare_part = readPart(compare_file, n_nodes);
+			
+			k = 0;
+			for (int com : compare_part)
+				if (k < com)
+					k = com;
+			
+			//
+			comArrPart2[i] = k+1;
+			modArrPart2[i] = modularity(G, compare_part);
+			nmiArrPart2[i] = fastNormalizedMutualInfo(louvain_part, compare_part);
+			f1ArrPart2[i] = fastAvgF1Score(louvain_part, compare_part);
+			
+		}
+		// write to MATLAB
+		String matlab_file = prefix + "_matlab/" + sample_file + "_opt.mat";		// Note: suffix '_opt'
+		
+		MLDouble modA = new MLDouble("modArrBest", modArrBest, 1);
+		MLDouble nmiA = new MLDouble("nmiArrBest", nmiArrBest, 1);
+		MLDouble f1A = new MLDouble("f1ArrBest", f1ArrBest, 1);
+		MLInt32 comA = new MLInt32("comArrBest", comArrBest, 1);
+		MLDouble modA2 = new MLDouble("modArrPart2", modArrPart2, 1);
+		MLDouble nmiA2 = new MLDouble("nmiArrPart2", nmiArrPart2, 1);
+		MLDouble f1A2 = new MLDouble("f1ArrPart2", f1ArrPart2, 1);
+		MLInt32 comA2 = new MLInt32("comArrPart2", comArrPart2, 1);
+        ArrayList<MLArray> towrite = new ArrayList<MLArray>();
+        towrite.add(modA); 
+        towrite.add(nmiA);
+        towrite.add(f1A);
+        towrite.add(comA);
+        towrite.add(modA2); 
+        towrite.add(nmiA2);
+        towrite.add(f1A2);
+        towrite.add(comA2);
+        
+        new MatFileWriter(matlab_file, towrite );
+        System.out.println("Written to MATLAB file.");
+		
+	}
+	
 	////////////////////////////////////////////////
 	public static void main(String[] args) throws Exception{
 		
@@ -980,27 +1066,50 @@ public class CommunityMeasure {
 //		String compare_file = "com_amazon_ungraph_nodesetlv2_20_40_10_3_2.50_30.0_10.part3";	// NodeSetLouvain
 		
 		
+		// 1 - comparison sample_file with Louvain (applied to all schemes)
 		// COMMAND-LINE <prefix> <dataname> <n_samples> <eps>
+//		String prefix= "";
+//		String dataname = "karate";
+//	    int n_samples = 1;
+//	    String sample_file = "";
+//	    
+//	    if(args.length >= 4){
+//	    	prefix = args[0];
+//			dataname = args[1];
+//			n_samples = Integer.parseInt(args[2]);
+//			sample_file = args[3];
+//	    }
+//	    
+//	    System.out.println("dataname = " + dataname);
+//		System.out.println("n_samples = " + n_samples);
+//		System.out.println("sample_file = " + sample_file);
+//		
+////		computeAndExport(prefix, dataname, sample_file, n_samples, 1);
+//		computeAndExport(prefix, dataname, sample_file, n_samples, 2);
+//		System.out.println("computeAndExport - DONE.");
+		
+		
+		// 2 - comparison with LouvainOpt (applied to LouvainModDiv only)
 		String prefix= "";
 		String dataname = "karate";
 	    int n_samples = 1;
+	    String louvainopt_file = "";
 	    String sample_file = "";
 	    
-	    if(args.length >= 4){
+	    if(args.length >= 5){
 	    	prefix = args[0];
 			dataname = args[1];
 			n_samples = Integer.parseInt(args[2]);
-			sample_file = args[3];
+			louvainopt_file = args[4];
+			sample_file = args[4];
 	    }
 	    
 	    System.out.println("dataname = " + dataname);
 		System.out.println("n_samples = " + n_samples);
 		System.out.println("sample_file = " + sample_file);
 		
-//		computeAndExport(prefix, dataname, sample_file, n_samples, 1);
-		computeAndExport(prefix, dataname, sample_file, n_samples, 2);
+		computeAndExport2(prefix, dataname, louvainopt_file, sample_file, n_samples);
 		System.out.println("computeAndExport - DONE.");
-		
 		
 		
 		//
