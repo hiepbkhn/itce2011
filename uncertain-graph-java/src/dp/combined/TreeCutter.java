@@ -174,8 +174,8 @@ public class TreeCutter {
 //		System.out.println("type = " + type);
 		
 		////
-		String[] dataname_list = new String[]{"com_amazon_ungraph", "com_dblp_ungraph", "com_youtube_ungraph"};
-		int[] n_list = new int[]{334863, 317080, 1134890};
+		String[] dataname_list = new String[]{ "com_youtube_ungraph"}; //"com_amazon_ungraph", "com_dblp_ungraph",
+		int[] n_list = new int[]{1134890};	//334863, 317080, 
 		int n_samples = 20;
 		
 		
@@ -197,51 +197,51 @@ public class TreeCutter {
 //		}
 		
 		// 2 - MD (LouvainModDiv)
-//		for (int i = 0; i < n_list.length; i++){
-//			String dataname = dataname_list[i];
-//			int n = n_list[i];
-//			
-//			double log_n = Math.log(n);
-//			int[] kArr = new int[]{2,3,4,5,6,10};
-//			int[] maxLevelArr = new int[]{10,7,5,4,4,3};
-//			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
-//			int burn_factor = 20;
-//			double ratio = 2.0;
-//			
-//			for (double eps : epsArr){
-//				for (int j = 0; j < kArr.length; j++){
-//					int k = kArr[j];
-//					int max_level = maxLevelArr[j];
-//					
-//					String tree_file = dataname + "_md_" + burn_factor + "_" + max_level + "_" + k + 
-//							"_" + String.format("%.1f", eps) + "_" + String.format("%.2f", ratio) + "_tree";
-//					
-//					cutTreeMD(tree_file, n_samples);
-//				}
-//			}
-//		}
-		
-		// 3 - HD (HRGDivisiveGreedy)
 		for (int i = 0; i < n_list.length; i++){
 			String dataname = dataname_list[i];
 			int n = n_list[i];
 			
 			double log_n = Math.log(n);
+			int[] kArr = new int[]{2,3};
+			int[] maxLevelArr = new int[]{10,7};
 			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
 			int burn_factor = 20;
-			double[] ratioArr = new double[]{2.0, 1.5, 1.0};
-			int max_level = 10;
+			double ratio = 2.0;
 			
-			for (double ratio : ratioArr){
-				for (double eps : epsArr){
-						
-					String tree_file = dataname + "_hd_" + burn_factor + "_" + max_level + 
+			for (double eps : epsArr){
+				for (int j = 0; j < kArr.length; j++){
+					int k = kArr[j];
+					int max_level = maxLevelArr[j];
+					
+					String tree_file = dataname + "_md_" + burn_factor + "_" + max_level + "_" + k + 
 							"_" + String.format("%.1f", eps) + "_" + String.format("%.2f", ratio) + "_tree";
 					
-					cutTreeHD(tree_file, n_samples);
+					cutTreeMD(tree_file, n_samples);
 				}
 			}
 		}
+		
+		// 3 - HD (HRGDivisiveGreedy)
+//		for (int i = 0; i < n_list.length; i++){
+//			String dataname = dataname_list[i];
+//			int n = n_list[i];
+//			
+//			double log_n = Math.log(n);
+//			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
+//			int burn_factor = 20;
+//			double[] ratioArr = new double[]{2.0, 1.5, 1.0};
+//			int max_level = 10;
+//			
+//			for (double ratio : ratioArr){
+//				for (double eps : epsArr){
+//						
+//					String tree_file = dataname + "_hd_" + burn_factor + "_" + max_level + 
+//							"_" + String.format("%.1f", eps) + "_" + String.format("%.2f", ratio) + "_tree";
+//					
+//					cutTreeHD(tree_file, n_samples);
+//				}
+//			}
+//		}
 	}
 
 }
