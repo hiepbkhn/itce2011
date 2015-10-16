@@ -14,16 +14,16 @@ n = n_list(pos);
 dataname = dataname_list{1};
 
 log_n = log(n);
-epsArr = [2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n];
-kArr = [2,4,8,16,32,64,128];
+epsArr = [0.25*log_n, 0.5*log_n, log_n];
+kArr = [8,16,32,64];
     
-modArr = zeros(7, length(epsArr));
-f1Arr = zeros(7, length(epsArr));
-nmiArr = zeros(7, length(epsArr));
+modArr = zeros(length(kArr), length(epsArr));
+f1Arr = zeros(length(kArr), length(epsArr));
+nmiArr = zeros(length(kArr), length(epsArr));
 
-for i1=1:7
+for i1=1:length(kArr)
     k = kArr(i1);
-    for i2=1:7
+    for i2=1:length(epsArr)
         eps = epsArr(i2);
         [modArr(i1,i2), f1Arr(i1,i2), nmiArr(i1,i2)] = aaa_readfile([dataname '_ldp_' sprintf('%.1f', eps) '_' int2str(k)]);
     end

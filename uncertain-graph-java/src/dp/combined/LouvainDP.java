@@ -10,6 +10,8 @@
  * Oct 11
  * - randomEqualCommunity(), genEqualPrivate()	
  * - COMMAND-LINE
+ * Oct 16
+ * - fix genEqualPrivate() using full Filter technique of Cormode (ICDT'12)	
  */
 
 package dp.combined;
@@ -27,6 +29,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import jdk.management.resource.internal.TotalResourceContext;
@@ -256,33 +259,100 @@ public class LouvainDP {
 		
 	}
 	
-	////
+	//// WRONG ! we must add noise to all edges (zero-cells, nonzero-cells) of graph_new 
+//	public static void genEqualPrivate(EdgeWeightedGraph graph, int k, double eps, String sample_file, String nodemap_file) throws IOException{
+//		int n = graph.V();
+//		Map<Integer, Integer> part_init = randomEqualCommunity(n, k);
+//		
+//		EdgeWeightedGraph graph_new = getGraphByPartition(graph, part_init);
+//		
+//		// add Laplace/geometric noise to graph_new edge weights
+//		double alpha = Math.exp(-eps);
+//		for (Edge e : graph_new.edges()){
+//			double value = e.weight() + DPUtil.geometricMechanism(alpha);
+//			if (value < 0)
+//				value = 0;
+//			e.setWeight(value);
+//		}
+//
+//		System.out.println("graph_new.V = " + graph_new.V() + " graph_new.E = " + graph_new.E());
+//		System.out.println("graph_new.totalWeight = " + graph_new.totalWeight());
+//		
+//		// write to sample_file (G1)
+//		EdgeWeightedGraph.writeGraph(graph_new, sample_file);
+//		
+//		// write to nodemap_file
+//		writeNodeMap(part_init, nodemap_file);
+//		
+//		
+//	}
+	
+	//// FIXED Oct 16, 2015
 	public static void genEqualPrivate(EdgeWeightedGraph graph, int k, double eps, String sample_file, String nodemap_file) throws IOException{
 		int n = graph.V();
 		Map<Integer, Integer> part_init = randomEqualCommunity(n, k);
 		
 		EdgeWeightedGraph graph_new = getGraphByPartition(graph, part_init);
+		int n_new = graph_new.V();
+		System.out.println("graph_new.V = " + graph_new.V() + " graph_new.E = " + graph_new.E());
 		
-		// add Laplace/geometric noise to graph_new edge weights
+		// compute theta
+		int m_new = graph_new.E();
+		double m = (double)n_new * (n_new + 1.0)/2;		// n + 1: consider all diagonal edges
+		System.out.println("m = " + m);
+		double s = m_new;			// fix s
+		System.out.println("s before = " + s);
 		double alpha = Math.exp(-eps);
+		double theta = Math.ceil( (Math.log(m-m_new) - Math.log((1+alpha)*s)) / eps); // 1+alpha: ONE-SIDED, round up theta
+		s = (m - m_new)*Math.pow(alpha, theta) /(1+alpha);	// recompute s
+		System.out.println("s after = " + s);
+		
+		System.out.println("alpha = " + alpha);
+		System.out.println("theta = " + theta);
+		
+		// add geometric noise to graph_new edge weights
+		EdgeWeightedGraph graph_final = new EdgeWeightedGraph(n);
+		
 		for (Edge e : graph_new.edges()){
 			double value = e.weight() + DPUtil.geometricMechanism(alpha);
-			if (value < 0)
-				value = 0;
-			e.setWeight(value);
+			if (value >= theta){
+				e.setWeight(value);
+				graph_final.addEdge(e);
+			}
 		}
+		System.out.println("BEFORE: graph_final.E = " + graph_final.E());
+		
+		// sample s zero-cells
+		Random random = new Random();
+		double EPS = 0.000001;
+		for (int i = 0; i < s; i++){
+			int u = random.nextInt(n_new);
+			int v = random.nextInt(n_new);
+			if (graph_new.getEdge(u, v) == null & graph_final.getEdge(u, v) == null){
+				// sample weight from Pr[X <= x] = 1 - alpha^(x-theta+1)	(ONE-SIDED)
+				double r = random.nextDouble();	// r in (0,1)
+				if (r > 1 - EPS)
+					r = 1 - EPS;
+				int weight = (int)(Math.log(1-r)/(-eps) + theta - 1);
+				if (weight > 0){
+					Edge e = new Edge(u, v, weight);
+					graph_final.addEdge(e);
+				}
+			}
+		}
+		
 
-		System.out.println("graph_new.V = " + graph_new.V() + " graph_new.E = " + graph_new.E());
-		System.out.println("graph_new.totalWeight = " + graph_new.totalWeight());
+		System.out.println("AFTER: graph_final.E = " + graph_final.E());
+		System.out.println("graph_final.totalWeight = " + graph_final.totalWeight());
 		
 		// write to sample_file (G1)
-		EdgeWeightedGraph.writeGraph(graph_new, sample_file);
+		EdgeWeightedGraph.writeGraph(graph_final, sample_file);
 		
 		// write to nodemap_file
 		writeNodeMap(part_init, nodemap_file);
 		
 		
-	}
+	}	
 	
 	
 	////////////////// Sep 28
@@ -349,15 +419,15 @@ public class LouvainDP {
 //		String dataname = "ca-HepPh";		// (12006,118489) 	
 //		String dataname = "ca-AstroPh";		// (18771,198050) 			
 		// LARGE
-		String dataname = "com_amazon_ungraph";		// (334863,925872)	
+//		String dataname = "com_amazon_ungraph";		// (334863,925872)	
 //		String dataname = "com_dblp_ungraph";		// (317080,1049866)	
-//		String dataname = "com_youtube_ungraph";	// (1134890,2987624) 
+		String dataname = "com_youtube_ungraph";	// (1134890,2987624) 
 													//						
 		// COMMAND-LINE <prefix> <dataname> <n_samples> <eps>
 		String prefix = "";
 	    int n_samples = 1;
-	    int k = 2;
-	    double eps = 2.0;
+	    int k = 4;
+	    double eps = 7.0;
 	    
 	    if(args.length >= 5){
 			prefix = args[0];

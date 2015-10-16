@@ -951,6 +951,17 @@ public class Louvain {
 		System.out.println("type = " + type);
 		System.out.println("sample_file = " + sample_file);
 		
+		int n = 0;
+		int k = 0;
+		if (sample_file.indexOf("amazon") != -1)
+			n = 334863;
+		if (sample_file.indexOf("dblp") != -1)
+			n = 317080;
+		if (sample_file.indexOf("youtube") != -1)
+			n = 1134890;
+		k = Integer.parseInt(sample_file.substring(sample_file.lastIndexOf("_") + 1) );
+		System.out.println("n = " + n + " k = " + k);
+		
 		if (type == 1)
 			for (int i = 0; i < n_samples; i++){
 		    	System.out.println("sample i = " + i);
@@ -981,11 +992,12 @@ public class Louvain {
 		    	String part_file = prefix + "_louvain/" + sample_file + "." + i + ".part";
 		    	
 				long start = System.currentTimeMillis();
-				EdgeWeightedGraph G = EdgeWeightedGraph.readEdgeList(prefix + "_sample/" + sample_file + "." + i);
-				System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
+				EdgeWeightedGraph G = EdgeWeightedGraph.readEdgeListAndWeight(prefix + "_sample/" + sample_file + "." + i, n/k + 1);	// #nodes = n/k+1 (LouvainDP.randomEqualCommunity)
+				System.out.println("readEdgeListAndWeight - DONE, elapsed " + (System.currentTimeMillis() - start));
 				
 				System.out.println("#nodes = " + G.V());
 				System.out.println("#edges = " + G.E());
+				System.out.println("totalWeight = " + G.totalWeight());
 				
 				// 
 				Louvain lv = new Louvain();

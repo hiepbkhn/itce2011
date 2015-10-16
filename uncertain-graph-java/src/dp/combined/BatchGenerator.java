@@ -216,7 +216,7 @@ public class BatchGenerator {
 		bw.close();
 	}
 	
-	// against LouvainOpt
+	// against LouvainOpt (not Louvain)
 	public static void measureLouvainModDivAgainstOpt(String batch_file, String prefix, String dataname, int n_samples, 
 			int burn_factor, int[] maxLevelArr, int[] kArr, double[] epsArr, double ratio) throws IOException{
 		
@@ -297,8 +297,8 @@ public class BatchGenerator {
 //			//
 //			String batch_file = "_cmd/LouvainDP_" + dataname + ".cmd";
 //			double log_n = Math.log(n);
-//			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
-//			int[] kArr = new int[]{2,4,8,16,32,64,128};
+//			double[] epsArr = new double[]{0.25*log_n, 0.5*log_n, log_n};
+//			int[] kArr = new int[]{8,16,32,64};
 //			
 //			
 //			
@@ -383,18 +383,18 @@ public class BatchGenerator {
 //			System.out.println("DONE.");
 //		}
 //		
-//		for (int i = 0; i < n_list.length; i++){
-//			String dataname = dataname_list[i];
-//			int n = n_list[i];
-//			double log_n = Math.log(n);
-//			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
-//			int[] kArr = new int[]{2,4,8,16,32,64,128};
-//			
-//			String batch_file = "_cmd/Louvain_" + dataname + ".cmd";
-//			generateLouvain(batch_file, prefix, dataname, n_samples, epsArr, "_ldp_", 1);
-//			
-//			System.out.println("DONE.");
-//		}
+		for (int i = 0; i < n_list.length; i++){
+			String dataname = dataname_list[i];
+			int n = n_list[i];
+			double log_n = Math.log(n);
+			double[] epsArr = new double[]{0.25*log_n, 0.5*log_n, log_n};
+			int[] kArr = new int[]{4,8,16,32,64};
+			
+			String batch_file = "_cmd/Louvain_" + dataname + ".cmd";
+			generateLouvain(batch_file, prefix, dataname, n_samples, epsArr, "_ldp_", 1);
+			
+			System.out.println("DONE.");
+		}
 		
 		
 		//////////////////////////////// COMMUNITY METRICS
@@ -441,13 +441,13 @@ public class BatchGenerator {
 //			System.out.println("measureLouvainModDiv - DONE.");
 			
 			//
-			String batch_file = "_cmd/Metric_LouvainModDiv_Opt_" + dataname + ".cmd";
-			int[] kArr = new int[]{2,3,4,5,6,10};
-			int[] maxLevelArr = new int[]{10,7,5,4,4,3};
-			int burn_factor = 20;
-			double ratio = 2.0;
-			measureLouvainModDivAgainstOpt(batch_file, prefix, dataname, n_samples, burn_factor, maxLevelArr, kArr, epsArr, ratio);
-			System.out.println("measureLouvainModDivAgainstOpt - DONE.");
+//			String batch_file = "_cmd/Metric_LouvainModDiv_Opt_" + dataname + ".cmd";
+//			int[] kArr = new int[]{2,3,4,5,6,10};
+//			int[] maxLevelArr = new int[]{10,7,5,4,4,3};
+//			int burn_factor = 20;
+//			double ratio = 2.0;
+//			measureLouvainModDivAgainstOpt(batch_file, prefix, dataname, n_samples, burn_factor, maxLevelArr, kArr, epsArr, ratio);
+//			System.out.println("measureLouvainModDivAgainstOpt - DONE.");
 		}
 		
 	}

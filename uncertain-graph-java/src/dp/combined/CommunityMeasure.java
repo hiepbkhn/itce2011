@@ -932,7 +932,7 @@ public class CommunityMeasure {
 		
 		int n_nodes = G.getNumberOfVertices();
 		
-		String louvain_file = prefix + "_data/" + louvainopt_file + ".part";
+		String louvain_file = prefix + "_louvain/" + louvainopt_file + ".0.best";
 		int[] louvain_part = readPart(louvain_file, n_nodes);
 		
 		
@@ -1068,48 +1068,48 @@ public class CommunityMeasure {
 		
 		// 1 - comparison sample_file with Louvain (applied to all schemes)
 		// COMMAND-LINE <prefix> <dataname> <n_samples> <eps>
-//		String prefix= "";
-//		String dataname = "karate";
-//	    int n_samples = 1;
-//	    String sample_file = "";
-//	    
-//	    if(args.length >= 4){
-//	    	prefix = args[0];
-//			dataname = args[1];
-//			n_samples = Integer.parseInt(args[2]);
-//			sample_file = args[3];
-//	    }
-//	    
-//	    System.out.println("dataname = " + dataname);
-//		System.out.println("n_samples = " + n_samples);
-//		System.out.println("sample_file = " + sample_file);
-//		
-////		computeAndExport(prefix, dataname, sample_file, n_samples, 1);
-//		computeAndExport(prefix, dataname, sample_file, n_samples, 2);
-//		System.out.println("computeAndExport - DONE.");
-		
-		
-		// 2 - comparison with LouvainOpt (applied to LouvainModDiv only)
 		String prefix= "";
 		String dataname = "karate";
 	    int n_samples = 1;
-	    String louvainopt_file = "";
 	    String sample_file = "";
 	    
-	    if(args.length >= 5){
+	    if(args.length >= 4){
 	    	prefix = args[0];
 			dataname = args[1];
 			n_samples = Integer.parseInt(args[2]);
-			louvainopt_file = args[4];
-			sample_file = args[4];
+			sample_file = args[3];
 	    }
 	    
 	    System.out.println("dataname = " + dataname);
 		System.out.println("n_samples = " + n_samples);
 		System.out.println("sample_file = " + sample_file);
 		
-		computeAndExport2(prefix, dataname, louvainopt_file, sample_file, n_samples);
+		computeAndExport(prefix, dataname, sample_file, n_samples, 1);		// EF, TmF, LouvainDP
+//		computeAndExport(prefix, dataname, sample_file, n_samples, 2);		// LouvainOpt, LouvainModDiv, HRGDivisiveGreedy
 		System.out.println("computeAndExport - DONE.");
+		
+		
+		// 2 - comparison with LouvainOpt (applied to LouvainModDiv only)
+//		String prefix= "";
+//		String dataname = "karate";
+//	    int n_samples = 1;
+//	    String louvainopt_file = "";
+//	    String sample_file = "";
+//	    
+//	    if(args.length >= 5){
+//	    	prefix = args[0];
+//			dataname = args[1];
+//			n_samples = Integer.parseInt(args[2]);
+//			louvainopt_file = args[3];
+//			sample_file = args[4];
+//	    }
+//	    
+//	    System.out.println("dataname = " + dataname);
+//		System.out.println("n_samples = " + n_samples);
+//		System.out.println("sample_file = " + sample_file);
+//		
+//		computeAndExport2(prefix, dataname, louvainopt_file, sample_file, n_samples);
+//		System.out.println("computeAndExport - DONE.");
 		
 		
 		//

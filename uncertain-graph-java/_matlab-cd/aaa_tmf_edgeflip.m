@@ -8,7 +8,7 @@ m_list = [925872, 1049866, 2987624];
 
 
 
-for i=2:2
+for i=1:1
     n = n_list(i);
     m = m_list(i);
     log_n = log(n);
@@ -40,9 +40,12 @@ for i=2:2
     plot (epsArr/log_n, n_edge1_EF/m, '-', epsArr/log_n, n_edge_total_EF/m ,'-', epsArr/log_n, n_edge1_TmF/m ,'--', epsArr/log_n, n_edge_total_TmF/m ,'--');
 %     axis([0 epsArr(length(epsArr)) 0 3])
     axis([0 3 0 3])
-    h = legend('n_1 (EF)','total-edges (EF)', 'n_1 (TmF)','total-edges (TmF)');
-    xlabel('\epsilon / ln(n)');
-    ylabel('normalized number of edges');
+    h_legend = legend('n_1 (EF)','total-edges (EF)', 'n_1 (TmF)','total-edges (TmF)');
+    set(h_legend,'FontSize',12);
+    xlhand = get(gca,'xlabel'); set(xlhand,'string','\epsilon / ln(n)','fontsize',18) 
+    ylhand = get(gca,'ylabel'); set(ylhand,'string','normalized number of edges','fontsize',12)
+%     xlabel('\epsilon / ln(n)');
+%     ylabel('normalized number of edges');
     line([1 1], [0 3], 'LineStyle', '--');
     line([2 2], [0 3], 'LineStyle', '--');
 %     set(h,'Interpreter','latex');

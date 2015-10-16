@@ -335,6 +335,29 @@ public class EdgeWeightedGraph {
     	return ret;
     }
     
+    // Oct 16, 2015
+    public static EdgeWeightedGraph readEdgeListAndWeight(String filename, int n_nodes) throws IOException{
+
+    	EdgeWeightedGraph ret = new EdgeWeightedGraph(n_nodes);
+    	
+    	BufferedReader br = new BufferedReader(new FileReader(filename));
+    	while (true){
+        	String str = br.readLine();
+        	if (str == null)
+        		break;
+        	
+        	String[] items = str.split("\t");
+        	int u = Integer.parseInt(items[0]);
+        	int v = Integer.parseInt(items[1]);
+        	double weight = Double.parseDouble(items[2]);
+        	ret.addEdge(new Edge(u, v, weight));
+    	}
+    	
+    	br.close();
+    	
+    	return ret;
+    }
+    
     public static void writeGraph(EdgeWeightedGraph G, String filename) throws IOException{
     	
     	BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
