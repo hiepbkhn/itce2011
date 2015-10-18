@@ -10,7 +10,9 @@
  * 	- add writeLevel()
  * Oct 11
  * 	- copy writeTree, readTree, bestCutOffline from NodeSetLouvainOpt
- * 
+ * Oct 18
+ * 	- readTree: children point to parent
+ * 	- add eArr: number of edges between two children of this node
  */
 
 package dp.combined;
@@ -62,6 +64,9 @@ public class NodeSetLouvain {
 	public int id;
 	public int level = 0;
 	public double modSelf = 0.0;	// see writeTree, readTree
+	//
+	public int[][] eArr = new int[10][10];	// 
+	public int e_self = 0;
 	
 	//// for the case number of parts < k
 	public int normalizePart(){
@@ -686,8 +691,10 @@ public class NodeSetLouvain {
         		cur_node.children = new NodeSetLouvain[items.length];
         		
         		for (int i = 0; i < values.length; i++){
-        			cur_node.children[i] = map.get(values[i]);
+        			NodeSetLouvain child = map.get(values[i]);
+        			cur_node.children[i] = child;
         			cur_node.children[i].level = cur_node.level + 1;
+        			child.parent = cur_node;
         		}
         	}
 		}
