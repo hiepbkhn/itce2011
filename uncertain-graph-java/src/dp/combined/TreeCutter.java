@@ -174,8 +174,8 @@ public class TreeCutter {
 //		System.out.println("type = " + type);
 		
 		////
-		String[] dataname_list = new String[]{ "com_youtube_ungraph"}; //"com_amazon_ungraph", "com_dblp_ungraph",
-		int[] n_list = new int[]{1134890};	//334863, 317080, 
+		String[] dataname_list = new String[]{ "com_amazon_ungraph"}; //"com_amazon_ungraph", "com_dblp_ungraph", com_youtube_ungraph
+		int[] n_list = new int[]{334863};	//334863, 317080, 1134890
 		int n_samples = 20;
 		
 		
@@ -202,10 +202,10 @@ public class TreeCutter {
 			int n = n_list[i];
 			
 			double log_n = Math.log(n);
-			int[] kArr = new int[]{2,3};
-			int[] maxLevelArr = new int[]{10,7};
-			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
-			int burn_factor = 20;
+			int[] kArr = new int[]{2,3,4,5,6,10};
+			int[] maxLevelArr = new int[]{10,7,5,4,4,3};
+			double[] epsArr = new double[]{log_n};	//2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
+			int burn_factor = 100;
 			double ratio = 2.0;
 			
 			for (double eps : epsArr){

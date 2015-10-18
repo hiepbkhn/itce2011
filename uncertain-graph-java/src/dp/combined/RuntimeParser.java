@@ -182,7 +182,7 @@ public class RuntimeParser {
 	////
 	public static void readLouvainOpt(String prefix, String dataname, int n_samples, int burn_factor, int max_level, int k) 
 			throws IOException{
-		String louvainStr = "best_partition - DONE, elapsed";
+		String louvainStr = "recursiveLouvain - DONE, elapsed";
 		int[] louvainArr = new int[n_samples];
 		
     	// -CONSOLE.txt
@@ -276,37 +276,37 @@ public class RuntimeParser {
 //		}
 
 		// LouvainDP
-		for (int i = 0; i < n_list.length; i++){
-			String dataname = dataname_list[i];
-			int n = n_list[i];
-			double log_n = Math.log(n);
-			double[] epsArr = new double[]{0.25*log_n, 0.5*log_n, log_n};
-			int[] kArr = new int[]{8,16,32,64};
-			
-			for (double eps : epsArr)
-				for (int k : kArr){
-				readLouvainDP(prefix, dataname, n_samples, eps, k);
-			}
-			
-			System.out.println("DONE.");
-		}
-		
-		// LouvainOpt
 //		for (int i = 0; i < n_list.length; i++){
 //			String dataname = dataname_list[i];
 //			int n = n_list[i];
-//			int[] kArr = new int[]{2,3,4,5,6,10};
-//			int[] maxLevelArr = new int[]{10,7,5,4,4,3};
-//			int burn_factor = 20;
+//			double log_n = Math.log(n);
+//			double[] epsArr = new double[]{0.25*log_n, 0.5*log_n, log_n};
+//			int[] kArr = new int[]{4}; //8,16,32,64};
 //			
-//			for (int j = 0; j < kArr.length; j++){
-//				int k = kArr[j];
-//				int max_level = maxLevelArr[j];
-//				readLouvainOpt(prefix, dataname, n_samples, burn_factor, max_level, k);
+//			for (double eps : epsArr)
+//				for (int k : kArr){
+//				readLouvainDP(prefix, dataname, n_samples, eps, k);
 //			}
 //			
 //			System.out.println("DONE.");
 //		}
+		
+		// LouvainOpt
+		for (int i = 0; i < n_list.length; i++){
+			String dataname = dataname_list[i];
+			int n = n_list[i];
+			int[] kArr = new int[]{2,3,4,5,6,10};
+			int[] maxLevelArr = new int[]{10,7,5,4,4,3};
+			int burn_factor = 20;
+			
+			for (int j = 0; j < kArr.length; j++){
+				int k = kArr[j];
+				int max_level = maxLevelArr[j];
+				readLouvainOpt(prefix, dataname, n_samples, burn_factor, max_level, k);
+			}
+			
+			System.out.println("DONE.");
+		}
 
 		// LouvainModDiv
 //		for (int i = 0; i < n_list.length; i++){
