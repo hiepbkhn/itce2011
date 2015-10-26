@@ -3,7 +3,7 @@
  * 	- paper "AutoPart - Parameter-Free Graph Partitioning and Outlier Detection" (PKDD'04)
  */
 
-package dp.combined;
+package dp.generator;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -3,7 +3,7 @@
  * 	- convert from C (project orbis/dkTopoGen1k.cc)
  */
 
-package dp.combined;
+package dp.generator;
 
 import grph.Grph;
 import grph.VertexPair;
@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import dp.combined.Louvain;
 import toools.io.file.RegularFile;
 import toools.set.IntSet;
 import naive.GreedyReconstruct;

@@ -15,6 +15,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -210,7 +211,8 @@ public class TreeCutter {
 		queue_set.add(root_set);
 		while (queue_set.size() > 0){
 			NodeSetLouvain R = queue_set.remove();
-			if (R.children.length == 0) // leaf
+			if (R.children.length == 0) 	// leaf, for readTree()
+//			if (R.children[0] == null) 		// leaf, for randomBinaryTree()
 				leaves.add(R);
 			else{
 				for (int i = 0; i < R.children.length; i++)
@@ -264,7 +266,8 @@ public class TreeCutter {
 		queue_set.add(root_set);
 		while (queue_set.size() > 0){
 			NodeSetLouvain R = queue_set.remove();
-			if (R.children.length == 0){ // leaf
+			if (R.children.length == 0){ 	// leaf, for readTree()
+//			if (R.children[0] == null){ 	// leaf, for randomBinaryTree()
 				double n_e = (double)R.ind2node.length* (R.ind2node.length-1)/2;
 				double p = (double)R.e_self/ n_e;
 				if (p > 0.0 && p < 1.0)
@@ -290,7 +293,79 @@ public class TreeCutter {
 		return ret;
 	}
 	
-	
+	////
+	public static void randomBinaryTree(EdgeWeightedGraph G, int max_level){
+		int n = G.V();
+		// random permutation
+		List<Integer> id = new ArrayList<Integer>();
+		for (int i = 0; i < n; i++)
+			id.add(i);
+		Collections.shuffle(id);
+		
+		// build k-ary tree
+		int k = 2;
+		int id_count = -1;
+		
+		NodeSetLouvain root_set = new NodeSetLouvain(k);
+		root_set.id = id_count--;
+		root_set.ind2node = new int[n];
+		for (int i = 0; i < n; i++)
+			root_set.ind2node[i] = id.get(i);
+		
+		Queue<NodeSetLouvain> queue_set = new LinkedList<NodeSetLouvain>();
+		queue_set.add(root_set);
+		while (queue_set.size() > 0){
+			NodeSetLouvain R = queue_set.remove();
+			
+			if (R.level < max_level){
+				n = R.ind2node.length;		// NOTE
+				
+				for (int j = 0; j < k-1; j++){
+					NodeSetLouvain child = new NodeSetLouvain(k);
+					child.ind2node = new int[n/k];
+					for (int i = 0; i < n/k; i++)
+						child.ind2node[i] = R.ind2node[j*(n/k) + i];
+					child.id = id_count--;
+					child.level = R.level + 1;
+					child.parent = R;
+					R.children[j] = child;
+					
+					queue_set.add(child);
+				}
+				
+				NodeSetLouvain child = new NodeSetLouvain(k);
+				child.ind2node = new int[n - (k-1)*(n/k)];
+				for (int i = (k-1)*(n/k); i < n; i++)
+					child.ind2node[i - (k-1)*(n/k)] = R.ind2node[i];
+				child.id = id_count--;
+				child.level = R.level + 1;
+				child.parent = R;
+				R.children[k-1] = child;
+				
+				queue_set.add(child);
+			}
+		}
+		
+		// debug
+//		queue_set = new LinkedList<NodeSetLouvain>();
+//		queue_set.add(root_set);
+//		while (queue_set.size() > 0){
+//			NodeSetLouvain R = queue_set.remove();
+//			
+//			System.out.print("id = " + R.id + ": ");
+//			if (R.children[0] != null)
+//				for (NodeSetLouvain child : R.children){
+//					System.out.print(child.id + ",");
+//					queue_set.add(child);
+//				}
+//			System.out.println();
+//		}
+		
+		
+		//
+		System.out.println("logLK = " + logLK(G, root_set) );
+		
+	}
 	
 	//////////////////////////////////////////////////
 	public static void main(String[] args) throws Exception{
@@ -312,8 +387,8 @@ public class TreeCutter {
 //		System.out.println("type = " + type);
 		
 		////
-		String[] dataname_list = new String[]{ "com_amazon_ungraph"}; //"com_amazon_ungraph", "com_dblp_ungraph", com_youtube_ungraph
-		int[] n_list = new int[]{334863};	//334863, 317080, 1134890
+		String[] dataname_list = new String[]{"com_amazon_ungraph", "com_dblp_ungraph", "com_youtube_ungraph"};
+		int[] n_list = new int[]{334863, 317080, 1134890};
 		int n_samples = 20;
 		
 		
@@ -382,18 +457,91 @@ public class TreeCutter {
 //		}
 		
 		
-		//////////
+		////////// LOGLK
 //		EdgeWeightedGraph G = EdgeWeightedGraph.readEdgeList("_data/karate.gr");
 ////		NodeSetLouvain root = NodeSetLouvain.readTree("_sample/karate_nmd_20_3_2_tree.1");
 //		NodeSetLouvain root = NodeSetLouvain.readTree("_sample/karate_hd_20_3_2.0_1.00_tree.1");
 		
-		EdgeWeightedGraph G = EdgeWeightedGraph.readEdgeList("_data/com_amazon_ungraph.gr");
-		NodeSetLouvain root = NodeSetLouvain.readTree("_sample/com_amazon_ungraph_md_20_10_2_38.2_2.00_tree.0");
+		// TEST randomBinaryTree
+//		EdgeWeightedGraph G = EdgeWeightedGraph.readEdgeList("_data/com_youtube_ungraph.gr");
+//		for (int i = 0; i < 20; i++)
+//			randomBinaryTree(G, 10);
 		
-		long start = System.currentTimeMillis();
-		double ret = logLK(G, root);
-		System.out.println("Done, elapsed " + (System.currentTimeMillis() - start));
-		System.out.println("logLK = " + ret);
+		
+		//
+		int[] kArr = new int[]{2,3,4,5,6,10};
+		int[] maxLevelArr = new int[]{10,7,5,4,4,3};
+		int burn_factor = 20;
+		
+		for (int i = 0; i < n_list.length; i++){
+			String dataname = dataname_list[i];
+			System.out.println("dataname = " + dataname);
+			EdgeWeightedGraph G = EdgeWeightedGraph.readEdgeList("_data/" + dataname + ".gr");
+			int n = n_list[i];
+			double log_n = Math.log(n);
+			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
+			double ratio = 2.0;
+			
+			// NMD
+//			System.out.println("NMD");
+//			for (int j = 0; j < kArr.length; j++){
+//				int k = kArr[j];
+//				int max_level = maxLevelArr[j];
+//				System.out.println("(k,maxL) = " + k + "," + max_level);
+//				
+//				String tree_file = dataname + "_nmd_" + burn_factor + "_" + max_level + "_" + k + "_tree";
+//				double sum_lk = 0.0;
+//				for (int s = 0; s < n_samples; s++){
+//					NodeSetLouvain root = NodeSetLouvain.readTree("_sample/" + tree_file + "." + s);
+//					sum_lk += logLK(G, root);
+//				}
+//				System.out.println("logLK = " + (sum_lk/n_samples));
+//			}
+//			
+//			// MD
+//			System.out.println("MD");
+//			
+//			for (int j = 0; j < kArr.length; j++){
+//				int k = kArr[j];
+//				int max_level = maxLevelArr[j];
+//				System.out.println("(k,maxL) = " + k + "," + max_level);
+//				
+//				for (double eps : epsArr){
+//					System.out.println("eps = " + String.format("%.1f", eps) );
+//					
+//					String tree_file = dataname + "_md_" + burn_factor + "_" + max_level + "_" + k +
+//							"_" + String.format("%.1f", eps) + "_" + String.format("%.2f", ratio) + "_tree";
+//					double sum_lk = 0.0;
+//					for (int s = 0; s < n_samples; s++){
+//						NodeSetLouvain root = NodeSetLouvain.readTree("_sample/" + tree_file + "." + s);
+//						sum_lk += logLK(G, root);
+//					}
+//					System.out.println("logLK = " + (sum_lk/n_samples));
+//				}
+//			}
+			
+			// HD
+			System.out.println("HD");
+			ratio = 1.0;
+			int k = 2;
+			int max_level = 10;
+			System.out.println("(k,maxL) = " + k + "," + max_level + " ratio = " + ratio);
+			
+			for (double eps : epsArr){
+				System.out.println("eps = " + String.format("%.1f", eps));
+				
+				String tree_file = dataname + "_hd_" + burn_factor + "_" + max_level + 
+						"_" + String.format("%.1f", eps) + "_" + String.format("%.2f", ratio) + "_tree";
+				double sum_lk = 0.0;
+				for (int s = 0; s < n_samples; s++){
+					NodeSetLouvain root = NodeSetLouvain.readTree("_sample/" + tree_file + "." + s);
+					sum_lk += logLK(G, root);
+				}
+				System.out.println("logLK = " + (sum_lk/n_samples));
+			}
+		}
+		
+		
 		
 	}
 
