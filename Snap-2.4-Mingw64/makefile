@@ -69,9 +69,17 @@ testgraph: src/testgraph.cpp #Snap.o
 	g++ -o out/testgraph src/testgraph.cpp out/Snap.o -I$(CSNAP) -I$(CGLIB) $(LDFLAGS) $(LIBS)
 
 
-bigclam: src/bigclam.cpp Snap.o 
-	g++ -o out/bigclam src/bigclam.cpp $(EXSNAPADV)/agm.cpp $(EXSNAPADV)/agmfit.cpp $(EXSNAPADV)/agmfast.cpp out/Snap.o \
+bigclam: examples/bigclam.cpp # Snap.o 
+	g++ -o out/bigclam examples/bigclam.cpp $(EXSNAPADV)/agm.cpp $(EXSNAPADV)/agmfit.cpp $(EXSNAPADV)/agmfast.cpp out/Snap.o \
 	-I$(CSNAP) -I$(CGLIB) -I${EXSNAPADV} $(LDFLAGS) $(LIBS)	$(CXXOPENMP) 	
+
+kronfit: examples/kronfit.cpp # Snap.o 
+	g++ -o out/kronfit examples/kronfit.cpp $(EXSNAPADV)/kronecker.cpp out/Snap.o \
+	-I$(CSNAP) -I$(CGLIB) -I${EXSNAPADV} $(LDFLAGS) $(LIBS)	$(CXXOPENMP)
+	
+kronem: examples/kronem.cpp # Snap.o 
+	g++ -o out/kronem examples/kronem.cpp $(EXSNAPADV)/kronecker.cpp out/Snap.o \
+	-I$(CSNAP) -I$(CGLIB) -I${EXSNAPADV} $(LDFLAGS) $(LIBS)	$(CXXOPENMP)	
 
 Snap.o: include/snap/snap-core/*.h include/snap/snap-core/*.cpp include/snap/glib-core/*.h include/snap/glib-core/*.cpp
 	 g++ -c include/snap/snap-core/Snap.cpp -I$(CSNAP) -I$(CGLIB) $(CXXFLAGS) $(LDFLAGS) $(LIBS) -o out/Snap.o
@@ -91,14 +99,14 @@ Snap-adv.so: include/snap/snap-core/*.h include/snap/snap-core/*.cpp include/sna
 	 g++ -c include/snap/snap-core/Snap.cpp -I$(CSNAP) -I$(CGLIB) -I${EXSNAPADV} $(CXXFLAGS) $(LDFLAGS) $(LIBS) -shared -o out/Snap-adv.so 	 
 	 
 # static linking	 
-bigclam-static: src/bigclam.cpp # Snap-adv.o 
-	g++ -o out/bigclam src/bigclam.cpp $(EXSNAPADV)/agm.cpp $(EXSNAPADV)/agmfit.cpp $(EXSNAPADV)/agmfast.cpp out/Snap-adv.o \
+bigclam-static: examples/bigclam.cpp # Snap-adv.o 
+	g++ -o out/bigclam examples/bigclam.cpp $(EXSNAPADV)/agm.cpp $(EXSNAPADV)/agmfit.cpp $(EXSNAPADV)/agmfast.cpp out/Snap-adv.o \
 	-I$(CSNAP) -I$(CGLIB) -I${EXSNAPADV} $(LDFLAGS) $(LIBS)	$(CXXOPENMP) 
 
 
 # dynamic linking
-bigclam-dynamic: src/bigclam.cpp 
-	g++ -o out/bigclam-dynamic src/bigclam.cpp $(EXSNAPADV)/agm.cpp $(EXSNAPADV)/agmfit.cpp $(EXSNAPADV)/agmfast.cpp out/Snap-adv.so \
+bigclam-dynamic: examples/bigclam.cpp 
+	g++ -o out/bigclam-dynamic examples/bigclam.cpp $(EXSNAPADV)/agm.cpp $(EXSNAPADV)/agmfit.cpp $(EXSNAPADV)/agmfast.cpp out/Snap-adv.so \
 	-I$(CSNAP) -I$(CGLIB) -I${EXSNAPADV} $(LDFLAGS) $(LIBS)	$(CXXOPENMP) 
 	
 	

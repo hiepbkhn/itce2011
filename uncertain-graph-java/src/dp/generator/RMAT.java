@@ -7,6 +7,7 @@ package dp.generator;
 
 import java.util.List;
 
+import algs4.EdgeDirWeightedGraph;
 import algs4.EdgeWeightedGraph;
 
 
@@ -40,26 +41,52 @@ public class RMAT {
 		//
 		double[] degEst = new double[degHist.length];	// estimated degree histogram
 		for (double p = lower; p < upper; p += step){
+			// Pi[i] = p^(n-i)*(1-p)^i
 			double[] Pi = new double[n+1];
-			for (int i = 0; i<= n; i++)
+			double maxPi = -1.0;
+			double minPi = 2.0;
+			for (int i = 0; i<= n; i++){
 				Pi[i] = Math.pow(p, n-i) * Math.pow(1-p, i);
+				if (maxPi < Pi[i])
+					maxPi = Pi[i];
+				if (minPi > Pi[i])
+					minPi = Pi[i];
+			}
+			System.out.println("minPi = " + minPi + " maxPi = " + maxPi);
 			
-			//
+			// WAY-1
 			for (int k = 0; k < degHist.length; k++){
 				degEst[k] = 0.0;
 				for (int i = 0; i<= n; i++){
 					double EPi = E*Pi[i];
 					double EPi2 = E*Pi[i]*(1-Pi[i]);
-					degEst[k] += nCk(n,i) / Math.sqrt(EPi2*2*Math.PI) * Math.exp(-(k-EPi)*(k-EPi)/(2*EPi2));
+					degEst[k] += nCk(n,i) / Math.sqrt(2*Math.PI*EPi2) * Math.exp(-(k-EPi)*(k-EPi)/(2*EPi2) );	// normal distr to approximate binomial distr
 					
 				}
 			}
+			
+			// WAY-2 (WRONG !)
+//			for (int k = 0; k < degHist.length; k++){
+//				
+//				double sumMean = 0.0;
+//				double sumVar = 0.0;
+//				for (int i = 0; i<= n; i++){
+//					double nCi = nCk(n,i);
+//					double EPi = E*Pi[i];
+//					double EPi2 = E*Pi[i]*(1-Pi[i]);
+//					sumMean += nCi * EPi;
+//					sumVar += nCi * nCi * EPi2;
+//				}
+//				
+//				degEst[k] = Math.exp(-(k-sumMean)*(k-sumMean)/(2*sumVar)) / Math.sqrt(2*Math.PI * sumVar);
+//			}
 			
 			// L1-distance between degHist and degEst
 			double dist = 0.0;
 			for (int k = 0; k < degHist.length; k++)
 				dist += Math.abs(degEst[k] - degHist[k]);
-			System.out.println("p = " + p + " dist = " + dist);
+			// debug
+//			System.out.println("p = " + p + " dist = " + dist);
 			
 			if (dist < min_dist){
 				min_dist = dist;
@@ -68,6 +95,7 @@ public class RMAT {
 			
 			
 		}
+		System.out.println("min_dist = " + min_dist);
 		
 		
 		return best_p;
@@ -83,18 +111,40 @@ public class RMAT {
 	//////////////////////////////////////////////////
 	public static void main(String[] args) throws Exception {
 
-		EdgeWeightedGraph G = EdgeWeightedGraph.readEdgeList("D:/git/itce2011/uncertain-graph/_data/rmat1024.gr", 1024, " ");	// Unweighted G, rmat1024.gr Weighted !
+//		EdgeDirWeightedGraph G = EdgeDirWeightedGraph.readEdgeList("D:/git/itce2011/uncertain-graph/_data/rmat1024_06_01_015.gr", 1024, " ");	// directed (p=0.728, 0.703)
+//		EdgeDirWeightedGraph G = EdgeDirWeightedGraph.readEdgeList("D:/git/itce2011/uncertain-graph/_data/rmat1024_045_015_015.gr", 1024, " ");	// directed (p=0.661, 0.649)
+		EdgeDirWeightedGraph G = EdgeDirWeightedGraph.readEdgeList("D:/git/itce2011/uncertain-graph/_data/rmat1024_045_01_01.gr", 1024, " ");	// directed (p=0.63, 0.63)
+//		EdgeDirWeightedGraph G = EdgeDirWeightedGraph.readEdgeList("D:/git/itce2011/uncertain-graph/_data/rmat65536_045_01_01.gr", 65536, " ");	// directed (p=0.639, 0.639)
 		System.out.println("#nodes = " + G.V());
 		System.out.println("#edges = " + G.E());
 		
 		//
+		int n = (int)Math.round(Math.log(G.V()) / Math.log(2.0));
+		System.out.println("n = " + n);
+		double lower = 0.5;
+		double upper = 0.9;
+		double step = 0.001;
+		
+		// out-degree
 		int[] degHist = new int[G.V()];
 		for (int u = 0; u < G.V(); u++)
-			degHist[G.degree(u)] += 1;
+			degHist[G.degreeOut(u)] += 1;
 		
-		//
-		double p = searchProb(degHist, 10, G.E(), 0.5, 1.0, 0.001);
-		System.out.println("best p = " + p);	//	p = 0.681
+		long start = System.currentTimeMillis();
+		double p = searchProb(degHist, n, G.E(), lower, upper, step);
+		System.out.println("out-deg: best p = " + p);	//
+		System.out.println("elapsed " + (System.currentTimeMillis() - start));
+		
+		
+		// in-degree
+		degHist = new int[G.V()];
+		for (int u = 0; u < G.V(); u++)
+			degHist[G.degreeIn(u)] += 1;
+		
+		start = System.currentTimeMillis();
+		p = searchProb(degHist, n, G.E(), lower, upper, step);
+		System.out.println("in-deg: best p = " + p);	//	
+		System.out.println("elapsed " + (System.currentTimeMillis() - start));
 	}
 
 }
