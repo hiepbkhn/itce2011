@@ -1,0 +1,12 @@
+rmat65536_045_01_01.gr
+#nodes = 65536
+#edges = 200000
+n = 16
+min_dist = 77135.0077172499
+out-deg: best p = 0.6390000000000005
+elapsed 319407
+min_dist = 78271.0077172499
+in-deg: best p = 0.6390000000000005
+elapsed 262729
+
+
