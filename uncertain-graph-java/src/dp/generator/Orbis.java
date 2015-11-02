@@ -173,6 +173,10 @@ public class Orbis {
 			}
 			
 			if (i == freeStubList.size()) {
+				nextStubIter++;		// IMPORTANT
+				if (nextStubIter == freeStubList.size())
+					break;
+				
 				needToRewire++;
 				continue;
 			}
@@ -187,10 +191,15 @@ public class Orbis {
 			mark[i] = true;
 			
 			nextStubIter ++;
-			if (nextStubIter == freeStubList.size() - 1)
-				break;
-			while (mark[nextStubIter] == true)
+			
+			while (nextStubIter < freeStubList.size() && mark[nextStubIter] == true)
 				nextStubIter ++;
+			if (nextStubIter == freeStubList.size())
+				break;
+			
+			// debug
+//			if (nextStubIter % 1000 == 0 || nextStubIter > freeStubList.size() - 1000)
+//				System.out.println(nextStubIter);
 			
 		}
 		System.out.println("count = " + count);
@@ -246,10 +255,10 @@ public class Orbis {
 	public static void main(String[] args) throws Exception{
 		
 		// TEST Orbis
-//		int n_nodes = 6474;
-//		String filename = "_data/as20graph.gr";
-//		String seqfile = "_dk/as20graph.seq";				// 0.06s, #components = 155
-//		String part_file = "_out/as20graph_orbis_java.part";	
+		int n_nodes = 6474;
+		String filename = "_data/as20graph.gr";
+		String seqfile = "_dk/as20graph.seq";				// 0.06s, #components = 155
+		String part_file = "_out/as20graph_orbis_java.part";	
 		
 //		int n_nodes = 334863;
 //		String filename = "_data/com_amazon_ungraph.gr";
@@ -261,10 +270,10 @@ public class Orbis {
 //		String seqfile = "_dk/com_dblp_ungraph.seq";
 //		String part_file = "_out/com_dblp_ungraph_orbis_java.part";
 		
-		int n_nodes = 1134890;
-		String filename = "_data/com_youtube_ungraph.gr";
-		String seqfile = "_dk/com_youtube_ungraph.seq";		// 11s, #components = 32343, need2Rewire = 0
-		String part_file = "_out/com_youtube_ungraph_orbis_java.part";
+//		int n_nodes = 1134890;
+//		String filename = "_data/com_youtube_ungraph.gr";
+//		String seqfile = "_dk/com_youtube_ungraph.seq";		// 11s, #components = 32343, need2Rewire = 0
+//		String part_file = "_out/com_youtube_ungraph_orbis_java.part";
 		
 		//
 		Grph g = new InMemoryGrph();
@@ -277,8 +286,8 @@ public class Orbis {
 		System.out.println("degList.length = " + degList.length);
 		
 		long start = System.currentTimeMillis();
-		boolean accept_self = true;
-		boolean accept_parallel = true;
+		boolean accept_self = false;
+		boolean accept_parallel = false;
 		int need2Rewire = orbis.dkTopoGen1k(g, degList, accept_self, accept_parallel);
 		System.out.println("dkTopoGen1k - DONE, elapsed " + (System.currentTimeMillis() - start));
 		
