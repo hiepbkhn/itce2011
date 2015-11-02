@@ -13,6 +13,8 @@ use IGRAPH functions
     - add "oned_as='column'" to compute_utility_and_export_matlab()
     Sep 29
     - run test_normalize_graphs() to convert synthetic graphs (Lancichinetti)
+    Nov 2
+    - extract_wcc(): extract the largest weak connected component (WCC) and normalize node ids
 '''
 
 
@@ -87,13 +89,53 @@ def normalize_graph(G, is_directed = False):
     return newG
 
 #######################################################
+# G: undirected
+def extract_wcc(G):
+    max_size = 0
+    max_wcc = [];
+    for c in nx.connected_components(G):    
+        if max_size < len(c):
+            max_size = len(c);
+            max_wcc = c;
+            
+    #
+    sG = G.subgraph(max_wcc)
+    min_id = min(max_wcc)
+    max_id = max(max_wcc)
+    print "min_id =", min_id
+    print "max_id =", max_id
+    
+    id_map = {}
+    count = 0
+    for u in max_wcc:
+        id_map[u] = count
+        count += 1
+    #
+    newG = nx.Graph()       # undirected
+    for (u,v) in sG.edges_iter():
+        newG.add_edge(id_map[u], id_map[v])
+            
+    # 
+    return newG;
+    
+
+#######################################################
 def test_normalize_graphs():
+    # TXT
 #    filename = "../_data/as20graph.txt"     #
 #    outfile = "../_data/as20graph.gr"       # no self-loops (6474 nodes, 12572 edges)
+#    filename = "../_data/wiki-Vote.txt"     #
+#    outfile = "../_data/wiki-Vote-wcc.gr"       #    wcc: extract_wcc()
+#    filename = "../_data/ca-HepPh.txt"     #
+#    outfile = "../_data/ca-HepPh-wcc.gr"       #
+#    filename = "../_data/ca-AstroPh.txt"     #
+#    outfile = "../_data/ca-AstroPh-wcc.gr"       #
 #    G = nx.read_edgelist(filename, '#', '\t', None, nodetype=int)
 
-#    filename = "../_data/polblogs.gml"      # DIRECTED
-#    outfile = "../_data/polblogs.gr"
+    # GML
+    filename = "../_data/polblogs.gml"      # DIRECTED
+    outfile = "../_data/polblogs.gr"
+    outfile = "../_data/polblogs-wcc.gr"
 #    filename = "../_data/polbooks.gml"    # 
 #    outfile = "../_data/polbooks.gr"
 #    filename = "../_data/karate.gml"    # 
@@ -102,8 +144,9 @@ def test_normalize_graphs():
 #    outfile = "../_data/adjnoun.gr"
 #    filename = "../_data/keystone.gml"    # DIRECTED
 #    outfile = "../_data/keystone.gr"
-#    G = nx.read_gml(filename)
-
+    G = nx.read_gml(filename)
+    
+    # SYNTHETIC
 #    filename = "../_data/network10k.dat"    # 2 components
 #    outfile = "../_data/network10k.gr"
 #    filename = "../_data/network100k.dat"   # 383 components
@@ -112,11 +155,11 @@ def test_normalize_graphs():
 #    outfile = "../_data/network100k2.gr"
 #    filename = "../_data/network300k.dat"   # 1 component
 #    outfile = "../_data/network300k.gr"
-    filename = "../_data/network.dat"   # 1 component
-    outfile = "../_data/network300k2.gr"
-#    filename = "E:/Tailieu/Paper-code/Social Network/Community/Lancichinetti/Benchmark/binary_networks/1m/network.dat"   # (4.8GB/graph) 1 component
+#    filename = "../_data/network.dat"   # 1 component
+#    outfile = "../_data/network300k2.gr"
+#    filename = "E:/Tailieu/Paper-code/Social Network/Community/Lancichinetti/Benchmark/binary_networks/1m/network.dat"   # (mem 4.8GB/graph) 1 component
 #    outfile = "../_data/network1m.gr"          
-    G = nx.read_edgelist(filename, '#', '\t', None, nodetype=int) 
+#    G = nx.read_edgelist(filename, '#', '\t', None, nodetype=int) 
 
     print "is_directed =", G.is_directed()
     print "#nodes =", G.number_of_nodes()
@@ -124,9 +167,11 @@ def test_normalize_graphs():
 
     # normalize G
 #    G = normalize_graph(G, is_directed = True) 
-    G = normalize_graph(G, is_directed = False)
-    
+    G = normalize_graph(G, is_directed = False)     # for all -wcc graphs
     print "normalize_graph: DONE"
+    G = extract_wcc(G);
+    print "extract_wcc: DONE"
+
     print "#nodes =", G.number_of_nodes()
     print "#edges =", G.number_of_edges()
     print "#components =", nx.number_connected_components(G)

@@ -343,8 +343,12 @@ public class UtilityMeasure {
 //		String dataname = "sm_100000_005_11";	// (100000,500000) 	WAY-1: OutOfMemory, 	WAY-2: 805s
 //		String dataname = "com_amazon_ungraph"; 	// (334863,925872) 
 //		String dataname = "com_dblp_ungraph";  		// (317080,1049866) 
-		String dataname = "com_youtube_ungraph"; 	// (1134890,2987624)
+//		String dataname = "com_youtube_ungraph"; 	// (1134890,2987624)
 		
+//		String dataname = "polblogs-wcc";			// (1222,16714) 	
+//		String dataname = "wiki-Vote-wcc";			// (7066,100736) 	
+//		String dataname = "ca-HepPh-wcc";			// (11204,117619) 
+		String dataname = "ca-AstroPh-wcc";			// (17903,196972) 
 		
 		String filename = "_data/" + dataname + ".grph";
 		String edgelist_name = "_data/" + dataname + ".gr";
@@ -358,23 +362,23 @@ public class UtilityMeasure {
 	    
 	    
 	    //
-////		GrphTextReader reader = new GrphTextReader();
-//		EdgeListReader reader = new EdgeListReader();
-//		Grph G;
-//		RegularFile f = new RegularFile(edgelist_name);
-//		
-//		G = reader.readGraph(f);
-//		
-//		System.out.println("#nodes = " + G.getNumberOfVertices());
-//		System.out.println("#edges = " + G.getNumberOfEdges());
+//		GrphTextReader reader = new GrphTextReader();
+		EdgeListReader reader = new EdgeListReader();
+		Grph G;
+		RegularFile f = new RegularFile(edgelist_name);
+		
+		G = reader.readGraph(f);
+		
+		System.out.println("#nodes = " + G.getNumberOfVertices());
+		System.out.println("#edges = " + G.getNumberOfEdges());
 		
 //		long start = System.currentTimeMillis();
 //		double[] dist = getDistanceDistr(G);
 //	    System.out.println("getDistanceDistr - DONE, elapsed " + (System.currentTimeMillis() - start));
 	 
 		// TEST generateCutQueries()
-//		generateCutQueries(G, n_queries, cut_query_file, 500);
-//		System.out.println("generateCutQueries - DONE");
+		generateCutQueries(G, n_queries, cut_query_file, 500);
+		System.out.println("generateCutQueries - DONE");
 		
 	    // TEST 
 //	    DegreeMetric deg = new DegreeMetric();
@@ -392,11 +396,11 @@ public class UtilityMeasure {
 ////	    computeUtility("_sample/as20graph_mcmc_10_10.0", cut_query_file, "_matlab/as20graph_mcmc_10_10.0.mat", n_queries, n_nodes);
 	    
 	    // TEST normalizeGraph()
-	    String file_name = "E:/Tailieu/Paper-code/DATA-SET/SNAP/Networks with ground-truth communities/com-lj.ungraph.txt";		// mem 2.4GB, 47s
-	    String out_file = "E:/Tailieu/Paper-code/DATA-SET/SNAP/Networks with ground-truth communities/com_lj_ungraph.gr";
-	    long start = System.currentTimeMillis();
-	    normalizeGraph(file_name, 34681189, out_file);
-	    System.out.println("normalizeGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
+//	    String file_name = "E:/Tailieu/Paper-code/DATA-SET/SNAP/Networks with ground-truth communities/com-lj.ungraph.txt";		// mem 2.4GB, 47s
+//	    String out_file = "E:/Tailieu/Paper-code/DATA-SET/SNAP/Networks with ground-truth communities/com_lj_ungraph.gr";
+//	    long start = System.currentTimeMillis();
+//	    normalizeGraph(file_name, 34681189, out_file);
+//	    System.out.println("normalizeGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
 	}
 
 }

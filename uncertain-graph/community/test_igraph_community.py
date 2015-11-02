@@ -104,29 +104,52 @@ if __name__ == '__main__':
 #    FILE_NAME = PATH + "karate.gml"
 #    FILE_NAME = PATH + "adjnoun.gml"
 #    G = ig.Graph.Read(FILE_NAME, format="gml")
-    
-#    FILE_NAME = PATH + "karate.gr"            # 1 component
-#    FILE_NAME = PATH + "polbooks.gr"            # 1 component
-#    FILE_NAME = PATH + "polblogs.gr"            # 2 components
-#    FILE_NAME = PATH + "as20graph.gr"           # 1 component
-#    FILE_NAME = PATH + "wiki-Vote.gr"           # 24 components
-#    FILE_NAME = PATH + "ca-HepPh.gr"            # 276 components
-#    FILE_NAME = PATH + "ca-AstroPh.gr"          # 289 components
-#    FILE_NAME = PATH + "com_amazon_ungraph.gr"  # 1 component
-#    FILE_NAME = PATH + "com_dblp_ungraph.gr"    # 1 component
-    FILE_NAME = PATH + "com_youtube_ungraph.gr" # 1 component
-    G = ig.Graph.Read_Edgelist(FILE_NAME, directed=False)
 
-#    G = ig.Graph.Read_Edgelist("../_data/com_amazon_ungraph.gr", directed=False)    # 254 clusters, 6.3s
-#    G = ig.Graph.Read_Edgelist("../_data/com_dblp_ungraph.gr", directed=False)    # 278 clusters, 5s
-#    G = ig.Graph.Read_Edgelist("../_data/com_youtube_ungraph.gr", directed=False)   # 13517 clusters, 11.5s
-#    PATH = "E:/Tailieu/Paper-code/DATA-SET/SNAP/Networks with ground-truth communities/"
-#    G = ig.Graph.Read_Edgelist(PATH + "com_lj_ungraph.gr", directed=False) # (3997962, 34681189)   (mem 2.8GB, 286s), 7322 clusters
+    # UNDIRECTED graphs
+##    FILE_NAME = PATH + "karate.gr"            # (34, 78)            1 component
+##    FILE_NAME = PATH + "polbooks.gr"            # (105, 441)        1 component
+#    FILE_NAME = PATH + "polblogs.gr"            # (1224,16715)      2 components (max.cluster: 1222 nodes)
+##    FILE_NAME = PATH + "as20graph.gr"           # (6474,12572)      1 component
+##    FILE_NAME = PATH + "wiki-Vote.gr"           # (7115,100762)     24 components (max.cluster: 7066 nodes ~ 99.3%)
+##    FILE_NAME = PATH + "ca-HepPh.gr"            # (12006,118489)    276 components (max.cluster: 11204 nodes ~ 93.3%)
+##    FILE_NAME = PATH + "ca-AstroPh.gr"          # (18771,198050)    289 components (max.cluster: 17903 nodes ~ 95.4%)
+##    FILE_NAME = PATH + "com_amazon_ungraph.gr"  # 1 component
+##    FILE_NAME = PATH + "com_dblp_ungraph.gr"    # 1 component
+##    FILE_NAME = PATH + "com_youtube_ungraph.gr" # 1 component
+#    G = ig.Graph.Read_Edgelist(FILE_NAME, directed=False)
+#
+##    G = ig.Graph.Read_Edgelist("../_data/com_amazon_ungraph.gr", directed=False)    # 254 clusters, 6.3s
+##    G = ig.Graph.Read_Edgelist("../_data/com_dblp_ungraph.gr", directed=False)    # 278 clusters, 5s
+##    G = ig.Graph.Read_Edgelist("../_data/com_youtube_ungraph.gr", directed=False)   # 13517 clusters, 11.5s
+##    PATH = "E:/Tailieu/Paper-code/DATA-SET/SNAP/Networks with ground-truth communities/"
+##    G = ig.Graph.Read_Edgelist(PATH + "com_lj_ungraph.gr", directed=False) # (3997962, 34681189)   (mem 2.8GB, 286s), 7322 clusters
+#    
+#    print "#nodes", G.vcount()
+#    print "#edges", G.ecount()   
+#    vertex_cluster = G.components();
+#    print "#components", vertex_cluster.summary()
+#    for cluster in vertex_cluster.__iter__():
+#        print type(cluster), len(cluster)
     
+    
+    # DIRECTED graphs
+    FILE_NAME = PATH + "polblogs.gml"           # (1490,19090)    688 strong, 268 weak         (max.strong=793, max.weak=1222)
+#    FILE_NAME = PATH + "wiki-Vote.dir"           # (8298,103689)     6999 strong, 1207 weak    (max.strong=1300, max.weak=7066)
+#    FILE_NAME = PATH + "ca-HepPh.dir"            # (89209,237010)    77479 strong, 77479 weak    (max.strong,weak = 11204)
+#    FILE_NAME = PATH + "ca-AstroPh.dir"          # (133280,396160)    114798 strong, 114798 weak (max.strong,weak = 17903)
+    
+    G = ig.Graph.Read_GML(FILE_NAME);   # .gml
+#    G = ig.Graph.Read_Edgelist(FILE_NAME, directed=True)    # .txt
     print "#nodes", G.vcount()
     print "#edges", G.ecount()   
-    vertex_cluster = G.components();
+    vertex_cluster = G.components("S");     # S:strong, W:weak
     print "#components", vertex_cluster.summary()
+    max_len = 0;
+    for cluster in vertex_cluster.__iter__():
+        # print type(cluster), len(cluster)
+        if max_len < len(cluster):
+            max_len = len(cluster)
+    print "max_len =", max_len
     
     
     # TEST community detection algorithms
