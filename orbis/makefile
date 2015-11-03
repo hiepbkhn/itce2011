@@ -74,6 +74,18 @@ dkTopoGen1k_new: dkUtils
 	g++ -I$(INCLUDE_DIR) -I$(BOOST_INCLUDE) ${OPT} -o out2/dkTopoGen1k_new.o $(SRC_DIR)/dkTopoGen1k_new.cc
 	g++ -L$(BOOST_LIB) -o out2/dkTopoGen1k_new.exe out2/dkUtils.o out2/dkTopoGen1k_new.o ${LIBS}
 	@echo 'Done';	
+	
+dkTopoGen1k_stub: dkUtils	
+	@echo 'Compiling dkTopoGen1k_stub ...';
+	g++ -I$(INCLUDE_DIR) -I$(BOOST_INCLUDE) ${OPT} -o out2/dkTopoGen1k_stub.o $(SRC_DIR)/dkTopoGen1k_stub.cc
+	g++ -L$(BOOST_LIB) -o out2/dkTopoGen1k_stub.exe out2/dkUtils.o out2/dkTopoGen1k_stub.o ${LIBS}
+	@echo 'Done';	
+		
+shuffle1k: dkUtils	
+	@echo 'Compiling shuffle1k ...';
+	g++ -I$(INCLUDE_DIR) -I$(BOOST_INCLUDE) ${OPT} -o out2/shuffle1k.o $(SRC_DIR)/shuffle1k.cc
+	g++ -L$(BOOST_LIB) -o out2/shuffle1k.exe out2/dkUtils.o out2/shuffle1k.o ${LIBS}
+	@echo 'Done';			
 
 clean:	
 	@echo 'Cleaning...';
