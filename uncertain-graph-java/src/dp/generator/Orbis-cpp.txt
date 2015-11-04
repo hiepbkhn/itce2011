@@ -87,6 +87,37 @@ modularity = 0.697848897805613
 #communitites = 212
 
 
+//// Nov 4, 2015
+dataname = com_amazon_ungraph
+readGraph - DONE, elapsed 1544
+#nodes = 334863
+#edges = 925872
+readGraph - DONE, elapsed 1412
+#nodes = 334863
+#edges = 925872
+deg_diff = 0
+#components = 165
+current_graph: #nodes = 334863 #edges = 925872 mod = -6.2281688615726065E-6
+?PASS_MAX = false
+current_graph: #nodes = 334863 #edges = 925872 mod = -6.2281688615726065E-6
+?PASS_MAX = false
+current_graph: #nodes = 94992 #edges = 780700 mod = 0.25911854485066255
+?PASS_MAX = false
+current_graph: #nodes = 29749 #edges = 649787 mod = 0.3300430025051104
+?PASS_MAX = false
+current_graph: #nodes = 13307 #edges = 614387 mod = 0.34965960882217845
+?PASS_MAX = true
+current_graph: #nodes = 315 #edges = 8411 mod = 0.38508014428453974
+?PASS_MAX = true
+current_graph: #nodes = 232 #edges = 2510 mod = 0.3852904110279216
+?PASS_MAX = true
+current_graph: #nodes = 230 #edges = 2375 mod = 0.3852913189264609
+modularity = 0.3852913189264609
+#communitites = 230
+real modularity = -3.019380248233911E-4
+
+
+
 =================================== DBLP ===========================================
 dataname = com_dblp_ungraph
 readGraph - DONE, elapsed 1607
@@ -185,6 +216,37 @@ current_graph: #nodes = 679 #edges = 801 mod = 0.7454263683126232
 modularity = 0.7454263683126232
 #communitites = 679
 real modularity = 0.19680873520515552
+
+
+//// Nov 4, 2015
+dataname = com_dblp_ungraph
+readGraph - DONE, elapsed 1667
+#nodes = 317080
+#edges = 1049866
+readGraph - DONE, elapsed 1675
+#nodes = 317080
+#edges = 1049866
+deg_diff = 0
+#components = 490
+current_graph: #nodes = 317080 #edges = 1049866 mod = -1.035672716287857E-5
+?PASS_MAX = false
+current_graph: #nodes = 317080 #edges = 1049866 mod = -1.035672716287857E-5
+?PASS_MAX = false
+current_graph: #nodes = 103576 #edges = 939759 mod = 0.20339906039235597
+?PASS_MAX = false
+current_graph: #nodes = 25687 #edges = 782593 mod = 0.2785117753874221
+?PASS_MAX = true
+current_graph: #nodes = 854 #edges = 8766 mod = 0.33639211873556246
+?PASS_MAX = true
+current_graph: #nodes = 595 #edges = 2983 mod = 0.33670653899017844
+?PASS_MAX = true
+current_graph: #nodes = 537 #edges = 1476 mod = 0.3367624490206365
+?PASS_MAX = true
+current_graph: #nodes = 532 #edges = 1336 mod = 0.33676365576581263
+modularity = 0.33676365576581263
+#communitites = 532
+real modularity = 6.607626346854867E-4
+
 
 ============================================================================
 

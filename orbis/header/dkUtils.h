@@ -47,6 +47,9 @@
 #include <map>
 #include <vector>
 #include <cstdlib>
+// hiepnh Nov 4, 2015
+#include <random>
+#include <chrono>
 
 // Various utilities used by all of the dk code
 
@@ -148,8 +151,12 @@ void dkShuffleList(std::list<T> &theList) {
 	}
 
 	// shuffle the vector - O(n)
+	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();	// hiepnh Nov 4, 2015
+	std::minstd_rand0 generator (seed);
+
 	for (int i = 0; i < listSize; ++i) {
-		int randIdx = rand() % listSize;
+//		int randIdx = rand() % listSize;	// RAND_MAX = 32767 !
+		int randIdx = generator() % listSize;
 		T tmp = theVector[randIdx];
 		theVector[randIdx] = theVector[i];
 		theVector[i] = tmp;

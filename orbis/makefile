@@ -15,6 +15,8 @@ BOOST_LIB := E:/caidat/Cpp/boost_1_57_0_mingw_x64/lib
 OPT := -O0 -g3 -Wall -c -fmessage-length=0
 #OPT := -O0 -g3 -Wall -c -fmessage-length=0 -static
 
+OPT_CPP11 := -std=c++11 -O0 -g3 -Wall -c -fmessage-length=0
+
 LIBS_32 := -lboost_program_options-mgw46-mt-1_46_1
 #LIBS_32 := -lboost_program_options-mgw48-mt-1_57 
 LIBS := -lboost_program_options-mgw48-mt-1_57
@@ -25,7 +27,7 @@ RM := rm -f
 all: dkUtils dkRewire dkDist dkRescale dkMetrics dkTopoGen0k dkTopoGen1k dkTopoGen2k	
 
 dkUtils:
-	g++ -I$(INCLUDE_DIR) -I$(BOOST_INCLUDE) ${OPT} -o out2/dkUtils.o $(SRC_DIR)/dkUtils.cc
+	g++ -I$(INCLUDE_DIR) -I$(BOOST_INCLUDE) ${OPT_CPP11} -o out2/dkUtils.o $(SRC_DIR)/dkUtils.cc
 
 dkRewire: 	
 	@echo 'Compiling dkRewire ...';
@@ -59,7 +61,7 @@ dkTopoGen0k:
 
 dkTopoGen1k:	
 	@echo 'Compiling dkTopoGen1k ...';
-	g++ -I$(INCLUDE_DIR) -I$(BOOST_INCLUDE) ${OPT} -o out2/dkTopoGen1k.o $(SRC_DIR)/dkTopoGen1k.cc
+	g++ -I$(INCLUDE_DIR) -I$(BOOST_INCLUDE) ${OPT_CPP11} -o out2/dkTopoGen1k.o $(SRC_DIR)/dkTopoGen1k.cc
 	g++ -L$(BOOST_LIB) -o out2/dkTopoGen1k.exe out2/dkUtils.o out2/dkTopoGen1k.o ${LIBS}
 	@echo 'Done';	
 	
@@ -71,7 +73,7 @@ dkTopoGen2k:
 
 dkTopoGen1k_new: dkUtils	
 	@echo 'Compiling dkTopoGen1k_new ...';
-	g++ -I$(INCLUDE_DIR) -I$(BOOST_INCLUDE) ${OPT} -o out2/dkTopoGen1k_new.o $(SRC_DIR)/dkTopoGen1k_new.cc
+	g++ -I$(INCLUDE_DIR) -I$(BOOST_INCLUDE) ${OPT_CPP11} -o out2/dkTopoGen1k_new.o $(SRC_DIR)/dkTopoGen1k_new.cc
 	g++ -L$(BOOST_LIB) -o out2/dkTopoGen1k_new.exe out2/dkUtils.o out2/dkTopoGen1k_new.o ${LIBS}
 	@echo 'Done';	
 	
