@@ -127,7 +127,7 @@ int main(int argc, char *argv[]) {
 
 	int need2Rewire = dkTopoGen1kSequence(g, degSeq, opt_n_nodes);
 
-	cerr << "done generating" << endl;
+	cerr << "done generating, need2Rewire = " << need2Rewire << endl;
 
 	// If specified, try to rewire all of the disconnected components
 	// to the GCC using 1k-preserving rewirings

@@ -1,10 +1,13 @@
 /*
- * Apr 2
+ * Apr 2, 2015
  * 	- add LS, RS for new implementation of Dendrogram.generateSanitizedSample()
+ * Nov 6
+ * 	- copy(): copy LS, RS
  */
 
 package dp.mcmc;
 
+import toools.set.IntHashSet;
 import toools.set.IntSet;
 
 public class Node {
@@ -47,6 +50,13 @@ public static final int ROOT_NODE = 100000000;
             aNode.left = null;
             aNode.right = null;
             
+        }
+        // LS, RS (only for internal nodes)
+        if (this.id < 0){
+	        aNode.LS = new IntHashSet();
+	        aNode.LS.addAll(this.LS);
+	        aNode.RS = new IntHashSet();
+	        aNode.RS.addAll(this.RS);
         }
         //
         return aNode;

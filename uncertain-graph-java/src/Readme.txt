@@ -12,6 +12,9 @@ CLASSPATH: D:\git\itce2011\uncertain-graph-java\bin;E:\caidat\Java\grph-1.6.29-s
 [dp.mcmc] private HRG
 - Dendrogram.java
 - MCMCInference.java: use Dendrogram.java 
+- DendrogramFixed.java: fixed balance binary tree
+- MCMCInferenceFixed.java: use DendrogramFixed.java
+
 
 [dp.hrg] non-private HRG
 - HRG.java (subclass of Dendrogram)
@@ -36,8 +39,6 @@ CLASSPATH: D:\git\itce2011\uncertain-graph-java\bin;E:\caidat\Java\grph-1.6.29-s
 - MixtureModel.java: converted from C
 
 [dp.combined]
-- AutoPart.java: AutoPart algorithm
-
 - NodeSetDiv.java: private (copied from NodeSet.java and NodePriv.java), use log-likelihood
 - DivisiveTmF.java: use NodeSetDiv.java
 
@@ -76,6 +77,14 @@ CLASSPATH: D:\git\itce2011\uncertain-graph-java\bin;E:\caidat\Java\grph-1.6.29-s
 - CommunityMeasure: clustering metrics
 
 - BatchGenerator: generate .cmd files
+
+[dp.generator]
+- AutoPart.java: AutoPart algorithm
+- Orbis.java: equivalent to C++ orbis
+- RMAT.java: R-MAT algorithm
+ 
+
+
 
 
 

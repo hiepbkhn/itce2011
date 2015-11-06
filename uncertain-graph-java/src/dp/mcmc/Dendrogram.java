@@ -12,6 +12,9 @@
  * 	- add partitionTopDown() using queue (see dynamic programming in NodeSetMod.bestCut())
  * Sep 24
  * 	- add buildDendrogram() using EdgeWeightedGraph
+ * Nov 6
+ * 	- add printDendrogram()
+ * 	- fix Overflow in config_2(), config_3(), buildDendrogram() (2 overloads)
  */
 
 package dp.mcmc;
@@ -171,9 +174,9 @@ public class Dendrogram {
             int n_s_tu = n_st + n_su;
             
             r_node.nEdge = n_s_tu;
-            r_node.value = (double)n_s_tu/(r_node.nL*r_node.nR);
+            r_node.value = (double)n_s_tu/r_node.nL/r_node.nR;
             p_node.nEdge = n_tu;
-            p_node.value = (double)n_tu/(p_node.nL*p_node.nR); 
+            p_node.value = (double)n_tu/p_node.nL/p_node.nR; 
             
             //
             t_node.parent = p_node;
@@ -209,9 +212,9 @@ public class Dendrogram {
             int n_s_tu = n_st + n_su;
             
             r_node.nEdge = n_s_tu;
-            r_node.value = (double)n_s_tu/(r_node.nL*r_node.nR);
+            r_node.value = (double)n_s_tu/r_node.nL/r_node.nR;
             p_node.nEdge = n_tu;
-            p_node.value = (double)n_tu/(p_node.nL*p_node.nR); 
+            p_node.value = (double)n_tu/p_node.nL/p_node.nR; 
             
             //
             t_node.parent = p_node;
@@ -257,9 +260,9 @@ public class Dendrogram {
             int n_su_t = n_st + n_tu;
             
             r_node.nEdge = n_su;
-            r_node.value = (double)n_su/(r_node.nL*r_node.nR);
+            r_node.value = (double)n_su/r_node.nL/r_node.nR;
             p_node.nEdge = n_su_t;
-            p_node.value = (double)n_su_t/(p_node.nL*p_node.nR); 
+            p_node.value = (double)n_su_t/p_node.nL/p_node.nR; 
             
             //
             t_node.parent = p_node;
@@ -285,9 +288,9 @@ public class Dendrogram {
             int n_su_t = n_st + n_tu;
             
             r_node.nEdge = n_su;
-            r_node.value = (double)n_su/(r_node.nL*r_node.nR);
+            r_node.value = (double)n_su/r_node.nL/r_node.nR;
             p_node.nEdge = n_su_t;
-            p_node.value = (double)n_su_t/(p_node.nL*p_node.nR); 
+            p_node.value = (double)n_su_t/p_node.nL/p_node.nR; 
             
             //
             t_node.parent = p_node;
@@ -614,7 +617,7 @@ public class Dendrogram {
 	    // compute value
 	    for (Node u : node_dict.values())
 	        if (u.id < 0)    // internal nodes
-	            u.value = (double)u.nEdge/(u.nL*u.nR);
+	            u.value = (double)u.nEdge/u.nL/u.nR;
 	}
 	
 	////
@@ -634,7 +637,7 @@ public class Dendrogram {
 	    // compute value
 	    for (Node u : node_dict.values())
 	        if (u.id < 0)    // internal nodes
-	            u.value = (double)u.nEdge/(u.nL*u.nR);
+	            u.value = (double)u.nEdge/u.nL/u.nR;
 	}
 	
 	////
@@ -1084,4 +1087,24 @@ public class Dendrogram {
 			T.readInternalNodes(G, filename);
 	    }
 	}
+	
+	////
+	static void printDendrogram(Node root ){
+		Queue<Node> queue = new LinkedList<Node>();
+		queue.add(root);
+		while (queue.size() > 0){
+			Node R = queue.remove();
+			System.out.print(R.id + "(" + R.nEdge + "," + String.format("%.4f", R.value) + "):" + R.left.id + "," + R.right.id + " :: ");
+			System.out.print(R.LS);
+			System.out.print(R.RS);
+			System.out.println();
+			
+			if (R.left.id < 0)
+				queue.add(R.left);
+			if (R.right.id < 0)
+				queue.add(R.right);
+			
+		}
+	}
 }
+
