@@ -60,16 +60,16 @@ public class MCMCInferenceFixed {
 //		String dataname = "ca-HepPh-wcc";			// (11204,117619) 
 //		String dataname = "ca-AstroPh-wcc";			// (17903,196972) 	199k fitting (3s)
 		// LARGE
-//		String dataname = "com_amazon_ungraph";		// (334863,925872)	355k (4s)			
+		String dataname = "com_amazon_ungraph";		// (334863,925872)	355k (4s)			
 //		String dataname = "com_dblp_ungraph";		// (317080,1049866)				
-		String dataname = "com_youtube_ungraph";	// (1134890,2987624) 11.4M fitting (160s)
+//		String dataname = "com_youtube_ungraph";	// (1134890,2987624) 11.4M fitting (160s)
 		
 		// COMMAND-LINE
 		String prefix = "";
 	    int n_samples = 20;
 		int sample_freq = 1000;
 		int burn_factor = 10;
-		double eps1 = 20.0;		// = 2logn ~ dU
+		double eps1 = 2.0;		// = 2logn ~ dU
 		double eps2 = 1.0;
 		
 		if(args.length >= 7){

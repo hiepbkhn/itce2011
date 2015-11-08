@@ -12,6 +12,7 @@ CLASSPATH: D:\git\itce2011\uncertain-graph-java\bin;E:\caidat\Java\grph-1.6.29-s
 [dp.mcmc] private HRG
 - Dendrogram.java
 - MCMCInference.java: use Dendrogram.java 
+
 - DendrogramFixed.java: fixed balance binary tree
 - MCMCInferenceFixed.java: use DendrogramFixed.java
 
