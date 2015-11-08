@@ -1,6 +1,12 @@
 /*
  * Nov 6, 2015
  * 	- implement the new problem: given a fixed dendrogram (balance tree), find the best permutation of leaf nodes (highest likelihood)
+ * Nov 7
+ * 	- fastSwap()
+ * 	- UnweightedGraph
+ * Nov 8
+ * 	!! fixed Overflow in fastSwap(): p.nL* (p.nR * (-p.value...
+ * 	- fix Overflow in dendrogramFitting() : long n_nodes = G.V();
  */
 
 package dp.mcmc;
@@ -17,22 +23,123 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import algs4.UnweightedGraph;
+
 import com.carrotsearch.hppc.cursors.IntCursor;
 
 import toools.set.IntHashSet;
 import toools.set.IntSet;
 import grph.Grph;
+import grph.topology.random.genetic.UndirectedSimpleEdgeAdditionMutation;
 
 public class DendrogramFixed extends Dendrogram{
 	
+	public int[][] leafPath;	// leafPath[u] is the list of parent ids up to root, positive for left, negative for right
+	public int[] lenPath;
 	
+	public double logLK;		// log-likelihood
+			
 	////
-	public void initByGraph(Grph G){
-		super.initByGraph(G);
+//	public void initByGraph(Grph G){
+//		super.initByGraph(G);
+//		
+//		// (copied from generateSanitizedSample)
+//		// build sets (bottom-up), use node.level
+//  		ArrayList<ArrayList<Node>> level_array = new ArrayList<ArrayList<Node>>();
+//  		for (int i = 0; i < root_node.level+1; i++)
+//  			level_array.add(new ArrayList<Node>());
+//  		for (Node u: node_dict.values())
+//			level_array.get(u.level).add(u);
+//  		
+//  		for (Node u : level_array.get(1)){	// parent of leaf nodes
+//  			u.LS = new IntHashSet();
+//  			u.LS.add(u.left.id);
+//  			u.RS = new IntHashSet();
+//  			u.RS.add(u.right.id);
+//  		}
+//  		
+//	    for (int i = 2; i < this.root_node.level + 1; i++){
+//	    	for (Node u : level_array.get(i)){
+//	    		u.LS = new IntHashSet();
+//	    		u.RS = new IntHashSet();
+//	    		
+//	    		if (u.left.id >= 0)
+//	      			u.LS.add(u.left.id);
+//	    		else{
+//	    			u.LS.addAll(u.left.LS);
+//	    			u.LS.addAll(u.left.RS);
+//	    		}
+//	    		
+//	    		if (u.right.id >= 0)
+//	      			u.RS.add(u.right.id);
+//	    		else{
+//	    			u.RS.addAll(u.right.LS);
+//	    			u.RS.addAll(u.right.RS);
+//	    		}
+//	    	}
+//	    }
+//	    
+//	    // leafPath, lenPath
+//	    int n = G.getNumberOfVertices();
+//	    int logn = (int)Math.round(Math.log(n)/Math.log(2)) + 1;
+//	    System.out.println("logn = " + logn);
+//	    leafPath = new int[n][logn];
+//	    lenPath = new int[n];
+//	    
+//	    for (Node u : this.node_list){
+//	    	int uid = u.id;
+//	    	int i = 0;
+//	    	
+//	    	while (u.id != -1){
+//	    		if (u.id == u.parent.left.id)
+//	    			leafPath[uid][i++] = u.parent.id;
+//	    		else
+//	    			leafPath[uid][i++] = -u.parent.id;
+//	    		
+//	    		lenPath[uid] += 1;
+//	    		
+//	    		u = u.parent;
+//	    	}
+//	    	
+//	    	// sort for fastSwap()
+//	    	int[] temp = Arrays.copyOf(leafPath[uid], lenPath[uid]);
+//	    	Arrays.sort(temp);
+//	    	for (i = 0; i < lenPath[uid]; i++)
+//	    		leafPath[uid][i] = temp[i];
+//	    }
+//	    
+//	   
+//		
+//	}
+	
+	//// UnweightedGraph, not Grph
+	public void initByGraph(UnweightedGraph G){
+		// COPIED from Dendrogram.initByGraph()
+		// compute node_list[]
+		this.node_list = new Node[G.V()];
+        for (int u = 0; u < G.V(); u++){
+            Node node = new Node(u,null,0.0);      // leaf node
+            node.nL = 1;                     // IMPORTANT in config_2(), config_3()
+            this.node_list[u] = node;
+        }
+        // init binary
+        this.root_node = initBinary(this.node_list,1);
+        
+        // compute node_dict{}
+        this.int_nodes = new int[this.node_list.length-1];
+        this.node_dict = buildNodeDict(this.root_node, this.int_nodes);
+        
+        //
+        long start = System.currentTimeMillis();
+        this.computeNodeLevels();		// for compute_nL_nR()
+//		        this.computeTopLevels();		// already called in computeNodeLevels
+        
+        buildDendrogram(this.node_list, this.node_dict, this.root_node, G);
+        System.out.println("build_dendrogram - DONE, elapsed " + (System.currentTimeMillis() - start));
+        
 		
-		// (copied from generateSanitizedSample)
+		// COPIED from Dendrogram.generateSanitizedSample()
 		// build sets (bottom-up), use node.level
-	    // array of level -> nodes (see compute_nL_nR)
   		ArrayList<ArrayList<Node>> level_array = new ArrayList<ArrayList<Node>>();
   		for (int i = 0; i < root_node.level+1; i++)
   			level_array.add(new ArrayList<Node>());
@@ -66,6 +173,39 @@ public class DendrogramFixed extends Dendrogram{
 	    		}
 	    	}
 	    }
+	    
+	    // leafPath, lenPath
+	    int n = G.V();
+	    int logn = (int)Math.round(Math.log(n)/Math.log(2)) + 1;
+	    System.out.println("logn = " + logn);
+	    leafPath = new int[n][logn];
+	    lenPath = new int[n];
+	    
+	    for (Node u : this.node_list){
+	    	int uid = u.id;
+	    	int i = 0;
+	    	
+	    	while (u.id != -1){
+	    		if (u.id == u.parent.left.id)
+	    			leafPath[uid][i++] = u.parent.id;
+	    		else
+	    			leafPath[uid][i++] = -u.parent.id;
+	    		
+	    		lenPath[uid] += 1;
+	    		
+	    		u = u.parent;
+	    	}
+	    	
+	    	// sort for fastSwap()
+	    	int[] temp = Arrays.copyOf(leafPath[uid], lenPath[uid]);
+	    	Arrays.sort(temp);
+	    	for (i = 0; i < lenPath[uid]; i++)
+	    		leafPath[uid][i] = temp[i];
+	    }
+	    
+	    //
+	    this.logLK = logLK();
+	    System.out.println("this.logLK = " + this.logLK);
 		
 	}
  	
@@ -212,15 +352,139 @@ public class DendrogramFixed extends Dendrogram{
 		
 	}
 	
+	////
+	public int findPair(int u, int v){
+		int  p = 0;
+		
+		int i = 0;
+		int j = lenPath[v]-1;
+		while (true){
+			if (leafPath[u][i] + leafPath[v][j] == 0){
+				p = -Math.abs(leafPath[u][i]);
+				break;
+			}else if (leafPath[u][i] + leafPath[v][j] > 0)
+				j = j - 1;
+			else
+				i = i + 1;
+			
+		}
+		//
+		return p;
+	}
+	
+	//// use leafPath
+	// 	return log-likelihood
+	public void fastSwap(UnweightedGraph G, Node u, Node v){
+		
+		// find affected internal nodes
+		List<Node> listParent = new ArrayList<Node>();
+		Node temp_u = u;
+		Node temp_v = v;
+		if (u.toplevel > v.toplevel){
+			Node temp = u;
+			for (int i = 0; i < u.toplevel - v.toplevel; i++){
+				listParent.add(temp.parent);
+				temp = temp.parent;
+			}
+			temp_u = temp;
+		}else{
+			Node temp = v;
+			for (int i = 0; i < v.toplevel - u.toplevel; i++){
+				listParent.add(temp.parent);
+				temp = temp.parent;
+			}
+			temp_v = temp;
+		}
+		
+		while (temp_u.parent.id != temp_v.parent.id){
+			listParent.add(temp_u.parent);
+			listParent.add(temp_v.parent);
+			
+			temp_u = temp_u.parent;
+			temp_v = temp_v.parent;
+		}
+		listParent.add(temp_u.parent);		// lowest common ancestor
+		
+		// compute logLK2
+		for (Node p : listParent){
+//			p.value = (double)p.nEdge /p.nL / p.nR;
+			
+			assert p.nL > 0 && p.nR > 0;
+			
+			if (p.value > 0.0 && p.value < 1.0)
+				this.logLK = this.logLK + p.nL* (p.nR * (-p.value * Math.log(p.value) - (1-p.value)*Math.log(1-p.value)));	// remove p from logLK2
+		}
+		
+		// 1 - remove u, v from the tree
+		int[] nodes = new int[]{u.id, v.id};
+		for (int uid : nodes){
+//			int[] N = G.getNeighbours(uid).toIntArray();	
+			// O(logn)
+			for (int w : G.adj(uid)){
+				int p = findPair(uid, w);
+				this.node_dict.get(p).nEdge -= 1;		// decrease
+			}
+		}
+		
+		
+		// 2 - swap (u,v) in leafPath, lenPath
+		for (int i = 0; i < leafPath[0].length; i++){
+			int temp = leafPath[u.id][i];
+			leafPath[u.id][i] = leafPath[v.id][i];
+			leafPath[v.id][i] = temp;
+		}
+		
+		int temp = lenPath[u.id];
+		lenPath[u.id] = lenPath[v.id];
+		lenPath[v.id] = temp;
+		
+		// 3 - add u, v to the tree
+		for (int uid : nodes){
+			for (int w : G.adj(uid)){
+				int p = findPair(uid, w);
+				this.node_dict.get(p).nEdge += 1;		// increase
+			}
+		}
+		
+		// 4 - update nEdge, logLK2
+		for (Node p : listParent){
+			p.value = (double)p.nEdge /p.nL / p.nR;
+		
+			// compute logLK2
+			if (p.value > 0.0 && p.value < 1.0)
+				this.logLK = this.logLK - p.nL* (p.nR * (-p.value * Math.log(p.value) - (1-p.value)*Math.log(1-p.value)));	// add p to logLK2
+		}
+		
+		// 5 - update pointers
+		Node u_parent = u.parent;
+		Node v_parent = v.parent;
+		u.parent = v_parent;
+		u.toplevel = v_parent.toplevel + 1;
+		v.parent = u_parent;
+		v.toplevel = u_parent.toplevel + 1;
+		// determine left/right child
+		if (u.id == u_parent.left.id)
+			u_parent.left = v;
+		else
+			u_parent.right = v;
+		
+		if (v.id == v_parent.left.id)
+			v_parent.left = u;
+		else
+			v_parent.right = u;
+		
+		
+	}
+	
 	
 	////
 	// Exponential mechanism by MCMC
 	// n_samples number of sample T
-	static List<DendrogramFixed> dendrogramFitting(DendrogramFixed T, Grph G, double eps1, int n_steps, int n_samples, int sample_freq){
+	static List<DendrogramFixed> dendrogramFitting(DendrogramFixed T, UnweightedGraph G, double eps1, int n_steps, int n_samples, int sample_freq){
 		List<DendrogramFixed> list_T = new ArrayList<DendrogramFixed>(); 	// list of sample T
 	    
 	    // delta U
-	    int n_nodes = G.getNumberOfVertices();
+	    long n_nodes = G.V();	// int -> long
 	    long nMax = 0;
 	    if (n_nodes % 2 == 0) 
 	        nMax = n_nodes*n_nodes/4;
@@ -237,7 +501,7 @@ public class DendrogramFixed extends Dendrogram{
 	    int n_accept = 0;
 	    int n_accept_positive = 0;
 	    Random random = new Random();
-	    double logLT = T.logLK();
+	    double logLT = T.logLK; //T.logLK();
 	    double logLT2;
 	    
 	    for (int i = 0; i < n_steps + n_samples*sample_freq; i++){
@@ -248,9 +512,10 @@ public class DendrogramFixed extends Dendrogram{
 	        	v = T.node_list[random.nextInt(T.node_list.length)];
 	        
 	        // swap (u,v)
-	        T.swap(G, u, v);
+//	        T.swap(G, u, v);
+	        T.fastSwap(G, u, v);
 	        
-	        logLT2 = T.logLK();
+	        logLT2 = T.logLK;
             
             if (logLT2 > logLT){
 				n_accept += 1;
@@ -261,7 +526,8 @@ public class DendrogramFixed extends Dendrogram{
 				double prob_val = random.nextDouble();
 				if (prob_val > prob)
 					// reverse
-					T.swap(G, u, v);
+//					T.swap(G, u, v);
+					T.fastSwap(G, u, v);
 				else {
 					n_accept += 1;
 					logLT = logLT2;
@@ -270,14 +536,15 @@ public class DendrogramFixed extends Dendrogram{
 	        
 	        //
 	        if (i % out_freq == 0)
-	        	System.out.println("i = " + i + " n_accept = " + n_accept + " logLK = " + T.logLK()
+	        	System.out.println("i = " + i + " n_accept = " + n_accept + " logLK = " + T.logLK + " logLK(2) = " + T.logLK()
 						+ " n_accept_positive = " + n_accept_positive 
 						+ " time : " + (System.currentTimeMillis() - start));
-	        if (i >= n_steps)
-	            if (i % sample_freq == 0){
-	                DendrogramFixed T2 = T.copy();
-	                list_T.add(T2);
-	            }
+	        // copy sample to list_T
+//	        if (i >= n_steps)
+//	            if (i % sample_freq == 0){
+//	                DendrogramFixed T2 = T.copy();
+//	                list_T.add(T2);
+//	            }
 	    }
 	    //
 	    return list_T;

@@ -14,7 +14,10 @@
  * 	- add buildDendrogram() using EdgeWeightedGraph
  * Nov 6
  * 	- add printDendrogram()
- * 	- fix Overflow in config_2(), config_3(), buildDendrogram() (2 overloads)
+ * 	!! fix Overflow in config_2(), config_3(), buildDendrogram() (2 overloads)
+ * 	- add buildDendrogram(UnweightedGraph)
+ * Nov 8
+ * 	!! fix Overflow in logLK()
  */
 
 package dp.mcmc;
@@ -39,7 +42,9 @@ import java.util.Queue;
 import java.util.Random;
 
 import algs4.Edge;
+import algs4.EdgeInt;
 import algs4.EdgeWeightedGraph;
+import algs4.UnweightedGraph;
 
 import com.carrotsearch.hppc.cursors.IntCursor;
 
@@ -311,7 +316,7 @@ public class Dendrogram {
 		while (queue.size() > 0){
 			Node r = queue.remove();
             if (r.value > 0.0 && r.value < 1.0)
-                L += -r.nL*r.nR * (-r.value * Math.log(r.value) - (1-r.value)*Math.log(1-r.value));
+                L += -r.nL* (r.nR * (-r.value * Math.log(r.value) - (1-r.value)*Math.log(1-r.value))); // (r.nR: to avoid overflow !
             
             if (r.left.id < 0)            // only internal nodes
                 queue.add(r.left);
@@ -626,6 +631,26 @@ public class Dendrogram {
 		
 	    // compute nEdge
 		for (Edge e : G.edges()){
+			int u = e.either();
+			int v = e.other(u);
+	//        print u, v
+	        // find lowest common ancestor
+	        int a_id = lowestCommonAncestor(node_dict.get(u), node_dict.get(v));
+	        node_dict.get(a_id).nEdge += 1;
+	    }
+		
+	    // compute value
+	    for (Node u : node_dict.values())
+	        if (u.id < 0)    // internal nodes
+	            u.value = (double)u.nEdge/u.nL/u.nR;
+	}
+	
+	////
+	public static void buildDendrogram(Node[] node_list, HashMap<Integer, Node> node_dict, Node root_node, UnweightedGraph G){
+		compute_nL_nR(root_node, node_dict);
+		
+	    // compute nEdge
+		for (EdgeInt e : G.edges()){
 			int u = e.either();
 			int v = e.other(u);
 	//        print u, v
