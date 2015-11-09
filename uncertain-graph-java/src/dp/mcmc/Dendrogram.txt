@@ -1,0 +1,59 @@
+	
+MCMCInference
+dataname = ca-AstroPh-wcc
+burn_factor = 100 sample_freq = 1000 n_samples = 50
+eps1 = 2.0
+eps2 = 1.0
+filename = _data/ca-AstroPh-wcc.gr
+node_file = _out/ca-AstroPh-wcc_dendro_50_1000_100_2.00
+#nodes = 17903
+#edges = 196972
+build_dendrogram - DONE, elapsed 141
+logLK = -1515087.6550519308
+dU = 19.199152787673956
+#steps = 1840300
+i = 0 n_accept = 1 logLK = -1515087.6550519308 n_accept_positive = 0 n_config2 = 0 time : 15
+i = 184030 n_accept = 183565 logLK = -1512990.395939699 n_accept_positive = 14354 n_config2 = 92317 time : 153427
+i = 368060 n_accept = 366870 logLK = -1511093.6788073427 n_accept_positive = 30916 n_config2 = 184196 time : 373624
+i = 552090 n_accept = 549936 logLK = -1507773.6264372463 n_accept_positive = 48982 n_config2 = 276223 time : 682618
+i = 736120 n_accept = 732588 logLK = -1504268.9046651586 n_accept_positive = 68213 n_config2 = 367998 time : 1101622
+i = 920150 n_accept = 914955 logLK = -1501706.371469868 n_accept_positive = 88317 n_config2 = 459621 time : 1613461
+i = 1104180 n_accept = 1097064 logLK = -1498317.0591838085 n_accept_positive = 109140 n_config2 = 552036 time : 2245853
+i = 1288210 n_accept = 1278710 logLK = -1493536.9486102522 n_accept_positive = 131638 n_config2 = 644027 time : 3049475
+i = 1472240 n_accept = 1459910 logLK = -1490750.4278951825 n_accept_positive = 155338 n_config2 = 736377 time : 4007603
+i = 1656270 n_accept = 1640754 logLK = -1488552.603618201 n_accept_positive = 179863 n_config2 = 828249 time : 5115236	
+
+
+
+MCMCInference
+dataname = ca-AstroPh-wcc
+burn_factor = 100 sample_freq = 1000 n_samples = 50
+eps1 = 1.0
+eps2 = 1.0
+filename = _data/ca-AstroPh-wcc.gr
+node_file = _out/ca-AstroPh-wcc_dendro_50_1000_100_1.00
+#nodes = 17903
+#edges = 196972
+build_dendrogram - DONE, elapsed 109
+logLK = -1515087.6550519308
+dU = 19.199152787673956
+#steps = 1840300
+i = 0 n_accept = 1 logLK = -1515087.6550519308 n_accept_positive = 0 n_config2 = 0 time : 16
+i = 184030 n_accept = 183802 logLK = -1512721.4941011872 n_accept_positive = 14461 n_config2 = 91809 time : 148426
+i = 368060 n_accept = 367445 logLK = -1509339.102581162 n_accept_positive = 31036 n_config2 = 183778 time : 410932
+i = 552090 n_accept = 550878 logLK = -1506227.91891836 n_accept_positive = 48343 n_config2 = 275923 time : 737055
+i = 736120 n_accept = 734095 logLK = -1502712.367692187 n_accept_positive = 66780 n_config2 = 367788 time : 1210721
+i = 920150 n_accept = 916940 logLK = -1498142.6515800755 n_accept_positive = 86641 n_config2 = 459599 time : 1816036
+i = 1104180 n_accept = 1099599 logLK = -1495518.0299429684 n_accept_positive = 107874 n_config2 = 551664 time : 2546022
+i = 1288210 n_accept = 1282022 logLK = -1491396.0008629637 n_accept_positive = 129700 n_config2 = 643854 time : 3375899
+i = 1472240 n_accept = 1464322 logLK = -1490099.727624071 n_accept_positive = 151533 n_config2 = 736126 time : 4317482
+i = 1656270 n_accept = 1646517 logLK = -1488600.3127476224 n_accept_positive = 174160 n_config2 = 828112 time : 5293097
+Exception in thread "main" java.lang.NullPointerException
+	at toools.set.IntSet.addAll(IntSet.java:260)
+	at dp.mcmc.Node.copy(Node.java:57)
+	at dp.mcmc.Dendrogram.copy(Dendrogram.java:79)
+	at dp.mcmc.Dendrogram.dendrogramFitting(Dendrogram.java:754)
+	at dp.mcmc.MCMCInference.main(MCMCInference.java:141)
+	
+
+

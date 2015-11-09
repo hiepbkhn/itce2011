@@ -18,6 +18,8 @@
  * 	- add buildDendrogram(UnweightedGraph)
  * Nov 8
  * 	!! fix Overflow in logLK()
+ * Nov 9
+ * 	- dendrogramFitting(): write to node_file instead of store to list_T + force recomputations in computeTopLevels(), computeNodeLevels()
  */
 
 package dp.mcmc;
@@ -327,13 +329,29 @@ public class Dendrogram {
         return L;
 	}
 	
-	////
+	//// Bottom-Up (using 'level')
 	public void writeInternalNodes(String filename) throws IOException{
-		this.computeNodeLevels(); // compute node levels
 		
-		File file = new File(filename);
-
-		BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+		this.computeNodeLevels(); // compute node levels (level and toplevel)
+		
+		// debug
+//		Queue<Node> queue = new LinkedList<Node>();
+//		queue.add(this.root_node);
+//		while (queue.size() > 0){
+//			Node r = queue.remove();
+//			int parent_id = 100000000;
+//			if (r.parent != null)
+//				parent_id = r.parent.id;
+//			System.out.println(r.id + "(" + parent_id + "):" + r.left.id + "," + r.right.id + ": level=" + r.level + ", toplevel=" + r.toplevel);
+//			
+//            if (r.left.id < 0)            // only internal nodes
+//                queue.add(r.left);
+//            if (r.right.id < 0)
+//                queue.add(r.right);    
+//		}
+		
+		
+		BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
 
 		for (int level = 1; level < this.root_node.level + 1; level++)
 			for (Node node : this.node_dict.values()) {
@@ -668,7 +686,7 @@ public class Dendrogram {
 	////
 	// Exponential mechanism by MCMC
 	// n_samples number of sample T
-	static List<Dendrogram> dendrogramFitting(Dendrogram T, Grph G, double eps1, int n_steps, int n_samples, int sample_freq){
+	static List<Dendrogram> dendrogramFitting(Dendrogram T, Grph G, double eps1, int n_steps, int n_samples, int sample_freq, String node_file) throws IOException{
 		List<Dendrogram> list_T = new ArrayList<Dendrogram>(); 	// list of sample T
 	    
 	    // delta U
@@ -692,6 +710,7 @@ public class Dendrogram {
 	    Random random = new Random();
 	    double logLT = T.logLK();
 	    double logLT2;
+	    int sample = 0;
 	    
 	    for (int i = 0; i < n_steps + n_samples*sample_freq; i++){
 	        // randomly pick an internal node (not root)
@@ -744,16 +763,25 @@ public class Dendrogram {
 					}
 				}
 	        }
+	        
+	        //
+	        if (i >= n_steps)
+	        	if (i % sample_freq == 0){
+	        		T.writeInternalNodes(node_file + "." + sample);
+	        		sample ++;
+	        	}
+	        
 	        //
 	        if (i % out_freq == 0)
 	        	System.out.println("i = " + i + " n_accept = " + n_accept + " logLK = " + T.logLK()
 						+ " n_accept_positive = " + n_accept_positive + " n_config2 = " + n_config2
 						+ " time : " + (System.currentTimeMillis() - start));
-	        if (i >= n_steps)
-	            if (i % sample_freq == 0){
-	                Dendrogram T2 = T.copy();
-	                list_T.add(T2);
-	            }
+	        
+//	        if (i >= n_steps)
+//	            if (i % sample_freq == 0){
+//	                Dendrogram T2 = T.copy();
+//	                list_T.add(T2);
+//	            }
 	    }
 	    //
 	    return list_T;
@@ -1042,8 +1070,8 @@ public class Dendrogram {
 //	    }
 	    
 		// WAY-2
-		if  (this.node_list[0].toplevel == 0)
-			this.computeTopLevels();
+//		if  (this.node_list[0].toplevel == 0)	// commented to force recomputation !
+		this.computeTopLevels();
 		
 		int max_toplevel = 0;
 		HashMap<Integer, ArrayList<Node>> toplevel_nodes = new HashMap<Integer, ArrayList<Node>>();
@@ -1064,10 +1092,11 @@ public class Dendrogram {
 	        u.level = 0;
 		for (int i = max_toplevel; i >= 0; i--){
 			for (Node u : toplevel_nodes.get(i)){
-                if (u.level != -1)
-                    continue;
+//                if (u.level != -1)	// commented to force recomputation !
+//                    continue;
                 if (u.left.level == -1 && u.right.level == -1)
                     System.out.println("level ERROR at u.id = " + u.id + " u.toplevel = " + u.toplevel);
+                
                 u.level = (u.left.level > u.right.level ? u.left.level : u.right.level) + 1;
 			}
 		}

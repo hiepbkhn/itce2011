@@ -47,29 +47,35 @@ public class MCMCInference {
 		
 		
 		// load graph
-		String dataname = "polbooks";		// (105, 441)
+		String dataname = "example";		// (13, 20)
+//		String dataname = "polbooks";		// (105, 441)
 //		String dataname = "polblogs";		// (1224,16715) 	1324k fitting (1069s)
 //		String dataname = "as20graph";		// (6474,12572)		build_dendrogram 0.16s, 75k fitting (16s), 750k(234s), 10 samples (68s) edge list (30s)
 //		String dataname = "wiki-Vote";		// (7115,100762) 	81k fitting (37s)
 //		String dataname = "ca-HepPh";		// (12006,118489) 	22k fitting (8.8s)
 //		String dataname = "ca-AstroPh";		// (18771,198050) 	28.7k fitting (19.6s)
+		// WCC
+//		String dataname = "polblogs-wcc";			// (1222,16714) 	
+//		String dataname = "wiki-Vote-wcc";			// (7066,100736) 	
+//		String dataname = "ca-HepPh-wcc";			// (11204,117619) 
+//		String dataname = "ca-AstroPh-wcc";			// (17903,196972) 	1.84M fitting (eps1=2, 5100s) 
 		
 		// COMMAND-LINE
 		String prefix = "";
-	    int n_samples = 50;
+	    int n_samples = 1;
 		int sample_freq = 1000;
-		int burn_factor = 1000;
-		double eps1 = 1.0;
+		int burn_factor = 100;
+		double eps1 = 2.0;
 		double eps2 = 1.0;
 		
-		if(args.length >= 7){
+		if(args.length >= 6){
 			prefix = args[0];
 			dataname = args[1];
 			n_samples = Integer.parseInt(args[2]);
 			sample_freq = Integer.parseInt(args[3]);
 			burn_factor = Integer.parseInt(args[4]);
 			eps1 = Double.parseDouble(args[5]);
-			eps2 = Double.parseDouble(args[6]);
+//			eps2 = Double.parseDouble(args[6]);
 		}
 		System.out.println("dataname = " + dataname);
 		System.out.println("burn_factor = " + burn_factor + " sample_freq = " + sample_freq + " n_samples = " + n_samples);
@@ -79,7 +85,7 @@ public class MCMCInference {
 		//
 //		String filename = "_data/" + dataname + ".grph";	// GrphTextReader		
 		String filename = prefix + "_data/" + dataname + ".gr";
-		String node_file = prefix + "_out/" + dataname + "_dendro" + "_" + n_samples + "_" + sample_freq + "_" + burn_factor + "_" + String.format("%.2f",eps1);
+		String node_file = prefix + "_out/" + dataname + "_dendro" + "_" + n_samples + "_" + sample_freq + "_" + burn_factor + "_" + String.format("%.1f",eps1) + "_tree";
 	    String out_file = prefix + "_sample/" + dataname + "_mcmc_10_10";    		// 10 (eps1=1.0), 10 (eps2=1.0)
 	    System.out.println("filename = " + filename);
 	    System.out.println("node_file = " + node_file);
@@ -133,7 +139,8 @@ public class MCMCInference {
 		
 		// TEST 
 	    long start = System.currentTimeMillis();
-	    List<Dendrogram> list_T = Dendrogram.dendrogramFitting(T, G, eps1, burn_factor*G.getNumberOfVertices(), n_samples, sample_freq);      
+	    List<Dendrogram> list_T = Dendrogram.dendrogramFitting(T, G, eps1, burn_factor*G.getNumberOfVertices(), n_samples, sample_freq, node_file);    
+	    System.out.println("logLK = " + T.logLK());
 	    System.out.println("dendrogramFitting - DONE, elapsed " + (System.currentTimeMillis() - start));
 
 //	    //check T

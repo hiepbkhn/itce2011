@@ -52,7 +52,7 @@ public static final int ROOT_NODE = 100000000;
             
         }
         // LS, RS (only for internal nodes)
-        if (this.id < 0){
+        if (this.id < 0 && this.LS != null && this.RS != null){
 	        aNode.LS = new IntHashSet();
 	        aNode.LS.addAll(this.LS);
 	        aNode.RS = new IntHashSet();

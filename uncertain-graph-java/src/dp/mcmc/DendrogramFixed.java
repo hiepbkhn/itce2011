@@ -7,6 +7,8 @@
  * Nov 8
  * 	!! fixed Overflow in fastSwap(): p.nL* (p.nR * (-p.value...
  * 	- fix Overflow in dendrogramFitting() : long n_nodes = G.V();
+ * Nov 9
+ * 	- dendrogramFitting(): write to node_file instead of store to list_T
  */
 
 package dp.mcmc;
@@ -16,6 +18,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -376,7 +379,7 @@ public class DendrogramFixed extends Dendrogram{
 	
 	//// use leafPath
 	// 	return log-likelihood
-	public void fastSwap(UnweightedGraph G, Node u, Node v){		// void or List<Int2>
+	public void fastSwap(UnweightedGraph G, Node u, Node v){		// return void or List<Int2>,	UnweightedGraph or Grph
 		
 //		List<Int2> intNodes = new ArrayList<Int2>();	// used in unSwap()
 		
@@ -527,7 +530,9 @@ public class DendrogramFixed extends Dendrogram{
 	////
 	// Exponential mechanism by MCMC
 	// n_samples number of sample T
-	static List<DendrogramFixed> dendrogramFitting(DendrogramFixed T, UnweightedGraph G, double eps1, int n_steps, int n_samples, int sample_freq){
+	static List<DendrogramFixed> dendrogramFitting(DendrogramFixed T, UnweightedGraph G, double eps1, int n_steps, int n_samples, int sample_freq, 
+			String node_file) throws IOException{
+		
 		List<DendrogramFixed> list_T = new ArrayList<DendrogramFixed>(); 	// list of sample T
 	    
 	    // delta U
@@ -541,7 +546,7 @@ public class DendrogramFixed extends Dendrogram{
 	    System.out.println("dU = " + dU);
 	    System.out.println("#steps = " + (n_steps + n_samples*sample_freq));
 	    
-	    int out_freq = (n_steps + n_samples*sample_freq)/10;
+	    int out_freq = (n_steps + n_samples*sample_freq)/20;
 	    
 	    // MCMC
 	    long start = System.currentTimeMillis();
@@ -551,6 +556,7 @@ public class DendrogramFixed extends Dendrogram{
 	    double logLT = T.logLK; //T.logLK();
 	    double logLT2;
 //	    List<Int2> intNodes;
+	    int sample = 0;
 	    
 	    for (int i = 0; i < n_steps + n_samples*sample_freq; i++){
 	        // randomly pick a pair of leaf nodes
@@ -589,6 +595,15 @@ public class DendrogramFixed extends Dendrogram{
 	        	System.out.println("i = " + i + " n_accept = " + n_accept + " logLK = " + T.logLK + " logLK(2) = " + T.logLK()
 						+ " n_accept_positive = " + n_accept_positive 
 						+ " time : " + (System.currentTimeMillis() - start));
+	        
+	        
+	        //
+	        if (i >= n_steps)
+	        	if (i % sample_freq == 0){
+	        		T.writeInternalNodes(node_file + "." + sample);
+	        		sample ++;
+	        	}
+	        
 	        // copy sample to list_T
 //	        if (i >= n_steps)
 //	            if (i % sample_freq == 0){

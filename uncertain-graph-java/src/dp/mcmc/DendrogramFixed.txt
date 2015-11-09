@@ -1,0 +1,316 @@
+MCMCInferenceFixed
+dataname = as20graph
+burn_factor = 10 sample_freq = 1000 n_samples = 20
+eps1 = 17.6
+eps2 = 1.0
+#nodes = 6474
+#edges = 12572
+build_dendrogram - DONE, elapsed 29
+logn = 14
+this.logLK = -100341.97063777923
+logLK = -100341.97063777923 logLK(2) = -100341.97063777923
+dU = 17.16480445959123
+#steps = 84740
+i = 0 n_accept = 1 logLK = -100341.33364799003 logLK(2) = -100341.33364799003 n_accept_positive = 1 time : 1
+i = 8474 n_accept = 5811 logLK = -98568.30592533934 logLK(2) = -98568.30592531466 n_accept_positive = 2110 time : 63
+i = 16948 n_accept = 11451 logLK = -97878.54489129788 logLK(2) = -97878.54489124271 n_accept_positive = 3794 time : 117
+i = 25422 n_accept = 17041 logLK = -96997.4721226996 logLK(2) = -96997.47212264863 n_accept_positive = 5626 time : 175
+i = 33896 n_accept = 22566 logLK = -96607.13019583307 logLK(2) = -96607.13019577337 n_accept_positive = 7322 time : 243
+i = 42370 n_accept = 28084 logLK = -96171.70931451386 logLK(2) = -96171.70931445222 n_accept_positive = 9064 time : 303
+i = 50844 n_accept = 33429 logLK = -95530.60351570931 logLK(2) = -95530.60351563669 n_accept_positive = 10612 time : 360
+i = 59318 n_accept = 38808 logLK = -95359.80098594654 logLK(2) = -95359.80098586755 n_accept_positive = 12170 time : 435
+i = 67792 n_accept = 44220 logLK = -95038.10606417235 logLK(2) = -95038.10606409555 n_accept_positive = 13821 time : 491
+i = 76266 n_accept = 49613 logLK = -94899.6033607815 logLK(2) = -94899.60336069355 n_accept_positive = 15344 time : 546
+dendrogramFitting - DONE, elapsed 604
+
+
+
+MCMCInferenceFixed
+dataname = polbooks
+burn_factor = 10 sample_freq = 1000 n_samples = 20
+eps1 = 17.6
+eps2 = 1.0
+#nodes = 105
+#edges = 441
+build_dendrogram - DONE, elapsed 2
+logn = 8
+this.logLK = -1248.6556626369318
+logLK = -1248.6556626369318 logLK(2) = -1248.6556626369318
+dU = 8.921354187835687
+#steps = 21050
+i = 0 n_accept = 0 logLK = -1248.6556626369315 logLK(2) = -1248.6556626369318 n_accept_positive = 0 time : 0
+i = 2105 n_accept = 224 logLK = -1052.4052104436457 logLK(2) = -1052.405210443462 n_accept_positive = 122 time : 21
+i = 4210 n_accept = 350 logLK = -979.4250550635867 logLK(2) = -979.4250550630766 n_accept_positive = 175 time : 37
+i = 6315 n_accept = 427 logLK = -945.6585899764485 logLK(2) = -945.658589975849 n_accept_positive = 202 time : 52
+i = 8420 n_accept = 492 logLK = -928.7813717029622 logLK(2) = -928.7813717023478 n_accept_positive = 230 time : 68
+i = 10525 n_accept = 564 logLK = -916.9715877799954 logLK(2) = -916.971587779322 n_accept_positive = 251 time : 84
+i = 12630 n_accept = 622 logLK = -907.7537806547791 logLK(2) = -907.7537806540238 n_accept_positive = 265 time : 105
+i = 14735 n_accept = 703 logLK = -903.3668428757645 logLK(2) = -903.3668428749247 n_accept_positive = 281 time : 120
+i = 16840 n_accept = 764 logLK = -909.4450679910633 logLK(2) = -909.4450679901304 n_accept_positive = 298 time : 136
+i = 18945 n_accept = 822 logLK = -915.9860579580825 logLK(2) = -915.9860579570837 n_accept_positive = 319 time : 151
+dendrogramFitting - DONE, elapsed 173
+
+
+
+MCMCInferenceFixed
+dataname = ca-AstroPh-wcc
+burn_factor = 10 sample_freq = 1000 n_samples = 20
+eps1 = 17.6
+eps2 = 1.0
+#nodes = 17903
+#edges = 196972
+build_dendrogram - DONE, elapsed 123
+logn = 15
+this.logLK = -1515087.6550519308
+logLK = -1515087.6550519308 logLK(2) = -1515087.6550519308
+dU = 19.199152787673956
+#steps = 199030
+i = 0 n_accept = 1 logLK = -1515087.5672136496 logLK(2) = -1515087.5672136496 n_accept_positive = 1 time : 3
+i = 19903 n_accept = 13032 logLK = -1477848.598295339 logLK(2) = -1477848.5982954444 n_accept_positive = 8108 time : 418
+i = 39806 n_accept = 22944 logLK = -1429608.8362166532 logLK(2) = -1429608.8362171422 n_accept_positive = 14262 time : 759
+i = 59709 n_accept = 31662 logLK = -1392961.1750773056 logLK(2) = -1392961.1750781962 n_accept_positive = 19388 time : 1083
+i = 79612 n_accept = 39767 logLK = -1367419.1037663098 logLK(2) = -1367419.1037671545 n_accept_positive = 23922 time : 1411
+i = 99515 n_accept = 47472 logLK = -1348299.097911829 logLK(2) = -1348299.0979129025 n_accept_positive = 28085 time : 1746
+i = 119418 n_accept = 54935 logLK = -1334248.4701090346 logLK(2) = -1334248.4701101873 n_accept_positive = 31981 time : 2081
+i = 139321 n_accept = 62138 logLK = -1322497.3553710724 logLK(2) = -1322497.3553728908 n_accept_positive = 35762 time : 2423
+i = 159224 n_accept = 68922 logLK = -1313499.7991851862 logLK(2) = -1313499.7991877296 n_accept_positive = 39337 time : 2767
+i = 179127 n_accept = 75654 logLK = -1306474.1586229966 logLK(2) = -1306474.1586267778 n_accept_positive = 42810 time : 3109
+dendrogramFitting - DONE, elapsed 3453
+
+
+MCMCInferenceFixed
+dataname = ca-AstroPh-wcc
+burn_factor = 1000 sample_freq = 1000 n_samples = 20
+eps1 = 17.6
+eps2 = 1.0
+#nodes = 17903
+#edges = 196972
+build_dendrogram - DONE, elapsed 110
+logn = 15
+this.logLK = -1515087.6550519308
+logLK = -1515087.6550519308 logLK(2) = -1515087.6550519308
+dU = 19.199152787673956
+#steps = 17923000
+i = 0 n_accept = 0 logLK = -1515087.655051931 logLK(2) = -1515087.6550519308 n_accept_positive = 0 time : 3
+i = 1792300 n_accept = 414733 logLK = -1201884.3563240531 logLK(2) = -1201884.3563658865 n_accept_positive = 208392 time : 32760
+i = 3584600 n_accept = 735775 logLK = -1167396.4191296257 logLK(2) = -1167396.4192468168 n_accept_positive = 364084 time : 66472
+i = 5376900 n_accept = 1044015 logLK = -1141814.9186438362 logLK(2) = -1141814.9188840475 n_accept_positive = 516707 time : 100740
+i = 7169200 n_accept = 1344605 logLK = -1123422.9466620893 logLK(2) = -1123422.9470297012 n_accept_positive = 665825 time : 134887
+i = 8961500 n_accept = 1638548 logLK = -1107438.1799234394 logLK(2) = -1107438.1803980814 n_accept_positive = 810482 time : 169415
+i = 10753800 n_accept = 1927690 logLK = -1094888.639359252 logLK(2) = -1094888.6400184187 n_accept_positive = 958011 time : 203904
+i = 12546100 n_accept = 2215132 logLK = -1083160.040951727 logLK(2) = -1083160.041752929 n_accept_positive = 1102741 time : 239026
+i = 14338400 n_accept = 2496230 logLK = -1072549.0590883964 logLK(2) = -1072549.0600051964 n_accept_positive = 1242707 time : 274536
+i = 16130700 n_accept = 2774949 logLK = -1063476.7482204582 logLK(2) = -1063476.7492837606 n_accept_positive = 1383686 time : 309670
+dendrogramFitting - DONE, elapsed 345913
+
+
+MCMCInferenceFixed
+dataname = ca-AstroPh-wcc
+burn_factor = 2000 sample_freq = 1000 n_samples = 20
+eps1 = 17.6
+eps2 = 1.0
+#nodes = 17903
+#edges = 196972
+build_dendrogram - DONE, elapsed 114
+logn = 15
+this.logLK = -1515087.6550519308
+logLK = -1515087.6550519308 logLK(2) = -1515087.6550519308
+dU = 19.199152787673956
+#steps = 35826000
+i = 0 n_accept = 0 logLK = -1515087.6550519308 logLK(2) = -1515087.6550519308 n_accept_positive = 0 time : 3
+i = 3582600 n_accept = 733585 logLK = -1165467.3006428669 logLK(2) = -1165467.3007839825 n_accept_positive = 365248 time : 64075
+i = 7165200 n_accept = 1342117 logLK = -1114699.8570885616 logLK(2) = -1114699.857463558 n_accept_positive = 666016 time : 130202
+i = 10747800 n_accept = 1940360 logLK = -1082803.1884714165 logLK(2) = -1082803.1891177695 n_accept_positive = 964719 time : 200779
+i = 14330400 n_accept = 2520195 logLK = -1060505.1107464528 logLK(2) = -1060505.1116856209 n_accept_positive = 1257446 time : 270866
+i = 17913000 n_accept = 3087312 logLK = -1044212.479844092 logLK(2) = -1044212.4810132844 n_accept_positive = 1540319 time : 340821
+i = 21495600 n_accept = 3645441 logLK = -1030785.5756234006 logLK(2) = -1030785.576816144 n_accept_positive = 1796663 time : 410417
+i = 25078200 n_accept = 4197032 logLK = -1019061.3896943117 logLK(2) = -1019061.3909214655 n_accept_positive = 2051754 time : 479547
+i = 28660800 n_accept = 4739619 logLK = -1008866.4521265242 logLK(2) = -1008866.4533523001 n_accept_positive = 2296184 time : 549474
+i = 32243400 n_accept = 5278073 logLK = -999590.1098937164 logLK(2) = -999590.1110848346 n_accept_positive = 2536215 time : 617765
+dendrogramFitting - DONE, elapsed 684421
+
+
+MCMCInferenceFixed
+dataname = ca-AstroPh-wcc
+burn_factor = 4000 sample_freq = 1000 n_samples = 20
+eps1 = 17.6
+eps2 = 1.0
+#nodes = 17903
+#edges = 196972
+build_dendrogram - DONE, elapsed 93
+logn = 15
+this.logLK = -1515087.6550519308
+logLK = -1515087.6550519308 logLK(2) = -1515087.6550519308
+dU = 19.199152787673956
+#steps = 71632000
+i = 0 n_accept = 1 logLK = -1515087.6908024638 logLK(2) = -1515087.6908024638 n_accept_positive = 0 time : 0
+i = 3581600 n_accept = 743130 logLK = -1163506.5535093872 logLK(2) = -1163506.553659946 n_accept_positive = 369287 time : 64552
+i = 7163200 n_accept = 1383856 logLK = -1118588.112375544 logLK(2) = -1118588.1127585974 n_accept_positive = 684325 time : 130245
+i = 10744800 n_accept = 2001829 logLK = -1088619.657265962 logLK(2) = -1088619.6579047327 n_accept_positive = 991656 time : 196406
+i = 14326400 n_accept = 2599667 logLK = -1064882.6249378005 logLK(2) = -1064882.6258655763 n_accept_positive = 1292170 time : 263128
+i = 17908000 n_accept = 3174096 logLK = -1047222.948729601 logLK(2) = -1047222.9499707051 n_accept_positive = 1586879 time : 330287
+i = 21489600 n_accept = 3735833 logLK = -1032498.1800789549 logLK(2) = -1032498.1812944168 n_accept_positive = 1835490 time : 397275
+i = 25071200 n_accept = 4298054 logLK = -1019471.8759599787 logLK(2) = -1019471.8771782956 n_accept_positive = 2090044 time : 464184
+i = 28652800 n_accept = 4846445 logLK = -1009315.6172642205 logLK(2) = -1009315.6184752431 n_accept_positive = 2337188 time : 531047
+i = 32234400 n_accept = 5387169 logLK = -1000277.8035838333 logLK(2) = -1000277.8047947135 n_accept_positive = 2582913 time : 599355
+i = 35816000 n_accept = 5916351 logLK = -993652.8760836656 logLK(2) = -993652.8773084574 n_accept_positive = 2828450 time : 668364
+i = 39397600 n_accept = 6443229 logLK = -987590.9925445728 logLK(2) = -987590.9937521475 n_accept_positive = 3068147 time : 737154
+i = 42979200 n_accept = 6966842 logLK = -980769.4873617582 logLK(2) = -980769.4886005612 n_accept_positive = 3314259 time : 807752
+i = 46560800 n_accept = 7485615 logLK = -976325.6563020418 logLK(2) = -976325.6575634413 n_accept_positive = 3556446 time : 877189
+i = 50142400 n_accept = 8001052 logLK = -971967.4464294862 logLK(2) = -971967.447743846 n_accept_positive = 3801826 time : 944803
+i = 53724000 n_accept = 8517014 logLK = -967222.468142499 logLK(2) = -967222.4695033032 n_accept_positive = 4046594 time : 1011713
+i = 57305600 n_accept = 9021512 logLK = -963604.8967465654 logLK(2) = -963604.8981704196 n_accept_positive = 4288023 time : 1078560
+i = 60887200 n_accept = 9525835 logLK = -960085.0604796694 logLK(2) = -960085.0619159447 n_accept_positive = 4522090 time : 1145064
+i = 64468800 n_accept = 10023446 logLK = -956503.3322746425 logLK(2) = -956503.3337573089 n_accept_positive = 4758346 time : 1211552
+i = 68050400 n_accept = 10518730 logLK = -954025.3223974619 logLK(2) = -954025.3238876724 n_accept_positive = 4987510 time : 1279707
+logLK = -950980.4838460368 logLK(2) = -950980.4853443003
+dendrogramFitting - DONE, elapsed 1346805
+
+
+MCMCInferenceFixed
+dataname = ca-AstroPh-wcc
+burn_factor = 4000 sample_freq = 1000 n_samples = 20
+eps1 = 9.5
+eps2 = 1.0
+#nodes = 17903
+#edges = 196972
+build_dendrogram - DONE, elapsed 110
+logn = 15
+this.logLK = -1515087.6550519308
+logLK = -1515087.6550519308 logLK(2) = -1515087.6550519308
+dU = 19.199152787673956
+#steps = 71632000
+i = 0 n_accept = 1 logLK = -1515087.7254682276 logLK(2) = -1515087.7254682279 n_accept_positive = 0 time : 0
+i = 3581600 n_accept = 1250503 logLK = -1205859.1752302144 logLK(2) = -1205859.1754559889 n_accept_positive = 603802 time : 65801
+i = 7163200 n_accept = 2416785 logLK = -1176562.2202884662 logLK(2) = -1176562.2207779484 n_accept_positive = 1161336 time : 133887
+i = 10744800 n_accept = 3567620 logLK = -1149749.3008900124 logLK(2) = -1149749.3016162126 n_accept_positive = 1709696 time : 200777
+i = 14326400 n_accept = 4708063 logLK = -1130968.5696625817 logLK(2) = -1130968.5706475715 n_accept_positive = 2254734 time : 267260
+i = 17908000 n_accept = 5836235 logLK = -1115535.2754857128 logLK(2) = -1115535.2767812884 n_accept_positive = 2799394 time : 334187
+i = 21489600 n_accept = 6963385 logLK = -1103976.618331753 logLK(2) = -1103976.619952711 n_accept_positive = 3345255 time : 401061
+i = 25071200 n_accept = 8086319 logLK = -1094349.9807064887 logLK(2) = -1094349.982666937 n_accept_positive = 3890436 time : 469917
+i = 28652800 n_accept = 9197275 logLK = -1085060.6665660557 logLK(2) = -1085060.6688315275 n_accept_positive = 4427237 time : 537522
+i = 32234400 n_accept = 10296821 logLK = -1077598.4180900208 logLK(2) = -1077598.420603561 n_accept_positive = 4955095 time : 606526
+i = 35816000 n_accept = 11399775 logLK = -1072442.7298867023 logLK(2) = -1072442.7326975153 n_accept_positive = 5487687 time : 674416
+i = 39397600 n_accept = 12501993 logLK = -1068619.4951463817 logLK(2) = -1068619.4982438837 n_accept_positive = 6020979 time : 742302
+i = 42979200 n_accept = 13607149 logLK = -1063329.0852642623 logLK(2) = -1063329.0886734212 n_accept_positive = 6561063 time : 810283
+i = 46560800 n_accept = 14713974 logLK = -1060835.0294717683 logLK(2) = -1060835.0331443383 n_accept_positive = 7100414 time : 878804
+i = 50142400 n_accept = 15815817 logLK = -1056344.0992903803 logLK(2) = -1056344.1032739845 n_accept_positive = 7640940 time : 946742
+i = 53724000 n_accept = 16920805 logLK = -1052889.1837378854 logLK(2) = -1052889.1880021612 n_accept_positive = 8181011 time : 1015343
+i = 57305600 n_accept = 18020056 logLK = -1050598.4022523374 logLK(2) = -1050598.4067988407 n_accept_positive = 8723971 time : 1083494
+i = 60887200 n_accept = 19123579 logLK = -1047646.7293669767 logLK(2) = -1047646.7341411414 n_accept_positive = 9266409 time : 1150942
+i = 64468800 n_accept = 20216470 logLK = -1045347.1484298521 logLK(2) = -1045347.153221619 n_accept_positive = 9769948 time : 1218652
+i = 68050400 n_accept = 21313946 logLK = -1043674.6589849086 logLK(2) = -1043674.6638057168 n_accept_positive = 10276749 time : 1285920
+logLK = -1041323.4175855789 logLK(2) = -1041323.4224317492
+dendrogramFitting - DONE, elapsed 1351536
+
+
+MCMCInferenceFixed
+dataname = ca-AstroPh-wcc
+burn_factor = 4000 sample_freq = 1000 n_samples = 20
+eps1 = 5.0
+eps2 = 1.0
+#nodes = 17903
+#edges = 196972
+build_dendrogram - DONE, elapsed 109
+logn = 15
+this.logLK = -1515087.6550519308
+logLK = -1515087.6550519308 logLK(2) = -1515087.6550519308
+dU = 19.199152787673956
+#steps = 71632000
+i = 0 n_accept = 1 logLK = -1515087.5426269432 logLK(2) = -1515087.5426269434 n_accept_positive = 1 time : 0
+i = 3581600 n_accept = 1744077 logLK = -1269004.4232247283 logLK(2) = -1269004.423422351 n_accept_positive = 827813 time : 63345
+i = 7163200 n_accept = 3427560 logLK = -1242732.7585011115 logLK(2) = -1242732.7590104765 n_accept_positive = 1628234 time : 127487
+i = 10744800 n_accept = 5115583 logLK = -1227000.2445785138 logLK(2) = -1227000.2453769562 n_accept_positive = 2429557 time : 190749
+i = 14326400 n_accept = 6803892 logLK = -1217124.514225794 logLK(2) = -1217124.5153199786 n_accept_positive = 3231434 time : 253447
+i = 17908000 n_accept = 8483412 logLK = -1205954.7608888415 logLK(2) = -1205954.7622768478 n_accept_positive = 4029957 time : 316300
+i = 21489600 n_accept = 10156839 logLK = -1199169.4121731624 logLK(2) = -1199169.4138616023 n_accept_positive = 4825345 time : 379706
+i = 25071200 n_accept = 11834128 logLK = -1191509.9695381129 logLK(2) = -1191509.9715076252 n_accept_positive = 5621829 time : 444409
+i = 28652800 n_accept = 13516115 logLK = -1184299.1651362707 logLK(2) = -1184299.1673769655 n_accept_positive = 6419316 time : 508310
+i = 32234400 n_accept = 15193274 logLK = -1181000.0458079276 logLK(2) = -1181000.0483246192 n_accept_positive = 7214674 time : 572803
+i = 35816000 n_accept = 16862968 logLK = -1176849.197996575 logLK(2) = -1176849.2007803523 n_accept_positive = 8006603 time : 637080
+i = 39397600 n_accept = 18536850 logLK = -1173076.5337375998 logLK(2) = -1173076.536815087 n_accept_positive = 8801181 time : 700672
+i = 42979200 n_accept = 20211148 logLK = -1169893.6398100487 logLK(2) = -1169893.643165863 n_accept_positive = 9596473 time : 764618
+i = 46560800 n_accept = 21878019 logLK = -1168673.620548751 logLK(2) = -1168673.6241493656 n_accept_positive = 10386223 time : 828521
+i = 50142400 n_accept = 23545955 logLK = -1166489.8966890175 logLK(2) = -1166489.900538175 n_accept_positive = 11176548 time : 893457
+i = 53724000 n_accept = 25217266 logLK = -1164663.060206593 logLK(2) = -1164663.0642946332 n_accept_positive = 11967472 time : 957702
+i = 57305600 n_accept = 26887423 logLK = -1163275.573131007 logLK(2) = -1163275.5774690118 n_accept_positive = 12758999 time : 1021638
+i = 60887200 n_accept = 28556671 logLK = -1161567.8563575991 logLK(2) = -1161567.8609352328 n_accept_positive = 13549770 time : 1085904
+i = 64468800 n_accept = 30224865 logLK = -1161447.2530064883 logLK(2) = -1161447.2578485778 n_accept_positive = 14340731 time : 1149229
+i = 68050400 n_accept = 31891829 logLK = -1159454.4386091193 logLK(2) = -1159454.4436846583 n_accept_positive = 15130450 time : 1212868
+logLK = -1158988.1020265676 logLK(2) = -1158988.1073766984
+dendrogramFitting - DONE, elapsed 1276192
+
+
+MCMCInferenceFixed
+dataname = ca-AstroPh-wcc
+burn_factor = 1000 sample_freq = 1000 n_samples = 20
+eps1 = 2.0
+eps2 = 1.0
+#nodes = 17903
+#edges = 196972
+build_dendrogram - DONE, elapsed 140
+logn = 15
+this.logLK = -1515087.6550519308
+logLK = -1515087.6550519308 logLK(2) = -1515087.6550519308
+dU = 19.199152787673956
+#steps = 17923000
+i = 0 n_accept = 1 logLK = -1515087.4329182003 logLK(2) = -1515087.4329182003 n_accept_positive = 1 time : 0
+i = 896150 n_accept = 617310 logLK = -1374753.6329232473 logLK(2) = -1374753.6329700425 n_accept_positive = 296484 time : 13261
+i = 1792300 n_accept = 1227732 logLK = -1372295.5329958966 logLK(2) = -1372295.5331011682 n_accept_positive = 586508 time : 26494
+i = 2688450 n_accept = 1837775 logLK = -1375264.6260014656 logLK(2) = -1375264.6261649912 n_accept_positive = 876876 time : 39742
+i = 3584600 n_accept = 2449267 logLK = -1373029.5619878909 logLK(2) = -1373029.5622104595 n_accept_positive = 1168058 time : 53035
+i = 4480750 n_accept = 3061838 logLK = -1374168.2377504166 logLK(2) = -1374168.2380330516 n_accept_positive = 1459421 time : 66312
+i = 5376900 n_accept = 3671384 logLK = -1373599.710842445 logLK(2) = -1373599.7111817868 n_accept_positive = 1749453 time : 79546
+i = 6273050 n_accept = 4281731 logLK = -1372286.7839893128 logLK(2) = -1372286.7843899622 n_accept_positive = 2040076 time : 92685
+i = 7169200 n_accept = 4890912 logLK = -1374112.327929836 logLK(2) = -1374112.328387878 n_accept_positive = 2330607 time : 105920
+i = 8065350 n_accept = 5500141 logLK = -1372890.7593785524 logLK(2) = -1372890.7598976763 n_accept_positive = 2620815 time : 119307
+i = 8961500 n_accept = 6111950 logLK = -1373448.47182685 logLK(2) = -1373448.472405111 n_accept_positive = 2912455 time : 132652
+i = 9857650 n_accept = 6721149 logLK = -1371900.6949868896 logLK(2) = -1371900.6956233808 n_accept_positive = 3202491 time : 146010
+i = 10753800 n_accept = 7328537 logLK = -1372209.0576804255 logLK(2) = -1372209.0583728887 n_accept_positive = 3491444 time : 159131
+i = 11649950 n_accept = 7936580 logLK = -1372575.7984850488 logLK(2) = -1372575.799237884 n_accept_positive = 3780885 time : 172272
+i = 12546100 n_accept = 8547008 logLK = -1372486.6490335804 logLK(2) = -1372486.6498443834 n_accept_positive = 4071104 time : 185565
+i = 13442250 n_accept = 9157019 logLK = -1374758.5083031238 logLK(2) = -1374758.509175318 n_accept_positive = 4361011 time : 198796
+i = 14338400 n_accept = 9766003 logLK = -1371615.5661049343 logLK(2) = -1371615.5670402257 n_accept_positive = 4650788 time : 211605
+i = 15234550 n_accept = 10375962 logLK = -1372115.4387187315 logLK(2) = -1372115.4397155992 n_accept_positive = 4940958 time : 224305
+i = 16130700 n_accept = 10987081 logLK = -1372889.935862775 logLK(2) = -1372889.9369185641 n_accept_positive = 5231971 time : 236991
+i = 17026850 n_accept = 11596883 logLK = -1372514.881892486 logLK(2) = -1372514.8830079874 n_accept_positive = 5522554 time : 249628
+logLK = -1374956.8996775404 logLK(2) = -1374956.9008549158
+dendrogramFitting - DONE, elapsed 262249
+
+
+
+MCMCInferenceFixed
+dataname = ca-AstroPh-wcc
+burn_factor = 1000 sample_freq = 1000 n_samples = 20
+eps1 = 1.0
+eps2 = 1.0
+#nodes = 17903
+#edges = 196972
+build_dendrogram - DONE, elapsed 124
+logn = 15
+this.logLK = -1515087.6550519308
+logLK = -1515087.6550519308 logLK(2) = -1515087.6550519308
+dU = 19.199152787673956
+#steps = 17923000
+i = 0 n_accept = 1 logLK = -1515086.6355644579 logLK(2) = -1515086.635564458 n_accept_positive = 1 time : 15
+i = 896150 n_accept = 834429 logLK = -1506040.4649770828 logLK(2) = -1506040.4649819885 n_accept_positive = 400313 time : 10533
+i = 1792300 n_accept = 1660670 logLK = -1505654.136798397 logLK(2) = -1505654.1368099414 n_accept_positive = 796760 time : 20957
+i = 2688450 n_accept = 2488886 logLK = -1507301.951224596 logLK(2) = -1507301.9512432492 n_accept_positive = 1194250 time : 31302
+i = 3584600 n_accept = 3315532 logLK = -1507167.2676565228 logLK(2) = -1507167.267682444 n_accept_positive = 1591168 time : 41584
+i = 4480750 n_accept = 4145466 logLK = -1510062.105966462 logLK(2) = -1510062.1059963203 n_accept_positive = 1989076 time : 51851
+i = 5376900 n_accept = 4974395 logLK = -1507988.4787222042 logLK(2) = -1507988.478756103 n_accept_positive = 2387207 time : 62242
+i = 6273050 n_accept = 5798196 logLK = -1507991.5620763563 logLK(2) = -1507991.562116374 n_accept_positive = 2782239 time : 72509
+i = 7169200 n_accept = 6622349 logLK = -1506325.9970620228 logLK(2) = -1506325.9971059489 n_accept_positive = 3177155 time : 82777
+i = 8065350 n_accept = 7449830 logLK = -1509542.9770554393 logLK(2) = -1509542.977101914 n_accept_positive = 3574679 time : 92997
+i = 8961500 n_accept = 8278680 logLK = -1505050.801177504 logLK(2) = -1505050.8012290364 n_accept_positive = 3972665 time : 103283
+i = 9857650 n_accept = 9105692 logLK = -1508945.7274297106 logLK(2) = -1508945.7274852616 n_accept_positive = 4369325 time : 113599
+i = 10753800 n_accept = 9936463 logLK = -1504175.9966530942 logLK(2) = -1504175.996712261 n_accept_positive = 4768328 time : 123928
+i = 11649950 n_accept = 10766165 logLK = -1504115.773587928 logLK(2) = -1504115.7736527256 n_accept_positive = 5166627 time : 134087
+i = 12546100 n_accept = 11591525 logLK = -1507251.7551203975 logLK(2) = -1507251.7551905974 n_accept_positive = 5562705 time : 144683
+i = 13442250 n_accept = 12424961 logLK = -1510607.2141871955 logLK(2) = -1510607.2142615211 n_accept_positive = 5962513 time : 154843
+i = 14338400 n_accept = 13256781 logLK = -1507316.8056614092 logLK(2) = -1507316.8057389809 n_accept_positive = 6361217 time : 164955
+i = 15234550 n_accept = 14089252 logLK = -1506179.4272404644 logLK(2) = -1506179.4273222564 n_accept_positive = 6761060 time : 175127
+i = 16130700 n_accept = 14917623 logLK = -1505427.5231982225 logLK(2) = -1505427.5232866223 n_accept_positive = 7158287 time : 185535
+i = 17026850 n_accept = 15748164 logLK = -1508761.820666495 logLK(2) = -1508761.8207606494 n_accept_positive = 7556545 time : 195817
+logLK = -1508154.3859413934 logLK(2) = -1508154.3860396903
+dendrogramFitting - DONE, elapsed 206100
