@@ -345,13 +345,27 @@ public class BatchGenerator {
    	bw.close();
 	}
 	
+	//// 1k-Series
+	public static void generate1kSeries(String batch_file, String prefix, String dataname, int n_samples, double[] epsArr) 
+			throws IOException{
+		
+		BufferedWriter bw = new BufferedWriter(new FileWriter(batch_file));
+		for (double eps : epsArr){
+			String cmd = "java dp.generator.Orbis " + prefix + " " + dataname + " " + n_samples + " " + String.format("%.2f", eps) + 
+					" > ../_console/" + dataname + "_1k_" + String.format("%.1f", eps) + "-CONSOLE.txt";
+			bw.write(cmd + "\n");
+		}
+		bw.close();
+	}
+	
 	////////////////////////////////////////////////
 	public static void main(String[] args) throws Exception{
 		
 		String prefix = "../";		// run in D:/git/itce2011/uncertain-graph-java/_cmd
 		
-		String[] dataname_list = new String[]{"polbooks", "polblogs-wcc", "as20graph", "wiki-Vote-wcc", "ca-HepPh-wcc", "ca-AstroPh-wcc"}; //"com_amazon_ungraph", "com_dblp_ungraph", "com_youtube_ungraph"};
-		int[] n_list = new int[]{105, 1222, 6474, 7066, 11204, 17903}; //334863, 317080, 1134890};
+		String[] dataname_list = new String[]{"polbooks", "polblogs-wcc", "as20graph", "wiki-Vote-wcc", "ca-HepPh-wcc", "ca-AstroPh-wcc",
+				"com_amazon_ungraph", "com_dblp_ungraph", "com_youtube_ungraph"};
+		int[] n_list = new int[]{105, 1222, 6474, 7066, 11204, 17903, 334863, 317080, 1134890};
 		// for TEST
 //		String[] dataname_list = new String[]{"karate"};
 //		int[] n_list = new int[]{34};
@@ -530,20 +544,34 @@ public class BatchGenerator {
 //		}
 		
 		// DER
-		dataname_list = new String[]{"polbooks", "polblogs-wcc", "as20graph", "wiki-Vote-wcc", "ca-HepPh-wcc", "ca-AstroPh-wcc"};
-		n_list = new int[]{105, 1222, 6474, 7066, 11204, 17903};
-		double[][] ratio = new double[][]{{1,1,1}, {2,1,1}, {4,1,1}, {4,2,1}, {8,4,1}};
-		
+//		dataname_list = new String[]{"polbooks", "polblogs-wcc", "as20graph", "wiki-Vote-wcc", "ca-HepPh-wcc", "ca-AstroPh-wcc"};
+//		n_list = new int[]{105, 1222, 6474, 7066, 11204, 17903};
+//		double[][] ratio = new double[][]{{1,1,1}, {2,1,1}, {4,1,1}, {4,2,1}, {8,4,1}};
+//		
+//		for (int i = 0; i < n_list.length; i++){
+//			String dataname = dataname_list[i];
+//			int n = n_list[i];
+//			
+//			//
+//			String batch_file = "_cmd2/DER_" + dataname + ".cmd";
+//			double log_n = Math.log(n);
+//			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
+//			
+//			generateDER(batch_file, prefix, dataname, n_samples, epsArr, ratio);
+//			System.out.println("DONE.");
+//		}
+
+		// 1k-Series
 		for (int i = 0; i < n_list.length; i++){
 			String dataname = dataname_list[i];
 			int n = n_list[i];
 			
 			//
-			String batch_file = "_cmd2/DER_" + dataname + ".cmd";
+			String batch_file = "_cmd2/1k_" + dataname + ".cmd";
 			double log_n = Math.log(n);
 			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
 			
-			generateDER(batch_file, prefix, dataname, n_samples, epsArr, ratio);
+			generate1kSeries(batch_file, prefix, dataname, n_samples, epsArr);
 			System.out.println("DONE.");
 		}
 		

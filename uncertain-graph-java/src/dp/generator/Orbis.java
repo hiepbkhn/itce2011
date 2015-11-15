@@ -5,6 +5,8 @@
  * 	- add params accept_self, accept_parallel to dkTopoGen1k_stublist(), dkTopoGen1k()
  * Nov 3
  * 	- add writeFreeStubList()
+ * Nov 15
+ * 	- adjustDegreeSequence(): converted from degree_seq_hist.py
  */
 
 package dp.generator;
@@ -14,6 +16,7 @@ import grph.VertexPair;
 import grph.algo.ConnectedComponentsAlgorithm;
 import grph.in_memory.InMemoryGrph;
 import grph.io.EdgeListReader;
+import grph.io.EdgeListWriter;
 import hist.Int2;
 
 import java.io.BufferedReader;
@@ -22,12 +25,15 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import dp.DPUtil;
+import dp.IndexSorter;
 import dp.combined.Louvain;
 import toools.io.file.RegularFile;
 import toools.set.IntSet;
@@ -308,15 +314,174 @@ public class Orbis {
 		bw.close();
 	}
 	
+	//// converted from Python
+	public static Integer[] adjustDegreeSequence(Grph G, double eps, String seq_file) throws IOException{
+		int n_nodes = G.getNumberOfVertices();
+		//
+		Integer[] degSeq = new Integer[n_nodes];
+		
+		for (int u = 0; u < n_nodes; u++)
+			degSeq[u] = G.getVertexDegree(u);
+		
+		//debug
+//		for (int d : degSeq)
+//			System.out.print(d + " ");
+//		System.out.println();
+		
+		// add geometric noise
+		double alpha = Math.exp(-eps);
+		int sum_deg = 0;
+		for (int u = 0; u < n_nodes; u++){
+			degSeq[u] += DPUtil.geometricMechanism(alpha);
+			sum_deg += degSeq[u];
+		}
+		
+		if (sum_deg % 2 == 1){
+			degSeq[0] += 1;
+			sum_deg += 1;
+		}
+		System.out.println("BEFORE: sum_deg = " + sum_deg);
+		
+		// index sort
+		IndexSorter<Integer> is = new IndexSorter<Integer>(degSeq);
+		is.sort();
+		
+		Integer[] idx = is.getIndexes();
+			
+		// compute degSeq
+		double[] deg_ratio = new double[n_nodes];
+		for (int u = 0; u < n_nodes; u++){
+	        if (degSeq[u] > 0)
+	            deg_ratio[u] = (double)degSeq[u]/sum_deg;    // use ABS()
+	        else
+	            deg_ratio[u] = 1.0/sum_deg;
+		}
+		
+		// adjust new_degSeq
+	    int ceil_s = 0;
+	    for (int u = 0; u < n_nodes; u++)
+	        ceil_s += (int)Math.ceil(deg_ratio[u]*sum_deg);
+	    int n_ceil = n_nodes - (ceil_s - sum_deg);
+	    
+	    System.out.println("n_ceil = " + n_ceil);    
+		
+	    for (int i = 0; i < n_nodes; i++){
+	    	int u =  idx[i];
+	        if (i < n_ceil)
+	        	degSeq[u] = (int)Math.ceil(deg_ratio[u]*sum_deg);    // ceiling
+	        else     
+	        	degSeq[u] = (int)Math.ceil(deg_ratio[u]*sum_deg) - 1;
+	    }
+	    
+	    // write degSeq to seq_file
+	    BufferedWriter bw = new BufferedWriter(new FileWriter(seq_file));
+		for (int d: degSeq)
+			bw.write(d + "\n");
+		
+		bw.close();
+	    
+	    //
+	    return degSeq;
+	}
+	
 	////////////////////////////////////////////////
 	public static void main(String[] args) throws Exception{
 		
-		// TEST Orbis
-////		int n_nodes = 105;
-////		String filename = "_data/polbooks.gr";
-////		String seqfile = "_dk/polbooks.seq";				// 
-////		String part_file = "_out/polbooks_orbis_java.part";	
-////		String stub_file = "_dk/polbooks.2.stub";
+		
+		// load graph
+//		String dataname = "example";		// (13, 20)
+//		String dataname = "karate";			// (34, 78)
+		String dataname = "polbooks";		// (105, 441)
+//		String dataname = "polblogs";		// (1224,16715) 	
+//		String dataname = "as20graph";		// (6474,12572)		
+//		String dataname = "wiki-Vote";		// (7115,100762) 	
+//		String dataname = "ca-HepPh";		// (12006,118489) 	
+//		String dataname = "ca-AstroPh";		// (18771,198050) 	
+		// WCC
+//		String dataname = "polblogs-wcc";			// (1222,16714) 	
+//		String dataname = "wiki-Vote-wcc";			// (7066,100736) 	
+//		String dataname = "ca-HepPh-wcc";			// (11204,117619) 
+//		String dataname = "ca-AstroPh-wcc";			// (17903,196972) 	
+		// LARGE
+//		String dataname = "com_amazon_ungraph";		// (334863,925872)		
+//		String dataname = "com_dblp_ungraph";		// (317080,1049866)				
+//		String dataname = "com_youtube_ungraph";	// (1134890,2987624) 
+		
+		// COMMAND-LINE
+		String prefix = "";
+	    int n_samples = 20;
+		double eps = 2.0;		
+		
+		if(args.length >= 4){
+			prefix = args[0];
+			dataname = args[1];
+			n_samples = Integer.parseInt(args[2]);
+			eps = Double.parseDouble(args[3]);
+		}
+		System.out.println("dataname = " + dataname);
+		System.out.println("eps = " + eps);
+		
+		//
+		String filename = prefix + "_data/" + dataname + ".gr";
+		String seq_file = prefix + "_out/" + dataname + "_1k_" + String.format("%.1f",eps);
+		String sample_file = prefix + "_sample/" + dataname + "_1k_" + String.format("%.1f", eps);
+	    System.out.println("seq_file = " + seq_file);
+		
+	    Grph G;
+	    EdgeListReader reader = new EdgeListReader();
+		RegularFile f = new RegularFile(filename);
+		long start = System.currentTimeMillis();
+		G = reader.readGraph(f);
+		System.out.println("#nodes = " + G.getNumberOfVertices());
+		System.out.println("#edges = " + G.getNumberOfEdges());  
+		System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
+		
+		int n_nodes = G.getNumberOfVertices();
+		Orbis orbis = new Orbis();
+		
+		for (int i = 0; i < n_samples; i++){
+	    	System.out.println("sample i = " + i);
+	    	
+	    	start = System.currentTimeMillis();
+			Integer[] degSeq = adjustDegreeSequence(G, eps, seq_file + "." + i + ".seq");
+			System.out.println("adjustDegreeSequence - DONE, elapsed " + (System.currentTimeMillis() - start));
+			//
+			int sum_deg = 0;
+			for (int d : degSeq){
+	//			System.out.print(d + " ");
+				sum_deg += d;
+			}
+	//		System.out.println();
+			System.out.println("sum_deg = " + sum_deg);
+			
+			// 
+			
+			int[] degList = new int[n_nodes]; 
+			
+			orbis.read1kDegrees(seq_file + "." + i + ".seq", degList);
+			System.out.println("degList.length = " + degList.length);
+			
+			start = System.currentTimeMillis();
+			Grph g = new InMemoryGrph();
+			g.addNVertices(n_nodes);
+			int need2Rewire = orbis.dkTopoGen1k(g, degList, true, true, "");
+			
+			f = new RegularFile(sample_file + "." + i);
+			EdgeListWriter writer = new EdgeListWriter();
+	    	writer.writeGraph(g, f);
+			
+			System.out.println("dkTopoGen1k - DONE, elapsed " + (System.currentTimeMillis() - start));
+		}
+		
+		
+		
+		
+		/////////////////// TEST Orbis
+//		int n_nodes = 105;
+//		String filename = "_data/polbooks.gr";
+//		String seqfile = "_dk/polbooks.seq";				// 
+//		String part_file = "_out/polbooks_orbis_java.part";	
+//		String stub_file = "_dk/polbooks.2.stub";
 //		
 ////		int n_nodes = 6474;
 ////		String filename = "_data/as20graph.gr";
@@ -330,11 +495,11 @@ public class Orbis {
 ////		String part_file = "_out/com_amazon_ungraph_orbis_java.part";
 ////		String stub_file = "_dk/com_amazon_ungraph.cpp.1.stub";		// cpp.1.stub: real modularity = 0.0133
 //		
-//		int n_nodes = 317080;								// 2.5s, #components = 462, need2Rewire = 0, real modularity = -2.692618648107859E-4
-//		String filename = "_data/com_dblp_ungraph.gr";
-//		String seqfile = "_dk/com_dblp_ungraph.seq";
-//		String part_file = "_out/com_dblp_ungraph_orbis_java.part";
-//		String stub_file = "_dk/com_dblp_ungraph.cpp.1.stub";		// cpp.1.stub: real modularity = 0.1722
+////		int n_nodes = 317080;								// 2.5s, #components = 462, need2Rewire = 0, real modularity = -2.692618648107859E-4
+////		String filename = "_data/com_dblp_ungraph.gr";
+////		String seqfile = "_dk/com_dblp_ungraph.seq";
+////		String part_file = "_out/com_dblp_ungraph_orbis_java.part";
+////		String stub_file = "_dk/com_dblp_ungraph.cpp.1.stub";		// cpp.1.stub: real modularity = 0.1722
 //		
 ////		int n_nodes = 1134890;
 ////		String filename = "_data/com_youtube_ungraph.gr";
@@ -356,15 +521,15 @@ public class Orbis {
 //		boolean accept_parallel = false;
 //		System.out.println("accept_self = " + accept_self + " , accept_parallel = " + accept_parallel);
 //		// OLD (freeStubList created on the fly, not written to .stub file)
-////		int need2Rewire = orbis.dkTopoGen1k(g, degList, accept_self, accept_parallel, stub_file);
+//		int need2Rewire = orbis.dkTopoGen1k(g, degList, accept_self, accept_parallel, stub_file);
 //
 //		// NEW (read freeStubList from .stub file, for C++ comparison)
-////		orbis.createStubFile(degList, stub_file);	// commented when read C++ .stub file (e.g. com_amazon_ungraph.cpp.1.stub)
-//		
-//		System.out.println("stub_file = " + stub_file);
-//		List<Stub> freeStubList = orbis.readFreeStubList(stub_file);
-//		Map<Int2, Integer> adjacencyMap = new HashMap<Int2, Integer>();
-//		int need2Rewire = orbis.dkTopoGen1k_stublist(g, freeStubList, adjacencyMap, accept_self, accept_parallel);
+//////		orbis.createStubFile(degList, stub_file);	// commented when read C++ .stub file (e.g. com_amazon_ungraph.cpp.1.stub)
+////		
+////		System.out.println("stub_file = " + stub_file);
+////		List<Stub> freeStubList = orbis.readFreeStubList(stub_file);
+////		Map<Int2, Integer> adjacencyMap = new HashMap<Int2, Integer>();
+////		int need2Rewire = orbis.dkTopoGen1k_stublist(g, freeStubList, adjacencyMap, accept_self, accept_parallel);
 //		
 //		System.out.println("dkTopoGen1k - DONE, elapsed " + (System.currentTimeMillis() - start));
 //		
@@ -407,77 +572,78 @@ public class Orbis {
 //		System.out.println("real modularity = " + GreedyReconstruct.modularity(G0, part));
 		
 		
-		////////////////////// C++
-		// TEST writeDegSeq + run dkTopoGen1k_new.exe + read .gen file and compute components/modularity
-//		String dataname = "karate";			// (34, 78)
-//		String dataname = "polbooks";		// (105, 441)		
-//		String dataname = "polblogs";		// (1224,16715) 	
-//		String dataname = "as20graph";		// (6474,12572)		
-//		String dataname = "wiki-Vote";		// (7115,100762)
-//		String dataname = "ca-HepPh";		// (12006,118489) 	
-//		String dataname = "ca-AstroPh";		// (18771,198050) 	
-		// WCC
-//		String dataname = "polblogs-wcc";			// (1222,16714) 	
-//		String dataname = "wiki-Vote-wcc";			// (7066,100736) 	
-//		String dataname = "ca-HepPh-wcc";			// (11204,117619) 
-//		String dataname = "ca-AstroPh-wcc";			// (17903,196972) 
-		// LARGE
-//		String dataname = "com_amazon_ungraph";		// (334863,925872)				real modularity = 0.0128, 0.0136, 0.0127, 0.0126
-		String dataname = "com_dblp_ungraph";		// (317080,1049866)				real modularity = 0.1968, 0.1833, 0.1988, 0.1988
-//		String dataname = "com_youtube_ungraph";	// (1134890,2987624)
-													//						
-		// COMMAND-LINE <prefix> <dataname> <n_samples> <eps>
-		String prefix = "";
-	    System.out.println("dataname = " + dataname);
-	    
-		String filename = prefix + "_data/" + dataname + ".gr";
-		String seqfile = prefix + "_dk/" + dataname + ".seq";
-		String outfile_1k = prefix + "_dk/" + dataname + ".1k";
-		String genfile = "D:/git/itce2011/orbis/out2/" + dataname + ".1.gen";
 		
-		EdgeListReader reader = new EdgeListReader();
-		Grph G;
-		RegularFile f = new RegularFile(filename);
-		
-		long start = System.currentTimeMillis();
-		G = reader.readGraph(f);
-		System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
-		
-		System.out.println("#nodes = " + G.getNumberOfVertices());
-		System.out.println("#edges = " + G.getNumberOfEdges());
-		
-		// write .deg and .seq files, then run dkTopoGen1k_new.exe (external)
-//		writeDegSeq(G, seqfile);
-//		System.out.println("writeDegSeq - DONE");
+		////////////////////// C++ 
+//		// TEST writeDegSeq + run dkTopoGen1k_new.exe + read .gen file and compute components/modularity
+////		String dataname = "karate";			// (34, 78)
+////		String dataname = "polbooks";		// (105, 441)		
+////		String dataname = "polblogs";		// (1224,16715) 	
+////		String dataname = "as20graph";		// (6474,12572)		
+////		String dataname = "wiki-Vote";		// (7115,100762)
+////		String dataname = "ca-HepPh";		// (12006,118489) 	
+////		String dataname = "ca-AstroPh";		// (18771,198050) 	
+//		// WCC
+////		String dataname = "polblogs-wcc";			// (1222,16714) 	
+////		String dataname = "wiki-Vote-wcc";			// (7066,100736) 	
+////		String dataname = "ca-HepPh-wcc";			// (11204,117619) 
+////		String dataname = "ca-AstroPh-wcc";			// (17903,196972) 
+//		// LARGE
+////		String dataname = "com_amazon_ungraph";		// (334863,925872)				real modularity = 0.0128, 0.0136, 0.0127, 0.0126
+//		String dataname = "com_dblp_ungraph";		// (317080,1049866)				real modularity = 0.1968, 0.1833, 0.1988, 0.1988
+////		String dataname = "com_youtube_ungraph";	// (1134890,2987624)
+//													//						
+//		// COMMAND-LINE <prefix> <dataname> <n_samples> <eps>
+//		String prefix = "";
+//	    System.out.println("dataname = " + dataname);
+//	    
+//		String filename = prefix + "_data/" + dataname + ".gr";
+//		String seqfile = prefix + "_dk/" + dataname + ".seq";
+//		String outfile_1k = prefix + "_dk/" + dataname + ".1k";
+//		String genfile = "D:/git/itce2011/orbis/out2/" + dataname + ".1.gen";
 //		
-//		write1kDistribution(G, outfile_1k);
-//		System.out.println("write1kDistribution - DONE");
-		
-		// read .gen file and compute components/modularity
-		Grph G2;
-		f = new RegularFile(genfile);
-		
-		start = System.currentTimeMillis();
-		G2 = reader.readGraph(f);
-		System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
-		
-		System.out.println("#nodes = " + G2.getNumberOfVertices());
-		System.out.println("#edges = " + G2.getNumberOfEdges());
-		
-		int deg_diff = 0;
-		for (int u = 0; u < G2.getNumberOfVertices(); u++)
-			deg_diff += Math.abs(G.getVertexDegree(u) - G2.getVertexDegree(u));
-		System.out.println("deg_diff = " + deg_diff);
-		
-		ConnectedComponentsAlgorithm algo = new ConnectedComponentsAlgorithm();
-		Collection<IntSet> components = algo.compute(G2);
-		System.out.println("#components = " + components.size());
-		
-		Louvain lv = new Louvain();
-		EdgeWeightedGraph g2 = GreedyReconstruct.convertGraph(G2);
-		Map<Integer, Integer> part = lv.best_partition(g2, null);
-		
-		System.out.println("real modularity = " + GreedyReconstruct.modularity(G, part));
+//		EdgeListReader reader = new EdgeListReader();
+//		Grph G;
+//		RegularFile f = new RegularFile(filename);
+//		
+//		long start = System.currentTimeMillis();
+//		G = reader.readGraph(f);
+//		System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
+//		
+//		System.out.println("#nodes = " + G.getNumberOfVertices());
+//		System.out.println("#edges = " + G.getNumberOfEdges());
+//		
+//		// write .deg and .seq files, then run dkTopoGen1k_new.exe (external)
+////		writeDegSeq(G, seqfile);
+////		System.out.println("writeDegSeq - DONE");
+////		
+////		write1kDistribution(G, outfile_1k);
+////		System.out.println("write1kDistribution - DONE");
+//		
+//		// read .gen file and compute components/modularity
+//		Grph G2;
+//		f = new RegularFile(genfile);
+//		
+//		start = System.currentTimeMillis();
+//		G2 = reader.readGraph(f);
+//		System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
+//		
+//		System.out.println("#nodes = " + G2.getNumberOfVertices());
+//		System.out.println("#edges = " + G2.getNumberOfEdges());
+//		
+//		int deg_diff = 0;
+//		for (int u = 0; u < G2.getNumberOfVertices(); u++)
+//			deg_diff += Math.abs(G.getVertexDegree(u) - G2.getVertexDegree(u));
+//		System.out.println("deg_diff = " + deg_diff);
+//		
+//		ConnectedComponentsAlgorithm algo = new ConnectedComponentsAlgorithm();
+//		Collection<IntSet> components = algo.compute(G2);
+//		System.out.println("#components = " + components.size());
+//		
+//		Louvain lv = new Louvain();
+//		EdgeWeightedGraph g2 = GreedyReconstruct.convertGraph(G2);
+//		Map<Integer, Integer> part = lv.best_partition(g2, null);
+//		
+//		System.out.println("real modularity = " + GreedyReconstruct.modularity(G, part));
 		
 	}
 
