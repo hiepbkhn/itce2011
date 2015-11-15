@@ -15,6 +15,8 @@
  * Oct 11
  * 	- copy writeTree, readTree, bestCutOffline from NodeSetLouvainOpt
  * 	- copy getSubEgdeLists() from NodeSetMod
+ * Nov 10
+ * 	- uncomment binaryPartition() and modify it
  */
 
 package dp.combined;
@@ -38,10 +40,12 @@ import java.util.Random;
 import com.carrotsearch.hppc.cursors.IntCursor;
 
 import dp.DPUtil;
+import dp.comm.NodeSet;
 import dp.mcmc.Dendrogram;
 import dp.mcmc.Node;
 import algs4.Edge;
 import algs4.EdgeWeightedGraph;
+import grph.Grph;
 import grph.VertexPair;
 import hist.Int2;
 import toools.set.BitVectorSet;
@@ -161,6 +165,30 @@ public class NodeSetDivGreedy {
 	////
 	public NodeSetDivGreedy(){
 		this.e_list = new ArrayList<Int2>();
+	}
+	
+	//// used in binaryPartition
+	public NodeSetDivGreedy(int[] nodeList){
+		int n_nodes = nodeList.length;
+		
+		this.ind = new boolean[n_nodes];
+		this.ind2node = new int[n_nodes];
+		this.node2ind = new HashMap<Integer, Integer>();
+		
+		//
+		for (int i = 0; i < n_nodes; i++){
+			this.ind2node[i] = nodeList[i];
+			this.node2ind.put(nodeList[i], i);
+		}
+		
+		//
+		for (int i = 0; i < n_nodes/2; i++)
+			this.ind[i] = true;
+		for (int i = n_nodes/2; i < n_nodes; i++)
+			this.ind[i] = false;
+		
+		this.n_s = n_nodes/2;
+		this.n_t = n_nodes - n_nodes/2;
 	}
 	
 	////
@@ -524,45 +552,6 @@ public class NodeSetDivGreedy {
 	}
 	
 	
-	////
-//	public static int binaryPartition(EdgeWeightedGraph G, NodeSetDivGreedy root, int id){
-//		
-//		int cur_id = id;
-//		Queue<NodeSetDivGreedy> queue = new LinkedList<NodeSetDivGreedy>();
-//		queue.add(root);
-//		while(queue.size() > 0){
-//			NodeSetDivGreedy R = queue.remove();
-//			
-//			if (R.n_s >= 2){
-//				NodeSetDivGreedy RS = getSubSet(G, R, true);;
-//				RS.id = cur_id--;
-//				R.left = RS;
-//				RS.parent = R;
-//				queue.add(RS);
-//			}else{
-//				NodeSetDivGreedy RS = getSubSet(G, R, true);;		// RS.id is the remaining item in S
-//				R.left = RS;
-//				RS.parent = R;
-//			}
-//			
-//			if (R.n_t >= 2){
-//				NodeSetDivGreedy RT = getSubSet(G, R, false);
-//				RT.id = cur_id--;
-//				R.right = RT;
-//				RT.parent = R;
-//				queue.add(RT);
-//			}else{
-//				NodeSetDivGreedy RT = getSubSet(G, R, false);		// RT.id is the remaining item in T
-//				R.right = RT;
-//				RT.parent = R;
-//			}
-//				
-//		}
-//		
-//		//
-//		return cur_id;
-//	}
-	
 	//////////////////////////////
 	// limit_size = 32: i.e. for NodeSet having size <= limit_size, call 
 	public static NodeSetDivGreedy recursiveLK(EdgeWeightedGraph G, double eps1, int burn_factor, int limit_size, int lower_size, int max_level, double ratio){
@@ -641,16 +630,84 @@ public class NodeSetDivGreedy {
 		}
 	}
 	
-	////
-	public static Dendrogram convertToHRG(EdgeWeightedGraph G, NodeSetDivGreedy root_set){
+	//// uncommented and modified (used in convertToHRG() )
+	public static int binaryPartition(NodeSetDivGreedy root, int id){
+		
+		int cur_id = id;
+		Queue<NodeSetDivGreedy> queue = new LinkedList<NodeSetDivGreedy>();
+		queue.add(root);
+		while(queue.size() > 0){
+			NodeSetDivGreedy R = queue.remove();
+			
+			int[] listS = new int[R.n_s];
+			int[] listT = new int[R.n_t];
+			int cs = 0;
+			int ct = 0;
+			for (int i = 0; i < R.ind.length; i++)
+				if (R.ind[i] == true)
+					listS[cs++] = R.ind2node[i];
+				else
+					listT[ct++] = R.ind2node[i];
+			
+			if (R.n_s >= 2){
+				NodeSetDivGreedy RS = new NodeSetDivGreedy(listS);
+				RS.id = cur_id--;
+				R.left = RS;
+				RS.parent = R;
+				queue.add(RS);
+			}else{
+				NodeSetDivGreedy RS = new NodeSetDivGreedy();		// RS.id is the remaining item in S
+				RS.id = listS[0];
+				R.left = RS;
+				RS.parent = R;
+			}
+			
+			if (R.n_t >= 2){
+				NodeSetDivGreedy RT = new NodeSetDivGreedy(listT);
+				RT.id = cur_id--;
+				R.right = RT;
+				RT.parent = R;
+				queue.add(RT);
+			}else{
+				NodeSetDivGreedy RT = new NodeSetDivGreedy();		// RT.id is the remaining item in T
+				RT.id = listT[0];
+				R.right = RT;
+				RT.parent = R;
+			}
+				
+		}
+		
+		//
+		return cur_id;
+	}
+		
+	//// used in HRGDivisiveFit
+	public static Dendrogram convertToHRG(EdgeWeightedGraph G, NodeSetDivGreedy root_set, int max_level){
 		int n_nodes = G.V();
 		Dendrogram D = new Dendrogram(); 
 		D.node_list = new Node[n_nodes];
 		
+		// binaryPartition
+		int last_id = -(int)Math.pow(2, max_level + 1);
+		
+		Queue<NodeSetDivGreedy> queue_set = new LinkedList<NodeSetDivGreedy>();
+		queue_set.add(root_set);
+		while(queue_set.size() > 0){
+			NodeSetDivGreedy R = queue_set.remove();
+			
+			if (R.left != null){	//internal node
+				queue_set.add(R.left);
+				queue_set.add(R.right);
+			}else{					// leaf node
+				last_id = binaryPartition(R, last_id);
+			}
+		}
+		
+		
 		// D.root_node and D.node_list
 		Node root_node = new Node(root_set.id, null, 0.0);
 		
-		Queue<NodeSetDivGreedy> queue_set = new LinkedList<NodeSetDivGreedy>();
+		queue_set = new LinkedList<NodeSetDivGreedy>();
 		Queue<Node> queue = new LinkedList<Node>();
 		
 		queue_set.add(root_set);	// parallel queues
@@ -672,6 +729,7 @@ public class NodeSetDivGreedy {
 				queue.add(right_node);
 			}else{					// leaf node
 				D.node_list[R.id] = r;
+				
 			}
 			
 		}

@@ -17,6 +17,7 @@ import grph.Grph;
 import grph.VertexPair;
 import grph.algo.AdjacencyMatrix;
 import grph.in_memory.InMemoryGrph;
+import grph.io.EdgeListReader;
 import grph.io.EdgeListWriter;
 import grph.io.GrphTextReader;
 import hist.DegreeSeqHist;
@@ -522,14 +523,14 @@ public class DensityExploreReconstruct {
 		System.out.println("epsA = " + epsA);
 		
 		
-		String filename = prefix + "_data/" + dataname + ".grph";
+		String filename = prefix + "_data/" + dataname + ".gr";
 		String sample_file = prefix + "_sample/" + dataname + "_der_" + String.format("%.1f", eps_c) + "_" + 
 									String.format("%.1f", eps_p) + "_" + String.format("%.1f", epsA);
 		System.out.println("sample_file = " + sample_file);
 		
 		//
-		GrphTextReader reader = new GrphTextReader();
 		Grph G;
+		EdgeListReader reader = new EdgeListReader();
 		RegularFile f = new RegularFile(filename);
 		
 		G = reader.readGraph(f);

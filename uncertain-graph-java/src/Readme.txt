@@ -1,5 +1,7 @@
 CLASSPATH: D:\git\itce2011\uncertain-graph-java\bin;E:\caidat\Java\grph-1.6.29-selfcontained\*
 
+\_cmd	: for CommunityDP
+\_cmd2	: for GraphDP + SNAM
 
 [algs4] http://algs4.cs.princeton.edu/
 - EdgeWeightedGraph.java: used in Louvain
@@ -16,6 +18,7 @@ CLASSPATH: D:\git\itce2011\uncertain-graph-java\bin;E:\caidat\Java\grph-1.6.29-s
 - DendrogramFixed.java: fixed balance binary tree
 - MCMCInferenceFixed.java: use DendrogramFixed.java
 
+- SampleGenerator.java: read tree in \out folder (_dendro_, _hrgdiv_, _fixed_) and generate samples
 
 [dp.hrg] non-private HRG
 - HRG.java (subclass of Dendrogram)
@@ -25,6 +28,8 @@ CLASSPATH: D:\git\itce2011\uncertain-graph-java\bin;E:\caidat\Java\grph-1.6.29-s
 - CommunityFit.java: non-private, use NodeSet.java
 - CommunityPriv.java: private, use NodePriv.java (extends NodeSet.java, non-use)
 - CommunityFit2.java: non-private, use NodeSet2.java
+
+- HRGDivisiveFit.java: copied from HRGDivisiveGreedy.java, use NodeSetDivGreedy.java
 
 [dp.der] DER
 - DensityExploreReconstruct.java

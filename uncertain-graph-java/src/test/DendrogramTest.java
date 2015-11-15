@@ -22,9 +22,10 @@
  * 	- dendrogramFitting(): write to node_file instead of store to list_T + force recomputations in computeTopLevels(), computeNodeLevels()
  * Nov 12
  * 	- field logLK faster computed in config_2(), config_3() instead of calling logLK()
+ * 	- EdgeIntGraph in place of Grph
  */
 
-package dp.mcmc;
+package test;
 
 import grph.Grph;
 import grph.VertexPair;
@@ -47,17 +48,20 @@ import java.util.Random;
 
 import algs4.Edge;
 import algs4.EdgeInt;
+import algs4.EdgeIntGraph;
 import algs4.EdgeWeightedGraph;
 import algs4.UnweightedGraph;
 
 import com.carrotsearch.hppc.cursors.IntCursor;
 
 import dp.DPUtil;
+import dp.mcmc.Int4;
+import dp.mcmc.Node;
 import toools.io.file.RegularFile;
 import toools.set.IntHashSet;
 import toools.set.IntSet;
 
-public class Dendrogram {
+public class DendrogramTest {
 	public static final int SAMPLE_FREQ = 1000;
 	
 	public Node root_node;
@@ -68,14 +72,14 @@ public class Dendrogram {
 	public double logLK;		// log-likelihood
 	
 	////
-	public Dendrogram(){
+	public DendrogramTest(){
 		this.root_node = null;
 		
 	}
 	
 	////
-	public Dendrogram copy(){
-		Dendrogram T2 = new Dendrogram();
+	public DendrogramTest copy(){
+		DendrogramTest T2 = new DendrogramTest();
 		
 		// copy node_dict first
         T2.node_dict = new HashMap<Integer, Node>();
@@ -114,10 +118,10 @@ public class Dendrogram {
 	}
 	
 	////
-	public void initByGraph(Grph G){
+	public void initByGraph(EdgeIntGraph G){
 		// compute node_list[]
-		this.node_list = new Node[G.getNumberOfVertices()];
-        for (int u = 0; u < G.getNumberOfVertices(); u++){
+		this.node_list = new Node[G.V()];
+        for (int u = 0; u < G.V(); u++){
             Node node = new Node(u,null,0.0);      // leaf node
             node.nL = 1;                     // IMPORTANT in config_2(), config_3()
             this.node_list[u] = node;
@@ -143,10 +147,10 @@ public class Dendrogram {
 	}
 	
 	////
-	public void initByInternalNodes(Grph G, Int4[] int_nodes){
+	public void initByInternalNodes(EdgeIntGraph G, Int4[] int_nodes){
 		// compute node_list[]
-		this.node_list = new Node[G.getNumberOfVertices()];
-        for (int u = 0; u < G.getNumberOfVertices(); u++){
+		this.node_list = new Node[G.V()];
+        for (int u = 0; u < G.V(); u++){
             Node node = new Node(u,null,0.0);      // leaf node
             node.nL = 1;                     // IMPORTANT in config_2(), config_3()
             this.node_list[u] = node;
@@ -169,7 +173,7 @@ public class Dendrogram {
 	
 	////
     // r_node: internal node, not root
-	public Node config_2(Grph G, Node r_node){
+    public Node config_2(EdgeIntGraph G, Node r_node){
         
         Node p_node = r_node.parent;
         
@@ -276,7 +280,7 @@ public class Dendrogram {
     ////
     // r_node: internal node, not root
     // RETURN r_node (whereas config_2() return p_node)
-    public Node config_3(Grph G, Node r_node){
+    public Node config_3(EdgeIntGraph G, Node r_node){
         
         Node p_node = r_node.parent;
         
@@ -419,10 +423,10 @@ public class Dendrogram {
 		bw.close();
 	}
 	
-	public void readInternalNodes(Grph G, String filename) throws IOException{
+	public void readInternalNodes(EdgeIntGraph G, String filename) throws IOException{
 		BufferedReader br = new BufferedReader(new FileReader(filename));
         
-        Int4[] int_nodes = new Int4[G.getNumberOfVertices()-1];  // list of tuples (id, parent.id, left.id, right.id)
+        Int4[] int_nodes = new Int4[G.V()-1];  // list of tuples (id, parent.id, left.id, right.id)
         int u = 0;
         while (true){
         	String str = br.readLine();
@@ -533,19 +537,35 @@ public class Dendrogram {
 	}
 	
 	////
-	static int countBetweenEdges(Grph G, Node u, Node t){
+	static int countBetweenEdges(EdgeIntGraph G, Node u, Node t){
 		int count = 0;
 		List<Integer> u_list = findChildren(u);
 		List<Integer> t_list = findChildren(t);
 		
-		for (int u1: u_list){
-			IntSet s = G.getNeighbours(u1);
-			for (int t1: t_list)
-				if (s.contains(t1))
-					count++;
+		// 1-Grph
+//		for (int u1: u_list){
+//			IntSet s = G.getNeighbours(u1);
+//			for (int t1: t_list)
+//				if (s.contains(t1))
+//					count++;
+		
+		// slow
+//		for (int u1: u_list){
+//			for (int t1: t_list)
+//				if (G.areVerticesAdjacent(u1, t1))
+//					count++;
 			
 //				if (A.get(u1, t1) == 1)
 //					count++;
+		
+		// 2-EdgeIntGraph
+		for (int u1: u_list){
+			for (int t1: t_list)
+				if (G.areEdgesAdjacent(u1, t1))
+					count++;
+		
+		
+		
 		}
 		return count;
 	}
@@ -676,13 +696,13 @@ public class Dendrogram {
 	
 	
 	////
-	public static void buildDendrogram(Node[] node_list, HashMap<Integer, Node> node_dict, Node root_node, Grph G){
+	public static void buildDendrogram(Node[] node_list, HashMap<Integer, Node> node_dict, Node root_node, EdgeIntGraph G){
 		compute_nL_nR(root_node, node_dict);
 		
 	    // compute nEdge
-		for (VertexPair p : G.getEdgePairs()){
-	        int u = p.first;
-	        int v = p.second;
+		for (EdgeInt p : G.edges()){
+	        int u = p.either();
+	        int v = p.other(u);
 	//        print u, v
 	        // find lowest common ancestor
 	        int a_id = lowestCommonAncestor(node_dict.get(u), node_dict.get(v));
@@ -738,11 +758,11 @@ public class Dendrogram {
 	////
 	// Exponential mechanism by MCMC
 	// n_samples number of sample T
-	static List<Dendrogram> dendrogramFitting(Dendrogram T, Grph G, double eps1, int n_steps, int n_samples, int sample_freq, String node_file) throws IOException{
-		List<Dendrogram> list_T = new ArrayList<Dendrogram>(); 	// list of sample T
+	static List<DendrogramTest> dendrogramFitting(DendrogramTest T, EdgeIntGraph G, double eps1, int n_steps, int n_samples, int sample_freq, String node_file) throws IOException{
+		List<DendrogramTest> list_T = new ArrayList<DendrogramTest>(); 	// list of sample T
 	    
 	    // delta U
-	    int n_nodes = G.getNumberOfVertices();
+	    int n_nodes = G.V();
 	    long nMax = 0;
 	    if (n_nodes % 2 == 0) 
 	        nMax = n_nodes*n_nodes/4;
@@ -840,7 +860,7 @@ public class Dendrogram {
 	}
 	
 	//// top-down cuts: use queue
-	public static List<Map<Integer, Integer>> partitionTopDown(Dendrogram T){
+	public static List<Map<Integer, Integer>> partitionTopDown(DendrogramTest T){
 		T.computeTopLevels();
 		
 		List<Map<Integer, Integer>> part_list = new ArrayList<Map<Integer,Integer>>();
@@ -1174,10 +1194,10 @@ public class Dendrogram {
 	}
 	
 	////
-	static void writeInternalNodes(List<Dendrogram> list_T, String node_file) throws Exception{
+	static void writeInternalNodes(List<DendrogramTest> list_T, String node_file) throws Exception{
 	    
 		int i = 0;
-	    for (Dendrogram T : list_T){
+	    for (DendrogramTest T : list_T){
 	    	T.writeInternalNodes(node_file + "." + i);
 	        i++;
 	    }
@@ -1185,9 +1205,9 @@ public class Dendrogram {
 	
 	////
 	// list_T: list of new Dendrogram()
-	static void readInternalNodes(Grph G, List<Dendrogram> list_T, String node_file, int n_samples) throws Exception{
+	static void readInternalNodes(EdgeIntGraph G, List<DendrogramTest> list_T, String node_file, int n_samples) throws Exception{
 		int i = 0;
-	    for (Dendrogram T : list_T){
+	    for (DendrogramTest T : list_T){
 	    	String filename = node_file + "." + i;
 	        i++;
 			T.readInternalNodes(G, filename);
