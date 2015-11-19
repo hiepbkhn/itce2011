@@ -1,6 +1,8 @@
 /*
  * Sep 21, 2015
  * 	- copied from EdgeWeightedGraph, use EdgeInt
+ * Nov 18
+ * 	- readEdgeListWithNodes()
  */
 
 package algs4;
@@ -324,6 +326,33 @@ public class EdgeIntGraph {
     	br.close();
     	
     	EdgeIntGraph ret = new EdgeIntGraph(maxNodeId + 1);
+    	for (Int2 e : edgeList)
+    		ret.addEdge(new EdgeInt(e.val0, e.val1, 1));
+    	
+    	return ret;
+    }
+    
+    //// 
+    public static EdgeIntGraph readEdgeListWithNodes(String filename, String split_char, int n_nodes) throws IOException{
+
+    	List<Int2> edgeList = new ArrayList<Int2>();
+    	
+    	
+    	BufferedReader br = new BufferedReader(new FileReader(filename));
+    	while (true){
+        	String str = br.readLine();
+        	if (str == null)
+        		break;
+        	
+        	String[] items = str.split(split_char);
+        	int u = Integer.parseInt(items[0]);
+        	int v = Integer.parseInt(items[1]);
+        	edgeList.add(new Int2(u, v));
+    	}
+    	
+    	br.close();
+    	
+    	EdgeIntGraph ret = new EdgeIntGraph(n_nodes);
     	for (Int2 e : edgeList)
     		ret.addEdge(new EdgeInt(e.val0, e.val1, 1));
     	

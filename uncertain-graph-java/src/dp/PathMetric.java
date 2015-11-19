@@ -8,7 +8,7 @@ package dp;
 public class PathMetric {
 	public double s_APD = 0.0;
 	public double s_CL = 0.0;
-	public double s_ED = 0.0;
+	public double s_EDiam = 0.0;
 	public double s_Diam = 0.0;
 	
 }

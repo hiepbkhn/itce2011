@@ -1,4 +1,5 @@
-CLASSPATH: D:\git\itce2011\uncertain-graph-java\bin;E:\caidat\Java\grph-1.6.29-selfcontained\*
+CLASSPATH: D:\git\itce2011\uncertain-graph-java\bin;E:\caidat\Java\grph-1.6.29-selfcontained\*;E:\Tailieu\Paper-code\Social Network\webgraph\webgraph-deps\*
+(copy powerlaws-0.0.1-SNAPSHOT.jar into \grph-1.6.29-selfcontained)
 
 \_cmd	: for CommunityDP
 \_cmd2	: for GraphDP + SNAM
@@ -84,10 +85,13 @@ CLASSPATH: D:\git\itce2011\uncertain-graph-java\bin;E:\caidat\Java\grph-1.6.29-s
 
 - BatchGenerator: generate .cmd files
 
+
 [dp.generator]
 - AutoPart.java: AutoPart algorithm
 - Orbis.java: equivalent to C++ orbis
 - RMAT.java: R-MAT algorithm
+
+- DendrogramSampler.java: read _tree files (MCMCInference, MCMCInferenceFixed, HRGDivisiveFit) and generate sample graphs	
  
 
 
