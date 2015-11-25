@@ -175,8 +175,8 @@ public class UtilityMeasure {
 //		for (int d = 0; d < n_nodes+1; d++)
 //			dist[d] = dist[d] / sum;		
 		
+		
 		// WAY-3: call hyperANF()
-		// TODO
 		double[] dist = hyperANF(G);					// NOTE: dist[i] num of path lengths <= i
 		
 		double[] dist_list = new double[dist.length];	// dist_list[i] num of path lengths == i
@@ -202,13 +202,53 @@ public class UtilityMeasure {
 		for (int i = 0; i < dist_list.length; i++)
             sum_CL += dist_list[i]/(i+1);
 	    path.s_CL = num_APD/sum_CL; 
+	    
+	    return dist_list;
+		    
 		
+		
+	}
+	
+	//// n_nodes < 20000
+	public static double[] getDistanceDistr(UnweightedGraph G, PathMetric path) throws IOException{
+		int n_nodes = G.V();
+		    
+		double[] dist_list = bfsSamples(G, n_nodes);	// full BFS
+		
+		path.s_Diam = dist_list[0];		// see the end of bfsSamples()
+		
+		double sum_APD = 0.0;
+		double num_APD = 0.0;
+		
+		for (int i = 1; i <= path.s_Diam ; i++){
+			sum_APD += i * dist_list[i];
+			num_APD += dist_list[i];
+		}
+		
+		double sum_dist = 0.0;
+		for (int i = 1; i <= path.s_Diam; i++){
+			sum_dist += dist_list[i];
+	        if (sum_dist >= 0.9 * num_APD){
+	            path.s_EDiam = i;
+	            break;
+	        }
+		}
+		path.s_APD = sum_APD/num_APD;
+		
+		double sum_CL = 0.0;
+		for (int i = 1; i <= path.s_Diam ; i++)
+            sum_CL += dist_list[i]/i;
+	    path.s_CL = num_APD/sum_CL; 
 		
 		return dist_list;
+		
+		
 	}
 	
 	//// converted from utility_measure.bfs_sample()
-	public static void bfsSamples(UnweightedGraph G, int n_samples){
+	public static double[] bfsSamples(UnweightedGraph G, int n_samples){
+
+		double[] dist_list = new double[50];
 		
 		int n_nodes = G.V();
 		int[] node_list = new int[n_nodes];
@@ -262,13 +302,21 @@ public class UtilityMeasure {
 					}
 			}
 			
-			for (int u = 0; u < n_nodes; u++)
+			for (int u = 0; u < n_nodes; u++){
+				if (dist[u] < INF)
+					dist_list[dist[u]] += 1;
+						
 				if (max_dist < dist[u] && dist[u] != INF)
 					max_dist = dist[u];
+			}
 		}
 		
+		dist_list[0] = max_dist;			// IMPORTANT !
+		
 		System.out.println("max_dist = " + max_dist);
-			
+		
+		//
+		return dist_list;
 	}
 	
 	
@@ -395,7 +443,17 @@ public class UtilityMeasure {
 		
 		// 2. distance distribution
 		PathMetric path = new PathMetric();
-		double[] distance_dist = getDistanceDistr(G, path);
+		double[] distance_dist;
+		if (G.V() > 20000){
+			System.out.println("HyperANF");
+			distance_dist = getDistanceDistr(G, path);
+		}else{
+			System.out.println("full BFS");
+			UnweightedGraph aG = UnweightedGraph.readEdgeListWithNodes(graph_file, "\t", n_nodes);
+			System.out.println("#nodes = " + aG.V());
+			System.out.println("#edges = " + aG.E());
+			distance_dist = getDistanceDistr(aG, path);
+		}
 		
 		System.out.println("s_APD = " + path.s_APD);
 		System.out.println("s_CL = " + path.s_CL);
@@ -573,12 +631,12 @@ public class UtilityMeasure {
 		// LARGE
 //		String dataname = "com_amazon_ungraph"; 	// (334863,925872) 
 //		String dataname = "com_dblp_ungraph";  		// (317080,1049866) 
-		String dataname = "com_youtube_ungraph"; 	// (1134890,2987624)	bfsSamples 1000 nodes (UnweightedGraph: 210s, 1.7GB) (int queue: 200s, 0.6GB)
+//		String dataname = "com_youtube_ungraph"; 	// (1134890,2987624)	bfsSamples 1000 nodes (UnweightedGraph: 210s, 1.7GB) (int queue: 200s, 0.6GB)
 		// WCC
 //		String dataname = "polblogs-wcc";			// (1222,16714) 	
 //		String dataname = "wiki-Vote-wcc";			// (7066,100736) 	
 //		String dataname = "ca-HepPh-wcc";			// (11204,117619) 
-//		String dataname = "ca-AstroPh-wcc";			// (17903,196972) 	bfsSamples 1000 nodes (Grph: 131s), (UnweightedGraph: 5.6s)
+		String dataname = "ca-AstroPh-wcc";			// (17903,196972) 	bfsSamples 1000 nodes (Grph: 131s), (UnweightedGraph: 5.6s)
 		
 		String filename = "_data/" + dataname + ".gr";
 		String louvain_file = "_sample/" + dataname + "_louvain";	// by community detection algo
@@ -601,20 +659,34 @@ public class UtilityMeasure {
  			n_samples = Integer.parseInt(args[2]);
  			graph_name = args[3];
  			n_nodes = Integer.parseInt(args[4]);
- 		}
- 		System.out.println("dataname = " + dataname);
- 		System.out.println("graph_name = " + graph_name);
  		
- 		String cut_query_file = prefix + "_data/" + dataname + ".cut";
- 		String graph_file = prefix + "_sample/" + graph_name;
- 		String matlab_file = prefix + "_matlab/" + graph_name;
-	    
- 		for (int i = 0; i < n_samples; i++){
-	    	System.out.println("sample i = " + i);
-	    	
-			
-			long start = System.currentTimeMillis();
-		    computeUtility(graph_file + "." + i, cut_query_file, matlab_file + "." + i + ".mat", n_queries, n_nodes);
+	 		System.out.println("dataname = " + dataname);
+	 		System.out.println("graph_name = " + graph_name);
+	 		
+	 		String cut_query_file = prefix + "_data/" + dataname + ".cut";
+	 		String graph_file = prefix + "_sample/" + graph_name;
+	 		String matlab_file = prefix + "_matlab/" + graph_name;
+		    
+	 		for (int i = 0; i < n_samples; i++){
+		    	System.out.println("sample i = " + i);
+		    	
+				
+				long start = System.currentTimeMillis();
+			    computeUtility(graph_file + "." + i, cut_query_file, matlab_file + "." + i + ".mat", n_queries, n_nodes);
+			    System.out.println("computeUtility - DONE, elapsed " + (System.currentTimeMillis() - start));
+	 		}
+ 		}else{	// run on true graph (3 arguments)
+ 			prefix = args[0];
+ 			dataname = args[1];
+ 			n_nodes = Integer.parseInt(args[2]);
+ 			
+ 			System.out.println("dataname = " + dataname);
+ 			String graph_file = prefix + "_data/" + dataname + ".gr";
+	 		String matlab_file = prefix + "_matlab/" + dataname + ".mat";
+ 			String cut_query_file = prefix + "_data/" + dataname + ".cut";
+ 			
+ 			long start = System.currentTimeMillis();
+		    computeUtility(graph_file, cut_query_file, matlab_file, n_queries, n_nodes);
 		    System.out.println("computeUtility - DONE, elapsed " + (System.currentTimeMillis() - start));
  		}
  		
@@ -639,8 +711,12 @@ public class UtilityMeasure {
 //	    System.out.println("getDistanceDistr - DONE, elapsed " + (System.currentTimeMillis() - start));
 
 		// TEST bfsSamples
+//	    UnweightedGraph G = UnweightedGraph.readEdgeListWithNodes(filename, "\t", 17903);
+//		System.out.println("#nodes = " + G.V());
+//		System.out.println("#edges = " + G.E());
+//		
 //		long start = System.currentTimeMillis();
-//		bfsSamples(G, 1000);
+//		bfsSamples(G, 17903);
 //	    System.out.println("bfsSamples - DONE, elapsed " + (System.currentTimeMillis() - start));
 
 		// TEST generateCutQueries()

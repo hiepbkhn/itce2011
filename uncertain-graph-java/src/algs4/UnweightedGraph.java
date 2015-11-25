@@ -184,6 +184,32 @@ public class UnweightedGraph {
     	return ret;
     }
     
+    public static UnweightedGraph readEdgeListWithNodes(String filename, String split_char, int n_nodes) throws IOException{
+
+    	List<Int2> edgeList = new ArrayList<Int2>();
+    	
+    	
+    	BufferedReader br = new BufferedReader(new FileReader(filename));
+    	while (true){
+        	String str = br.readLine();
+        	if (str == null)
+        		break;
+        	
+        	String[] items = str.split(split_char);
+        	int u = Integer.parseInt(items[0]);
+        	int v = Integer.parseInt(items[1]);
+        	edgeList.add(new Int2(u, v));
+    	}
+    	
+    	br.close();
+    	
+    	UnweightedGraph ret = new UnweightedGraph(n_nodes);
+    	for (Int2 e : edgeList)
+    		ret.addEdge(e.val0, e.val1);
+    	
+    	return ret;
+    }
+    
     /**
      * Unit tests the <tt>EdgeWeightedGraph</tt> data type.
      */
