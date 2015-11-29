@@ -246,19 +246,25 @@ if __name__ == '__main__':
 #    G = nx.karate_club_graph();
     
     #######
-    dataname = "polbooks"           # (105, 441)     
-    dataname = "polblogs"           # (1224,16715) 
-    dataname = "as20graph"          # (6474,12572)    max_size=50, 423 com(0.9s)
-    dataname = "wiki-Vote"          # (7115,100762)    max_size=50, 466 com(5.1s)
-    dataname = "ca-HepPh"           # (12006,118489)  max_size=50, 1061 com(6.7s)   
-    dataname = "ca-AstroPh"         # (18771,198050)   max_size=50, 1334 com(11.7s) 
-    dataname = "com_amazon_ungraph" # (334863,925872) max_size=50,100, mem (1.4GB) (168s) 
-#    dataname = "com_dblp_ungraph"  # (317080,1049866) 
+#    dataname = "polbooks"           # (105, 441)     max_size=10
+##    dataname = "polblogs"           # (1224,16715) 
+#    dataname = "as20graph"          # (6474,12572)    max_size=50, 423 com(0.9s)
+##    dataname = "wiki-Vote"          # (7115,100762)    max_size=50, 466 com(5.1s)
+##    dataname = "ca-HepPh"           # (12006,118489)  max_size=50, 1061 com(6.7s)   
+##    dataname = "ca-AstroPh"         # (18771,198050)   max_size=50, 1334 com(11.7s) 
+#    # WCC
+#    dataname = "polblogs-wcc"       # (1222,16714)     max_size=20
+#    dataname = "wiki-Vote-wcc"      # (7066,100736)      max_size=50
+#    dataname = "ca-HepPh-wcc"       # (11204,117619)    max_size=50
+    dataname = "ca-AstroPh-wcc"     # (17903,196972)    max_size=50
+    # LARGE
+#    dataname = "com_amazon_ungraph" # (334863,925872) max_size=50,100, mem (1.4GB) (168s) 
+#    dataname = "com_dblp_ungraph"  # (317080,1049866) max_size=50
 #    dataname = "com_youtube_ungraph"# (1134890,2987624) max_size=50,100, mem (4.7GB) (2930s-Acer)
     
 
     max_size = 50
-    n_runs = 10
+    n_runs = 1
     
     ######  Command-line param for automation (bash): <dataname> <n_runs> <max_size>
     if len(sys.argv) > 1:

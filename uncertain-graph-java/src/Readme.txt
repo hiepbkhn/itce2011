@@ -31,6 +31,7 @@ CLASSPATH: D:\git\itce2011\uncertain-graph-java\bin;E:\caidat\Java\grph-1.6.29-s
 - CommunityFit2.java: non-private, use NodeSet2.java
 
 - HRGDivisiveFit.java: copied from HRGDivisiveGreedy.java, use NodeSetDivGreedy.java
+- HRGDivisiveFitNonPriv.java: use NodeSetDivNonPriv.java
 
 [dp.der] DER
 - DensityExploreReconstruct.java
@@ -65,6 +66,7 @@ CLASSPATH: D:\git\itce2011\uncertain-graph-java\bin;E:\caidat\Java\grph-1.6.29-s
 
 - HRGDivisiveGreedy.java: combine HRG-Divisive and modularity
 - NodeSetDivGreedy.java: use log-likelihood (binary tree)
+- NodeSetDivNonPriv.java: remove eps1 from recursiveLK(), partitionLK()
 
 - ModDivisiveDP.java: exponential mechanism with modularity Q
 - NodeSetMod.java: used in ModDivisiveDP (binary tree)

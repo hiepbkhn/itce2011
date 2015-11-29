@@ -11,10 +11,13 @@ from random import *
 import math
 import sys
 import networkx as nx
+import igraph as ig
+import snap as sn
 import scipy.io
 from numpy import *
 import numpy as np
 from scipy.linalg import * 
+from utility_measure import convert_networkx_to_SNAP
 
 
 #######################################################
@@ -58,6 +61,36 @@ def test_graph_by_deg_sequence():
         print "#edges =", G2.number_of_edges()
 
 
+#######################################################
+def test_clustering_coefficient():
+    
+    dataname = "example"            # (13, 20)  
+#    dataname = "polbooks"           # (105, 441)     
+#    dataname = "polblogs"           # (1224,16715)     # s_CC = 0.225958517359
+#    dataname = "polblogs-wcc"       # (1222,16714) 
+#    dataname = "as20graph"          # (6474,12572)     
+
+    filename = "../_data/" + dataname + ".gr"
+    
+    ### read graph for DETERMINISTIC G
+    start = time.clock()
+    print "filename =", filename
+    G = ig.Graph.Read_Edgelist(filename, directed=False)
+    print "#nodes =", G.vcount()
+
+    # igraph
+    s_CC = G.transitivity_undirected()
+    print "s_CC =", s_CC
+    
+    s_agv_local_CC = G.transitivity_avglocal_undirected()
+    print "s_agv_local_CC =", s_agv_local_CC
+    
+    # SNAP
+    aG = convert_networkx_to_SNAP(G)
+    print "convert to SNAP graph: DONE"
+    
+    s_CC = sn.GetClustCf(aG)
+    print "s_CC =", s_CC
     
 
 #######################################################
@@ -74,7 +107,11 @@ if __name__ == '__main__':
 #    print np.dot(a.transpose(),a)
 
     # TEST test_graph_by_deg_sequence()
-    test_graph_by_deg_sequence()
+#    test_graph_by_deg_sequence()
+
+    # TEST test_clustering_coefficient()
+    test_clustering_coefficient()
+    
     
     
     
