@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.Random;
 
@@ -191,31 +192,41 @@ public class Test {
 		
 		////
 		long start = System.currentTimeMillis();
-		EdgeIntGraph G = EdgeIntGraph.readEdgeList("_data/polbooks.gr", "\t");	// "\t" or " "
+//		EdgeIntGraph G = EdgeIntGraph.readEdgeList("_data/polbooks.gr", "\t");	
+		EdgeIntGraph G = EdgeIntGraph.readEdgeList("_data/as20graph.gr", "\t");	
 		System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
 		
 		System.out.println("#nodes = " + G.V());
 		System.out.println("#edges = " + G.E());
 		
-		Dendrogram T = new Dendrogram();
-		T.readInternalNodes(G, "_out/polbooks_fixed_20_105_50_1.2_tree.0");
-		T.compute_LS_RS();
+//		Dendrogram T = new Dendrogram();
+//		T.readInternalNodes(G, "_out/polbooks_fixed_20_105_50_1.2_tree.0");
+//		T.compute_LS_RS();
+//		
+//		Queue<Node> queue = new LinkedList<Node>();
+//		queue.add(T.root_node);
+//		while (queue.size() > 0){
+//			Node R = queue.remove();
+//
+//			System.out.println("R.id = " + R.id + " nL=" + R.nL + " nR=" + R.nR + " nEdge=" + R.nEdge + " level=" + R.level + " toplevel=" + R.toplevel);
+//			System.out.println(R.LS);
+//			System.out.println(R.RS);
+//			
+//			if (R.left.id < 0)
+//				queue.add(R.left);
+//			if (R.right.id < 0)
+//				queue.add(R.right);
+//			
+//		}
 		
-		Queue<Node> queue = new LinkedList<Node>();
-		queue.add(T.root_node);
-		while (queue.size() > 0){
-			Node R = queue.remove();
-
-			System.out.println("R.id = " + R.id + " nL=" + R.nL + " nR=" + R.nR + " nEdge=" + R.nEdge + " level=" + R.level + " toplevel=" + R.toplevel);
-			System.out.println(R.LS);
-			System.out.println(R.RS);
-			
-			if (R.left.id < 0)
-				queue.add(R.left);
-			if (R.right.id < 0)
-				queue.add(R.right);
-			
-		}
+//		NodeSetLouvain root = Dendrogram.readTree(G, "_out/polbooks_fixed_np_20_105_1000_tree.0");		// 0.3123
+//		NodeSetLouvain root = Dendrogram.readTree(G, "_out/as20graph_hrgdiv_np_20_7_2_tree.0");			// -0.0332
+//		NodeSetLouvain root = Dendrogram.readTree(G, "_out/as20graph_fixed_np_20_6474_1000_tree.0");	// -0.0351
+		NodeSetLouvain root = Dendrogram.readTree(G, "_out/as20graph_fixed_20_6474_1000_2.0_tree.0");	// -0.0469
+		System.out.println("readTree - DONE");
+		List<NodeSetLouvain> best_cut = NodeSetLouvain.bestCutHRG(root, G.E(), 5, 0.5);
+		System.out.println("best_cut.size = " + best_cut.size());
+		
 		
 	}
 

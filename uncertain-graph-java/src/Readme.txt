@@ -19,6 +19,9 @@ CLASSPATH: D:\git\itce2011\uncertain-graph-java\bin;E:\caidat\Java\grph-1.6.29-s
 - DendrogramFixed.java: fixed balance binary tree
 - MCMCInferenceFixed.java: use DendrogramFixed.java
 
+- DendrogramFixedNonPriv.java: non-private
+- MCMCInferenceFixedNonPriv.java: use DendrogramFixedNonPriv.java
+
 - SampleGenerator.java: read tree in \out folder (_dendro_, _hrgdiv_, _fixed_) and generate samples
 
 [dp.hrg] non-private HRG

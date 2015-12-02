@@ -24,7 +24,9 @@
  * 	- field logLK faster computed in config_2(), config_3() instead of calling logLK()
  * 	- EdgeIntGraph in place of Grph
  * Dec 2
+ * 	- replace Grph with EdgeIntGraph
  * 	- compute_LS_RS() extracted from generateSanitizedSample()
+ * 	- readTree() used in
  */
 
 package dp.mcmc;
@@ -1242,45 +1244,72 @@ public class Dendrogram {
 	
 	
 	////used in TreeCutter.cutTreeHRGFixed()
-	//
-	static void readTree(EdgeIntGraph G, String filename) throws IOException{
+	// used with NodeSetLouvain.bestCutHRG()
+	public static NodeSetLouvain readTree(EdgeIntGraph G, String filename) throws IOException{
 		
 		// read dendrogram
 		Dendrogram T = new Dendrogram();
 		T.readInternalNodes(G, filename);
 		
+		T.compute_LS_RS();
+		// debug
+		System.out.println("T.root_node.id = " + T.root_node.id);
+		
+		
 		// create the corresponding NodeSetLouvain
 		int k = 2;
 		NodeSetLouvain root = new NodeSetLouvain(k);
-		root.id = -1;
 		
 		Queue<Node> queue = new LinkedList<Node>();
 		Queue<NodeSetLouvain> queue_set = new LinkedList<NodeSetLouvain>();
 		queue.add(T.root_node);
 		queue_set.add(root);
-		int id = -2;
 		while (queue.size() > 0){
 			Node R = queue.remove();
 			NodeSetLouvain NS = queue_set.remove();
+			NS.id = R.id;
+			
+//			int n = R.nL + R.nR;
+//			NS.part = new int[n];
+			NS.size = new int[k];
+			NS.dc = new int[k];
+			NS.size[0] = R.nL; NS.size[1] = R.nR;
+			
+			for (IntCursor s : R.LS)
+				NS.dc[0] += G.degree(s.value);
+			for (IntCursor t : R.RS)
+				NS.dc[1] += G.degree(t.value);
+			
+			NS.e_self = R.nEdge;
+			if (R.left.id < 0)
+				NS.e_self += R.left.nEdge;
+			if (R.right.id < 0)
+				NS.e_self += R.right.nEdge;
+			
 
-			for (int i = 0; i < k; i++){
-				NodeSetLouvain child = new NodeSetLouvain(k);
-				child.id = id--;
-				child.level = NS.level + 1;
+			
+			if (R.left.id < 0){
+				queue.add(R.left);
 				
-				NS.children[i] = child;
+				NodeSetLouvain child = new NodeSetLouvain(k);
+				child.level = NS.level + 1;
+				NS.children[0] = child;
 				queue_set.add(child);
 			}
 			
-			if (R.left.id < 0)
-				queue.add(R.left);
-			if (R.right.id < 0)
+			if (R.right.id < 0){
 				queue.add(R.right);
+				
+				NodeSetLouvain child = new NodeSetLouvain(k);
+				child.level = NS.level + 1;
+				NS.children[1] = child;
+				queue_set.add(child);
+			}
 			
 		}
 		
-
-		
+		//
+		return root;
 	}
 }
 

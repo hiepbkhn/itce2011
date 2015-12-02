@@ -13,6 +13,8 @@
  * Oct 18
  * 	- readTree: children point to parent
  * 	- add eArr: number of edges between two children of this node
+ * Dec 2
+ * 	- modularityHRG(): used in Dendrogram.readTree()
  */
 
 package dp.combined;
@@ -239,6 +241,20 @@ public class NodeSetLouvain {
 	public double modularitySelf(int m){
 		double mod = 0.0;
 		double lc = this.e_list.size();
+		double dc = 0;
+		for (int val : this.dc)
+			dc += val;
+		
+		mod = lc/m - (dc/(2.0*m))*(dc/(2.0*m));
+		
+		//
+		return mod;
+	}
+	
+	//// 
+	public double modularityHRG(int m){
+		double mod = 0.0;
+		double lc = this.e_self;
 		double dc = 0;
 		for (int val : this.dc)
 			dc += val;
@@ -577,6 +593,84 @@ public class NodeSetLouvain {
 				ret.add(R);
 				System.out.print(R.id + " ");
 			}else if (R.children[0] != null)
+				for (int i = 0; i < R.children.length; i++)
+					queue.add(R.children[i]);
+		}
+		System.out.println();
+		
+		//
+		return ret;
+	}
+	
+	//// call R.modularityHRG()
+	public static List<NodeSetLouvain> bestCutHRG(NodeSetLouvain root_set, int m, int level, double eps_mod){
+		
+		List<NodeSetLouvain> ret = new ArrayList<NodeSetLouvain>();
+		Map<Integer, CutNode> sol = new HashMap<Integer, CutNode>();	// best solution node.id --> CutNode info
+		
+		Queue<NodeSetLouvain> queue = new LinkedList<NodeSetLouvain>();
+		Stack<NodeSetLouvain> stack = new Stack<NodeSetLouvain>();
+		
+		// fill stack using queue
+		queue.add(root_set);
+		while (queue.size() > 0){
+			NodeSetLouvain R = queue.remove();
+			stack.push(R);
+			if (R.level < level)
+				for (int i = 0; i < R.children.length; i++)
+					if (R.children[i] != null)
+						queue.add(R.children[i]);
+		}
+		System.out.println("stack.size = " + stack.size());
+		
+		
+		double dU = 3.0/m;
+		// 
+		while (stack.size() > 0){
+			NodeSetLouvain R = stack.pop();
+			
+			double mod = R.modularityHRG(m);			// modularityHRG
+			double mod_noisy = mod;	//+ DPUtil.laplaceMechanism(eps_mod/dU);
+			boolean self = true;
+			if (R.level == level){	// leaf nodes
+				sol.put(R.id, new CutNode(mod, mod_noisy, true));
+				System.out.println("LEAF id = " + R.id);
+				
+			}else{
+				//
+				double mod_opt = 0.0;
+				double mod_noisy_opt = 0.0;
+				for (int i = 0; i < R.children.length; i++)
+					if (R.children[i] != null){
+						mod_opt += sol.get(R.children[i].id).mod;
+						mod_noisy_opt += sol.get(R.children[i].id).mod_noisy;
+					}
+				
+				if (mod_noisy < mod_noisy_opt){
+					mod = mod_opt;
+					mod_noisy = mod_noisy_opt;
+					self = false;
+				}
+					
+				sol.put(R.id, new CutNode(mod, mod_noisy, self));
+				System.out.println("id = " + R.id);
+			}
+		}
+		
+		System.out.println("sol.size = " + sol.size());
+		System.out.println("best modularity = " + sol.get(root_set.id).mod);		// root.id
+		System.out.println("best mod_noisy = " + sol.get(root_set.id).mod_noisy);
+		
+		// compute ret
+		queue = new LinkedList<NodeSetLouvain>();
+		queue.add(root_set);
+		while (queue.size() > 0){
+			NodeSetLouvain R = queue.remove();
+			
+			if (sol.get(R.id).self == true){
+				ret.add(R);
+				System.out.print(R.id + " ");
+			}else if (R.level < level)
 				for (int i = 0; i < R.children.length; i++)
 					queue.add(R.children[i]);
 		}
