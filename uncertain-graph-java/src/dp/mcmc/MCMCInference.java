@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
 
+import algs4.EdgeIntGraph;
 import toools.io.file.RegularFile;
 import toools.set.IntSet;
 import grph.Grph;
@@ -91,16 +92,25 @@ public class MCMCInference {
 	    System.out.println("node_file = " + node_file);
 
 	    //
-//		GrphTextReader reader = new GrphTextReader();
-		EdgeListReader reader = new EdgeListReader();
-		EdgeListWriter writer = new EdgeListWriter();
-		Grph G;
-		RegularFile f = new RegularFile(filename);
+//		EdgeListReader reader = new EdgeListReader();
+//		EdgeListWriter writer = new EdgeListWriter();
+//		Grph G;
+//		RegularFile f = new RegularFile(filename);
+//		
+//		G = reader.readGraph(f);
+//		
+//		System.out.println("#nodes = " + G.getNumberOfVertices());
+//		System.out.println("#edges = " + G.getNumberOfEdges());
+//			
+////		AdjacencyMatrix A = G.getAdjacencyMatrix();
 		
-		G = reader.readGraph(f);
+	    //
+	    long start = System.currentTimeMillis();
+		EdgeIntGraph G = EdgeIntGraph.readEdgeList(filename, "\t");	// "\t" or " "
+		System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
 		
-		System.out.println("#nodes = " + G.getNumberOfVertices());
-		System.out.println("#edges = " + G.getNumberOfEdges());
+		System.out.println("#nodes = " + G.V());
+		System.out.println("#edges = " + G.E());
 			
 //		AdjacencyMatrix A = G.getAdjacencyMatrix();
 		
@@ -138,8 +148,8 @@ public class MCMCInference {
 //	    Dendrogram.inOrderPrint(T.root_node, true, true);
 		
 		// TEST 
-	    long start = System.currentTimeMillis();
-	    List<Dendrogram> list_T = Dendrogram.dendrogramFitting(T, G, eps1, burn_factor*G.getNumberOfVertices(), n_samples, sample_freq, node_file);    
+	    start = System.currentTimeMillis();
+	    List<Dendrogram> list_T = Dendrogram.dendrogramFitting(T, G, eps1, burn_factor*G.V(), n_samples, sample_freq, node_file);    
 	    System.out.println("logLK = " + T.logLK());
 	    System.out.println("dendrogramFitting - DONE, elapsed " + (System.currentTimeMillis() - start));
 

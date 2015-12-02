@@ -1,7 +1,8 @@
 /*
  * April 1
  * 	- created
- * 
+ * Dec 2
+ * 	- replace Grph by EdgeIntGraph 
  */
 
 package dp.comm;
@@ -9,9 +10,10 @@ package dp.comm;
 import java.util.Iterator;
 import java.util.Random;
 
+import algs4.EdgeIntGraph;
+
 import com.carrotsearch.hppc.cursors.IntCursor;
 
-import grph.Grph;
 import toools.set.BitVectorSet;
 import toools.set.IntHashSet;
 import toools.set.IntSet;
@@ -20,20 +22,20 @@ public class NodePriv extends NodeSet{
 
 	////
 	// 
-	public NodePriv(Grph G, IntSet A){
+	public NodePriv(EdgeIntGraph G, IntSet A){
 		super(G, A);
 	}
 	
 	////
-	public NodePriv(Grph G){
+	public NodePriv(EdgeIntGraph G){
 		super(G);
 	}
 	
 	//// LOG-LIKELIHOOD partition, using logLK()
-	public static void partitionLK(NodePriv R, Grph G, double eps1, int n_steps, int n_samples, int sample_freq){
+	public static void partitionLK(NodePriv R, EdgeIntGraph G, double eps1, int n_steps, int n_samples, int sample_freq){
 		System.out.println("NodePriv.partitionLK called");
 		// delta U
-		int n_nodes = G.getNumberOfVertices();
+		int n_nodes = G.V();
 		long nMax = 0;
 		if (n_nodes % 2 == 0) 
 	        nMax = n_nodes*n_nodes/4;
@@ -114,10 +116,10 @@ public class NodePriv extends NodeSet{
 	
 	
 	//// EDGE-VAR partition, using edgeVar()
-	public static void partitionEV(NodePriv R, Grph G, double eps1, int n_steps, int n_samples, int sample_freq){
+	public static void partitionEV(NodePriv R, EdgeIntGraph G, double eps1, int n_steps, int n_samples, int sample_freq){
 		System.out.println("NodePriv.partitionEV called");
 		// dU
-		int n_nodes = G.getNumberOfVertices();
+		int n_nodes = G.V();
 		
 		double dU = 2.0;
 	    System.out.println("dU = " + dU);

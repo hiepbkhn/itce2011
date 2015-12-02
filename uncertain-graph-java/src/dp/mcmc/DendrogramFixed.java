@@ -26,10 +26,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import algs4.EdgeIntGraph;
 import algs4.UnweightedGraph;
 
 import com.carrotsearch.hppc.cursors.IntCursor;
 
+import dp.combined.NodeSetLouvain;
 import toools.set.IntHashSet;
 import toools.set.IntSet;
 import grph.Grph;
@@ -629,13 +631,26 @@ public class DendrogramFixed extends Dendrogram{
 	
 	////
 	// list_T: list of new DendrogramDeg()
-	static void readInternalNodes(Grph G, List<DendrogramFixed> list_T, String node_file, int n_samples) throws Exception{
+	static void readInternalNodes(EdgeIntGraph G, List<DendrogramFixed> list_T, String node_file, int n_samples) throws Exception{
 		int i = 0;
 	    for (DendrogramFixed T : list_T){
 	    	String filename = node_file + "." + i;
 	        i++;
 			T.readInternalNodes(G, filename);
 	    }
+	}
+	
+	//// used in TreeCutter.cutTreeHRGFixed()
+	//
+	static void readTree(EdgeIntGraph G, String filename) throws IOException{
+		DendrogramFixed T = new DendrogramFixed();
+		T.readInternalNodes(G, filename);
+		
+		// create
+		NodeSetLouvain root = new NodeSetLouvain(1);
+		
+		// compute
+		
 	}
 	
 	

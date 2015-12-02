@@ -3,6 +3,8 @@
  * 	- copied from EdgeWeightedGraph, use EdgeInt
  * Nov 18
  * 	- readEdgeListWithNodes()
+ * Dec 2
+ * 	- writeGraph()
  */
 
 package algs4;
@@ -10,7 +12,9 @@ package algs4;
 import hist.Int2;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -357,6 +361,19 @@ public class EdgeIntGraph {
     		ret.addEdge(new EdgeInt(e.val0, e.val1, 1));
     	
     	return ret;
+    }
+    
+    ////
+    public static void writeGraph(EdgeIntGraph G, String filename) throws IOException{
+    	
+    	BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
+    	for (EdgeInt e : G.edges()){
+    		int u = e.either();
+    		int v = e.other(u);
+    		bw.write(u + "\t" + v + "\t" + e.weight() + "\n");
+    	}
+    	
+    	bw.close();
     }
     
     /**

@@ -4,6 +4,8 @@
  *  - add reverse_add(), reverse_remove()
  * Sep 21, 2015
  * 	- copy two improvements from NodeSetMod.java
+ * Dec 2
+ * 	- replace Grph by EdgeIntGraph 
  */
 
 package dp.comm;
@@ -14,11 +16,13 @@ import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.Random;
 
+import algs4.EdgeInt;
+import algs4.EdgeIntGraph;
+
 import com.carrotsearch.hppc.cursors.IntCursor;
 
 import dp.mcmc.Dendrogram;
 import dp.mcmc.Node;
-import grph.Grph;
 import grph.VertexPair;
 import toools.set.BitVectorSet;
 import toools.set.IntHashSet;
@@ -51,13 +55,13 @@ public class NodeSet2 {
 	
 	////
 	// n_nodes: 0->n_nodes-1 are node ids in graph
-	public NodeSet2(Grph G, IntSet A){
+	public NodeSet2(EdgeIntGraph G, IntSet A){
 		if (A.size() == 1){
 			this.id = A.toIntArray()[0];
 			return;
 		}
 		
-//		int n_nodes = G.getNumberOfVertices();
+//		int n_nodes = G.V();
 		
 		this.S = new IntHashSet();
 		this.T = new IntHashSet();
@@ -75,7 +79,7 @@ public class NodeSet2 {
 		this.n_t = this.T.size();
 		
 		//
-		int n = G.getNumberOfVertices();
+		int n = G.V();
 		int[] node2Set = new int[n]; // 1:S, 2:T
 		
 		for (IntCursor u : this.S)
@@ -91,9 +95,9 @@ public class NodeSet2 {
 		
 		int u; 
 		int v;
-		for (VertexPair p : G.getEdgePairs()){
-			u = p.first;
-			v = p.second;
+		for (EdgeInt p : G.edges()){
+			u = p.either();
+			v = p.other(u);
 			if (node2Set[u] + node2Set[v] == 3)	// avoid node2Set[u] == 0
 				this.e_st += 1;
 			if (node2Set[u] == 1 && node2Set[v] == 1)
@@ -104,8 +108,8 @@ public class NodeSet2 {
 	}
 	
 	////
-	public NodeSet2(Grph G){
-		int n_nodes = G.getNumberOfVertices();
+	public NodeSet2(EdgeIntGraph G){
+		int n_nodes = G.V();
 		
 		this.S = new IntHashSet();
 		this.T = new IntHashSet();
@@ -120,7 +124,7 @@ public class NodeSet2 {
 		this.n_t = this.T.size();
 		
 		//
-		int n = G.getNumberOfVertices();
+		int n = G.V();
 		int[] node2Set = new int[n]; // 1:S, 2:T
 		
 		for (IntCursor u : this.S)
@@ -136,9 +140,9 @@ public class NodeSet2 {
 		
 		int u; 
 		int v;
-		for (VertexPair p : G.getEdgePairs()){
-			u = p.first;
-			v = p.second;
+		for (EdgeInt p : G.edges()){
+			u = p.either();
+			v = p.other(u);
 			if (node2Set[u] + node2Set[v] == 3)	// avoid node2Set[u] == 0
 				this.e_st += 1;
 			if (node2Set[u] == 1 && node2Set[v] == 1)
@@ -149,13 +153,13 @@ public class NodeSet2 {
 	}
 	
 	//// move 1 item u from T to S
-	public void add(int u, Grph G){
+	public void add(int u, EdgeIntGraph G){
 		
 		//
 		int count_add = 0;
 		int count_remove = 0;
-		int[] N = G.getNeighbours(u).toIntArray();
-		for (int v : N){
+		
+		for (int v : G.adj(u).keySet()){
 			if (S.contains(v))
 				count_remove += 1;
 			if (T.contains(v))
@@ -178,13 +182,12 @@ public class NodeSet2 {
 	}
 	
 	//// move 1 item u from S to T
-	public void remove(int u, Grph G){
+	public void remove(int u, EdgeIntGraph G){
 		
 		//
 		int count_add = 0;
 		int count_remove = 0;
-		int[] N = G.getNeighbours(u).toIntArray();
-		for (int v : N){
+		for (int v : G.adj(u).keySet()){
 			if (S.contains(v))
 				count_add += 1;
 			if (T.contains(v))
@@ -207,7 +210,7 @@ public class NodeSet2 {
 	}
 	
 	////move 1 item u from S back to T
-	public void reverse_add(int u, Grph G, int old_st, int old_s, int old_t){
+	public void reverse_add(int u, EdgeIntGraph G, int old_st, int old_s, int old_t){
 		this.e_st = old_st;
 		this.e_s = old_s;
 		this.e_t = old_t;
@@ -220,7 +223,7 @@ public class NodeSet2 {
 	}
 	
 	////move 1 item u from T back to S
-	public void reverse_remove(int u, Grph G, int old_st, int old_s, int old_t){
+	public void reverse_remove(int u, EdgeIntGraph G, int old_st, int old_s, int old_t){
 		this.e_st = old_st;
 		this.e_s = old_s;
 		this.e_t = old_t;
@@ -311,11 +314,11 @@ public class NodeSet2 {
 	}
 	
 	//// LOG-LIKELIHOOD partition, using logLK()
-	public static void partitionLK(NodeSet2 R, Grph G, int n_steps, int n_samples, int sample_freq, boolean print_out){
+	public static void partitionLK(NodeSet2 R, EdgeIntGraph G, int n_steps, int n_samples, int sample_freq, boolean print_out){
 		if (print_out)
 			System.out.println("Node.partitionLK called");
 		
-//		int n_nodes = G.getNumberOfVertices();
+//		int n_nodes = G.V();
 		int n_nodes = R.S.size() + R.T.size();
 		
 		if (print_out)
@@ -402,9 +405,9 @@ public class NodeSet2 {
 	
 	
 	//// MINCUT partition, using mincut()
-	public static void partitionMC(NodeSet2 R, Grph G, int n_steps, int n_samples, int sample_freq){
+	public static void partitionMC(NodeSet2 R, EdgeIntGraph G, int n_steps, int n_samples, int sample_freq){
 		System.out.println("Node.partitionMC called");
-		int n_nodes = G.getNumberOfVertices();
+		int n_nodes = G.V();
 		
 		System.out.println("#steps = " + (n_steps + n_samples * sample_freq));
 
@@ -477,9 +480,9 @@ public class NodeSet2 {
 	}
 	
 	//// EDGE-VAR partition, using edgeVar()
-	public static void partitionEV(NodeSet2 R, Grph G, int n_steps, int n_samples, int sample_freq){
+	public static void partitionEV(NodeSet2 R, EdgeIntGraph G, int n_steps, int n_samples, int sample_freq){
 		System.out.println("Node.partitionEV called");
-		int n_nodes = G.getNumberOfVertices();
+		int n_nodes = G.V();
 		
 		System.out.println("#steps = " + (n_steps + n_samples * sample_freq));
 
@@ -552,7 +555,7 @@ public class NodeSet2 {
 	}
 	
 	////
-	public static int binaryPartition(Grph G, NodeSet2 root, int id){
+	public static int binaryPartition(EdgeIntGraph G, NodeSet2 root, int id){
 		
 		int cur_id = id;
 		Queue<NodeSet2> queue = new LinkedList<NodeSet2>();
@@ -592,8 +595,8 @@ public class NodeSet2 {
 	
 	//////////////////////////////
 	// limit_size = 32: i.e. for NodeSet having size <= limit_size, call 
-	public static NodeSet2 recursiveLK(Grph G, int burn_factor, int limit_size){
-		int n_nodes = G.getNumberOfVertices();
+	public static NodeSet2 recursiveLK(EdgeIntGraph G, int burn_factor, int limit_size){
+		int n_nodes = G.V();
 		int id = -1;
 		
 		IntSet A = new IntHashSet();
@@ -703,8 +706,8 @@ public class NodeSet2 {
 	}
 	
 	////
-	public static Dendrogram convertToHRG(Grph G, NodeSet2 root_set){
-		int n_nodes = G.getNumberOfVertices();
+	public static Dendrogram convertToHRG(EdgeIntGraph G, NodeSet2 root_set){
+		int n_nodes = G.V();
 		Dendrogram D = new Dendrogram(); 
 		D.node_list = new Node[n_nodes];
 		

@@ -19,15 +19,13 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
 
+import algs4.EdgeIntGraph;
 import toools.io.file.RegularFile;
 import toools.set.IntSet;
-import grph.Grph;
 import grph.VertexPair;
 import grph.algo.AdjacencyMatrix;
-import grph.in_memory.InMemoryGrph;
 import grph.io.EdgeListReader;
 import grph.io.EdgeListWriter;
-import grph.io.GrphTextReader;
 
 
 //////////////////////////////////
@@ -38,7 +36,7 @@ public class MCMCFitEdgeVar {
 		System.out.println("MCMCFitEdgeVar");
 		
 		// TOY GRAPH
-//		Grph G = new InMemoryGrph();
+//		EdgeIntGraph G = new InMemoryEdgeIntGraph();
 //		G.addNVertices(7);
 //		for (int v = 0; v < 6; v++)
 //			G.addSimpleEdge(v, v+1, false);
@@ -69,23 +67,18 @@ public class MCMCFitEdgeVar {
 		System.out.println("burn_factor = " + burn_factor + " sample_freq = " + sample_freq + " n_samples = " + n_samples);
 		
 		//
-//		String filename = "_data/" + dataname + ".grph";	// GrphTextReader
+//		String filename = "_data/" + dataname + ".grph";	// EdgeIntGraphTextReader
 		String filename = prefix + "_data/" + dataname + ".gr";	// EdgeListReader
 		String node_file = prefix + "_out/" + dataname + "_ev_hrg";
 	    String out_file = prefix + "_sample/" + dataname + "_ev_fit";    		
 
 	    //
-//		GrphTextReader reader = new GrphTextReader();
-		EdgeListReader reader = new EdgeListReader();
-		EdgeListWriter writer = new EdgeListWriter();
+	    long start = System.currentTimeMillis();
+		EdgeIntGraph G = EdgeIntGraph.readEdgeList(filename, "\t");	// "\t" or " "
+		System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
 		
-		Grph G;
-		RegularFile f = new RegularFile(filename);
-		
-		G = reader.readGraph(f);
-		
-		System.out.println("#nodes = " + G.getNumberOfVertices());
-		System.out.println("#edges = " + G.getNumberOfEdges());
+		System.out.println("#nodes = " + G.V());
+		System.out.println("#edges = " + G.E());
 			
 //		AdjacencyMatrix A = G.getAdjacencyMatrix();
 		
@@ -125,8 +118,8 @@ public class MCMCFitEdgeVar {
 //	    HRGEdgeVar.inOrderPrint(T.root_node, true, true);
 		
 		// TEST 
-	    long start = System.currentTimeMillis();
-	    List<HRGEdgeVar> list_T = HRGEdgeVar.dendrogramFitting(T, G, burn_factor*G.getNumberOfVertices(), n_samples, sample_freq);      
+	    start = System.currentTimeMillis();
+	    List<HRGEdgeVar> list_T = HRGEdgeVar.dendrogramFitting(T, G, burn_factor*G.V(), n_samples, sample_freq);      
 	    System.out.println("dendrogramFitting - DONE, elapsed " + (System.currentTimeMillis() - start));
 
 //	    //check T
@@ -157,9 +150,9 @@ public class MCMCFitEdgeVar {
 //	    start = System.currentTimeMillis();
 //	    int count = 0;
 //	    for (HRGEdgeVar T2 : list_T){
-//	    	Grph aG = T2.generateSanitizedSample(G.getNumberOfVertices(), false);	// list_T not list_T2 (T2 not contains .noisy_value)
+//	    	EdgeIntGraph aG = T2.generateSanitizedSample(G.getNumberOfVertices(), false);	// list_T not list_T2 (T2 not contains .noisy_value)
 //	    	f = new RegularFile(out_file + "." + count);
-////	    	f.setContent(aG.toGrphText().getBytes());
+////	    	f.setContent(aG.toEdgeIntGraphText().getBytes());
 //	    	writer.writeGraph(aG, f);
 //	    	count ++;
 //	    }

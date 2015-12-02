@@ -2,6 +2,7 @@ package dp.comm;
 
 import java.util.List;
 
+import algs4.EdgeIntGraph;
 import toools.io.file.RegularFile;
 import grph.Grph;
 import grph.in_memory.InMemoryGrph;
@@ -36,27 +37,22 @@ public class CommunityPriv {
 		String filename = prefix + "_data/" + dataname + ".gr";	// EdgeListReader
 		
 		//
-//		GrphTextReader reader = new GrphTextReader();
-		EdgeListReader reader = new EdgeListReader();
-		EdgeListWriter writer = new EdgeListWriter();
+	    long start = System.currentTimeMillis();
+		EdgeIntGraph G = EdgeIntGraph.readEdgeList(filename, "\t");	// "\t" or " "
+		System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
 		
-		Grph G;
-		RegularFile f = new RegularFile(filename);
-		
-		G = reader.readGraph(f);
-		
-		System.out.println("#nodes = " + G.getNumberOfVertices());
-		System.out.println("#edges = " + G.getNumberOfEdges());
+		System.out.println("#nodes = " + G.V());
+		System.out.println("#edges = " + G.E());
 		
 		//
 		NodePriv R = new NodePriv(G);
 		System.out.println("logLK = " + R.logLK() + " mincut = " + R.mincut() + " edgeVar = " + R.edgeVar());
 		
 		// TEST 
-	    long start = System.currentTimeMillis();
+	    start = System.currentTimeMillis();
 	    
-//	    NodePriv.partitionLK(R, G, eps1, burn_factor*G.getNumberOfVertices(), n_samples, sample_freq);
-	    NodePriv.partitionEV(R, G, eps1, burn_factor*G.getNumberOfVertices(), n_samples, sample_freq);
+//	    NodePriv.partitionLK(R, G, eps1, burn_factor*G.V(), n_samples, sample_freq);
+	    NodePriv.partitionEV(R, G, eps1, burn_factor*G.V(), n_samples, sample_freq);
 	    
 	    System.out.println("NodePriv.partition - DONE, elapsed " + (System.currentTimeMillis() - start));
 	    

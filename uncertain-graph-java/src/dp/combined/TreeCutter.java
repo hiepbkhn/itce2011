@@ -3,6 +3,8 @@
  * 	- 
  * Oct 18
  * 	- add logLK(): compute log-likelihood
+ * Dec 2
+ * 	- add cutTreeHRGFixed()
  */
 
 package dp.combined;
@@ -148,6 +150,26 @@ public class TreeCutter {
 	
 	////
 	public static void cutTreeHD(String tree_file, int n_samples) throws IOException{
+		String part_file = tree_file.substring(0, tree_file.length()-5);
+		
+		for (int i = 0; i < n_samples; i++){
+			NodeSetLouvain root_set = NodeSetLouvain.readTree("_sample/" + tree_file + "." + i);
+			
+			
+			List<NodeSetLouvain> best_cut = NodeSetLouvain.bestCutOffline(root_set);
+			System.out.println("best_cut.size = " + best_cut.size());
+			NodeSetLouvain.writeBestCut(best_cut, "_louvain/" + part_file + "." + i + ".best");
+			
+			
+			List<NodeSetLouvain> part2_cut = NodeSetLouvain.cutLevel(root_set, 2);
+			System.out.println("part2_cut.size = " + part2_cut.size());
+			NodeSetLouvain.writeBestCut(part2_cut, "_louvain/" + part_file + "." + i + ".part2");
+		}
+		
+	}
+	
+	////
+	public static void cutTreeHRGFixed(String tree_file, int n_samples) throws IOException{
 		String part_file = tree_file.substring(0, tree_file.length()-5);
 		
 		for (int i = 0; i < n_samples; i++){
@@ -392,6 +414,7 @@ public class TreeCutter {
 		int n_samples = 20;
 		
 		
+		////////// TODO: TREE-CUTTER
 		// 1 - NMD (LouvainOpt)
 //		int[] kArr = new int[]{2}; //,3,4,5,6,10};
 //		int[] maxLevelArr = new int[]{10}; //,7,5,4,4,3};
@@ -410,29 +433,29 @@ public class TreeCutter {
 //		}
 		
 		// 2 - MD (LouvainModDiv)
-//		for (int i = 0; i < n_list.length; i++){
-//			String dataname = dataname_list[i];
-//			int n = n_list[i];
-//			
-//			double log_n = Math.log(n);
-//			int[] kArr = new int[]{2,3,4,5,6,10};
-//			int[] maxLevelArr = new int[]{10,7,5,4,4,3};
-//			double[] epsArr = new double[]{log_n};	//2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
-//			int burn_factor = 100;
-//			double ratio = 2.0;
-//			
-//			for (double eps : epsArr){
-//				for (int j = 0; j < kArr.length; j++){
-//					int k = kArr[j];
-//					int max_level = maxLevelArr[j];
-//					
-//					String tree_file = dataname + "_md_" + burn_factor + "_" + max_level + "_" + k + 
-//							"_" + String.format("%.1f", eps) + "_" + String.format("%.2f", ratio) + "_tree";
-//					
-//					cutTreeMD(tree_file, n_samples);
-//				}
-//			}
-//		}
+		for (int i = 0; i < n_list.length; i++){
+			String dataname = dataname_list[i];
+			int n = n_list[i];
+			
+			double log_n = Math.log(n);
+			int[] kArr = new int[]{2,3,4,5,6,10};
+			int[] maxLevelArr = new int[]{10,7,5,4,4,3};
+			double[] epsArr = new double[]{log_n};	//2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
+			int burn_factor = 100;
+			double ratio = 2.0;
+			
+			for (double eps : epsArr){
+				for (int j = 0; j < kArr.length; j++){
+					int k = kArr[j];
+					int max_level = maxLevelArr[j];
+					
+					String tree_file = dataname + "_md_" + burn_factor + "_" + max_level + "_" + k + 
+							"_" + String.format("%.1f", eps) + "_" + String.format("%.2f", ratio) + "_tree";
+					
+					cutTreeMD(tree_file, n_samples);
+				}
+			}
+		}
 		
 		// 3 - HD (HRGDivisiveGreedy)
 //		for (int i = 0; i < n_list.length; i++){
@@ -457,7 +480,7 @@ public class TreeCutter {
 //		}
 		
 		
-		////////// LOGLK
+		////////// TODO: LOGLK
 //		EdgeWeightedGraph G = EdgeWeightedGraph.readEdgeList("_data/karate.gr");
 ////		NodeSetLouvain root = NodeSetLouvain.readTree("_sample/karate_nmd_20_3_2_tree.1");
 //		NodeSetLouvain root = NodeSetLouvain.readTree("_sample/karate_hd_20_3_2.0_1.00_tree.1");
@@ -521,24 +544,24 @@ public class TreeCutter {
 //			}
 			
 			// HD
-			System.out.println("HD");
-			ratio = 1.0;
-			int k = 2;
-			int max_level = 10;
-			System.out.println("(k,maxL) = " + k + "," + max_level + " ratio = " + ratio);
-			
-			for (double eps : epsArr){
-				System.out.println("eps = " + String.format("%.1f", eps));
-				
-				String tree_file = dataname + "_hd_" + burn_factor + "_" + max_level + 
-						"_" + String.format("%.1f", eps) + "_" + String.format("%.2f", ratio) + "_tree";
-				double sum_lk = 0.0;
-				for (int s = 0; s < n_samples; s++){
-					NodeSetLouvain root = NodeSetLouvain.readTree("_sample/" + tree_file + "." + s);
-					sum_lk += logLK(G, root);
-				}
-				System.out.println("logLK = " + (sum_lk/n_samples));
-			}
+//			System.out.println("HD");
+//			ratio = 1.0;
+//			int k = 2;
+//			int max_level = 10;
+//			System.out.println("(k,maxL) = " + k + "," + max_level + " ratio = " + ratio);
+//			
+//			for (double eps : epsArr){
+//				System.out.println("eps = " + String.format("%.1f", eps));
+//				
+//				String tree_file = dataname + "_hd_" + burn_factor + "_" + max_level + 
+//						"_" + String.format("%.1f", eps) + "_" + String.format("%.2f", ratio) + "_tree";
+//				double sum_lk = 0.0;
+//				for (int s = 0; s < n_samples; s++){
+//					NodeSetLouvain root = NodeSetLouvain.readTree("_sample/" + tree_file + "." + s);
+//					sum_lk += logLK(G, root);
+//				}
+//				System.out.println("logLK = " + (sum_lk/n_samples));
+//			}
 		}
 		
 		

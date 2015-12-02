@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
 
+import algs4.EdgeIntGraph;
 import toools.io.file.RegularFile;
 import toools.set.IntSet;
 import grph.Grph;
@@ -74,17 +75,25 @@ public class MCMCInferenceEdgeVar {
 		String out_file = prefix + "_sample/" + dataname + "_ev_mcmc_10_10";    		// 10 (eps1=1.0), 10 (eps2=1.0)
 		
 		//
-//		GrphTextReader reader = new GrphTextReader();
-		EdgeListReader reader = new EdgeListReader();
-		EdgeListWriter writer = new EdgeListWriter();
+//		EdgeListReader reader = new EdgeListReader();
+//		EdgeListWriter writer = new EdgeListWriter();
+//		Grph G;
+//		RegularFile f = new RegularFile(filename);
+//		
+//		G = reader.readGraph(f);
+//		
+//		System.out.println("#nodes = " + G.getNumberOfVertices());
+//		System.out.println("#edges = " + G.getNumberOfEdges());
+//			
+////		AdjacencyMatrix A = G.getAdjacencyMatrix();
 		
-		Grph G;
-		RegularFile f = new RegularFile(filename);
+	    //
+	    long start = System.currentTimeMillis();
+		EdgeIntGraph G = EdgeIntGraph.readEdgeList(filename, "\t");	// "\t" or " "
+		System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
 		
-		G = reader.readGraph(f);
-		
-		System.out.println("#nodes = " + G.getNumberOfVertices());
-		System.out.println("#edges = " + G.getNumberOfEdges());
+		System.out.println("#nodes = " + G.V());
+		System.out.println("#edges = " + G.E());
 			
 //		AdjacencyMatrix A = G.getAdjacencyMatrix();
 		
@@ -121,8 +130,8 @@ public class MCMCInferenceEdgeVar {
 //	    Dendrogram.inOrderPrint(T.root_node, true, true);
 		
 		// TEST 
-	    long start = System.currentTimeMillis();
-	    List<DendrogramEdgeVar> list_T = DendrogramEdgeVar.dendrogramFitting(T, G, eps1, burn_factor*G.getNumberOfVertices(), n_samples, sample_freq);      
+	    start = System.currentTimeMillis();
+	    List<DendrogramEdgeVar> list_T = DendrogramEdgeVar.dendrogramFitting(T, G, eps1, burn_factor*G.V(), n_samples, sample_freq);      
 	    System.out.println("dendrogram_fitting - DONE, elapsed " + (System.currentTimeMillis() - start));
 	    
 //	    //check T

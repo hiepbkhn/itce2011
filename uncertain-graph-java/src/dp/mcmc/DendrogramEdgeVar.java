@@ -14,7 +14,8 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
 
-import grph.Grph;
+import algs4.EdgeIntGraph;
+
 
 public class DendrogramEdgeVar extends DendrogramDeg{
 	
@@ -85,11 +86,11 @@ public class DendrogramEdgeVar extends DendrogramDeg{
     ////
  // Exponential mechanism by MCMC
  	// n_samples number of sample T
- 	static List<DendrogramEdgeVar> dendrogramFitting(DendrogramEdgeVar T, Grph G, double eps1, int n_steps, int n_samples, int sample_freq){
+ 	static List<DendrogramEdgeVar> dendrogramFitting(DendrogramEdgeVar T, EdgeIntGraph G, double eps1, int n_steps, int n_samples, int sample_freq){
  		List<DendrogramEdgeVar> list_T = new ArrayList<DendrogramEdgeVar>(); 	// list of sample T
  	    
  	    // delta U
- 	    int n_edges = G.getNumberOfEdges();
+ 	    int n_edges = G.E();
  	    double dU = 2.0;			// or 2.0
  	    System.out.println("dU = " + dU);
  	    System.out.println("#steps = " + (n_steps + n_samples*sample_freq));
@@ -178,7 +179,7 @@ public class DendrogramEdgeVar extends DendrogramDeg{
 	
 	////
 	// list_T: list of new DendrogramEdgeVar()
-	static void readInternalNodes(Grph G, List<DendrogramEdgeVar> list_T, String node_file, int n_samples) throws Exception{
+	static void readInternalNodes(EdgeIntGraph G, List<DendrogramEdgeVar> list_T, String node_file, int n_samples) throws Exception{
 		int i = 0;
 	    for (DendrogramEdgeVar T : list_T){
 	    	String filename = node_file + "." + i;

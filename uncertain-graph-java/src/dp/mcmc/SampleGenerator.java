@@ -5,6 +5,7 @@
 
 package dp.mcmc;
 
+import algs4.EdgeIntGraph;
 import dp.mcmc.Dendrogram;
 import grph.Grph;
 import grph.io.EdgeListReader;
@@ -60,15 +61,12 @@ public class SampleGenerator {
 	    System.out.println("sample_file = " + sample_file);
 	    
 	    //
-	    Grph G;
-	    EdgeListReader reader = new EdgeListReader();
-	    EdgeListWriter writer = new EdgeListWriter();
-		RegularFile f = new RegularFile(filename);
-		long start = System.currentTimeMillis();
-		G = reader.readGraph(f);
-		System.out.println("#nodes = " + G.getNumberOfVertices());
-		System.out.println("#edges = " + G.getNumberOfEdges());  
+	    long start = System.currentTimeMillis();
+		EdgeIntGraph G = EdgeIntGraph.readEdgeList(filename, "\t");	// "\t" or " "
 		System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
+		
+		System.out.println("#nodes = " + G.V());
+		System.out.println("#edges = " + G.E());
 	    
 	    //
 	    for (int i = 0; i < n_samples; i++){
@@ -87,9 +85,8 @@ public class SampleGenerator {
 	    	
 	    	// 
 	    	start = System.currentTimeMillis();
-	    	Grph aG = T.generateSanitizedSample(G.getNumberOfVertices(), true);	// true: noisy_nEdge
-	    	f = new RegularFile(sample_file + "." + i);
-	    	writer.writeGraph(aG, f);
+	    	EdgeIntGraph aG = T.generateSanitizedSample(G.V(), true);	// true: noisy_nEdge
+	    	EdgeIntGraph.writeGraph(aG, sample_file + "." + i);
 			System.out.println("generateSanitizedSample - DONE, elapsed " + (System.currentTimeMillis() - start));
 		}
 

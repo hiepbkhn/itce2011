@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import algs4.EdgeIntGraph;
 import grph.Grph;
 
 public class DendrogramDeg extends Dendrogram{
@@ -57,22 +58,22 @@ public class DendrogramDeg extends Dendrogram{
     
     ////
     @Override
-    public void initByGraph(Grph G) {
+    public void initByGraph(EdgeIntGraph G) {
     	super.initByGraph(G);
     	//
     	this.org_deg_list = new double[this.node_list.length];
     	for (int u = 0; u < this.node_list.length; u++)
-    		this.org_deg_list[u] = G.getVertexDegree(u);
+    		this.org_deg_list[u] = G.degree(u);
     }
     
     ////
     @Override
-    public void initByInternalNodes(Grph G, Int4[] int_nodes) {
+    public void initByInternalNodes(EdgeIntGraph G, Int4[] int_nodes) {
     	super.initByInternalNodes(G, int_nodes);
     	//
     	this.org_deg_list = new double[this.node_list.length];
     	for (int u = 0; u < this.node_list.length; u++)
-    		this.org_deg_list[u] = G.getVertexDegree(u);
+    		this.org_deg_list[u] = G.degree(u);
     }
     
     ////
@@ -119,11 +120,11 @@ public class DendrogramDeg extends Dendrogram{
     ////
  // Exponential mechanism by MCMC
  	// n_samples number of sample T
- 	static List<DendrogramDeg> dendrogramFitting(DendrogramDeg T, Grph G, double eps1, int n_steps, int n_samples, int sample_freq){
+ 	static List<DendrogramDeg> dendrogramFitting(DendrogramDeg T, EdgeIntGraph G, double eps1, int n_steps, int n_samples, int sample_freq){
  		List<DendrogramDeg> list_T = new ArrayList<DendrogramDeg>(); 	// list of sample T
  	    
  	    // delta U
- 	    int n_edges = G.getNumberOfEdges();
+ 	    int n_edges = G.E();
  	    double dU = 4.0;		// = log(2m)
  	    System.out.println("dU = " + dU);
  	    System.out.println("#steps = " + (n_steps + n_samples*sample_freq));
@@ -210,7 +211,7 @@ public class DendrogramDeg extends Dendrogram{
 	
 	////
 	// list_T: list of new DendrogramDeg()
-	static void readInternalNodes(Grph G, List<DendrogramDeg> list_T, String node_file, int n_samples) throws Exception{
+	static void readInternalNodes(EdgeIntGraph G, List<DendrogramDeg> list_T, String node_file, int n_samples) throws Exception{
 		int i = 0;
 	    for (DendrogramDeg T : list_T){
 	    	String filename = node_file + "." + i;

@@ -12,10 +12,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import algs4.EdgeIntGraph;
 import dp.mcmc.DendrogramDeg;
 import dp.mcmc.Int4;
 import dp.mcmc.Node;
-import grph.Grph;
 
 public class HRGDeg extends DendrogramDeg {
 
@@ -64,7 +64,7 @@ public class HRGDeg extends DendrogramDeg {
 	////
 	// MCMC
 	// n_samples number of sample T
-	static List<HRGDeg> dendrogramFitting(HRGDeg T, Grph G, int n_steps, int n_samples, int sample_freq) {
+	static List<HRGDeg> dendrogramFitting(HRGDeg T, EdgeIntGraph G, int n_steps, int n_samples, int sample_freq) {
 		List<HRGDeg> list_T = new ArrayList<HRGDeg>(); // list of sample T
 		HRGDeg best_T;
 		double best_degDiffL1 = Double.MAX_VALUE;
@@ -169,7 +169,7 @@ public class HRGDeg extends DendrogramDeg {
 	
 	////
 	// list_T: list of new HRG()
-	static void readInternalNodes(Grph G, List<HRGDeg> list_T, String node_file, int n_samples) throws Exception{
+	static void readInternalNodes(EdgeIntGraph G, List<HRGDeg> list_T, String node_file, int n_samples) throws Exception{
 		int i = 0;
 	    for (HRGDeg T : list_T){
 	    	String filename = node_file + "." + i;

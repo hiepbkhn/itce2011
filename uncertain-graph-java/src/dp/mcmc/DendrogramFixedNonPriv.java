@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import algs4.EdgeIntGraph;
 import algs4.UnweightedGraph;
 
 import com.carrotsearch.hppc.cursors.IntCursor;
@@ -613,7 +614,7 @@ public class DendrogramFixedNonPriv extends Dendrogram{
 	
 	////
 	// list_T: list of new DendrogramDeg()
-	static void readInternalNodes(Grph G, List<DendrogramFixedNonPriv> list_T, String node_file, int n_samples) throws Exception{
+	static void readInternalNodes(EdgeIntGraph G, List<DendrogramFixedNonPriv> list_T, String node_file, int n_samples) throws Exception{
 		int i = 0;
 	    for (DendrogramFixedNonPriv T : list_T){
 	    	String filename = node_file + "." + i;

@@ -5,41 +5,40 @@
 package dp.comm;
 
 
+import algs4.EdgeIntGraph;
 import dp.mcmc.Dendrogram;
 import toools.io.file.RegularFile;
-import grph.Grph;
-import grph.in_memory.InMemoryGrph;
 import grph.io.EdgeListReader;
 import grph.io.EdgeListWriter;
 
 public class CommunityFit2 {
 
 	////
-	static void test(){
-		// TOY GRAPH
-		Grph G = new InMemoryGrph();
-		G.addNVertices(6);
-//				for (int v = 0; v < 6; v++)
-//					G.addSimpleEdge(v, v+1, false);
-		G.addSimpleEdge(0, 1, false);
-		G.addSimpleEdge(0, 2, false);
-		G.addSimpleEdge(1, 2, false);
-		G.addSimpleEdge(2, 3, false);
-		G.addSimpleEdge(3, 4, false);
-		G.addSimpleEdge(3, 5, false);
-		G.addSimpleEdge(4, 5, false);
-		
-		//
-		NodeSet2 R = new NodeSet2(G);
-		
-		System.out.println(R.e_s);
-		System.out.println(R.n_s);
-		System.out.println(R.e_t);
-		System.out.println(R.n_t);
-		System.out.println(R.e_st);
-		//
-		System.out.println("logLK = " + R.logLK());
-	}
+//	static void test(){
+//		// TOY GRAPH
+//		EdgeIntGraph G = new InMemoryEdgeIntGraph();
+//		G.addNVertices(6);
+////				for (int v = 0; v < 6; v++)
+////					G.addSimpleEdge(v, v+1, false);
+//		G.addSimpleEdge(0, 1, false);
+//		G.addSimpleEdge(0, 2, false);
+//		G.addSimpleEdge(1, 2, false);
+//		G.addSimpleEdge(2, 3, false);
+//		G.addSimpleEdge(3, 4, false);
+//		G.addSimpleEdge(3, 5, false);
+//		G.addSimpleEdge(4, 5, false);
+//		
+//		//
+//		NodeSet2 R = new NodeSet2(G);
+//		
+//		System.out.println(R.e_s);
+//		System.out.println(R.n_s);
+//		System.out.println(R.e_t);
+//		System.out.println(R.n_t);
+//		System.out.println(R.e_st);
+//		//
+//		System.out.println("logLK = " + R.logLK());
+//	}
 	
 	//////////////////////////////////////////////////
 	public static void main(String[] args) throws Exception{
@@ -89,16 +88,12 @@ public class CommunityFit2 {
 		String sample_file = prefix + "_sample/" + dataname + "_divisive2_" + burn_factor + "_" + limit_size;
 		
 		//
-//		GrphTextReader reader = new GrphTextReader();
-		EdgeListReader reader = new EdgeListReader();
+	    long start = System.currentTimeMillis();
+		EdgeIntGraph G = EdgeIntGraph.readEdgeList(filename, "\t");	// "\t" or " "
+		System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
 		
-		Grph G;
-		RegularFile f = new RegularFile(filename);
-		
-		G = reader.readGraph(f);
-		
-		System.out.println("#nodes = " + G.getNumberOfVertices());
-		System.out.println("#edges = " + G.getNumberOfEdges());
+		System.out.println("#nodes = " + G.V());
+		System.out.println("#edges = " + G.E());
 		
 		//
 		NodeSet2 R = new NodeSet2(G);
@@ -108,7 +103,7 @@ public class CommunityFit2 {
 		for (int i = 0; i < n_samples; i++){
 			System.out.println("sample i = " + i);
 			
-			long start = System.currentTimeMillis();
+			start = System.currentTimeMillis();
 			NodeSet2 root_set = NodeSet2.recursiveLK(G, burn_factor, limit_size);
 			System.out.println("recursiveLK - DONE, elapsed " + (System.currentTimeMillis() - start));
 			
@@ -120,15 +115,13 @@ public class CommunityFit2 {
 			D.writeInternalNodes(node_file + "." + i);
 			System.out.println("D.logLK = " + D.logLK());
 			
-			Grph aG = D.generateSanitizedSample(G.getNumberOfVertices(), false);
+			EdgeIntGraph aG = D.generateSanitizedSample(G.V(), false);
 			
 //			start = System.currentTimeMillis();
 //			System.out.println("edit distance (aG, G) = " + DegreeSeqHist.editScore(aG, G));
 //			System.out.println("editScore - DONE, elapsed " + (System.currentTimeMillis() - start));
 			
-			f = new RegularFile(sample_file + "." + i);
-			EdgeListWriter writer = new EdgeListWriter();
-	    	writer.writeGraph(aG, f);
+			EdgeIntGraph.writeGraph(aG, sample_file + "." + i);
 		}
 	    
 	}

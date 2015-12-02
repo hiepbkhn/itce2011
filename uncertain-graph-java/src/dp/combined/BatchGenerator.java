@@ -281,6 +281,9 @@ public class BatchGenerator {
 			String cmd = "java dp.mcmc.MCMCInference " + prefix + " " + dataname + " " + n_samples + 
 								" " + sample_freq + " " + burn_factor + " " + String.format("%.1f", eps1) + 
 					" > ../_console/" + dataname + "_dendro_" + n_samples + "_" + sample_freq + "_" + burn_factor + "_" + String.format("%.1f", eps1) + "-CONSOLE.txt";
+//			String cmd = "java test.MCMCInferenceTest " + prefix + " " + dataname + " " + n_samples + 
+//					" " + sample_freq + " " + burn_factor + " " + String.format("%.1f", eps1) + 
+//					" > ../_console/" + dataname + "_dendro_" + n_samples + "_" + sample_freq + "_" + burn_factor + "_" + String.format("%.1f", eps1) + "-CONSOLE.txt";
 			bw.write(cmd + "\n");
 		}
 		
@@ -562,19 +565,19 @@ public class BatchGenerator {
 		
 		///////////////////// TODO: COMMUNITY
 		// EdgeFlip
-		for (int i = 0; i < n_list.length; i++){
-			String dataname = dataname_list[i];
-			int n = n_list[i];
-			
-			//
-			String batch_file = "_cmd2/EdgeFlip_" + dataname + ".cmd";
-			double log_n = Math.log(n);
-			double[] epsArr = new double[]{log_n, 1.5*log_n, 2*log_n, 3*log_n};	// 2.0, 0.25*log_n, 0.5*log_n, 
-			
-			
-			generateEdgeFlip(batch_file, prefix, dataname, n_samples, epsArr);
-			System.out.println("DONE.");
-		}
+//		for (int i = 0; i < n_list.length; i++){
+//			String dataname = dataname_list[i];
+//			int n = n_list[i];
+//			
+//			//
+//			String batch_file = "_cmd2/EdgeFlip_" + dataname + ".cmd";
+//			double log_n = Math.log(n);
+//			double[] epsArr = new double[]{log_n, 1.5*log_n, 2*log_n, 3*log_n};	// 2.0, 0.25*log_n, 0.5*log_n, 
+//			
+//			
+//			generateEdgeFlip(batch_file, prefix, dataname, n_samples, epsArr);
+//			System.out.println("DONE.");
+//		}
 		
 		// TmF
 //		for (int i = 0; i < n_list.length; i++){
@@ -662,38 +665,38 @@ public class BatchGenerator {
 		
 		///////////////// TODO: GRAPH DP
 		// MCMCInference
-//		dataname_list = new String[]{"polbooks", "polblogs-wcc", "as20graph", "wiki-Vote-wcc", "ca-HepPh-wcc", "ca-AstroPh-wcc"};
-//		n_list = new int[]{105, 1222, 6474, 7066, 11204, 17903};
-//		int burn_factor = 1000;
-//		
-//		for (int i = 0; i < n_list.length; i++){
-//			String dataname = dataname_list[i];
-//			int n = n_list[i];
-//			
-//			//
-//			String batch_file = "_cmd2/MCMCInference_" + dataname + ".cmd";
-//			double log_n = Math.log(n);
-//			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
-//			
-//			int sample_freq = n;
-//			
-//			generateMCMCInference(batch_file, prefix, dataname, n_samples, sample_freq, burn_factor, epsArr);
-//			System.out.println("DONE.");
-//		}
+		dataname_list = new String[]{"polbooks", "polblogs-wcc", "as20graph", "wiki-Vote-wcc", "ca-HepPh-wcc", "ca-AstroPh-wcc"};
+		n_list = new int[]{105, 1222, 6474, 7066, 11204, 17903};
+		int burn_factor = 1000;
+		
+		for (int i = 0; i < n_list.length; i++){
+			String dataname = dataname_list[i];
+			int n = n_list[i];
+			
+			//
+			String batch_file = "_cmd2/MCMCInference_" + dataname + ".cmd";
+			double log_n = Math.log(n);
+			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
+			
+			int sample_freq = n;
+			
+			generateMCMCInference(batch_file, prefix, dataname, n_samples, sample_freq, burn_factor, epsArr);
+			System.out.println("DONE.");
+		}
 		
 		// MCMCInferenceFixed
 //		dataname_list = new String[]{"polbooks", "polblogs-wcc", "as20graph", "wiki-Vote-wcc", "ca-HepPh-wcc", "ca-AstroPh-wcc", 
 //				"com_amazon_ungraph", "com_dblp_ungraph", "com_youtube_ungraph"};
 //		n_list = new int[]{105, 1222, 6474, 7066, 11204, 17903,
 //				334863, 317080, 1134890};
-//		burn_factor = 1000;
+//		int burn_factor = 50;
 //		
 //		for (int i = 0; i < n_list.length; i++){
 //			String dataname = dataname_list[i];
 //			int n = n_list[i];
 //			
 //			//
-//			String batch_file = "_cmd2/MCMCInferenceFixed_" + dataname + ".cmd";
+//			String batch_file = "_cmd_temp/MCMCInferenceFixed_" + dataname + ".cmd";
 //			double log_n = Math.log(n);
 //			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
 //			

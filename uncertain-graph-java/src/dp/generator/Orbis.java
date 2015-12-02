@@ -7,6 +7,8 @@
  * 	- add writeFreeStubList()
  * Nov 15
  * 	- adjustDegreeSequence(): converted from degree_seq_hist.py
+ * Nov 26
+ * 	- adjustDegreeSequence(): alpha = epx(-eps/2)
  */
 
 package dp.generator;
@@ -329,7 +331,7 @@ public class Orbis {
 //		System.out.println();
 		
 		// add geometric noise
-		double alpha = Math.exp(-eps);
+		double alpha = Math.exp(-eps/2);		// NOTE : eps/2 !
 		int sum_deg = 0;
 		for (int u = 0; u < n_nodes; u++){
 			degSeq[u] += DPUtil.geometricMechanism(alpha);

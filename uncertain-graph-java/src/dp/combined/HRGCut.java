@@ -5,9 +5,7 @@
 
 package dp.combined;
 
-import grph.Grph;
 import grph.VertexPair;
-import grph.in_memory.InMemoryGrph;
 import grph.io.EdgeListReader;
 import grph.io.EdgeListWriter;
 import hrg.HRG;
@@ -16,18 +14,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import algs4.EdgeInt;
+import algs4.EdgeIntGraph;
 import dp.mcmc.Dendrogram;
 import toools.io.file.RegularFile;
 
 public class HRGCut {
 	
 	//// copied from TmFPart.filterByNodesets()
-	public static double modularity(Grph G, Map<Integer, Integer> part){
-		int n = G.getNumberOfVertices();
-		int m = G.getNumberOfEdges();
+	public static double modularity(EdgeIntGraph G, Map<Integer, Integer> part){
+		int n = G.V();
+		int m = G.E();
 		
-		Grph aG = new InMemoryGrph();
-		aG.addNVertices((int)n);
+		EdgeIntGraph aG = new EdgeIntGraph(n);
 		
 		int[] nodeToSet = new int[n];	// point to containing nodelist
 		int c = 0;	// number of clusters
@@ -54,9 +53,9 @@ public class HRGCut {
 		int[] lc = new int[c];
 		int[] dc = new int[c];
 		
-		for (VertexPair p : G.getEdgePairs()){
-			int u = p.first;
-			int v = p.second;
+		for (EdgeInt p : G.edges()){
+			int u = p.either();
+			int v = p.other(u);
 			int u_com = part.get(u);
 			int v_com = part.get(v);
 			if (u_com == v_com)
@@ -119,16 +118,12 @@ public class HRGCut {
 	    String out_file = prefix + "_sample/" + dataname + "_fit";    		
 
 	    //
-		EdgeListReader reader = new EdgeListReader();
-		EdgeListWriter writer = new EdgeListWriter();
+	    long start = System.currentTimeMillis();
+		EdgeIntGraph G = EdgeIntGraph.readEdgeList(filename, "\t");	// "\t" or " "
+		System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
 		
-		Grph G;
-		RegularFile f = new RegularFile(filename);
-		
-		G = reader.readGraph(f);
-		
-		System.out.println("#nodes = " + G.getNumberOfVertices());
-		System.out.println("#edges = " + G.getNumberOfEdges());
+		System.out.println("#nodes = " + G.V());
+		System.out.println("#edges = " + G.E());
 			
 		//
 		HRG T = new HRG();

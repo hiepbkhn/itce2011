@@ -1,18 +1,17 @@
 package dp;
 
+import algs4.EdgeIntGraph;
 import toools.io.file.RegularFile;
-import grph.Grph;
 import grph.io.EdgeListWriter;
-import grph.io.GrphTextReader;
 import dp.mcmc.Dendrogram;
 
 public class SampleGenerator {
 
 	//// e.g. dendro_file = ..\_out\ca-AstroPh_louvain_dendro_50
 	//		  sample_file = ..\_sample\ca-AstroPh_louvain_dendro_50_sample
-	public static void generateSampleFromDendrogram(Grph G, String dendro_file, String sample_file, int n_samples) throws Exception{
+	public static void generateSampleFromDendrogram(EdgeIntGraph G, String dendro_file, String sample_file, int n_samples) throws Exception{
 		
-		int n_nodes = G.getNumberOfVertices();
+		int n_nodes = G.V();
 		
 		for (int i = 0; i < n_samples; i++){
 			Dendrogram T = new Dendrogram();
@@ -20,13 +19,10 @@ public class SampleGenerator {
 			
 			//
 			long start = System.currentTimeMillis();
-			Grph aG = T.generateSanitizedSample(n_nodes, false);	// false: use nEdge
+			EdgeIntGraph aG = T.generateSanitizedSample(n_nodes, false);	// false: use nEdge
 			
 			//
-			
-			RegularFile f = new RegularFile(sample_file + "." + i);
-			EdgeListWriter writer = new EdgeListWriter();
-	    	writer.writeGraph(aG, f);
+			EdgeIntGraph.writeGraph(aG, sample_file + "." + i);
 	    	
 	    	System.out.println("generateSanitizedSample and writeGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
 		}
@@ -34,9 +30,9 @@ public class SampleGenerator {
 	
 	////e.g. dendro_file = ..\_out\ca-AstroPh_louvain_dendro_50
 	//		  sample_file = ..\_sample\ca-AstroPh_louvain_dendro_50_sample
-	public static void generateSampleFromDendrogramWithLaplace(Grph G, String dendro_file, String sample_file, int n_samples, double eps_Laplace) throws Exception{
+	public static void generateSampleFromDendrogramWithLaplace(EdgeIntGraph G, String dendro_file, String sample_file, int n_samples, double eps_Laplace) throws Exception{
 		
-		int n_nodes = G.getNumberOfVertices();
+		int n_nodes = G.V();
 		
 		for (int i = 0; i < n_samples; i++){
 			Dendrogram T = new Dendrogram();
@@ -46,13 +42,11 @@ public class SampleGenerator {
 			
 			//
 			long start = System.currentTimeMillis();
-			Grph aG = T.generateSanitizedSample(n_nodes, true);		// true: use noisy_nEdge !
+			EdgeIntGraph aG = T.generateSanitizedSample(n_nodes, true);		// true: use noisy_nEdge !
 			
 			//
 			
-			RegularFile f = new RegularFile(sample_file + "." + i);
-			EdgeListWriter writer = new EdgeListWriter();
-	    	writer.writeGraph(aG, f);
+			EdgeIntGraph.writeGraph(aG, sample_file + "." + i);
 	    	
 	    	System.out.println("generateSanitizedSample and writeGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
 		}
@@ -98,14 +92,12 @@ public class SampleGenerator {
 			System.out.println("eps_Laplace = " + eps_Laplace);
 		
 		//
-		GrphTextReader reader = new GrphTextReader();
-		Grph G;
-		RegularFile f = new RegularFile(filename);
+	    long start = System.currentTimeMillis();
+		EdgeIntGraph G = EdgeIntGraph.readEdgeList(filename, "\t");	// "\t" or " "
+		System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
 		
-		G = reader.readGraph(f);
-		
-		System.out.println("#nodes = " + G.getNumberOfVertices());
-		System.out.println("#edges = " + G.getNumberOfEdges());
+		System.out.println("#nodes = " + G.V());
+		System.out.println("#edges = " + G.E());
 		
 		// TEST generateSampleFromDendrogram()
 		if(args.length == 4)

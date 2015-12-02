@@ -22,6 +22,7 @@
  * 	- dendrogramFitting(): write to node_file instead of store to list_T + force recomputations in computeTopLevels(), computeNodeLevels()
  * Nov 12
  * 	- field logLK faster computed in config_2(), config_3() instead of calling logLK()
+ * 	- EdgeIntGraph in place of Grph
  */
 
 package dp.mcmc;
@@ -47,12 +48,15 @@ import java.util.Random;
 
 import algs4.Edge;
 import algs4.EdgeInt;
+import algs4.EdgeIntGraph;
 import algs4.EdgeWeightedGraph;
 import algs4.UnweightedGraph;
 
 import com.carrotsearch.hppc.cursors.IntCursor;
 
 import dp.DPUtil;
+import dp.mcmc.Int4;
+import dp.mcmc.Node;
 import toools.io.file.RegularFile;
 import toools.set.IntHashSet;
 import toools.set.IntSet;
@@ -114,10 +118,10 @@ public class Dendrogram {
 	}
 	
 	////
-	public void initByGraph(Grph G){
+	public void initByGraph(EdgeIntGraph G){
 		// compute node_list[]
-		this.node_list = new Node[G.getNumberOfVertices()];
-        for (int u = 0; u < G.getNumberOfVertices(); u++){
+		this.node_list = new Node[G.V()];
+        for (int u = 0; u < G.V(); u++){
             Node node = new Node(u,null,0.0);      // leaf node
             node.nL = 1;                     // IMPORTANT in config_2(), config_3()
             this.node_list[u] = node;
@@ -143,10 +147,10 @@ public class Dendrogram {
 	}
 	
 	////
-	public void initByInternalNodes(Grph G, Int4[] int_nodes){
+	public void initByInternalNodes(EdgeIntGraph G, Int4[] int_nodes){
 		// compute node_list[]
-		this.node_list = new Node[G.getNumberOfVertices()];
-        for (int u = 0; u < G.getNumberOfVertices(); u++){
+		this.node_list = new Node[G.V()];
+        for (int u = 0; u < G.V(); u++){
             Node node = new Node(u,null,0.0);      // leaf node
             node.nL = 1;                     // IMPORTANT in config_2(), config_3()
             this.node_list[u] = node;
@@ -169,7 +173,7 @@ public class Dendrogram {
 	
 	////
     // r_node: internal node, not root
-	public Node config_2(Grph G, Node r_node){
+    public Node config_2(EdgeIntGraph G, Node r_node){
         
         Node p_node = r_node.parent;
         
@@ -276,7 +280,7 @@ public class Dendrogram {
     ////
     // r_node: internal node, not root
     // RETURN r_node (whereas config_2() return p_node)
-    public Node config_3(Grph G, Node r_node){
+    public Node config_3(EdgeIntGraph G, Node r_node){
         
         Node p_node = r_node.parent;
         
@@ -419,10 +423,10 @@ public class Dendrogram {
 		bw.close();
 	}
 	
-	public void readInternalNodes(Grph G, String filename) throws IOException{
+	public void readInternalNodes(EdgeIntGraph G, String filename) throws IOException{
 		BufferedReader br = new BufferedReader(new FileReader(filename));
         
-        Int4[] int_nodes = new Int4[G.getNumberOfVertices()-1];  // list of tuples (id, parent.id, left.id, right.id)
+        Int4[] int_nodes = new Int4[G.V()-1];  // list of tuples (id, parent.id, left.id, right.id)
         int u = 0;
         while (true){
         	String str = br.readLine();
@@ -533,19 +537,35 @@ public class Dendrogram {
 	}
 	
 	////
-	static int countBetweenEdges(Grph G, Node u, Node t){
+	static int countBetweenEdges(EdgeIntGraph G, Node u, Node t){
 		int count = 0;
 		List<Integer> u_list = findChildren(u);
 		List<Integer> t_list = findChildren(t);
 		
-		for (int u1: u_list){
-			IntSet s = G.getNeighbours(u1);
-			for (int t1: t_list)
-				if (s.contains(t1))
-					count++;
+		// 1-Grph
+//		for (int u1: u_list){
+//			IntSet s = G.getNeighbours(u1);
+//			for (int t1: t_list)
+//				if (s.contains(t1))
+//					count++;
+		
+		// slow
+//		for (int u1: u_list){
+//			for (int t1: t_list)
+//				if (G.areVerticesAdjacent(u1, t1))
+//					count++;
 			
 //				if (A.get(u1, t1) == 1)
 //					count++;
+		
+		// 2-EdgeIntGraph
+		for (int u1: u_list){
+			for (int t1: t_list)
+				if (G.areEdgesAdjacent(u1, t1))
+					count++;
+		
+		
+		
 		}
 		return count;
 	}
@@ -676,13 +696,13 @@ public class Dendrogram {
 	
 	
 	////
-	public static void buildDendrogram(Node[] node_list, HashMap<Integer, Node> node_dict, Node root_node, Grph G){
+	public static void buildDendrogram(Node[] node_list, HashMap<Integer, Node> node_dict, Node root_node, EdgeIntGraph G){
 		compute_nL_nR(root_node, node_dict);
 		
 	    // compute nEdge
-		for (VertexPair p : G.getEdgePairs()){
-	        int u = p.first;
-	        int v = p.second;
+		for (EdgeInt p : G.edges()){
+	        int u = p.either();
+	        int v = p.other(u);
 	//        print u, v
 	        // find lowest common ancestor
 	        int a_id = lowestCommonAncestor(node_dict.get(u), node_dict.get(v));
@@ -738,11 +758,11 @@ public class Dendrogram {
 	////
 	// Exponential mechanism by MCMC
 	// n_samples number of sample T
-	static List<Dendrogram> dendrogramFitting(Dendrogram T, Grph G, double eps1, int n_steps, int n_samples, int sample_freq, String node_file) throws IOException{
+	static List<Dendrogram> dendrogramFitting(Dendrogram T, EdgeIntGraph G, double eps1, int n_steps, int n_samples, int sample_freq, String node_file) throws IOException{
 		List<Dendrogram> list_T = new ArrayList<Dendrogram>(); 	// list of sample T
 	    
 	    // delta U
-	    int n_nodes = G.getNumberOfVertices();
+	    int n_nodes = G.V();
 	    long nMax = 0;
 	    if (n_nodes % 2 == 0) 
 	        nMax = n_nodes*n_nodes/4;
@@ -1000,13 +1020,12 @@ public class Dendrogram {
 	
 	//// FASTER !
 	// is_noisy = True (MCMCInference), false (MCMCFit)
-	public Grph generateSanitizedSample(int n_nodes, boolean is_noisy) throws Exception{
+	public EdgeIntGraph generateSanitizedSample(int n_nodes, boolean is_noisy) throws Exception{
 	    
 	    Random random = new Random();
 //	    this.computeNodeLevels();				// already called in initByInternalNodes()
 	    
-    	Grph aG = new InMemoryGrph();
-	    aG.addNVertices(n_nodes);
+	    EdgeIntGraph aG = new EdgeIntGraph(n_nodes);
         
 	    // 1. build sets (bottom-up), use node.level
 	    // array of level -> nodes (see compute_nL_nR)
@@ -1061,7 +1080,7 @@ public class Dendrogram {
 			for (int i = 0; i < num_edges; i++){
 				u = left_nodes[random.nextInt(left_nodes.length)];
 				v = right_nodes[random.nextInt(right_nodes.length)];
-				aG.addSimpleEdge(u, v, false);
+				aG.addEdge(new EdgeInt(u, v, 1));
 			}
 			
 			
@@ -1185,7 +1204,7 @@ public class Dendrogram {
 	
 	////
 	// list_T: list of new Dendrogram()
-	static void readInternalNodes(Grph G, List<Dendrogram> list_T, String node_file, int n_samples) throws Exception{
+	static void readInternalNodes(EdgeIntGraph G, List<Dendrogram> list_T, String node_file, int n_samples) throws Exception{
 		int i = 0;
 	    for (Dendrogram T : list_T){
 	    	String filename = node_file + "." + i;

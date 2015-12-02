@@ -19,14 +19,12 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
 
+import algs4.EdgeIntGraph;
 import dp.mcmc.DendrogramEdgeVar;
 import toools.io.file.RegularFile;
 import toools.set.IntSet;
-import grph.Grph;
 import grph.VertexPair;
 import grph.algo.AdjacencyMatrix;
-import grph.in_memory.InMemoryGrph;
-import grph.io.GrphTextReader;
 
 
 //////////////////////////////////
@@ -37,7 +35,7 @@ public class Compare {
 		System.out.println("Compare");
 		
 		// TOY GRAPH
-//		Grph G = new InMemoryGrph();
+//		EdgeIntGraph G = new InMemoryEdgeIntGraph();
 //		G.addNVertices(7);
 //		for (int v = 0; v < 6; v++)
 //			G.addSimpleEdge(v, v+1, false);
@@ -58,14 +56,12 @@ public class Compare {
 	    String hrg_file = "_out/" + dataname + "_louvain_dendro";
 
 	    //
-		GrphTextReader reader = new GrphTextReader();
-		Grph G;
-		RegularFile f = new RegularFile(filename);
+	    long start = System.currentTimeMillis();
+		EdgeIntGraph G = EdgeIntGraph.readEdgeList(filename, "\t");	// "\t" or " "
+		System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
 		
-		G = reader.readGraph(f);
-		
-		System.out.println("#nodes = " + G.getNumberOfVertices());
-		System.out.println("#edges = " + G.getNumberOfEdges());
+		System.out.println("#nodes = " + G.V());
+		System.out.println("#edges = " + G.E());
 			
 //		AdjacencyMatrix A = G.getAdjacencyMatrix();
 		
