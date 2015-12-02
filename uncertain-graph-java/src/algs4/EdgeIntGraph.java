@@ -4,7 +4,7 @@
  * Nov 18
  * 	- readEdgeListWithNodes()
  * Dec 2
- * 	- writeGraph()
+ * 	- writeGraph(), writeGraphWithWeights()
  */
 
 package algs4;
@@ -365,6 +365,19 @@ public class EdgeIntGraph {
     
     ////
     public static void writeGraph(EdgeIntGraph G, String filename) throws IOException{
+    	
+    	BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
+    	for (EdgeInt e : G.edges()){
+    		int u = e.either();
+    		int v = e.other(u);
+    		bw.write(u + "\t" + v + "\n");
+    	}
+    	
+    	bw.close();
+    }
+    
+    ////
+    public static void writeGraphWithWeights(EdgeIntGraph G, String filename) throws IOException{
     	
     	BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
     	for (EdgeInt e : G.edges()){

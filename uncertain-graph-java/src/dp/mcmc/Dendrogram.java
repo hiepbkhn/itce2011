@@ -23,6 +23,8 @@
  * Nov 12
  * 	- field logLK faster computed in config_2(), config_3() instead of calling logLK()
  * 	- EdgeIntGraph in place of Grph
+ * Dec 2
+ * 	- compute_LS_RS() extracted from generateSanitizedSample()
  */
 
 package dp.mcmc;
@@ -55,6 +57,7 @@ import algs4.UnweightedGraph;
 import com.carrotsearch.hppc.cursors.IntCursor;
 
 import dp.DPUtil;
+import dp.combined.NodeSetLouvain;
 import dp.mcmc.Int4;
 import dp.mcmc.Node;
 import toools.io.file.RegularFile;
@@ -1027,7 +1030,44 @@ public class Dendrogram {
 	    
 	    EdgeIntGraph aG = new EdgeIntGraph(n_nodes);
         
-	    // 1. build sets (bottom-up), use node.level
+	    compute_LS_RS();
+	    
+	    // scan internal nodes
+	    Queue<Node> queue = new LinkedList<Node>();
+		queue.add(this.root_node);
+		while (queue.size() > 0){
+			Node r = queue.remove();
+			
+			int num_edges = r.nEdge; 
+			if (is_noisy)
+				num_edges = (int)Math.round(r.noisy_nEdge);
+			
+			int[] left_nodes = r.LS.toIntArray();
+			int[] right_nodes = r.RS.toIntArray();
+			int u = 0;
+			int v = 0;
+			for (int i = 0; i < num_edges; i++){
+				u = left_nodes[random.nextInt(left_nodes.length)];
+				v = right_nodes[random.nextInt(right_nodes.length)];
+				aG.addEdge(new EdgeInt(u, v, 1));
+			}
+			
+			
+			//
+			if (r.left.id < 0)            // only internal nodes
+                queue.add(r.left);
+            if (r.right.id < 0)
+                queue.add(r.right);    
+		}
+	    
+	    
+	    //
+        return aG;
+	}
+	
+	////
+	public void compute_LS_RS(){
+		// 1. build sets (bottom-up), use node.level
 	    // array of level -> nodes (see compute_nL_nR)
   		ArrayList<ArrayList<Node>> level_array = new ArrayList<ArrayList<Node>>();
   		for (int i = 0; i < root_node.level+1; i++)
@@ -1062,38 +1102,6 @@ public class Dendrogram {
 	    		}
 	    	}
 	    }
-	    
-	    // scan internal nodes
-	    Queue<Node> queue = new LinkedList<Node>();
-		queue.add(this.root_node);
-		while (queue.size() > 0){
-			Node r = queue.remove();
-			
-			int num_edges = r.nEdge; 
-			if (is_noisy)
-				num_edges = (int)Math.round(r.noisy_nEdge);
-			
-			int[] left_nodes = r.LS.toIntArray();
-			int[] right_nodes = r.RS.toIntArray();
-			int u = 0;
-			int v = 0;
-			for (int i = 0; i < num_edges; i++){
-				u = left_nodes[random.nextInt(left_nodes.length)];
-				v = right_nodes[random.nextInt(right_nodes.length)];
-				aG.addEdge(new EdgeInt(u, v, 1));
-			}
-			
-			
-			//
-			if (r.left.id < 0)            // only internal nodes
-                queue.add(r.left);
-            if (r.right.id < 0)
-                queue.add(r.right);    
-		}
-	    
-	    
-	    //
-        return aG;
 	}
 	
 	////
@@ -1230,6 +1238,49 @@ public class Dendrogram {
 				queue.add(R.right);
 			
 		}
+	}
+	
+	
+	////used in TreeCutter.cutTreeHRGFixed()
+	//
+	static void readTree(EdgeIntGraph G, String filename) throws IOException{
+		
+		// read dendrogram
+		Dendrogram T = new Dendrogram();
+		T.readInternalNodes(G, filename);
+		
+		// create the corresponding NodeSetLouvain
+		int k = 2;
+		NodeSetLouvain root = new NodeSetLouvain(k);
+		root.id = -1;
+		
+		Queue<Node> queue = new LinkedList<Node>();
+		Queue<NodeSetLouvain> queue_set = new LinkedList<NodeSetLouvain>();
+		queue.add(T.root_node);
+		queue_set.add(root);
+		int id = -2;
+		while (queue.size() > 0){
+			Node R = queue.remove();
+			NodeSetLouvain NS = queue_set.remove();
+
+			for (int i = 0; i < k; i++){
+				NodeSetLouvain child = new NodeSetLouvain(k);
+				child.id = id--;
+				child.level = NS.level + 1;
+				
+				NS.children[i] = child;
+				queue_set.add(child);
+			}
+			
+			if (R.left.id < 0)
+				queue.add(R.left);
+			if (R.right.id < 0)
+				queue.add(R.right);
+			
+		}
+		
+
+		
 	}
 }
 

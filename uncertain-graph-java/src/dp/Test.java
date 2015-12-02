@@ -3,6 +3,8 @@ package dp;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Random;
 
 import algs4.EdgeInt;
@@ -14,7 +16,9 @@ import com.jmatio.types.MLArray;
 import com.jmatio.types.MLDouble;
 import com.jmatio.types.MLInt32;
 
+import dp.combined.NodeSetLouvain;
 import dp.mcmc.Dendrogram;
+import dp.mcmc.Node;
 import toools.io.file.RegularFile;
 import toools.set.IntHashSet;
 import toools.set.IntSet;
@@ -180,9 +184,39 @@ public class Test {
 //		System.out.println("init - elapsed " + (System.currentTimeMillis() - start));
 		
 		////
-		Random random = new Random();
-		for (int i = 0; i < 50; i++)
-			System.out.print(random.nextInt(2) + " ");
+//		Random random = new Random();
+//		for (int i = 0; i < 50; i++)
+//			System.out.print(random.nextInt(2) + " ");
+		
+		
+		////
+		long start = System.currentTimeMillis();
+		EdgeIntGraph G = EdgeIntGraph.readEdgeList("_data/polbooks.gr", "\t");	// "\t" or " "
+		System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
+		
+		System.out.println("#nodes = " + G.V());
+		System.out.println("#edges = " + G.E());
+		
+		Dendrogram T = new Dendrogram();
+		T.readInternalNodes(G, "_out/polbooks_fixed_20_105_50_1.2_tree.0");
+		T.compute_LS_RS();
+		
+		Queue<Node> queue = new LinkedList<Node>();
+		queue.add(T.root_node);
+		while (queue.size() > 0){
+			Node R = queue.remove();
+
+			System.out.println("R.id = " + R.id + " nL=" + R.nL + " nR=" + R.nR + " nEdge=" + R.nEdge + " level=" + R.level + " toplevel=" + R.toplevel);
+			System.out.println(R.LS);
+			System.out.println(R.RS);
+			
+			if (R.left.id < 0)
+				queue.add(R.left);
+			if (R.right.id < 0)
+				queue.add(R.right);
+			
+		}
+		
 	}
 
 }

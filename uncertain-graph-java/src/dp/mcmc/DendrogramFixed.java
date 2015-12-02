@@ -640,18 +640,7 @@ public class DendrogramFixed extends Dendrogram{
 	    }
 	}
 	
-	//// used in TreeCutter.cutTreeHRGFixed()
-	//
-	static void readTree(EdgeIntGraph G, String filename) throws IOException{
-		DendrogramFixed T = new DendrogramFixed();
-		T.readInternalNodes(G, filename);
-		
-		// create
-		NodeSetLouvain root = new NodeSetLouvain(1);
-		
-		// compute
-		
-	}
+	
 	
 	
 }
