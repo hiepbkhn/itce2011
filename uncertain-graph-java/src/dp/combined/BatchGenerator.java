@@ -15,6 +15,8 @@
  * 	- sampleMCMCInference(), sampleMCMCInferenceFixed(), sampleHRGDivisiveFit()
  * Nov 18
  * 	- utilityByGraph(): generate 
+ * Dec 28
+ * 	- ICWSM submission: generate scripts for epsilon=0.1->0.5ln n
  */
 
 package dp.combined;
@@ -38,6 +40,22 @@ public class BatchGenerator {
 			bw.write(cmd + "\n");
 		}
     	bw.close();
+	}
+	
+	//// EdgeFlip (And Shrink)
+	public static void generateEdgeFlipAndShrink(String batch_file, String prefix, String dataname, int n_samples, double[] epsArr, double[] ratioArr) 
+			throws IOException{
+		
+		BufferedWriter bw = new BufferedWriter(new FileWriter(batch_file));
+		for (double eps : epsArr){
+			for (double ratio : ratioArr){
+				String cmd = "java dp.combined.EdgeFlip " + prefix + " " + dataname + " " + n_samples + " " + String.format("%.2f", eps) + " " + String.format("%.1f", ratio) + 
+						" > ../_console/" + dataname + "_ef_shrink_" + String.format("%.1f", eps) + "_" + String.format("%.1f", ratio) + "-CONSOLE.txt";
+				bw.write(cmd + "\n");
+			}
+			bw.write("\n");
+		}
+   	bw.close();
 	}
 	
 	//// TmF
@@ -129,19 +147,79 @@ public class BatchGenerator {
 	}
 	
 	/////////
-	// algo = "_ef_", "_tmf_", "_ldp_"
-	public static void generateLouvain(String batch_file, String prefix, String dataname, int n_samples, double[] epsArr, String algo, int type) 
+	// algo = "_ef_", "_tmf_", "_1k_" (type=1), "_ldp_"
+	public static void generateLouvain(String batch_file, String prefix, String dataname, int n_samples, double[] epsArr, String algo, int type, int[] kArr) 
+			throws IOException{
+		
+		BufferedWriter bw = new BufferedWriter(new FileWriter(batch_file));
+		if (type == 1)
+			for (double eps : epsArr){
+				String sample_name = dataname + algo + String.format("%.1f", eps);
+				
+				String cmd = "java dp.combined.Louvain " + prefix + " " + n_samples + " " + type + " " + sample_name + 
+						" > ../_console/" + dataname + algo + String.format("%.1f", eps) + "-LOUVAIN.txt";
+				
+				bw.write(cmd + "\n");
+			}
+		else{
+			for (double eps : epsArr){
+				for (int k : kArr){
+					String sample_name = dataname + algo + String.format("%.1f", eps) + "_" + k;
+					
+					String cmd = "java dp.combined.Louvain " + prefix + " " + n_samples + " " + type + " " + sample_name + 
+							" > ../_console/" + dataname + algo + String.format("%.1f", eps) + "_" + k + "-LOUVAIN.txt";
+					bw.write(cmd + "\n");
+				}
+				bw.write("\n");
+			}
+			
+		}
+			
+    	bw.close();
+	}
+	
+	//// "_ef_shrink_"
+	public static void generateLouvainEFShrink(String batch_file, String prefix, String dataname, int n_samples, double[] epsArr, int type, double[] ratioArr) 
 			throws IOException{
 		
 		BufferedWriter bw = new BufferedWriter(new FileWriter(batch_file));
 		for (double eps : epsArr){
-			String sample_name = dataname + algo + String.format("%.1f", eps);
+			for (double ratio : ratioArr){
+				String sample_name = dataname + "_ef_shrink_" + String.format("%.1f", eps) + "_" + String.format("%.1f", ratio);
+				
+				String cmd = "java dp.combined.Louvain " + prefix + " " + n_samples + " " + type + " " + sample_name + 
+						" > ../_console/" + dataname + "_ef_shrink_" + String.format("%.1f", eps) + "_" + String.format("%.1f", ratio) + "-LOUVAIN.txt";
+				
+				bw.write(cmd + "\n");
+			}
+			bw.write("\n");
 			
-			String cmd = "java dp.combined.Louvain " + prefix + " " + n_samples + " " + type + " " + sample_name + 
-					" > ../_console/" + dataname + "_ef_" + String.format("%.1f", eps) + "-LOUVAIN.txt";
-			bw.write(cmd + "\n");
 		}
+			
     	bw.close();
+	}
+	
+	//// "_der_"
+	public static void generateLouvainDER(String batch_file, String prefix, String dataname, int n_samples, double[] epsArr, int type, double[] ratio) 
+			throws IOException{
+		
+		BufferedWriter bw = new BufferedWriter(new FileWriter(batch_file));
+		for (double eps : epsArr){
+			
+			double sum_row = ratio[0] + ratio[1] + ratio[2];
+			double eps_c =  ratio[0]/ sum_row * eps;
+			double eps_p =  ratio[1]/ sum_row * eps;
+			double epsA =  ratio[2]/ sum_row * eps;
+			
+				String sample_name = dataname + "_der_" + String.format("%.1f", eps_c) + "_" + String.format("%.1f", eps_p) + "_" + String.format("%.1f", epsA);
+				
+				String cmd = "java dp.combined.Louvain " + prefix + " " + n_samples + " " + type + " " + sample_name + 
+						" > ../_console/" + sample_name + "-LOUVAIN.txt";
+				
+				bw.write(cmd + "\n");
+			
+		}
+		bw.close();
 	}
 	
 	//////to automate CommunityMeasure.computeAndExport()
@@ -552,9 +630,12 @@ public class BatchGenerator {
 		
 		String prefix = "../";		// run in D:/git/itce2011/uncertain-graph-java/_cmd
 		
-		String[] dataname_list = new String[]{"polbooks", "polblogs-wcc", "as20graph", "wiki-Vote-wcc", "ca-HepPh-wcc", "ca-AstroPh-wcc",
-				"com_amazon_ungraph", "com_dblp_ungraph", "com_youtube_ungraph"};
-		int[] n_list = new int[]{105, 1222, 6474, 7066, 11204, 17903, 334863, 317080, 1134890};
+		String[] dataname_list = new String[]{"ca-AstroPh-wcc"};
+		int[] n_list = new int[]{17903};
+//		String[] dataname_list = new String[]{"polbooks", "polblogs-wcc", "as20graph", "wiki-Vote-wcc", "ca-HepPh-wcc", "ca-AstroPh-wcc",
+//				"com_amazon_ungraph", "com_dblp_ungraph", "com_youtube_ungraph"};
+//		int[] n_list = new int[]{105, 1222, 6474, 7066, 11204, 17903, 334863, 317080, 1134890};
+		
 		// for TEST
 //		String[] dataname_list = new String[]{"karate"};
 //		int[] n_list = new int[]{34};
@@ -565,17 +646,36 @@ public class BatchGenerator {
 		
 		///////////////////// TODO: COMMUNITY
 		// EdgeFlip
+//		dataname_list = new String[]{"polbooks", "as20graph", "ca-AstroPh-wcc"};
+//		n_list = new int[]{105, 6474, 17903};
 //		for (int i = 0; i < n_list.length; i++){
 //			String dataname = dataname_list[i];
 //			int n = n_list[i];
 //			
 //			//
-//			String batch_file = "_cmd2/EdgeFlip_" + dataname + ".cmd";
+//			String batch_file = "_cmd/EdgeFlip_" + dataname + ".cmd";
 //			double log_n = Math.log(n);
-//			double[] epsArr = new double[]{log_n, 1.5*log_n, 2*log_n, 3*log_n};	// 2.0, 0.25*log_n, 0.5*log_n, 
+//			double[] epsArr = new double[]{0.1*log_n, 0.2*log_n, 0.3*log_n, 0.4*log_n, 0.5*log_n};	// 0.5*log_n 
 //			
 //			
 //			generateEdgeFlip(batch_file, prefix, dataname, n_samples, epsArr);
+//			System.out.println("DONE.");
+//		}
+		
+		// EdgeFlip (And Shrink)
+//		dataname_list = new String[]{"polbooks", "as20graph", "ca-AstroPh-wcc",	"com_amazon_ungraph", "com_dblp_ungraph", "com_youtube_ungraph"};
+//		n_list = new int[]{105, 6474, 17903, 334863, 317080, 1134890};
+//		for (int i = 0; i < n_list.length; i++){
+//			String dataname = dataname_list[i];
+//			int n = n_list[i];
+//			
+//			//
+//			String batch_file = "_cmd/EdgeFlipAndShrink_" + dataname + ".cmd";
+//			double log_n = Math.log(n);
+//			double[] epsArr = new double[]{0.1*log_n, 0.2*log_n, 0.3*log_n, 0.4*log_n, 0.5*log_n};	// 0.5*log_n 
+//			double[] ratioArr = new double[]{1.0, 2.0};
+//			
+//			generateEdgeFlipAndShrink(batch_file, prefix, dataname, n_samples, epsArr, ratioArr);
 //			System.out.println("DONE.");
 //		}
 		
@@ -587,7 +687,7 @@ public class BatchGenerator {
 //			//
 //			String batch_file = "_cmd/TmF_" + dataname + ".cmd";
 //			double log_n = Math.log(n);
-//			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
+//			double[] epsArr = new double[]{0.1*log_n, 0.2*log_n, 0.3*log_n, 0.4*log_n};	// 0.5*log_n
 //			
 //			
 //			generateTmF(batch_file, prefix, dataname, n_samples, epsArr);
@@ -602,7 +702,7 @@ public class BatchGenerator {
 //			//
 //			String batch_file = "_cmd/LouvainDP_" + dataname + ".cmd";
 //			double log_n = Math.log(n);
-//			double[] epsArr = new double[]{2.0, 1.5*log_n, 2*log_n, 3*log_n};
+//			double[] epsArr = new double[]{0.1*log_n, 0.2*log_n, 0.3*log_n, 0.4*log_n};	// 0.5*log_n
 //			int[] kArr = new int[]{4,8,16,32,64};
 //			
 //			
@@ -635,9 +735,11 @@ public class BatchGenerator {
 //			//
 //			String batch_file = "_cmd/LouvainModDiv_" + dataname + ".cmd";
 //			double log_n = Math.log(n);
-//			int[] kArr = new int[]{2,3,4,5,6,10};
-//			int[] maxLevelArr = new int[]{10,7,5,4,4,3};
-//			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
+////			int[] kArr = new int[]{2,3,4,5,6,10};			// amazon, dblp, youtube
+////			int[] maxLevelArr = new int[]{10,7,5,4,4,3};
+//			int[] kArr = new int[]{2,3,4};					// polbooks (2,4),(3,3),(4,2) , as20graph (2,6),(3,4),(4,3), ca-AstroPh-wcc (2,7),(3,5),(4,4)
+//			int[] maxLevelArr = new int[]{7,5,4};
+//			double[] epsArr = new double[]{0.1*log_n, 0.2*log_n, 0.3*log_n, 0.4*log_n, 0.5*log_n};	// 0.5*log_n
 //			int burn_factor = 20;
 //			double ratio = 2.0;
 //			
@@ -665,40 +767,43 @@ public class BatchGenerator {
 		
 		///////////////// TODO: GRAPH DP
 		// MCMCInference
-		dataname_list = new String[]{"polbooks", "polblogs-wcc", "as20graph", "wiki-Vote-wcc", "ca-HepPh-wcc", "ca-AstroPh-wcc"};
-		n_list = new int[]{105, 1222, 6474, 7066, 11204, 17903};
-		int burn_factor = 1000;
-		
-		for (int i = 0; i < n_list.length; i++){
-			String dataname = dataname_list[i];
-			int n = n_list[i];
-			
-			//
-			String batch_file = "_cmd2/MCMCInference_" + dataname + ".cmd";
-			double log_n = Math.log(n);
-			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
-			
-			int sample_freq = n;
-			
-			generateMCMCInference(batch_file, prefix, dataname, n_samples, sample_freq, burn_factor, epsArr);
-			System.out.println("DONE.");
-		}
-		
-		// MCMCInferenceFixed
-//		dataname_list = new String[]{"polbooks", "polblogs-wcc", "as20graph", "wiki-Vote-wcc", "ca-HepPh-wcc", "ca-AstroPh-wcc", 
-//				"com_amazon_ungraph", "com_dblp_ungraph", "com_youtube_ungraph"};
-//		n_list = new int[]{105, 1222, 6474, 7066, 11204, 17903,
-//				334863, 317080, 1134890};
-//		int burn_factor = 50;
+//		dataname_list = new String[]{"polbooks", "as20graph", "ca-AstroPh-wcc"};
+//		n_list = new int[]{105, 6474, 17903};
+////		dataname_list = new String[]{"polbooks", "polblogs-wcc", "as20graph", "wiki-Vote-wcc", "ca-HepPh-wcc", "ca-AstroPh-wcc"};
+////		n_list = new int[]{105, 1222, 6474, 7066, 11204, 17903};
+//		int burn_factor = 1000;
 //		
 //		for (int i = 0; i < n_list.length; i++){
 //			String dataname = dataname_list[i];
 //			int n = n_list[i];
 //			
 //			//
-//			String batch_file = "_cmd_temp/MCMCInferenceFixed_" + dataname + ".cmd";
+//			String batch_file = "_cmd/MCMCInference_" + dataname + ".cmd";
 //			double log_n = Math.log(n);
-//			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
+//			double[] epsArr = new double[]{0.1*log_n, 0.2*log_n, 0.3*log_n, 0.4*log_n};	// 0.5*log_n
+//			
+//			int sample_freq = n;
+//			
+//			generateMCMCInference(batch_file, prefix, dataname, n_samples, sample_freq, burn_factor, epsArr);
+//			System.out.println("DONE.");
+//		}
+		
+		// MCMCInferenceFixed
+//		dataname_list = new String[]{"com_amazon_ungraph", "com_dblp_ungraph", "com_youtube_ungraph"};
+//		n_list = new int[]{334863, 317080, 1134890};
+////		dataname_list = new String[]{"polbooks", "polblogs-wcc", "as20graph", "wiki-Vote-wcc", "ca-HepPh-wcc", "ca-AstroPh-wcc", 
+////				"com_amazon_ungraph", "com_dblp_ungraph", "com_youtube_ungraph"};
+////		n_list = new int[]{105, 1222, 6474, 7066, 11204, 17903, 334863, 317080, 1134890};
+//		int burn_factor = 1000;
+//		
+//		for (int i = 0; i < n_list.length; i++){
+//			String dataname = dataname_list[i];
+//			int n = n_list[i];
+//			
+//			//
+//			String batch_file = "_cmd/MCMCInferenceFixed_" + dataname + ".cmd";
+//			double log_n = Math.log(n);
+//			double[] epsArr = new double[]{0.1*log_n, 0.2*log_n, 0.3*log_n, 0.4*log_n};	// 0.5*log_n
 //			
 //			int sample_freq = n;
 //			
@@ -734,18 +839,21 @@ public class BatchGenerator {
 //		}
 		
 		// DER
-//		dataname_list = new String[]{"polbooks", "polblogs-wcc", "as20graph", "wiki-Vote-wcc", "ca-HepPh-wcc", "ca-AstroPh-wcc"};
-//		n_list = new int[]{105, 1222, 6474, 7066, 11204, 17903};
-//		double[][] ratio = new double[][]{{1,1,1}, {2,1,1}, {4,1,1}, {4,2,1}, {8,4,1}};
+//		dataname_list = new String[]{"polbooks", "as20graph", "ca-AstroPh-wcc"};
+//		n_list = new int[]{105, 6474, 17903};
+//		double[][] ratio = new double[][]{{4,2,1}};
+////		dataname_list = new String[]{"polbooks", "polblogs-wcc", "as20graph", "wiki-Vote-wcc", "ca-HepPh-wcc", "ca-AstroPh-wcc"};
+////		n_list = new int[]{105, 1222, 6474, 7066, 11204, 17903};
+////		double[][] ratio = new double[][]{{1,1,1}, {2,1,1}, {4,1,1}, {4,2,1}, {8,4,1}};
 //		
 //		for (int i = 0; i < n_list.length; i++){
 //			String dataname = dataname_list[i];
 //			int n = n_list[i];
 //			
 //			//
-//			String batch_file = "_cmd2/DER_" + dataname + ".cmd";
+//			String batch_file = "_cmd/DER_" + dataname + ".cmd";
 //			double log_n = Math.log(n);
-//			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
+//			double[] epsArr = new double[]{0.1*log_n, 0.2*log_n, 0.3*log_n, 0.4*log_n};	// 0.5*log_n
 //			
 //			generateDER(batch_file, prefix, dataname, n_samples, epsArr, ratio);
 //			System.out.println("DONE.");
@@ -757,9 +865,9 @@ public class BatchGenerator {
 //			int n = n_list[i];
 //			
 //			//
-//			String batch_file = "_cmd2/1k_" + dataname + ".cmd";
+//			String batch_file = "_cmd/1k_" + dataname + ".cmd";		// _cmd2
 //			double log_n = Math.log(n);
-//			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
+//			double[] epsArr = new double[]{0.1*log_n, 0.2*log_n, 0.3*log_n, 0.4*log_n};	// 0.5*log_n
 //			
 //			generate1kSeries(batch_file, prefix, dataname, n_samples, epsArr);
 //			System.out.println("DONE.");
@@ -870,22 +978,22 @@ public class BatchGenerator {
 //			String dataname = dataname_list[i];
 //			int n = n_list[i];
 //			double log_n = Math.log(n);
-//			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
+//			double[] epsArr = new double[]{0.1*log_n, 0.2*log_n, 0.3*log_n, 0.4*log_n};	// 0.5*log_n
 //			
 //			String batch_file = "_cmd/Louvain_" + dataname + ".cmd";
 //			generateLouvain(batch_file, prefix, dataname, n_samples, epsArr, "_ef_", 1);
 //			
 //			System.out.println("DONE.");
 //		}
-//		
+		
 //		for (int i = 0; i < n_list.length; i++){
 //			String dataname = dataname_list[i];
 //			int n = n_list[i];
 //			double log_n = Math.log(n);
-//			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
+//			double[] epsArr = new double[]{0.1*log_n, 0.2*log_n, 0.3*log_n, 0.4*log_n, 0.5*log_n};	// 0.5*log_n
 //			
-//			String batch_file = "_cmd/Louvain_" + dataname + ".cmd";
-//			generateLouvain(batch_file, prefix, dataname, n_samples, epsArr, "_tmf_", 1);
+//			String batch_file = "_cmd/Louvain_1k_" + dataname + ".cmd";
+//			generateLouvain(batch_file, prefix, dataname, n_samples, epsArr, "_1k_", 1, null);
 //			
 //			System.out.println("DONE.");
 //		}
@@ -894,17 +1002,60 @@ public class BatchGenerator {
 //			String dataname = dataname_list[i];
 //			int n = n_list[i];
 //			double log_n = Math.log(n);
-//			double[] epsArr = new double[]{0.25*log_n, 0.5*log_n, log_n};
+//			double[] epsArr = new double[]{0.1*log_n, 0.2*log_n, 0.3*log_n, 0.4*log_n, 0.5*log_n};	// 0.5*log_n
+//			
+//			String batch_file = "_cmd/Louvain_tmf_" + dataname + ".cmd";
+//			generateLouvain(batch_file, prefix, dataname, n_samples, epsArr, "_tmf_", 1, null);
+//			
+//			System.out.println("DONE.");
+//		}
+//		
+//		for (int i = 0; i < n_list.length; i++){
+//			String dataname = dataname_list[i];
+//			int n = n_list[i];
+//			double log_n = Math.log(n);
+//			double[] epsArr = new double[]{0.1*log_n, 0.2*log_n, 0.3*log_n, 0.4*log_n, 0.5*log_n};	// 0.5*log_n
 //			int[] kArr = new int[]{4,8,16,32,64};
 //			
-//			String batch_file = "_cmd/Louvain_" + dataname + ".cmd";
-//			generateLouvain(batch_file, prefix, dataname, n_samples, epsArr, "_ldp_", 1);
+//			String batch_file = "_cmd/Louvain_ldp_" + dataname + ".cmd";
+//			generateLouvain(batch_file, prefix, dataname, n_samples, epsArr, "_ldp_", 0, kArr);
 //			
 //			System.out.println("DONE.");
 //		}
 		
 		
-		//////////////////////////////// COMMUNITY METRICS
+		dataname_list = new String[]{"polbooks", "as20graph", "ca-AstroPh-wcc"};
+		n_list = new int[]{105, 6474, 17903};
+		double[] ratio = new double[]{4,2,1};
+		for (int i = 0; i < n_list.length; i++){
+			String dataname = dataname_list[i];
+			int n = n_list[i];
+			double log_n = Math.log(n);
+			double[] epsArr = new double[]{0.1*log_n, 0.2*log_n, 0.3*log_n, 0.4*log_n, 0.5*log_n};	// 0.5*log_n
+			
+			String batch_file = "_cmd/Louvain_der_" + dataname + ".cmd";
+			generateLouvainDER(batch_file, prefix, dataname, n_samples, epsArr, 1, ratio);
+			
+			System.out.println("DONE.");
+		}
+		
+		////
+//		dataname_list = new String[]{"polbooks", "as20graph", "ca-AstroPh-wcc",	"com_amazon_ungraph", "com_dblp_ungraph", "com_youtube_ungraph"};
+//		n_list = new int[]{105, 6474, 17903, 334863, 317080, 1134890};
+//		for (int i = 0; i < n_list.length; i++){
+//			String dataname = dataname_list[i];
+//			int n = n_list[i];
+//			double log_n = Math.log(n);
+//			double[] epsArr = new double[]{0.1*log_n, 0.2*log_n, 0.3*log_n, 0.4*log_n, 0.5*log_n};	// 0.5*log_n
+//			double[] ratioArr = new double[]{1.0, 2.0};
+//					
+//			String batch_file = "_cmd/Louvain_ef_shrink_" + dataname + ".cmd";
+//			generateLouvainEFShrink(batch_file, prefix, dataname, n_samples, epsArr, 1, ratioArr);
+//			
+//			System.out.println("DONE.");
+//		}
+		
+		//////////////////////////////// TODO: COMMUNITY METRICS
 		for (int i = 0; i < n_list.length; i++){
 			String dataname = dataname_list[i];
 			int n = n_list[i];

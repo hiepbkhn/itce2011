@@ -953,14 +953,18 @@ public class Louvain {
 		
 		int n = 0;
 		int k = 0;
+		if (sample_file.indexOf("polbooks") != -1)
+			n = 105;
+		if (sample_file.indexOf("as20graph") != -1)
+			n = 6474;
+		if (sample_file.indexOf("ca-AstroPh-wcc") != -1)
+			n = 17903;
 		if (sample_file.indexOf("amazon") != -1)
 			n = 334863;
 		if (sample_file.indexOf("dblp") != -1)
 			n = 317080;
 		if (sample_file.indexOf("youtube") != -1)
 			n = 1134890;
-		k = Integer.parseInt(sample_file.substring(sample_file.lastIndexOf("_") + 1) );
-		System.out.println("n = " + n + " k = " + k);
 		
 		if (type == 1)
 			for (int i = 0; i < n_samples; i++){
@@ -985,7 +989,10 @@ public class Louvain {
 				System.out.println("writePart - DONE");
 		    	
 			}
-		else	// LouvainDP
+		else{	// LouvainDP
+			k = Integer.parseInt(sample_file.substring(sample_file.lastIndexOf("_") + 1) );
+			System.out.println("n = " + n + " k = " + k);
+
 			for (int i = 0; i < n_samples; i++){
 		    	System.out.println("sample i = " + i);
 		    	
@@ -1016,7 +1023,7 @@ public class Louvain {
 				Louvain.writePart(nodemap, part_file);
 				System.out.println("writePart - DONE");
 			}
-			
+		}
 	    
 	    
 	    // Louvain on true graphs

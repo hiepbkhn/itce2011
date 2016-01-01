@@ -8,7 +8,9 @@ package algs4;
 import hist.Int2;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -208,6 +210,19 @@ public class UnweightedGraph {
     		ret.addEdge(e.val0, e.val1);
     	
     	return ret;
+    }
+    
+    ////
+    public static void writeGraph(UnweightedGraph G, String filename) throws IOException{
+    	
+    	BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
+    	for (int v = 0; v < G.V(); v++)
+            for (int w : G.adj.get(v)){
+            	if (w > v)
+            		bw.write(v + "\t" + w + "\n");
+            }
+    	
+    	bw.close();
     }
     
     /**

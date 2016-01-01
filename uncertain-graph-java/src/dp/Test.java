@@ -190,10 +190,14 @@ public class Test {
 //			System.out.print(random.nextInt(2) + " ");
 		
 		
-		////
+		//// TEST Dendrogram.compute_LS_RS(), Dendrogram.readTree(), NodeSetLouvain.bestCutHRG()
 		long start = System.currentTimeMillis();
 //		EdgeIntGraph G = EdgeIntGraph.readEdgeList("_data/polbooks.gr", "\t");	
-		EdgeIntGraph G = EdgeIntGraph.readEdgeList("_data/as20graph.gr", "\t");	
+//		EdgeIntGraph G = EdgeIntGraph.readEdgeList("_data/as20graph.gr", "\t");
+//		EdgeIntGraph G = EdgeIntGraph.readEdgeList("_data/ca-AstroPh-wcc.gr", "\t");
+//		EdgeIntGraph G = EdgeIntGraph.readEdgeList("_data/com_amazon_ungraph.gr", "\t");
+//		EdgeIntGraph G = EdgeIntGraph.readEdgeList("_data/com_dblp_ungraph.gr", "\t");
+		EdgeIntGraph G = EdgeIntGraph.readEdgeList("_data/com_youtube_ungraph.gr", "\t");	
 		System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
 		
 		System.out.println("#nodes = " + G.V());
@@ -219,12 +223,16 @@ public class Test {
 //			
 //		}
 		
-//		NodeSetLouvain root = Dendrogram.readTree(G, "_out/polbooks_fixed_np_20_105_1000_tree.0");		// 0.3123
-//		NodeSetLouvain root = Dendrogram.readTree(G, "_out/as20graph_hrgdiv_np_20_7_2_tree.0");			// -0.0332
-//		NodeSetLouvain root = Dendrogram.readTree(G, "_out/as20graph_fixed_np_20_6474_1000_tree.0");	// -0.0351
-		NodeSetLouvain root = Dendrogram.readTree(G, "_out/as20graph_fixed_20_6474_1000_2.0_tree.0");	// -0.0469
+//		NodeSetLouvain root = Dendrogram.readTree(G, "_out/polbooks_fixed_np_20_105_1000_tree.0");					// 0.3123
+//		NodeSetLouvain root = Dendrogram.readTree(G, "_out/as20graph_hrgdiv_np_20_7_2_tree.0");						// -0.0332
+//		NodeSetLouvain root = Dendrogram.readTree(G, "_out/as20graph_fixed_np_20_6474_1000_tree.0");				// -0.0351
+//		NodeSetLouvain root = Dendrogram.readTree(G, "_out/as20graph_fixed_20_6474_1000_2.0_tree.0");				// level=5,-0.0469, 
+//		NodeSetLouvain root = Dendrogram.readTree(G, "_out/ca-AstroPh-wcc_fixed_np_20_17903_1000_tree.0");			// level=9, 0.2099
+//		NodeSetLouvain root = Dendrogram.readTree(G, "_out/com_amazon_ungraph_fixed_np_20_334863_1000_tree.0");		// level=12, 0.2616 , level=14, 0.2617
+//		NodeSetLouvain root = Dendrogram.readTree(G, "_out/com_dblp_ungraph_fixed_np_20_317080_1000_tree.0");		// level=14, 0.1903
+		NodeSetLouvain root = Dendrogram.readTree(G, "_out/com_youtube_ungraph_fixed_np_20_1134890_1000_tree.0");	// level=16, 0.0288 (mem 3.3GB)
 		System.out.println("readTree - DONE");
-		List<NodeSetLouvain> best_cut = NodeSetLouvain.bestCutHRG(root, G.E(), 5, 0.5);
+		List<NodeSetLouvain> best_cut = NodeSetLouvain.bestCutHRG(root, G.E(), 16, 0.5);
 		System.out.println("best_cut.size = " + best_cut.size());
 		
 		
