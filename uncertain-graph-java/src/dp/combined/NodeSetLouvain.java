@@ -67,6 +67,7 @@ public class NodeSetLouvain {
 	public NodeSetLouvain parent;
 	public int id;
 	public int level = 0;
+	public int max_level = -1;
 	public double modSelf = 0.0;	// see writeTree, readTree
 	//
 	public int[][] eArr = new int[10][10];	// 
@@ -674,7 +675,8 @@ public class NodeSetLouvain {
 				System.out.print(R.id + " ");
 			}else if (R.level < level)
 				for (int i = 0; i < R.children.length; i++)
-					queue.add(R.children[i]);
+					if (R.children[i] != null)
+						queue.add(R.children[i]);
 		}
 		System.out.println();
 		

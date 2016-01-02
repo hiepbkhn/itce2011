@@ -1303,6 +1303,8 @@ public class Dendrogram {
 				child.level = NS.level + 1;
 				NS.children[0] = child;
 				queue_set.add(child);
+				if (child.level > root.max_level)
+					root.max_level = child.level;
 			}
 			
 			if (R.right.id < 0){
@@ -1312,6 +1314,8 @@ public class Dendrogram {
 				child.level = NS.level + 1;
 				NS.children[1] = child;
 				queue_set.add(child);
+				if (child.level > root.max_level)
+					root.max_level = child.level;
 			}
 			
 		}
