@@ -149,7 +149,7 @@ public class LouvainModDiv {
  		double eps = 20.0;	// 1, 10, 50, 80, 100 for polbooks: interesting prob values and final results
  		double ratio = 2.0; // 1.26 = 2^(1/3)
  		int k = 5;
- 		double eps_mod = 0.1;		// epsilon used in bestCut()
+ 		double eps_mod = 0.01;		// 0.1, epsilon used in bestCut()
  		
  		
  		if(args.length >= 8){

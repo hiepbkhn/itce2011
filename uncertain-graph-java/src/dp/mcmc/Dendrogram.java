@@ -1274,7 +1274,15 @@ public class Dendrogram {
 			NS.size = new int[k];
 			NS.dc = new int[k];
 			NS.size[0] = R.nL; NS.size[1] = R.nR;
+			// store child leaves, used in NodeSetLouvain.writeBestCutHRG()
+			NS.ind2node = new int[R.nL + R.nR];
+			int i = 0;
+			for (IntCursor s : R.LS)
+				NS.ind2node[i++] = s.value;
+			for (IntCursor t : R.RS)
+				NS.ind2node[i++] = t.value;
 			
+			//
 			for (IntCursor s : R.LS)
 				NS.dc[0] += G.degree(s.value);
 			for (IntCursor t : R.RS)

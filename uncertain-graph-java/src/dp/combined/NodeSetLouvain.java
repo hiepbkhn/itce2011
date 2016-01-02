@@ -15,6 +15,8 @@
  * 	- add eArr: number of edges between two children of this node
  * Dec 2
  * 	- modularityHRG(): used in Dendrogram.readTree()
+ * Jan 1, 2016
+ * 	- writeBestCutHRG() + findChildLeaves()
  */
 
 package dp.combined;
@@ -634,7 +636,7 @@ public class NodeSetLouvain {
 			boolean self = true;
 			if (R.level == level){	// leaf nodes
 				sol.put(R.id, new CutNode(mod, mod_noisy, true));
-				System.out.println("LEAF id = " + R.id);
+//				System.out.println("LEAF id = " + R.id);
 				
 			}else{
 				//
@@ -653,7 +655,7 @@ public class NodeSetLouvain {
 				}
 					
 				sol.put(R.id, new CutNode(mod, mod_noisy, self));
-				System.out.println("id = " + R.id);
+//				System.out.println("id = " + R.id);
 			}
 		}
 		
@@ -917,6 +919,21 @@ public class NodeSetLouvain {
 		
 		//
 		return ret;
+	}
+
+	//// Jan 01, 2016
+	public static void writeBestCutHRG(List<NodeSetLouvain> best_cut, String best_file) throws IOException{
+		
+		BufferedWriter bw = new BufferedWriter(new FileWriter(best_file));
+		
+		for (NodeSetLouvain R : best_cut){
+			
+			for (int s : R.ind2node)
+				bw.write(s + ",");
+			bw.write("\n");
+		}
+			
+		bw.close();
 	}
 	
 }
