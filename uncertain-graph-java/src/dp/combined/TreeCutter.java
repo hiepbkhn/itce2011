@@ -178,7 +178,7 @@ public class TreeCutter {
 		for (int i = 0; i < n_samples; i++){
 			NodeSetLouvain root_set = Dendrogram.readTree(G, "_out/" + tree_file + "." + i);
 			
-			List<NodeSetLouvain> best_cut = NodeSetLouvain.bestCutHRG(root_set, G.E(), level, 0.0);
+			List<NodeSetLouvain> best_cut = NodeSetLouvain.bestCutHRGFixed(root_set, G.E(), level, 0.0);
 			System.out.println("best_cut.size = " + best_cut.size());
 			NodeSetLouvain.writeBestCutHRG(best_cut, "_louvain/" + part_file + "." + i + ".best");
 		}
@@ -193,7 +193,10 @@ public class TreeCutter {
 			NodeSetLouvain root_set = Dendrogram.readTree(G, "_out/" + tree_file + "." + i);
 			System.out.println("max_level = " + root_set.max_level);
 			
-			List<NodeSetLouvain> best_cut = NodeSetLouvain.bestCutHRG(root_set, G.E(), root_set.max_level, 0.0);
+			System.out.println("root_set.ind2node = " + root_set.ind2node.length);
+			System.out.println(root_set.children[0].ind2node.length + " " + root_set.children[1].ind2node.length);
+			
+			List<NodeSetLouvain> best_cut = NodeSetLouvain.bestCutHRGMCMC(root_set, G.E(), 0.0);
 			System.out.println("best_cut.size = " + best_cut.size());
 			NodeSetLouvain.writeBestCutHRG(best_cut, "_louvain/" + part_file + "." + i + ".best");
 		}
@@ -532,11 +535,23 @@ public class TreeCutter {
 			
 			for (double eps : epsArr){
 					
-				String tree_file = dataname + "_fixed_" + n_samples + "_" + sample_freq + "_" + burn_factor + "_" + String.format("%.1f", eps) + "_tree";
+				String tree_file = dataname + "_dendro_" + n_samples + "_" + sample_freq + "_" + burn_factor + "_" + String.format("%.1f", eps) + "_tree";
 				
 				cutTreeHRGMCMC(G, tree_file, n_samples);
 			}
 		}
+		
+		// TEST
+//		String dataname = "as20graph";
+//		n_samples = 1;
+//		String filename = "_data/" + dataname + ".gr";
+//		EdgeIntGraph G = EdgeIntGraph.readEdgeList(filename, "\t");
+//		System.out.println("#nodes = " + G.V());
+//		System.out.println("#edges = " + G.E());
+//		
+//		String tree_file = "as20graph_dendro_20_6474_1000_4.4_tree";
+//		
+//		cutTreeHRGMCMC(G, tree_file, n_samples);
 				
 		
 		

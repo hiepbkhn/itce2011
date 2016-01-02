@@ -17,6 +17,8 @@
  * 	- modularityHRG(): used in Dendrogram.readTree()
  * Jan 1, 2016
  * 	- writeBestCutHRG() + findChildLeaves()
+ * Jan 2
+ * 	- bestCutHRG -> bestCutHRGFixed, bestCutHRGMCMC
  */
 
 package dp.combined;
@@ -606,7 +608,7 @@ public class NodeSetLouvain {
 	}
 	
 	//// call R.modularityHRG()
-	public static List<NodeSetLouvain> bestCutHRG(NodeSetLouvain root_set, int m, int level, double eps_mod){
+	public static List<NodeSetLouvain> bestCutHRGFixed(NodeSetLouvain root_set, int m, int level, double eps_mod){
 		
 		List<NodeSetLouvain> ret = new ArrayList<NodeSetLouvain>();
 		Map<Integer, CutNode> sol = new HashMap<Integer, CutNode>();	// best solution node.id --> CutNode info
@@ -683,6 +685,85 @@ public class NodeSetLouvain {
 		//
 		return ret;
 	}
+	
+	////call R.modularityHRG()
+	public static List<NodeSetLouvain> bestCutHRGMCMC(NodeSetLouvain root_set, int m, double eps_mod){
+		
+		List<NodeSetLouvain> ret = new ArrayList<NodeSetLouvain>();
+		Map<Integer, CutNode> sol = new HashMap<Integer, CutNode>();	// best solution node.id --> CutNode info
+		
+		Queue<NodeSetLouvain> queue = new LinkedList<NodeSetLouvain>();
+		Stack<NodeSetLouvain> stack = new Stack<NodeSetLouvain>();
+		
+		// fill stack using queue
+		queue.add(root_set);
+		while (queue.size() > 0){
+			NodeSetLouvain R = queue.remove();
+			stack.push(R);
+			for (int i = 0; i < R.children.length; i++)
+				if (R.children[i] != null)
+					queue.add(R.children[i]);
+		}
+		System.out.println("stack.size = " + stack.size());
+		
+		
+		double dU = 3.0/m;
+		// 
+		while (stack.size() > 0){
+			NodeSetLouvain R = stack.pop();
+			
+			double mod = R.modularityHRG(m);			// modularityHRG
+			double mod_noisy = mod;	//+ DPUtil.laplaceMechanism(eps_mod/dU);
+			boolean self = true;
+			if (R.children[0] == null || R.children[1] == null){	// leaf node
+				sol.put(R.id, new CutNode(mod, mod_noisy, true));
+//				System.out.println("LEAF id = " + R.id);
+				
+			}else{
+				//
+				double mod_opt = 0.0;
+				double mod_noisy_opt = 0.0;
+				for (int i = 0; i < R.children.length; i++)
+					if (R.children[i] != null){
+						mod_opt += sol.get(R.children[i].id).mod;
+						mod_noisy_opt += sol.get(R.children[i].id).mod_noisy;
+					}
+				
+				if (mod_noisy < mod_noisy_opt){
+					mod = mod_opt;
+					mod_noisy = mod_noisy_opt;
+					self = false;
+				}
+					
+				sol.put(R.id, new CutNode(mod, mod_noisy, self));
+//				System.out.println("id = " + R.id);
+			}
+		}
+		
+		System.out.println("sol.size = " + sol.size());
+		System.out.println("best modularity = " + sol.get(root_set.id).mod);		// root.id
+		System.out.println("best mod_noisy = " + sol.get(root_set.id).mod_noisy);
+		
+		// compute ret
+		queue = new LinkedList<NodeSetLouvain>();
+		queue.add(root_set);
+		while (queue.size() > 0){
+			NodeSetLouvain R = queue.remove();
+			
+			if (sol.get(R.id).self == true){
+				ret.add(R);
+				System.out.print(R.id + " ");
+			}else
+				for (int i = 0; i < R.children.length; i++)
+					if (R.children[i] != null)
+						queue.add(R.children[i]);
+		}
+		System.out.println();
+		
+		//
+		return ret;
+	}
+	
 	
 	////
 	public static void writeBestCut(List<NodeSetLouvain> best_cut, String best_file) throws IOException{
