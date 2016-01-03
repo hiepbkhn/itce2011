@@ -69,11 +69,13 @@ public class NodeSetLouvain {
 	public NodeSetLouvain parent;
 	public int id;
 	public int level = 0;
+	public int toplevel = -1;
 	public int max_level = -1;
 	public double modSelf = 0.0;	// see writeTree, readTree
 	//
 	public int[][] eArr = new int[10][10];	// 
 	public int e_self = 0;
+	public int nEdge = 0;		// from Node (in Dendrogram)
 	
 	//// for the case number of parts < k
 	public int normalizePart(){

@@ -19,6 +19,7 @@ public static final int ROOT_NODE = 100000000;
 	public double noisy_value;
 	public int nL, nR;
 	public int nEdge;
+	public int e_self = 0;
 	public double noisy_nEdge;
 	public int level = -1;
 	public int toplevel = 0;	// top-down level for lowestCommonAncestor()

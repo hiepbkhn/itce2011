@@ -1082,6 +1082,8 @@ public class Dendrogram {
   			u.LS.add(u.left.id);
   			u.RS = new IntHashSet();
   			u.RS.add(u.right.id);
+  			
+  			u.e_self = u.nEdge + (u.left.e_self + u.right.e_self);
   		}
   		
 	    for (int i = 2; i < this.root_node.level + 1; i++){
@@ -1102,6 +1104,8 @@ public class Dendrogram {
 	    			u.RS.addAll(u.right.LS);
 	    			u.RS.addAll(u.right.RS);
 	    		}
+	    		
+	    		u.e_self = u.nEdge + (u.left.e_self + u.right.e_self);
 	    	}
 	    }
 	}
@@ -1288,19 +1292,16 @@ public class Dendrogram {
 			for (IntCursor t : R.RS)
 				NS.dc[1] += G.degree(t.value);
 			
-			NS.e_self = R.nEdge;
-			if (R.left.id < 0)
-				NS.e_self += R.left.nEdge;
-			if (R.right.id < 0)
-				NS.e_self += R.right.nEdge;
+			// R.nEdge computed in compute_LS_RS()
+			NS.e_self = R.e_self;
+			NS.nEdge = R.nEdge;
 			
-
-			
+			//
 			if (R.left.id < 0){
 				queue.add(R.left);
 				
 				NodeSetLouvain child = new NodeSetLouvain(k);
-				child.level = NS.level + 1;
+				child.level = NS.level + 1;			// top-down
 				NS.children[0] = child;
 				queue_set.add(child);
 				if (child.level > root.max_level)
@@ -1311,7 +1312,7 @@ public class Dendrogram {
 				queue.add(R.right);
 				
 				NodeSetLouvain child = new NodeSetLouvain(k);
-				child.level = NS.level + 1;
+				child.level = NS.level + 1;			// top-down
 				NS.children[1] = child;
 				queue_set.add(child);
 				if (child.level > root.max_level)
@@ -1319,6 +1320,7 @@ public class Dendrogram {
 			}
 			
 		}
+		
 		
 		//
 		return root;

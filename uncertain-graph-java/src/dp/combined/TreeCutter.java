@@ -9,6 +9,8 @@
 
 package dp.combined;
 
+import grph.Grph;
+import grph.io.EdgeListReader;
 import hist.Int2;
 
 import java.io.BufferedReader;
@@ -24,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
+import toools.io.file.RegularFile;
 import dp.mcmc.Dendrogram;
 import dp.mcmc.Node;
 import algs4.Edge;
@@ -158,7 +161,6 @@ public class TreeCutter {
 		for (int i = 0; i < n_samples; i++){
 			NodeSetLouvain root_set = NodeSetLouvain.readTree("_sample/" + tree_file + "." + i);
 			
-			
 			List<NodeSetLouvain> best_cut = NodeSetLouvain.bestCutOffline(root_set);
 			System.out.println("best_cut.size = " + best_cut.size());
 			NodeSetLouvain.writeBestCut(best_cut, "_louvain/" + part_file + "." + i + ".best");
@@ -172,12 +174,35 @@ public class TreeCutter {
 	}
 	
 	////
-	public static void cutTreeHRGFixed(EdgeIntGraph G, String tree_file, int n_samples, int level) throws IOException{
+	public static void cutTreeHRGFixed(EdgeIntGraph G, String tree_file, int level, int n_samples) throws IOException{
 		String part_file = tree_file.substring(0, tree_file.length()-5);
 		
 		for (int i = 0; i < n_samples; i++){
 			NodeSetLouvain root_set = Dendrogram.readTree(G, "_out/" + tree_file + "." + i);
 			
+			// debug
+			System.out.println("root_set.e_self = " + root_set.e_self);
+			System.out.println("root_set.ind2node = " + root_set.ind2node.length);
+			System.out.println(root_set.children[0].ind2node.length + " " + root_set.children[1].ind2node.length);
+			
+			Queue<NodeSetLouvain> queue_set = new LinkedList<NodeSetLouvain>();
+			queue_set.add(root_set);
+			int n_edges = 0;
+			int n_self = 0;
+			while (queue_set.size() > 0){
+				NodeSetLouvain NS = queue_set.remove();
+				n_edges += NS.nEdge;
+				n_self += NS.e_self;
+				
+				for (int j = 0; j < NS.children.length; j++)
+					if (NS.children[j] != null)
+						queue_set.add(NS.children[j]);
+						
+			}
+			System.out.println("n_edges = " + n_edges);
+			System.out.println("n_self = " + n_self);
+			
+			//
 			List<NodeSetLouvain> best_cut = NodeSetLouvain.bestCutHRGFixed(root_set, G.E(), level, 0.0);
 			System.out.println("best_cut.size = " + best_cut.size());
 			NodeSetLouvain.writeBestCutHRG(best_cut, "_louvain/" + part_file + "." + i + ".best");
@@ -191,11 +216,13 @@ public class TreeCutter {
 		
 		for (int i = 0; i < n_samples; i++){
 			NodeSetLouvain root_set = Dendrogram.readTree(G, "_out/" + tree_file + "." + i);
+			// debug
 			System.out.println("max_level = " + root_set.max_level);
-			
+			System.out.println("root_set.e_self = " + root_set.e_self);
 			System.out.println("root_set.ind2node = " + root_set.ind2node.length);
 			System.out.println(root_set.children[0].ind2node.length + " " + root_set.children[1].ind2node.length);
 			
+			//
 			List<NodeSetLouvain> best_cut = NodeSetLouvain.bestCutHRGMCMC(root_set, G.E(), 0.0);
 			System.out.println("best_cut.size = " + best_cut.size());
 			NodeSetLouvain.writeBestCutHRG(best_cut, "_louvain/" + part_file + "." + i + ".best");
@@ -544,15 +571,36 @@ public class TreeCutter {
 		// TEST
 //		String dataname = "as20graph";
 //		n_samples = 1;
+//		int level = 10;
 //		String filename = "_data/" + dataname + ".gr";
 //		EdgeIntGraph G = EdgeIntGraph.readEdgeList(filename, "\t");
 //		System.out.println("#nodes = " + G.V());
 //		System.out.println("#edges = " + G.E());
+//		System.out.println("level = " + level);
 //		
-//		String tree_file = "as20graph_dendro_20_6474_1000_4.4_tree";
+////		String tree_file = "as20graph_dendro_20_6474_1000_4.4_tree";
+////		cutTreeHRGMCMC(G, tree_file, n_samples);
 //		
-//		cutTreeHRGMCMC(G, tree_file, n_samples);
+////		String tree_file = "as20graph_fixed_20_6474_50_4.4_tree";
+//		String tree_file = "as20graph_fixed_20_6474_50_26.3_tree";
+//		cutTreeHRGFixed(G, tree_file, level, n_samples);
+//		
+////		String tree_file = "as20graph_md_20_6_2_4.4_2.00_tree";
+////		cutTreeMD(tree_file, n_samples);
+		
 				
+		// CHECK modularity
+//		EdgeListReader reader = new EdgeListReader();
+//		Grph G;
+//		RegularFile f = new RegularFile("_data/as20graph.gr");
+//		G = reader.readGraph(f);
+//		System.out.println("#nodes = " + G.getNumberOfVertices());
+//		System.out.println("#edges = " + G.getNumberOfEdges());
+//		
+//		int[] compare_part = CommunityMeasure.readPart("_louvain/as20graph_fixed_20_6474_50_26.3.1.best", G.getNumberOfVertices());
+////		int[] compare_part = CommunityMeasure.readPart("_louvain/as20graph_md_20_6_2_4.4_2.00.0.best", G.getNumberOfVertices());
+//		System.out.println("compare_part.size = " + compare_part.length);
+//		System.out.println("mod = " + CommunityMeasure.modularity(G, compare_part));
 		
 		
 		////////// TODO: LOGLK

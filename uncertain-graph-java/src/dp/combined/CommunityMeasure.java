@@ -167,11 +167,12 @@ public class CommunityMeasure {
 	}
 	
 	//// n : #nodes
-	public static int[] readPart(String part_file, int n) throws IOException{
+	public static int[] readPart(String part_file, int n) throws Exception{
 		int[] part = new int[n];
 		
 		BufferedReader br = new BufferedReader(new FileReader(part_file));
 		int count = 0;
+		int n_nodes = 0;
 		while (true){
         	String str = br.readLine();
         	if (str == null)
@@ -180,6 +181,7 @@ public class CommunityMeasure {
         		continue;
         	
         	String[] items = str.split(",");
+        	n_nodes += items.length;
         	
         	for (int i = 0; i < items.length; i++){
         		int u = Integer.parseInt(items[i]);
@@ -187,6 +189,8 @@ public class CommunityMeasure {
         	}
         	count += 1;
 		}
+		if (n_nodes < n)
+			throw new Exception("invalid part file !");
 		
 		//
 		return part;
