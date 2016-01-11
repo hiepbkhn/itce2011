@@ -133,9 +133,10 @@ public class EdgeFlip {
 		
 		double s = 2/(Math.exp(eps1) + 1);
 		System.out.println("s = " + s);
-		double m_full = (1-s)*m + n*(n-1)*s/4;
+		double m_full = (1-s)*m_noisy + (double)(n)*(n-1)*s/4;	// overflow !
 		
 		double edge_prob = m_noisy*ratio / m_full;
+		System.out.println("edge_prob = " + edge_prob);
 		
 		EdgeIntGraph aG = new EdgeIntGraph(n);
 		Random random = new Random();
@@ -149,6 +150,7 @@ public class EdgeFlip {
 			if (val > s/2 && val2 <= edge_prob)		// 1 -> 1 
 				aG.addEdge(new EdgeInt(u, v, 1));
 		}
+		System.out.println("BEFORE aG #1-edge = " + aG.E());
 			
 		
 		// 0-edges 
@@ -157,13 +159,14 @@ public class EdgeFlip {
 		while (count < n_zeros){
 			int u = random.nextInt(n);
 			int v = random.nextInt(n);
-			while (aG.areEdgesAdjacent(u, v)){		// 0-cell
+			while (aG.areEdgesAdjacent(u, v) || G.areEdgesAdjacent(u, v)){		// 0-cell
 				u = random.nextInt(n);
 				v = random.nextInt(n);
 			}
 			aG.addEdge(new EdgeInt(u, v, 1));
 			count++;
 		}
+		System.out.println("AFTER aG #1-edge = " + aG.E());
 		
 		//
 		return aG;

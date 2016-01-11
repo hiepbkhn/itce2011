@@ -189,8 +189,8 @@ public class CommunityMeasure {
         	}
         	count += 1;
 		}
-		if (n_nodes < n)
-			throw new Exception("invalid part file !");
+		if (n_nodes < 0.9*n)
+			throw new Exception("invalid part file ! " + part_file);
 		
 		//
 		return part;
@@ -1088,8 +1088,8 @@ public class CommunityMeasure {
 		System.out.println("n_samples = " + n_samples);
 		System.out.println("sample_file = " + sample_file);
 		
-		computeAndExport(prefix, dataname, sample_file, n_samples, 1);		// EF, TmF, LouvainDP
-//		computeAndExport(prefix, dataname, sample_file, n_samples, 2);		// LouvainOpt, LouvainModDiv, HRGDivisiveGreedy
+//		computeAndExport(prefix, dataname, sample_file, n_samples, 1);		// EF, TmF, LouvainDP, DER, 1k
+		computeAndExport(prefix, dataname, sample_file, n_samples, 2);		// LouvainOpt, LouvainModDiv, HRGDivisiveGreedy, MCMCInference, MCMCInferenceFixed
 		System.out.println("computeAndExport - DONE.");
 		
 		

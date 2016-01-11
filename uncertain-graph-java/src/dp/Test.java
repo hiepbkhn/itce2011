@@ -5,11 +5,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
 
 import algs4.EdgeInt;
 import algs4.EdgeIntGraph;
+import algs4.EdgeWeightedGraph;
 
 import com.carrotsearch.hppc.cursors.IntCursor;
 import com.jmatio.io.MatFileWriter;
@@ -17,6 +19,7 @@ import com.jmatio.types.MLArray;
 import com.jmatio.types.MLDouble;
 import com.jmatio.types.MLInt32;
 
+import dp.combined.Louvain;
 import dp.combined.NodeSetLouvain;
 import dp.mcmc.Dendrogram;
 import dp.mcmc.Node;
@@ -191,17 +194,17 @@ public class Test {
 		
 		
 		//// TEST Dendrogram.compute_LS_RS(), Dendrogram.readTree(), NodeSetLouvain.bestCutHRG()
-		long start = System.currentTimeMillis();
-//		EdgeIntGraph G = EdgeIntGraph.readEdgeList("_data/polbooks.gr", "\t");	
-//		EdgeIntGraph G = EdgeIntGraph.readEdgeList("_data/as20graph.gr", "\t");
-//		EdgeIntGraph G = EdgeIntGraph.readEdgeList("_data/ca-AstroPh-wcc.gr", "\t");
-//		EdgeIntGraph G = EdgeIntGraph.readEdgeList("_data/com_amazon_ungraph.gr", "\t");
-//		EdgeIntGraph G = EdgeIntGraph.readEdgeList("_data/com_dblp_ungraph.gr", "\t");
-		EdgeIntGraph G = EdgeIntGraph.readEdgeList("_data/com_youtube_ungraph.gr", "\t");	
-		System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
-		
-		System.out.println("#nodes = " + G.V());
-		System.out.println("#edges = " + G.E());
+//		long start = System.currentTimeMillis();
+////		EdgeIntGraph G = EdgeIntGraph.readEdgeList("_data/polbooks.gr", "\t");	
+////		EdgeIntGraph G = EdgeIntGraph.readEdgeList("_data/as20graph.gr", "\t");
+////		EdgeIntGraph G = EdgeIntGraph.readEdgeList("_data/ca-AstroPh-wcc.gr", "\t");
+////		EdgeIntGraph G = EdgeIntGraph.readEdgeList("_data/com_amazon_ungraph.gr", "\t");
+////		EdgeIntGraph G = EdgeIntGraph.readEdgeList("_data/com_dblp_ungraph.gr", "\t");
+//		EdgeIntGraph G = EdgeIntGraph.readEdgeList("_data/com_youtube_ungraph.gr", "\t");	
+//		System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
+//		
+//		System.out.println("#nodes = " + G.V());
+//		System.out.println("#edges = " + G.E());
 		
 //		Dendrogram T = new Dendrogram();
 //		T.readInternalNodes(G, "_out/polbooks_fixed_20_105_50_1.2_tree.0");
@@ -223,19 +226,32 @@ public class Test {
 //			
 //		}
 		
-//		NodeSetLouvain root = Dendrogram.readTree(G, "_out/polbooks_fixed_np_20_105_1000_tree.0");					// 0.3123
-//		NodeSetLouvain root = Dendrogram.readTree(G, "_out/as20graph_hrgdiv_np_20_7_2_tree.0");						// -0.0332
-//		NodeSetLouvain root = Dendrogram.readTree(G, "_out/as20graph_fixed_np_20_6474_1000_tree.0");				// -0.0351
-//		NodeSetLouvain root = Dendrogram.readTree(G, "_out/as20graph_fixed_20_6474_1000_2.0_tree.0");				// level=5,-0.0469, 
-//		NodeSetLouvain root = Dendrogram.readTree(G, "_out/ca-AstroPh-wcc_fixed_np_20_17903_1000_tree.0");			// level=9, 0.2099
-//		NodeSetLouvain root = Dendrogram.readTree(G, "_out/com_amazon_ungraph_fixed_np_20_334863_1000_tree.0");		// level=12, 0.2616 , level=14, 0.2617
-//		NodeSetLouvain root = Dendrogram.readTree(G, "_out/com_dblp_ungraph_fixed_np_20_317080_1000_tree.0");		// level=14, 0.1903
-		NodeSetLouvain root = Dendrogram.readTree(G, "_out/com_youtube_ungraph_fixed_np_20_1134890_1000_tree.0");	// level=16, 0.0288 (mem 3.3GB)
-		System.out.println("readTree - DONE");
-		List<NodeSetLouvain> best_cut = NodeSetLouvain.bestCutHRG(root, G.E(), 16, 0.5);
-		System.out.println("best_cut.size = " + best_cut.size());
+////		NodeSetLouvain root = Dendrogram.readTree(G, "_out/polbooks_fixed_np_20_105_1000_tree.0");					// 0.3123
+////		NodeSetLouvain root = Dendrogram.readTree(G, "_out/as20graph_hrgdiv_np_20_7_2_tree.0");						// -0.0332
+////		NodeSetLouvain root = Dendrogram.readTree(G, "_out/as20graph_fixed_np_20_6474_1000_tree.0");				// -0.0351
+////		NodeSetLouvain root = Dendrogram.readTree(G, "_out/as20graph_fixed_20_6474_1000_2.0_tree.0");				// level=5,-0.0469, 
+////		NodeSetLouvain root = Dendrogram.readTree(G, "_out/ca-AstroPh-wcc_fixed_np_20_17903_1000_tree.0");			// level=9, 0.2099
+////		NodeSetLouvain root = Dendrogram.readTree(G, "_out/com_amazon_ungraph_fixed_np_20_334863_1000_tree.0");		// level=12, 0.2616 , level=14, 0.2617
+////		NodeSetLouvain root = Dendrogram.readTree(G, "_out/com_dblp_ungraph_fixed_np_20_317080_1000_tree.0");		// level=14, 0.1903
+//		NodeSetLouvain root = Dendrogram.readTree(G, "_out/com_youtube_ungraph_fixed_np_20_1134890_1000_tree.0");	// level=16, 0.0288 (mem 3.3GB)
+//		System.out.println("readTree - DONE");
+//		List<NodeSetLouvain> best_cut = NodeSetLouvain.bestCutHRGFixed(root, G.E(), 16, 0.5);
+//		System.out.println("best_cut.size = " + best_cut.size());
+		
+		//
+		EdgeWeightedGraph G = EdgeWeightedGraph.readEdgeList("_data/as20graph.gr");
+		System.out.println("#nodes = " + G.V());
+		System.out.println("#edges = " + G.E());
+		
+		Louvain lv = new Louvain();
+		long start = System.currentTimeMillis();
+		Map<Integer, Integer> part = lv.best_partition(G, null);
+		System.out.println("best_partition - DONE, elapsed " + (System.currentTimeMillis() - start));
+
 		
 		
+//		Louvain.writePart(part, "ca-AstroPh-wcc.louvain");
+//		System.out.println("writePart - DONE");
 	}
 
 }

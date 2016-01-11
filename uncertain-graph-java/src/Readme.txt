@@ -12,6 +12,8 @@ CLASSPATH: D:\git\itce2011\uncertain-graph-java\bin;E:\caidat\Java\grph-1.6.29-s
 - SampleGenerator.java: 
 - UtilityMeasure.java --> see uncertain-graph/dp/utility_measure.py
 
+- Test.java: Dendrogram.compute_LS_RS(), Dendrogram.readTree(), NodeSetLouvain.bestCutHRG()
+
 [dp.mcmc] private HRG
 - Dendrogram.java
 - MCMCInference.java: use Dendrogram.java 
