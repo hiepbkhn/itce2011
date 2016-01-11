@@ -14,5 +14,10 @@ avg_f1_part2 = mean(f1ArrPart2);
 avg_nmi_part2= mean(nmiArrPart2);
 avg_com_part2= mean(comArrPart2);
 
+% avg_mod_part2 = 0;
+% avg_f1_part2 = 0; 
+% avg_nmi_part2 = 0;
+% avg_com_part2 = 0;
+
 end
 

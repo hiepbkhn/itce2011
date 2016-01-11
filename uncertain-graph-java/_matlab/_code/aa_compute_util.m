@@ -89,9 +89,12 @@ e_EDiam = abs(sum_EDiam - a_s_EDiam)/a_s_EDiam;
 e_Diam = abs(sum_Diam - a_s_Diam)/a_s_Diam;
 
 % no e_PL
-% rel_err = (e_degArr + e_distArr + e_AD + e_MD + e_DV + e_CC + e_APD + e_CL + e_EDiam + e_Diam)/10;
+% rel_err = (e_degArr + e_distArr + e_AD + e_MD + e_DV + e_CC + e_APD + e_CL + e_EDiam + e_Diam)/10;                % w/o e_PL
 
 % rel_err = (e_degArr + e_distArr + e_AD + e_MD + e_DV + e_CC + e_PL + e_APD + e_CL + e_EDiam + e_Diam)/11.0;
+
+
+% rel_err = (e_degArr + e_distArr + e_cutArr + e_AD + e_MD + e_DV + e_CC + e_APD + e_CL + e_EDiam + e_Diam)/11.0;     % w/o e_PL
 rel_err = (e_degArr + e_distArr + e_cutArr + e_AD + e_MD + e_DV + e_CC + e_PL + e_APD + e_CL + e_EDiam + e_Diam)/12.0;
 
 % % for TmF table
