@@ -168,44 +168,44 @@ public class DivisiveTmF {
 		String sample_file = prefix + "_sample/" + dataname + "_divtmf_" + burn_factor + "_" + limit_size + "_" + lower_size + "_" + max_level;
 		
 		//
-//		GrphTextReader reader = new GrphTextReader();
-		EdgeListReader reader = new EdgeListReader();
-		
-		Grph G;
-		RegularFile f = new RegularFile(filename);
-		
-		G = reader.readGraph(f);
-		
-		System.out.println("#nodes = " + G.getNumberOfVertices());
-		System.out.println("#edges = " + G.getNumberOfEdges());
-		
-		//
-		NodeSetDiv R = new NodeSetDiv(G);
-		System.out.println("logLK = " + R.logLK() + " mincut = " + R.mincut() + " edgeVar = " + R.edgeVar());
-		
-		// TEST recursiveLK()
-		for (int i = 0; i < n_samples; i++){
-			System.out.println("sample i = " + i);
-			
-			long start = System.currentTimeMillis();
-			NodeSetDiv root_set = NodeSetDiv.recursiveLK(G, eps1, burn_factor, limit_size, lower_size, max_level, false);	// false: stop partitioning at limit_size
-			System.out.println("recursiveLK - DONE, elapsed " + (System.currentTimeMillis() - start));
-			
-			//debug
-//			NodeSet2.printSetIds(root_set);
-			
-			writeNodeSets(root_set, nodeset_file + "." + i);
-			
-			Grph aG = generateSample(nodeset_file + "." + i, G, epsTmF, eps1, max_level);
-			
-////			start = System.currentTimeMillis();
-////			System.out.println("edit distance (aG, G) = " + DegreeSeqHist.editScore(aG, G));
-////			System.out.println("editScore - DONE, elapsed " + (System.currentTimeMillis() - start));
+////		GrphTextReader reader = new GrphTextReader();
+//		EdgeListReader reader = new EdgeListReader();
+//		
+//		Grph G;
+//		RegularFile f = new RegularFile(filename);
+//		
+//		G = reader.readGraph(f);
+//		
+//		System.out.println("#nodes = " + G.getNumberOfVertices());
+//		System.out.println("#edges = " + G.getNumberOfEdges());
+//		
+//		//
+//		NodeSetDiv R = new NodeSetDiv(G);
+//		System.out.println("logLK = " + R.logLK() + " mincut = " + R.mincut() + " edgeVar = " + R.edgeVar());
+//		
+//		// TEST recursiveLK()
+//		for (int i = 0; i < n_samples; i++){
+//			System.out.println("sample i = " + i);
 //			
-//			f = new RegularFile(sample_file + "." + i);
-//			EdgeListWriter writer = new EdgeListWriter();
-//	    	writer.writeGraph(aG, f);
-		}
+//			long start = System.currentTimeMillis();
+//			NodeSetDiv root_set = NodeSetDiv.recursiveLK(G, eps1, burn_factor, limit_size, lower_size, max_level, false);	// false: stop partitioning at limit_size
+//			System.out.println("recursiveLK - DONE, elapsed " + (System.currentTimeMillis() - start));
+//			
+//			//debug
+////			NodeSet2.printSetIds(root_set);
+//			
+//			writeNodeSets(root_set, nodeset_file + "." + i);
+//			
+//			Grph aG = generateSample(nodeset_file + "." + i, G, epsTmF, eps1, max_level);
+//			
+//////			start = System.currentTimeMillis();
+//////			System.out.println("edit distance (aG, G) = " + DegreeSeqHist.editScore(aG, G));
+//////			System.out.println("editScore - DONE, elapsed " + (System.currentTimeMillis() - start));
+////			
+////			f = new RegularFile(sample_file + "." + i);
+////			EdgeListWriter writer = new EdgeListWriter();
+////	    	writer.writeGraph(aG, f);
+//		}
 
 	}
 

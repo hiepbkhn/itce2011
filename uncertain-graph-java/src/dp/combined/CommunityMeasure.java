@@ -1088,8 +1088,8 @@ public class CommunityMeasure {
 		System.out.println("n_samples = " + n_samples);
 		System.out.println("sample_file = " + sample_file);
 		
-//		computeAndExport(prefix, dataname, sample_file, n_samples, 1);		// EF, TmF, LouvainDP, DER, 1k
-		computeAndExport(prefix, dataname, sample_file, n_samples, 2);		// LouvainOpt, LouvainModDiv, HRGDivisiveGreedy, MCMCInference, MCMCInferenceFixed
+		computeAndExport(prefix, dataname, sample_file, n_samples, 1);		// EF, TmF, LouvainDP, LouvainDPLaplace, DER, 1k
+//		computeAndExport(prefix, dataname, sample_file, n_samples, 2);		// LouvainOpt, LouvainModDiv, HRGDivisiveGreedy, MCMCInference, MCMCInferenceFixed
 		System.out.println("computeAndExport - DONE.");
 		
 		

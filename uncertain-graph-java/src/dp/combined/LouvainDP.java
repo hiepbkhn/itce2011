@@ -12,6 +12,8 @@
  * - COMMAND-LINE
  * Oct 16
  * - fix genEqualPrivate() using full Filter technique of Cormode (ICDT'12)	
+ * Mar 10, 2016
+ * - add genEqualPrivateLaplace()
  */
 
 package dp.combined;
@@ -314,7 +316,7 @@ public class LouvainDP {
 		EdgeWeightedGraph graph_final = new EdgeWeightedGraph(n);
 		
 		for (Edge e : graph_new.edges()){
-			double value = e.weight() + DPUtil.geometricMechanism(alpha);
+			double value = e.weight() + DPUtil.geometricMechanism(alpha);		// Geometric mechanism
 			if (value >= theta){
 				e.setWeight(value);
 				graph_final.addEdge(e);
@@ -333,7 +335,7 @@ public class LouvainDP {
 				double r = random.nextDouble();	// r in (0,1)
 				if (r > 1 - EPS)
 					r = 1 - EPS;
-				int weight = (int)(Math.log(1-r)/(-eps) + theta - 1);
+				int weight = (int)(Math.log(1-r)/(-eps) + theta - 1);		// int
 				if (weight > 0){
 					Edge e = new Edge(u, v, weight);
 					graph_final.addEdge(e);
@@ -354,6 +356,68 @@ public class LouvainDP {
 		
 	}	
 	
+	////
+	public static void genEqualPrivateLaplace(EdgeWeightedGraph graph, int k, double eps, String sample_file, String nodemap_file) throws IOException{
+		int n = graph.V();
+		Map<Integer, Integer> part_init = randomEqualCommunity(n, k);
+		
+		EdgeWeightedGraph graph_new = getGraphByPartition(graph, part_init);
+		int n_new = graph_new.V();
+		System.out.println("graph_new.V = " + graph_new.V() + " graph_new.E = " + graph_new.E());
+		
+		// compute theta
+		int m_new = graph_new.E();
+		double m = (double)n_new * (n_new + 1.0)/2;		// n + 1: consider all diagonal edges
+		System.out.println("m = " + m);
+		double s = m_new;			// fix s
+		System.out.println("s = " + s);
+		double theta = Math.log((m-m_new)/(2*s)) / eps; // 1+alpha: ONE-SIDED, round up theta
+		
+		System.out.println("theta = " + theta);
+		
+		// add geometric noise to graph_new edge weights
+		EdgeWeightedGraph graph_final = new EdgeWeightedGraph(n);
+		
+		for (Edge e : graph_new.edges()){
+			double value = e.weight() + DPUtil.laplaceMechanism(eps);		// Laplace mechanism
+			if (value >= theta){
+				e.setWeight(value);
+				graph_final.addEdge(e);
+			}
+		}
+		System.out.println("BEFORE: graph_final.E = " + graph_final.E());
+		
+		// sample s zero-cells
+		Random random = new Random();
+		double EPS = 0.000001;
+		for (int i = 0; i < s; i++){
+			int u = random.nextInt(n_new);
+			int v = random.nextInt(n_new);
+			if (graph_new.getEdge(u, v) == null & graph_final.getEdge(u, v) == null){
+				// sample weight from Pr[X <= x] = 1 - alpha^(x-theta+1)	(ONE-SIDED)
+				double r = random.nextDouble();	// r in (0,1)
+				if (r > 1 - EPS)
+					r = 1 - EPS;
+				double weight = Math.log(1-r)/(-eps) + theta;
+				if (weight > 0){
+					Edge e = new Edge(u, v, weight);
+					graph_final.addEdge(e);
+				}
+			}
+		}
+		
+
+		System.out.println("AFTER: graph_final.E = " + graph_final.E());
+		System.out.println("graph_final.totalWeight = " + graph_final.totalWeight());
+		
+		// write to sample_file (G1)
+		EdgeWeightedGraph.writeGraph(graph_final, sample_file);
+		
+		// write to nodemap_file
+		writeNodeMap(part_init, nodemap_file);
+		
+		
+	}	
 	
 	////////////////// Sep 28
 	// PRIVATE
@@ -426,8 +490,9 @@ public class LouvainDP {
 		// COMMAND-LINE <prefix> <dataname> <n_samples> <eps>
 		String prefix = "";
 	    int n_samples = 1;
-	    int k = 4;
 	    double eps = 7.0;
+	    int k = 4;
+	    int type = 0;	// 0: Geometric, 1: Laplace
 	    
 	    if(args.length >= 5){
 			prefix = args[0];
@@ -436,15 +501,24 @@ public class LouvainDP {
 			eps = Double.parseDouble(args[3]);
 			k = Integer.parseInt(args[4]);
 		}
+	    if(args.length >= 6){
+	    	type = Integer.parseInt(args[5]);
+	    }
+	    
 	    
 	    System.out.println("dataname = " + dataname);
 		System.out.println("n_samples = " + n_samples);
 		System.out.println("eps = " + eps);
 		System.out.println("k = " + k);
+		System.out.println("type = " + type);
 	    
 		String filename = prefix + "_data/" + dataname + ".gr";
 		String sample_file = prefix + "_sample/" + dataname + "_ldp_" + String.format("%.1f", eps) + "_" + k;
 		String nodemap_file = prefix + "_sample/" + dataname + "_ldp_" + String.format("%.1f", eps) + "_" + k + "_nodemap";
+		if (type == 1){
+			sample_file = prefix + "_sample/" + dataname + "_ldp_laplace_" + String.format("%.1f", eps) + "_" + k;
+			nodemap_file = prefix + "_sample/" + dataname + "_ldp_laplace_" + String.format("%.1f", eps) + "_" + k + "_nodemap";
+		}
 		
 		long start = System.currentTimeMillis();
 		EdgeWeightedGraph G = EdgeWeightedGraph.readEdgeList(filename);
@@ -458,8 +532,15 @@ public class LouvainDP {
 			System.out.println("sample i = " + i);
 				
 			start = System.currentTimeMillis();
-			LouvainDP.genEqualPrivate(G, k, eps, sample_file + "." + i, nodemap_file + "." + i);
-			System.out.println("genEqualPrivate - DONE, elapsed " + (System.currentTimeMillis() - start));
+			if (type == 0){
+				LouvainDP.genEqualPrivate(G, k, eps, sample_file + "." + i, nodemap_file + "." + i);
+				System.out.println("genEqualPrivate - DONE, elapsed " + (System.currentTimeMillis() - start));
+			}
+			
+			if (type == 1){
+				LouvainDP.genEqualPrivateLaplace(G, k, eps, sample_file + "." + i, nodemap_file + "." + i);
+				System.out.println("genEqualPrivateLaplace - DONE, elapsed " + (System.currentTimeMillis() - start));
+			}
 		}
 		
 		

@@ -17,6 +17,8 @@
  * 	- utilityByGraph(): generate 
  * Dec 28
  * 	- ICWSM submission: generate scripts for epsilon=0.1->0.5ln n
+ * Mar 10, 2016
+ * 	- add generateLouvainDPLaplace()
  */
 
 package dp.combined;
@@ -88,6 +90,23 @@ public class BatchGenerator {
 		bw.close();
 	}
 	
+	//// LouvainDP (Laplace)
+	public static void generateLouvainDPLaplace(String batch_file, String prefix, String dataname, int n_samples, double[] epsArr, int[] kArr) 
+			throws IOException{
+		
+		BufferedWriter bw = new BufferedWriter(new FileWriter(batch_file));
+		for (double eps : epsArr){
+			for (int k : kArr){
+				String cmd = "java dp.combined.LouvainDP " + prefix + " " + dataname + " " + n_samples + " " + 
+						String.format("%.2f", eps) + " " + k + " 1 " + 
+						" > ../_console/" + dataname + "_ldp_laplace_" + String.format("%.1f", eps) + "_" + k + "-CONSOLE.txt";
+				bw.write(cmd + "\n");
+			}
+			bw.write("\n");
+		}
+		bw.close();
+	}
+	
 	////LouvainOpt
 	public static void generateLouvainOpt(String batch_file, String prefix, String dataname, int n_samples, 
 			int burn_factor, int[] maxLevelArr, int[] kArr) throws IOException{
@@ -147,7 +166,7 @@ public class BatchGenerator {
 	}
 	
 	/////////
-	// algo = "_ef_", "_tmf_", "_1k_" (type=1), "_ldp_"
+	// algo = "_ef_", "_tmf_", "_1k_" (type=1), "_ldp_", "_ldp_laplace_" (type=0)
 	public static void generateLouvain(String batch_file, String prefix, String dataname, int n_samples, double[] epsArr, String algo, int type, int[] kArr) 
 			throws IOException{
 		
@@ -161,7 +180,7 @@ public class BatchGenerator {
 				
 				bw.write(cmd + "\n");
 			}
-		else{
+		else{ // for _ldp_, _ldp_laplace_
 			for (double eps : epsArr){
 				for (int k : kArr){
 					String sample_name = dataname + algo + String.format("%.1f", eps) + "_" + k;
@@ -302,6 +321,22 @@ public class BatchGenerator {
 		for (double eps : epsArr){
 			for (int k : kArr){
 				String sample_file = dataname + "_ldp_" + String.format("%.1f", eps) + "_" + k;
+				String cmd = "java dp.combined.CommunityMeasure " + prefix + " " + dataname + " " + n_samples + " " + sample_file;
+				
+				bw.write(cmd + "\n");
+			}
+			bw.write("\n");
+		}
+		bw.close();
+	}
+	
+	public static void measureLouvainDPLaplace(String batch_file, String prefix, String dataname, int n_samples, double[] epsArr, int[] kArr) 
+			throws IOException{
+		
+		BufferedWriter bw = new BufferedWriter(new FileWriter(batch_file));
+		for (double eps : epsArr){
+			for (int k : kArr){
+				String sample_file = dataname + "_ldp_laplace_" + String.format("%.1f", eps) + "_" + k;
 				String cmd = "java dp.combined.CommunityMeasure " + prefix + " " + dataname + " " + n_samples + " " + sample_file;
 				
 				bw.write(cmd + "\n");
@@ -782,6 +817,23 @@ public class BatchGenerator {
 //			System.out.println("DONE.");
 //		}
 		
+		// LouvainDP (Laplace)
+//		for (int i = 0; i < 5; i++){
+//			String dataname = dataname_list[i];
+//			int n = n_list[i];
+//			
+//			//
+//			String batch_file = "_cmd/LouvainDPLaplace_" + dataname + ".cmd";
+//			double log_n = Math.log(n);
+//			double[] epsArr = new double[]{0.1*log_n, 0.2*log_n, 0.3*log_n, 0.4*log_n, 0.5*log_n};	// 0.5*log_n
+//			int[] kArr = new int[]{4,8,16,32,64};
+//			
+//			
+//			
+//			generateLouvainDPLaplace(batch_file, prefix, dataname, n_samples, epsArr, kArr);
+//			System.out.println("DONE.");
+//		}
+		
 		// LouvainOpt
 //		for (int i = 0; i < n_list.length; i++){
 //			String dataname = dataname_list[i];
@@ -799,24 +851,24 @@ public class BatchGenerator {
 //		}
 		
 		// LouvainModDiv
-		for (int i = 4; i < n_list.length; i++){
-			String dataname = dataname_list[i];
-			int n = n_list[i];
-			
-			//
-			String batch_file = "_cmd/LouvainModDiv_" + dataname + ".cmd";
-			double log_n = Math.log(n);
-			int[] kArr = new int[]{2,3,4,5,6,10};			// amazon, dblp, youtube
-			int[] maxLevelArr = new int[]{10,7,5,4,4,3};
-//			int[] kArr = new int[]{2,3,4};					// polbooks (2,4),(3,3),(4,2) , as20graph (2,6),(3,4),(4,3), ca-AstroPh-wcc (2,7),(3,5),(4,4)
-//			int[] maxLevelArr = new int[]{7,5,4};
-			double[] epsArr = new double[]{0.1*log_n, 0.2*log_n, 0.3*log_n, 0.4*log_n, 0.5*log_n};	// 0.5*log_n
-			int burn_factor = 20;
-			double ratio = 2.0;
-			
-			generateLouvainModDiv(batch_file, prefix, dataname, n_samples, burn_factor, maxLevelArr, kArr, epsArr, ratio);
-			System.out.println("DONE.");
-		}
+//		for (int i = 4; i < n_list.length; i++){
+//			String dataname = dataname_list[i];
+//			int n = n_list[i];
+//			
+//			//
+//			String batch_file = "_cmd/LouvainModDiv_" + dataname + ".cmd";
+//			double log_n = Math.log(n);
+//			int[] kArr = new int[]{2,3,4,5,6,10};			// amazon, dblp, youtube
+//			int[] maxLevelArr = new int[]{10,7,5,4,4,3};
+////			int[] kArr = new int[]{2,3,4};					// polbooks (2,4),(3,3),(4,2) , as20graph (2,6),(3,4),(4,3), ca-AstroPh-wcc (2,7),(3,5),(4,4)
+////			int[] maxLevelArr = new int[]{7,5,4};
+//			double[] epsArr = new double[]{0.1*log_n, 0.2*log_n, 0.3*log_n, 0.4*log_n, 0.5*log_n};	// 0.5*log_n
+//			int burn_factor = 20;
+//			double ratio = 2.0;
+//			
+//			generateLouvainModDiv(batch_file, prefix, dataname, n_samples, burn_factor, maxLevelArr, kArr, epsArr, ratio);
+//			System.out.println("DONE.");
+//		}
 		
 		// HRGDivisiveGreedy
 //		for (int i = 0; i < n_list.length; i++){
@@ -1093,6 +1145,19 @@ public class BatchGenerator {
 //			
 //			System.out.println("DONE.");
 //		}
+//		
+//		for (int i = 0; i < n_list.length; i++){
+//			String dataname = dataname_list[i];
+//			int n = n_list[i];
+//			double log_n = Math.log(n);
+//			double[] epsArr = new double[]{0.1*log_n, 0.2*log_n, 0.3*log_n, 0.4*log_n, 0.5*log_n};	// 0.5*log_n
+//			int[] kArr = new int[]{4,8,16,32,64};
+//			
+//			String batch_file = "_cmd/Louvain_ldp_laplace_" + dataname + ".cmd";
+//			generateLouvain(batch_file, prefix, dataname, n_samples, epsArr, "_ldp_laplace_", 0, kArr);
+//			
+//			System.out.println("DONE.");
+//		}
 		
 		
 //		dataname_list = new String[]{"polbooks", "as20graph", "ca-AstroPh-wcc"};
@@ -1180,6 +1245,11 @@ public class BatchGenerator {
 //			measureLouvainDP(batch_file, prefix, dataname, n_samples, epsArr, kArr);
 //			System.out.println("measureLouvainDP - DONE.");
 			
+			//
+			String batch_file = "_cmd/Metric_LouvainDP_Laplace_" + dataname + ".cmd";
+			int[] kArr = new int[]{4,8,16,32,64};
+			measureLouvainDPLaplace(batch_file, prefix, dataname, n_samples, epsArr, kArr);
+			System.out.println("measureLouvainDPLaplace - DONE.");			
 			
 			/////
 //			String batch_file = "_cmd/Metric_MCMCInference_" + dataname + ".cmd";
