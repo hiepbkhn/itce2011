@@ -99,8 +99,8 @@ public class LinkExchange {
 			int k = random.nextInt(srcList.size());
 			while(dup.containsKey(k) == true)
 				k = random.nextInt(srcList.size());
-			dup.put(k, 1);
 			
+			dup.put(k, 1);
 			ret.add(srcList.get(k));
 			
 		}
@@ -193,11 +193,7 @@ public class LinkExchange {
 	//// insert link e to a sorted list
 	public static boolean insertLink(List<Int2> list, Int2 e){
 		// normalize e
-		if (e.val0 > e.val1){
-			int temp = e.val0;
-			e.val0 = e.val1;
-			e.val1 = temp;
-		}
+		normalizeEdge(e);
 		
 		//
 		int lo = 0;
@@ -225,7 +221,13 @@ public class LinkExchange {
 		}
 		
 		if (!found){
-			list.add(mid, e);
+			comp = list.get(mid).compareTo(e);
+			if (comp < 0)
+				list.add(mid+1, e);
+			else if (comp > 0)
+				list.add(mid, e);
+			else
+				System.err.println("ERROR in insertLink");
 			return true;
 		}else
 			return false;
@@ -250,7 +252,7 @@ public class LinkExchange {
 	}
 	
 	////
-	public static void linkExchangeNoDup(EdgeIntGraph G, int round, double alpha, double beta, String count_file) throws IOException{
+	public static void linkExchangeNoDup(EdgeIntGraph G, int round, double alpha, double beta, double discount, String count_file) throws IOException{
 		int n = G.V();
 		
 		List<List<Int2>> links = new ArrayList<List<Int2>>();
@@ -316,6 +318,9 @@ public class LinkExchange {
 				for (Int2 e:exLinks.get(u))
 					insertLink(links.get(u), e);
 			}
+			
+			//
+			alpha = alpha * discount;
 		}
 		
 		// count true/false/duplicate links
@@ -326,6 +331,8 @@ public class LinkExchange {
 			Map<Int2, Integer> dup = new HashMap<Int2, Integer>();
 			for(Int2 p : links.get(u)){
 				// p is already normalized 
+				if (p.val0 > p.val1)
+					System.err.println("error");
 				
 				if (dup.containsKey(p)){
 					dupLinks[u] += 1;
@@ -356,7 +363,8 @@ public class LinkExchange {
 	public static void main(String[] args) throws Exception{
 		String prefix = "";
 //		String dataname = "pl_1000_5_01";		// diameter = 5
-		String dataname = "pl_10000_5_01";		// diameter = 6, round=3 (OutOfMem, 7GB ok), 98s (Acer)
+		String dataname = "pl_10000_5_01";		// diameter = 6,  Dup: round=3 (OutOfMem, 7GB ok), 98s (Acer)
+												//				NoDup: round=3 (4.5GB), 376s (Acer)
 		
 		
 		String filename = prefix + "_data/" + dataname + ".gr";
@@ -374,8 +382,9 @@ public class LinkExchange {
 		
 		
 		//
-		int round = 1; // <= diameter
+		int round = 4; // <= diameter
 		double alpha = 0.5;
+		double discount = 0.5;
 		double beta = 1.0;
 		// TEST linkExchange()
 //		String count_file = prefix + "_out/" + dataname + "-" + round + "_" + String.format("%.1f",alpha) + "_" + String.format("%.1f",beta) + ".cnt";
@@ -401,9 +410,10 @@ public class LinkExchange {
 		
 		
 		// TEST linkExchangeNoDup()
-		String count_file = prefix + "_out/" + dataname + "-nodup-" + round + "_" + String.format("%.1f",alpha) + "_" + String.format("%.1f",beta) + ".cnt";
+		String count_file = prefix + "_out/" + dataname + "-nodup-" + round + "_" + String.format("%.1f",alpha) + "_" + 
+				String.format("%.1f",beta) + "_" + String.format("%.1f",discount) + ".cnt";
 		
-		linkExchangeNoDup(G, round, alpha, beta, count_file);
+		linkExchangeNoDup(G, round, alpha, beta, discount, count_file);
 		
 		
 	}
