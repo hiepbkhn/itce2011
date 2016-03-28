@@ -1,3 +1,9 @@
+/*
+ * Mar 27, 2016
+ * 	- commented hashCode()
+ * 	- fix compareTo()
+ */
+
 package hist;
 
 public class Int2 implements Comparable<Int2> {
@@ -10,17 +16,21 @@ public class Int2 implements Comparable<Int2> {
 	
 	////
 	public int compareTo(Int2 other) {
-		if (this.val1 < other.val1)
+		if (this.val0 < other.val0)
 			return -1;
-		if (this.val1 > other.val1)
+		if (this.val0 == other.val0 && this.val1 < other.val1)
+			return -1;
+		if (this.val0 > other.val0)
+			return 1;
+		if (this.val0 == other.val0 && this.val1 > other.val1)
 			return 1;
 		return 0;
 	}
 
-	@Override
-	public int hashCode() {
-		return val0*10000000 + val1;
-	}
+//	@Override
+//	public int hashCode() {
+//		return val0*10000000 + val1;
+//	}
 
 	@Override
 	public boolean equals(Object obj) {
