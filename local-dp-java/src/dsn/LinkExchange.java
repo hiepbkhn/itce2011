@@ -3,6 +3,8 @@
  * 	- "Link Exchange" problem(s)
  * Mar 27
  * 	- add graphMetric(), sampleLinkNoDup(), linkExchangeNoDup()
+ * Apr 6
+ * 	- add linkGossip(), linkGossipNoDup(), linkGossipAsync()
  */
 
 package dsn;
@@ -190,6 +192,92 @@ public class LinkExchange {
 		
 	}
 	
+	////
+	public static void linkGossip(EdgeIntGraph G, int round, double alpha, double beta, String count_file) throws IOException{
+		int n = G.V();
+		
+		List<List<Int2>> links = new ArrayList<List<Int2>>();
+		
+		// compute adj lists
+		List<List<Integer>> adj = new ArrayList<List<Integer>>();
+		for (int u = 0; u < n; u++){
+			List<Integer> nblist = new ArrayList<Integer>(G.adj(u).keySet());
+			adj.add(nblist);
+		}
+		
+		
+		long start = System.currentTimeMillis();
+		// initial stage
+		for (int u = 0; u < n; u++){
+			List<Int2> temp = new ArrayList<Int2>();
+			for (int v:G.adj(u).keySet())
+				temp.add(new Int2(u, v));
+			
+			List<Int2> newLinks = createFalseLink(G, u, beta);
+			temp.addAll(newLinks);
+			
+			links.add(temp);
+		}
+		
+		// loop
+		Random random = new Random();
+		for(int t = 1; t < round+1; t++){
+			List<List<Int2>> exLinks = new ArrayList<List<Int2>>();		// new links received at each node
+			for (int u = 0; u < n; u++)
+				exLinks.add(new ArrayList<Int2>());
+			
+			// for each node u
+			for (int u = 0; u < n; u++){
+				int v = adj.get(u).get(random.nextInt(G.degree(u)));
+				
+				List<Int2> listU = sampleLink(links.get(u), alpha);
+				
+				//
+				exLinks.get(v).addAll(listU);
+				
+			}
+			// expand lists, accept duplicate links
+			for (int u = 0; u < n; u++)
+				links.get(u).addAll(exLinks.get(u));
+		}
+		
+		// count true/false/duplicate links
+		int[] trueLinks = new int[n];
+		int[] falseLinks = new int[n];
+		int[] dupLinks = new int[n];
+		for (int u = 0; u < n; u++){
+			Map<Int2, Integer> dup = new HashMap<Int2, Integer>();
+			for(Int2 p : links.get(u)){
+				if(p.val0 > p.val1){	// normalize
+					int temp = p.val0;
+					p.val0 = p.val1;
+					p.val1 = temp;
+				}
+				
+				if (dup.containsKey(p)){
+					dupLinks[u] += 1;
+				}else{
+					dup.put(p, 1);
+					if (G.areEdgesAdjacent(p.val0, p.val1))
+						trueLinks[u] += 1;
+					else
+						falseLinks[u] += 1;
+				}
+			}
+			
+		}
+		System.out.println("linkGossip - DONE, elapsed " + (System.currentTimeMillis() - start));
+		
+		// write to file
+		BufferedWriter bw = new BufferedWriter(new FileWriter(count_file));
+		for (int u = 0; u < n; u++){
+			bw.write(trueLinks[u] + "\t" + falseLinks[u] + "\t" + dupLinks[u] + "\n");
+		}
+		bw.close();
+		System.out.println("Written to count_file.");
+		
+	}
+	
 	//// insert link e to a sorted list
 	public static boolean insertLink(List<Int2> list, Int2 e){
 		// normalize e
@@ -358,6 +446,215 @@ public class LinkExchange {
 		
 	}
 	
+	////
+	public static void linkGossipNoDup(EdgeIntGraph G, int round, double alpha, double beta, double discount, String count_file) throws IOException{
+		int n = G.V();
+		
+		List<List<Int2>> links = new ArrayList<List<Int2>>();
+		// compute adj lists
+		List<List<Integer>> adj = new ArrayList<List<Integer>>();
+		for (int u = 0; u < n; u++){
+			List<Integer> nblist = new ArrayList<Integer>(G.adj(u).keySet());
+			adj.add(nblist);
+		}
+				
+		long start = System.currentTimeMillis();
+		// initial stage
+		for (int u = 0; u < n; u++){
+			List<Int2> temp = new ArrayList<Int2>();
+			for (int v:G.adj(u).keySet())
+				temp.add(new Int2(u, v));
+			links.add(temp);
+			
+			// normalize and sort
+			normalizeEdges(links.get(u));
+			Collections.sort(links.get(u));
+			
+			// add false links (u,w)
+			Random random = new Random();
+			for (int i = 0; i < beta*G.degree(u); i++){
+				int w = random.nextInt(n);
+				
+				while (true){
+					
+					if (w == u || G.areEdgesAdjacent(u, w) == true){
+						w = random.nextInt(n);
+						continue;
+					}
+					
+					Int2 e = new Int2(u, w);
+					boolean isNew = insertLink(links.get(u), e);
+					if (isNew == true)
+						break;
+					else
+						w = random.nextInt(n);
+					
+				}
+			}
+		}
+		
+		
+		// loop
+		Random random = new Random();
+		for(int t = 1; t < round+1; t++){
+			List<List<Int2>> exLinks = new ArrayList<List<Int2>>();		// new links received at each node
+			for (int u = 0; u < n; u++)
+				exLinks.add(new ArrayList<Int2>());
+			
+			// for each node u
+			for (int u = 0; u < n; u++){
+				int v = adj.get(u).get(random.nextInt(G.degree(u)));
+				
+				List<Int2> listU = sampleLinkNoDup(links.get(u), alpha);
+				
+				//
+				exLinks.get(v).addAll(listU);
+				
+			}
+			// expand lists, do not accept duplicate links
+			for (int u = 0; u < n; u++){
+				for (Int2 e:exLinks.get(u))
+					insertLink(links.get(u), e);
+			}
+			
+			//
+			alpha = alpha * discount;
+		}
+		
+		// count true/false/duplicate links
+		int[] trueLinks = new int[n];
+		int[] falseLinks = new int[n];
+		int[] dupLinks = new int[n];
+		for (int u = 0; u < n; u++){
+			Map<Int2, Integer> dup = new HashMap<Int2, Integer>();
+			for(Int2 p : links.get(u)){
+				// p is already normalized 
+				if (p.val0 > p.val1)
+					System.err.println("error");
+				
+				if (dup.containsKey(p)){
+					dupLinks[u] += 1;
+				}else{
+					dup.put(p, 1);
+					if (G.areEdgesAdjacent(p.val0, p.val1))
+						trueLinks[u] += 1;
+					else
+						falseLinks[u] += 1;
+				}
+			}
+			
+		}
+		System.out.println("linkGossipNoDup - DONE, elapsed " + (System.currentTimeMillis() - start));
+		
+		// write to file
+		BufferedWriter bw = new BufferedWriter(new FileWriter(count_file));
+		for (int u = 0; u < n; u++){
+			bw.write(trueLinks[u] + "\t" + falseLinks[u] + "\t" + dupLinks[u] + "\n");
+		}
+		bw.close();
+		System.out.println("Written to count_file.");
+		
+	}
+	
+	
+	//// run by step (not round)
+	public static void linkGossipAsync(EdgeIntGraph G, int step, double alpha, double beta, String count_file) throws IOException{
+		int n = G.V();
+		
+		List<List<Int2>> links = new ArrayList<List<Int2>>();
+		// compute adj lists
+		List<List<Integer>> adj = new ArrayList<List<Integer>>();
+		for (int u = 0; u < n; u++){
+			List<Integer> nblist = new ArrayList<Integer>(G.adj(u).keySet());
+			adj.add(nblist);
+		}
+				
+		long start = System.currentTimeMillis();
+		// initial stage
+		for (int u = 0; u < n; u++){
+			List<Int2> temp = new ArrayList<Int2>();
+			for (int v:G.adj(u).keySet())
+				temp.add(new Int2(u, v));
+			links.add(temp);
+			
+			// normalize and sort
+			normalizeEdges(links.get(u));
+			Collections.sort(links.get(u));
+			
+			// add false links (u,w)
+			Random random = new Random();
+			for (int i = 0; i < beta*G.degree(u); i++){
+				int w = random.nextInt(n);
+				
+				while (true){
+					
+					if (w == u || G.areEdgesAdjacent(u, w) == true){
+						w = random.nextInt(n);
+						continue;
+					}
+					
+					Int2 e = new Int2(u, w);
+					boolean isNew = insertLink(links.get(u), e);
+					if (isNew == true)
+						break;
+					else
+						w = random.nextInt(n);
+					
+				}
+			}
+		}
+		
+		
+		// loop
+		Random random = new Random();
+		for(int t = 1; t < step+1; t++){
+			// select node u
+			int u = random.nextInt(n);
+			int v = adj.get(u).get(random.nextInt(G.degree(u)));
+			
+			List<Int2> listU = sampleLinkNoDup(links.get(u), alpha);
+			
+			
+			// expand lists, do not accept duplicate links
+			for (Int2 e:listU)
+				insertLink(links.get(v), e);
+			
+		}
+		
+		// count true/false/duplicate links
+		int[] trueLinks = new int[n];
+		int[] falseLinks = new int[n];
+		int[] dupLinks = new int[n];
+		for (int u = 0; u < n; u++){
+			Map<Int2, Integer> dup = new HashMap<Int2, Integer>();
+			for(Int2 p : links.get(u)){
+				// p is already normalized 
+				if (p.val0 > p.val1)
+					System.err.println("error");
+				
+				if (dup.containsKey(p)){
+					dupLinks[u] += 1;
+				}else{
+					dup.put(p, 1);
+					if (G.areEdgesAdjacent(p.val0, p.val1))
+						trueLinks[u] += 1;
+					else
+						falseLinks[u] += 1;
+				}
+			}
+			
+		}
+		System.out.println("linkGossipAsync - DONE, elapsed " + (System.currentTimeMillis() - start));
+		
+		// write to file
+		BufferedWriter bw = new BufferedWriter(new FileWriter(count_file));
+		for (int u = 0; u < n; u++){
+			bw.write(trueLinks[u] + "\t" + falseLinks[u] + "\t" + dupLinks[u] + "\n");
+		}
+		bw.close();
+		System.out.println("Written to count_file.");
+		
+	}
 	
 	////////////////////////////////////////////////
 	public static void main(String[] args) throws Exception{
@@ -382,9 +679,10 @@ public class LinkExchange {
 		
 		
 		//
-		int round = 4; // <= diameter
+		int round = 10; // <= diameter
+		int step = 100000;
 		double alpha = 0.5;
-		double discount = 0.5;
+		double discount = 1.0;
 		double beta = 1.0;
 		// TEST linkExchange()
 //		String count_file = prefix + "_out/" + dataname + "-" + round + "_" + String.format("%.1f",alpha) + "_" + String.format("%.1f",beta) + ".cnt";
@@ -410,11 +708,30 @@ public class LinkExchange {
 		
 		
 		// TEST linkExchangeNoDup()
-		String count_file = prefix + "_out/" + dataname + "-nodup-" + round + "_" + String.format("%.1f",alpha) + "_" + 
-				String.format("%.1f",beta) + "_" + String.format("%.1f",discount) + ".cnt";
+//		String count_file = prefix + "_out/" + dataname + "-nodup-" + round + "_" + String.format("%.1f",alpha) + "_" + 
+//				String.format("%.1f",beta) + "_" + String.format("%.1f",discount) + ".cnt";
+//		
+//		linkExchangeNoDup(G, round, alpha, beta, discount, count_file);
 		
-		linkExchangeNoDup(G, round, alpha, beta, discount, count_file);
 		
+		////////
+		// TEST linkGossip()
+//		String count_file = prefix + "_out/" + dataname + "-gossip-" + round + "_" + String.format("%.1f",alpha) + "_" + 
+//				String.format("%.1f",beta) + "_" + String.format("%.1f",discount) + ".cnt";
+//		
+//		linkGossip(G, round, alpha, beta, count_file);
+		
+		// TEST linkGossipNoDup()
+//		String count_file = prefix + "_out/" + dataname + "-gossip-nodup-" + round + "_" + String.format("%.1f",alpha) + "_" + 
+//				String.format("%.1f",beta) + "_" + String.format("%.1f",discount) + ".cnt";
+//		
+//		linkGossipNoDup(G, round, alpha, beta, discount, count_file);
+		
+		// TEST linkGossipAsync()
+		String count_file = prefix + "_out/" + dataname + "-gossip-async-" + step + "_" + String.format("%.1f",alpha) + "_" + 
+				String.format("%.1f",beta) + ".cnt";
+		
+		linkGossipAsync(G, step, alpha, beta, count_file);
 		
 	}
 
