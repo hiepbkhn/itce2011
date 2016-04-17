@@ -1,0 +1,32 @@
+dataname = pl_10000_5_01
+readGraph - DONE, elapsed 110
+#nodes = 10000
+#edges = 49970
+max_deg = 350
+total_size = 2542550
+max_size = 5278
+min_size = 30
+p = 0.9811933028329164
+computeGroupByDistance - DONE, elapsed 734
+
+
+dataname = com_dblp_ungraph
+readGraph - DONE, elapsed 2485
+#nodes = 317080
+#edges = 1049866
+max_deg = 343
+total_size = 27437914
+max_size = 5416
+min_size = 2
+computeGroupByDistance - DONE, elapsed 11329
+
+
+dataname = com_amazon_ungraph
+readGraph - DONE, elapsed 3141
+#nodes = 334863
+#edges = 925872
+max_deg = 549
+total_size = 13867194
+max_size = 1396
+min_size = 2
+computeGroupByDistance - DONE, elapsed 3906
