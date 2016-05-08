@@ -9,6 +9,8 @@
  * 	- (degree/(2.0*links))*(degree /(2.0*links)); 	
  * Sep 28
  * 	- PASS_MAX = 20 (nb_pass_done < PASS_MAX in true graphs), used to reduce runtime of Louvain on TmF, EdgeFlip
+ * May 8, 2016
+ * 	- generate_first_round(), generate_first_step() + one_step()
  */
 
 package dp.combined;
@@ -318,6 +320,47 @@ public class Louvain {
 	    System.out.println("?PASS_MAX = " + (nb_pass_done < PASS_MAX));
 	}
 	
+	////call neighcom(), remove(), insert()
+	private void one_step(EdgeWeightedGraph graph, Status status){
+		int V = graph.V();
+		
+	    // run only one step !
+        for (int node = 0; node < V; node++){
+        	
+            int com_node = status.node2com.get(node);
+            double degc_totw = status.gdegrees.get(node) / (status.total_weight*2.);
+            
+            Map<Integer, Integer> neigh_communities = neighcom(node, graph, status);
+            
+            // remove() 'node' from current 'com_node'
+            int weight = 0;
+            if (neigh_communities.containsKey(com_node))
+            	weight = neigh_communities.get(com_node);
+            remove(node, com_node, weight, status);
+            
+            // compute 'best_com'
+            int best_com = com_node;
+            double best_increase = 0;
+            for (Map.Entry<Integer, Integer> entry : neigh_communities.entrySet()){
+            	int com = entry.getKey();
+            	int dnc = entry.getValue();
+                double incr =  dnc  - status.degrees.get(com) * degc_totw;
+                if (incr > best_increase){
+                    best_increase = incr;
+                    best_com = com;
+                }
+            }
+            
+            // insert() 'node' into 'best_com'
+            weight = 0;
+            if (neigh_communities.containsKey(best_com))
+            	weight = neigh_communities.get(best_com);
+            insert(node, best_com, weight, status);
+            
+		}
+	    
+	}
+	
 	//// replace param 'dictionary' by 'status' (dictionary = status.node2com)
 	// 	
 	private Map<Integer, Integer> renumber(Status status){
@@ -497,6 +540,67 @@ public class Louvain {
 	    
 	    //
 	    return status_list;
+	}
+	
+	//// copied from generate_dendrogram()
+	public Map<Integer, Integer> generate_first_round(EdgeWeightedGraph graph, Map<Integer, Integer> part_init){
+
+		EdgeWeightedGraph current_graph = graph.clone();
+	    Status status = new Status();
+	    status.init(current_graph, part_init, null);
+	    double mod = modularity(status);
+	    System.out.println("current_graph: #nodes = " + current_graph.V() + " #edges = " + current_graph.E() + " mod = " + mod);
+
+	    //
+	    one_level(current_graph, status);	// full first round !
+	    
+	    double new_mod = modularity(status);
+	    
+	    
+	    Map<Integer, Integer> partition = renumber(status);
+	    
+	    current_graph = induced_graph(partition, current_graph);
+	    status.init(current_graph, null, status);
+	    
+	  	//debug
+	    System.out.println("modularity = " + new_mod);
+	    System.out.println("#communitites = " + current_graph.V());
+	    
+	    //
+	    return partition;
+	}
+	
+	////
+	public Map<Integer, Integer> generate_first_step(EdgeWeightedGraph graph, Map<Integer, Integer> part_init){
+
+		EdgeWeightedGraph current_graph = graph.clone();
+	    Status status = new Status();
+	    status.init(current_graph, part_init, null);
+	    double mod = modularity(status);
+	    System.out.println("current_graph: #nodes = " + current_graph.V() + " #edges = " + current_graph.E() + " mod = " + mod);
+
+	    List<Status> status_all = new ArrayList<Status>();			// for logLK()
+	    List<EdgeWeightedGraph> graph_all = new ArrayList<EdgeWeightedGraph>();			// for logLK()
+	    
+	    //
+	    one_step(current_graph, status);	// only first step !
+	    
+	    double new_mod = modularity(status);
+	    
+	    
+	    Map<Integer, Integer> partition = renumber(status);
+	    status_all.add(status.copy());
+	    
+	    current_graph = induced_graph(partition, current_graph);
+	    status.init(current_graph, null, status);
+	    graph_all.add(current_graph.clone());
+	    
+	  	//debug
+	    System.out.println("modularity = " + new_mod);
+	    System.out.println("#communitites = " + current_graph.V());
+	    
+	    //
+	    return partition;
 	}
 	
 	////
@@ -915,7 +1019,7 @@ public class Louvain {
 	public static void main(String[] args) throws Exception{
 		// load graph
 //		String dataname = "example";			// 
-//		String dataname = "karate";			// (34, 78) 		ok
+		String dataname = "karate";			// (34, 78) 		ok
 //		String dataname = "polbooks";		// (105, 441)		ok
 //		String dataname = "polblogs";		// (1224,16715)		ok 	
 //		String dataname = "as20graph";		// (6474,12572)		ok
@@ -932,98 +1036,98 @@ public class Louvain {
 		// LARGE
 //		String dataname = "com_amazon_ungraph";		// (334863,925872)	17.8s
 //		String dataname = "com_dblp_ungraph";		// (317080,1049866)	27.2s 			(new : 20s, Mem 1.5GB)
-		String dataname = "com_youtube_ungraph";	// (1134890,2987624) 670s, 2.2GB)	(new : 42s, Mem 2.7GB)
+//		String dataname = "com_youtube_ungraph";	// (1134890,2987624) 670s, 2.2GB)	(new : 42s, Mem 2.7GB)
 													//						
 		// COMMAND-LINE <prefix> <dataname> <n_samples> <eps>
-		String prefix = "";
-	    int n_samples = 1;
-	    int type = 1;	// 1:EdgeFlip, TmF, 2:LouvainDP
-	    String sample_file = "";
-	    
-	    if(args.length >= 4){
-			prefix = args[0];
-			n_samples = Integer.parseInt(args[1]);
-			type = Integer.parseInt(args[2]);
-			sample_file = args[3];
-	    }
-	    
-		System.out.println("n_samples = " + n_samples);
-		System.out.println("type = " + type);
-		System.out.println("sample_file = " + sample_file);
-		
-		int n = 0;
-		int k = 0;
-		if (sample_file.indexOf("polbooks") != -1)
-			n = 105;
-		if (sample_file.indexOf("as20graph") != -1)
-			n = 6474;
-		if (sample_file.indexOf("ca-AstroPh-wcc") != -1)
-			n = 17903;
-		if (sample_file.indexOf("amazon") != -1)
-			n = 334863;
-		if (sample_file.indexOf("dblp") != -1)
-			n = 317080;
-		if (sample_file.indexOf("youtube") != -1)
-			n = 1134890;
-		
-		if (type == 1)
-			for (int i = 0; i < n_samples; i++){
-		    	System.out.println("sample i = " + i);
-		    	
-		    	String part_file = prefix + "_louvain/" + sample_file + "." + i + ".part";
-		    	
-				long start = System.currentTimeMillis();
-				EdgeWeightedGraph G = EdgeWeightedGraph.readEdgeList(prefix + "_sample/" + sample_file + "." + i);
-				System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
-				
-				System.out.println("#nodes = " + G.V());
-				System.out.println("#edges = " + G.E());
-				
-				// 
-				Louvain lv = new Louvain();
-				start = System.currentTimeMillis();
-				Map<Integer, Integer> part = lv.best_partition(G, null);
-				System.out.println("best_partition - DONE, elapsed " + (System.currentTimeMillis() - start));
-		
-				Louvain.writePart(part, part_file);
-				System.out.println("writePart - DONE");
-		    	
-			}
-		else{	// LouvainDP
-			k = Integer.parseInt(sample_file.substring(sample_file.lastIndexOf("_") + 1) );
-			System.out.println("n = " + n + " k = " + k);
-
-			for (int i = 0; i < n_samples; i++){
-		    	System.out.println("sample i = " + i);
-		    	
-		    	String part_file = prefix + "_louvain/" + sample_file + "." + i + ".part";
-		    	
-				long start = System.currentTimeMillis();
-				EdgeWeightedGraph G = EdgeWeightedGraph.readEdgeListAndWeight(prefix + "_sample/" + sample_file + "." + i, n/k + 1);	// #nodes = n/k+1 (LouvainDP.randomEqualCommunity)
-				System.out.println("readEdgeListAndWeight - DONE, elapsed " + (System.currentTimeMillis() - start));
-				
-				System.out.println("#nodes = " + G.V());
-				System.out.println("#edges = " + G.E());
-				System.out.println("totalWeight = " + G.totalWeight());
-				
-				// 
-				Louvain lv = new Louvain();
-				start = System.currentTimeMillis();
-				Map<Integer, Integer> part = lv.best_partition(G, null);
-				System.out.println("best_partition - DONE, elapsed " + (System.currentTimeMillis() - start));
-		
-				// remap
-				String nodemap_file = prefix + "_sample/" + sample_file + "_nodemap." + i;
-				Map<Integer, Integer> nodemap = readNodeMap(nodemap_file);
-				
-				for (Map.Entry<Integer, Integer> entry : nodemap.entrySet()){
-					nodemap.put(entry.getKey(), part.get(entry.getValue()));
-				}
-				
-				Louvain.writePart(nodemap, part_file);
-				System.out.println("writePart - DONE");
-			}
-		}
+//		String prefix = "";
+//	    int n_samples = 1;
+//	    int type = 1;	// 1:EdgeFlip, TmF, 2:LouvainDP
+//	    String sample_file = "";
+//	    
+//	    if(args.length >= 4){
+//			prefix = args[0];
+//			n_samples = Integer.parseInt(args[1]);
+//			type = Integer.parseInt(args[2]);
+//			sample_file = args[3];
+//	    }
+//	    
+//		System.out.println("n_samples = " + n_samples);
+//		System.out.println("type = " + type);
+//		System.out.println("sample_file = " + sample_file);
+//		
+//		int n = 0;
+//		int k = 0;
+//		if (sample_file.indexOf("polbooks") != -1)
+//			n = 105;
+//		if (sample_file.indexOf("as20graph") != -1)
+//			n = 6474;
+//		if (sample_file.indexOf("ca-AstroPh-wcc") != -1)
+//			n = 17903;
+//		if (sample_file.indexOf("amazon") != -1)
+//			n = 334863;
+//		if (sample_file.indexOf("dblp") != -1)
+//			n = 317080;
+//		if (sample_file.indexOf("youtube") != -1)
+//			n = 1134890;
+//		
+//		if (type == 1)
+//			for (int i = 0; i < n_samples; i++){
+//		    	System.out.println("sample i = " + i);
+//		    	
+//		    	String part_file = prefix + "_louvain/" + sample_file + "." + i + ".part";
+//		    	
+//				long start = System.currentTimeMillis();
+//				EdgeWeightedGraph G = EdgeWeightedGraph.readEdgeList(prefix + "_sample/" + sample_file + "." + i);
+//				System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
+//				
+//				System.out.println("#nodes = " + G.V());
+//				System.out.println("#edges = " + G.E());
+//				
+//				// 
+//				Louvain lv = new Louvain();
+//				start = System.currentTimeMillis();
+//				Map<Integer, Integer> part = lv.best_partition(G, null);
+//				System.out.println("best_partition - DONE, elapsed " + (System.currentTimeMillis() - start));
+//		
+//				Louvain.writePart(part, part_file);
+//				System.out.println("writePart - DONE");
+//		    	
+//			}
+//		else{	// LouvainDP
+//			k = Integer.parseInt(sample_file.substring(sample_file.lastIndexOf("_") + 1) );
+//			System.out.println("n = " + n + " k = " + k);
+//
+//			for (int i = 0; i < n_samples; i++){
+//		    	System.out.println("sample i = " + i);
+//		    	
+//		    	String part_file = prefix + "_louvain/" + sample_file + "." + i + ".part";
+//		    	
+//				long start = System.currentTimeMillis();
+//				EdgeWeightedGraph G = EdgeWeightedGraph.readEdgeListAndWeight(prefix + "_sample/" + sample_file + "." + i, n/k + 1);	// #nodes = n/k+1 (LouvainDP.randomEqualCommunity)
+//				System.out.println("readEdgeListAndWeight - DONE, elapsed " + (System.currentTimeMillis() - start));
+//				
+//				System.out.println("#nodes = " + G.V());
+//				System.out.println("#edges = " + G.E());
+//				System.out.println("totalWeight = " + G.totalWeight());
+//				
+//				// 
+//				Louvain lv = new Louvain();
+//				start = System.currentTimeMillis();
+//				Map<Integer, Integer> part = lv.best_partition(G, null);
+//				System.out.println("best_partition - DONE, elapsed " + (System.currentTimeMillis() - start));
+//		
+//				// remap
+//				String nodemap_file = prefix + "_sample/" + sample_file + "_nodemap." + i;
+//				Map<Integer, Integer> nodemap = readNodeMap(nodemap_file);
+//				
+//				for (Map.Entry<Integer, Integer> entry : nodemap.entrySet()){
+//					nodemap.put(entry.getKey(), part.get(entry.getValue()));
+//				}
+//				
+//				Louvain.writePart(nodemap, part_file);
+//				System.out.println("writePart - DONE");
+//			}
+//		}
 	    
 	    
 	    // Louvain on true graphs
@@ -1053,6 +1157,35 @@ public class Louvain {
 ////		int[] part1 = new int[]{0,0,0,1,1,2,2,3,3,3,3,2,2};
 //		int[] part1 = new int[]{0,0,0,2,2,2,2,3,3,3,3,2,2};
 //		System.out.println(CommunityMeasure.modularity(G, part1));
+		
+		
+		//// TEST generate_first_round(), generate_first_step()
+	    System.out.println("dataname = " + dataname);
+	    
+		String filename = "_data/" + dataname + ".gr";
+//		String part_file = "_out/" + dataname + ".f1";	// f1: full first round
+		String part_file = "_out/" + dataname + ".s1";	// s1: only first step
+		
+		long start = System.currentTimeMillis();
+		EdgeWeightedGraph G = EdgeWeightedGraph.readEdgeList(filename);
+		System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
+		
+		System.out.println("#nodes = " + G.V());
+		System.out.println("#edges = " + G.E());
+		
+		// TEST best_partition()
+		Louvain lv = new Louvain();
+		start = System.currentTimeMillis();
+		//
+//		Map<Integer, Integer> part = lv.generate_first_round(G, null);
+//		System.out.println("generate_first_round - DONE, elapsed " + (System.currentTimeMillis() - start));
+		//
+		Map<Integer, Integer> part = lv.generate_first_step(G, null);
+		System.out.println("generate_first_step - DONE, elapsed " + (System.currentTimeMillis() - start));
+
+		Louvain.writePart(part, part_file);
+		System.out.println("writePart - DONE");
+		
 	}
 
 }

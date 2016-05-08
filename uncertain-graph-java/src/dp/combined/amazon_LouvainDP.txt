@@ -1,0 +1,259 @@
+LouvainDP
+dataname = com_amazon_ungraph
+eps = 0.25
+readGraph - DONE, elapsed 2922
+#nodes = 334863
+#edges = 925872
+m = 1.38630084E9
+s before = 925872.0
+s after = 911910.6156365521
+alpha = 0.7788007830714049
+theta = 27.0
+graph_final.V = 52655
+BEFORE: graph_final.E = 209
+AFTER: graph_final.E = 911650
+graph_final.totalWeight = 2.6915736E7
+current_graph: #nodes = 52655 #edges = 911650 mod = 3.0199222898451436E-5
+?PASS_MAX = true
+current_graph: #nodes = 52655 #edges = 911650 mod = 3.0199222898451436E-5
+?PASS_MAX = false
+current_graph: #nodes = 13996 #edges = 881207 mod = 0.059962902130687105
+?PASS_MAX = true
+current_graph: #nodes = 14 #edges = 105 mod = 0.12357204072775335
+?PASS_MAX = true
+current_graph: #nodes = 13 #edges = 91 mod = 0.12357635186480527
+modularity = 0.12357635186480526
+#communitites = 13
+true_mod = 0.6175392151686211
+louvainGivenPartition - DONE, elapsed 25360
+
+
+LouvainDP
+dataname = com_amazon_ungraph
+eps = 0.5
+readGraph - DONE, elapsed 3000
+#nodes = 334863
+#edges = 925872
+m = 1.38630084E9
+s before = 925872.0
+s after = 786351.9075794272
+alpha = 0.6065306597126334
+theta = 14.0
+graph_final.V = 52655
+BEFORE: graph_final.E = 217
+AFTER: graph_final.E = 786247
+graph_final.totalWeight = 1.1431375E7
+current_graph: #nodes = 52655 #edges = 786247 mod = 4.7537064721533575E-5
+?PASS_MAX = true
+current_graph: #nodes = 52655 #edges = 786247 mod = 4.7537064721533575E-5
+?PASS_MAX = false
+current_graph: #nodes = 14881 #edges = 759956 mod = 0.06682064717838375
+?PASS_MAX = true
+current_graph: #nodes = 14 #edges = 105 mod = 0.13769902773905351
+modularity = 0.13769902773905346
+#communitites = 14
+true_mod = 0.6241474543589658
+louvainGivenPartition - DONE, elapsed 22970
+
+
+LouvainDP
+dataname = com_amazon_ungraph
+eps = 1.0
+readGraph - DONE, elapsed 3313
+#nodes = 334863
+#edges = 925872
+m = 1.38630084E9
+s before = 925872.0
+s after = 923545.1684016724
+alpha = 0.36787944117144233
+theta = 7.0
+graph_final.V = 52655
+BEFORE: graph_final.E = 403
+AFTER: graph_final.E = 923515
+graph_final.totalWeight = 6079402.0
+current_graph: #nodes = 52655 #edges = 923515 mod = 8.605939668505943E-5
+?PASS_MAX = true
+current_graph: #nodes = 52655 #edges = 923515 mod = 8.605939668505943E-5
+?PASS_MAX = false
+current_graph: #nodes = 16318 #edges = 899782 mod = 0.057270612493782895
+?PASS_MAX = true
+current_graph: #nodes = 15 #edges = 120 mod = 0.12734835165599004
+?PASS_MAX = true
+current_graph: #nodes = 14 #edges = 105 mod = 0.12735543315155998
+modularity = 0.12735543315155995
+#communitites = 14
+true_mod = 0.6146265176952334
+louvainGivenPartition - DONE, elapsed 27868
+
+
+============
+LouvainDP
+dataname = com_amazon_ungraph
+eps = 0.25
+part_file = _out/com_amazon_ungraph.s1
+readGraph - DONE, elapsed 3235
+#nodes = 334863
+#edges = 925872
+m = 6.73316299E9
+s before = 925872.0
+s after = 770067.8565180246
+alpha = 0.7788007830714049
+theta = 34.0
+graph_final.V = 116044
+BEFORE: graph_final.E = 60
+AFTER: graph_final.E = 770034
+graph_final.totalWeight = 2.8121349E7
+current_graph: #nodes = 116044 #edges = 770034 mod = 8.68139714428302E-6
+?PASS_MAX = true
+current_graph: #nodes = 116044 #edges = 770034 mod = 8.68139714428302E-6
+?PASS_MAX = false
+current_graph: #nodes = 32164 #edges = 717690 mod = 0.13208219662299783
+?PASS_MAX = true
+current_graph: #nodes = 87 #edges = 1265 mod = 0.2341543122935562
+?PASS_MAX = true
+current_graph: #nodes = 19 #edges = 186 mod = 0.23432238580899312
+?PASS_MAX = true
+current_graph: #nodes = 17 #edges = 150 mod = 0.23432703457382584
+modularity = 0.23432703457382584
+#communitites = 17
+true_mod = 0.3697602675775633
+louvainGivenPartition - DONE, elapsed 24899
+
+
+LouvainDP
+dataname = com_amazon_ungraph
+eps = 0.5
+part_file = _out/com_amazon_ungraph.s1
+readGraph - DONE, elapsed 3066
+#nodes = 334863
+#edges = 925872
+m = 6.73316299E9
+s before = 925872.0
+s after = 852643.1150946106
+alpha = 0.6065306597126334
+theta = 17.0
+graph_final.V = 116044
+BEFORE: graph_final.E = 76
+AFTER: graph_final.E = 852621
+graph_final.totalWeight = 1.4956205E7
+current_graph: #nodes = 116044 #edges = 852621 mod = 1.0580794255770244E-5
+?PASS_MAX = true
+current_graph: #nodes = 116044 #edges = 852621 mod = 1.0580794255770244E-5
+?PASS_MAX = false
+current_graph: #nodes = 33889 #edges = 803679 mod = 0.11889116347262602
+?PASS_MAX = true
+current_graph: #nodes = 72 #edges = 942 mod = 0.22054559661720943
+?PASS_MAX = true
+current_graph: #nodes = 18 #edges = 157 mod = 0.22067237020303257
+?PASS_MAX = true
+current_graph: #nodes = 15 #edges = 116 mod = 0.22067674598242143
+modularity = 0.22067674598242143
+#communitites = 15
+true_mod = 0.3644355879725261
+louvainGivenPartition - DONE, elapsed 29678
+
+
+LouvainDP
+dataname = com_amazon_ungraph
+eps = 1.0
+part_file = _out/com_amazon_ungraph.s1
+readGraph - DONE, elapsed 3016
+#nodes = 334863
+#edges = 925872
+m = 6.73316299E9
+s before = 925872.0
+s after = 607381.05917137
+alpha = 0.36787944117144233
+theta = 9.0
+graph_final.V = 116044
+BEFORE: graph_final.E = 96
+AFTER: graph_final.E = 607413
+graph_final.totalWeight = 5213251.0
+current_graph: #nodes = 116044 #edges = 607413 mod = 4.042291763063946E-5
+?PASS_MAX = true
+current_graph: #nodes = 116044 #edges = 607413 mod = 4.042291763063946E-5
+?PASS_MAX = true
+current_graph: #nodes = 37129 #edges = 565377 mod = 0.1550881466600286
+?PASS_MAX = false
+current_graph: #nodes = 12438 #edges = 513979 mod = 0.2025588615463434
+?PASS_MAX = true
+current_graph: #nodes = 51 #edges = 1135 mod = 0.25897917531565856
+?PASS_MAX = true
+current_graph: #nodes = 38 #edges = 630 mod = 0.2590387430210857
+modularity = 0.25903874302108565
+#communitites = 38
+true_mod = 0.3938128315169853
+louvainGivenPartition - DONE, elapsed 28575
+
+
+LouvainDP
+dataname = com_amazon_ungraph
+eps = 2.0
+part_file = _out/com_amazon_ungraph.s1
+readGraph - DONE, elapsed 2874
+#nodes = 334863
+#edges = 925872
+m = 6.73316299E9
+s before = 925872.0
+s after = 269209.5426033678
+alpha = 0.1353352832366127
+theta = 5.0
+graph_final.V = 116044
+BEFORE: graph_final.E = 129
+AFTER: graph_final.E = 269324
+graph_final.totalWeight = 1119757.0
+current_graph: #nodes = 116044 #edges = 269324 mod = 9.935122169196546E-5
+?PASS_MAX = true
+current_graph: #nodes = 116044 #edges = 269324 mod = 9.935122169196546E-5
+?PASS_MAX = false
+current_graph: #nodes = 45070 #edges = 242218 mod = 0.2869355879754015
+?PASS_MAX = false
+current_graph: #nodes = 17895 #edges = 187755 mod = 0.3885053001742804
+?PASS_MAX = false
+current_graph: #nodes = 7876 #edges = 167053 mod = 0.42617549391749926
+?PASS_MAX = true
+current_graph: #nodes = 1446 #edges = 14023 mod = 0.47230053100578995
+?PASS_MAX = true
+current_graph: #nodes = 1258 #edges = 3064 mod = 0.47370124738591546
+?PASS_MAX = true
+current_graph: #nodes = 1248 #edges = 2371 mod = 0.4737416654726391
+modularity = 0.4737416654726391
+#communitites = 1248
+true_mod = 0.401299809410674
+louvainGivenPartition - DONE, elapsed 19141
+
+
+LouvainDP
+dataname = com_amazon_ungraph
+eps = 4.0
+part_file = _out/com_amazon_ungraph.s1
+readGraph - DONE, elapsed 2938
+#nodes = 334863
+#edges = 925872
+m = 6.73316299E9
+s before = 925872.0
+s after = 40620.30758075193
+alpha = 0.01831563888873418
+theta = 3.0
+graph_final.V = 116044
+BEFORE: graph_final.E = 123
+AFTER: graph_final.E = 40740
+graph_final.totalWeight = 82375.0
+current_graph: #nodes = 116044 #edges = 40740 mod = 7.439364650995415E-4
+?PASS_MAX = true
+current_graph: #nodes = 116044 #edges = 40740 mod = 7.439364650995415E-4
+?PASS_MAX = true
+current_graph: #nodes = 82554 #edges = 32418 mod = 0.8244147754284006
+?PASS_MAX = true
+current_graph: #nodes = 76234 #edges = 19778 mod = 0.9778435715491088
+?PASS_MAX = true
+current_graph: #nodes = 75388 #edges = 18085 mod = 0.9983737177353443
+?PASS_MAX = true
+current_graph: #nodes = 75330 #edges = 17969 mod = 0.9997693427799228
+?PASS_MAX = true
+current_graph: #nodes = 75326 #edges = 17961 mod = 0.9998632151252441
+modularity = 0.9998632151252443
+#communitites = 75326
+true_mod = 0.41026298254523175
+louvainGivenPartition - DONE, elapsed 4716
+

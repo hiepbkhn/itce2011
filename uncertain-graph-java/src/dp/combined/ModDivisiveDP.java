@@ -145,7 +145,7 @@ public class ModDivisiveDP {
 			NodeSetMod.writePart(root_set, part_file);
 			System.out.println("writePart - DONE");
 			
-			LouvainDP.louvainAfterFirstPass(G, part_file, 2.0);
+//			LouvainDP.louvainAfterFirstPass(G, part_file, 2.0);
 			
 			//
 			
