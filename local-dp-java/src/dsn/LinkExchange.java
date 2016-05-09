@@ -679,11 +679,13 @@ public class LinkExchange {
 		
 		
 		//
-		int round = 10; // <= diameter
-		int step = 100000;
+//		int round = 3; 		// flood
+		int round = 10; 	// gossip
+		int step = 100000;	// gossip-async
 		double alpha = 0.5;
 		double discount = 1.0;
 		double beta = 1.0;
+		
 		// TEST linkExchange()
 //		String count_file = prefix + "_out/" + dataname + "-" + round + "_" + String.format("%.1f",alpha) + "_" + String.format("%.1f",beta) + ".cnt";
 //		
@@ -714,7 +716,7 @@ public class LinkExchange {
 //		linkExchangeNoDup(G, round, alpha, beta, discount, count_file);
 		
 		
-		////////
+		//////////
 		// TEST linkGossip()
 //		String count_file = prefix + "_out/" + dataname + "-gossip-" + round + "_" + String.format("%.1f",alpha) + "_" + 
 //				String.format("%.1f",beta) + "_" + String.format("%.1f",discount) + ".cnt";
@@ -722,16 +724,17 @@ public class LinkExchange {
 //		linkGossip(G, round, alpha, beta, count_file);
 		
 		// TEST linkGossipNoDup()
-//		String count_file = prefix + "_out/" + dataname + "-gossip-nodup-" + round + "_" + String.format("%.1f",alpha) + "_" + 
-//				String.format("%.1f",beta) + "_" + String.format("%.1f",discount) + ".cnt";
-//		
-//		linkGossipNoDup(G, round, alpha, beta, discount, count_file);
+		String count_file = prefix + "_out/" + dataname + "-gossip-nodup-" + round + "_" + String.format("%.1f",alpha) + "_" + 
+				String.format("%.1f",beta) + "_" + String.format("%.1f",discount) + ".cnt";
 		
+		linkGossipNoDup(G, round, alpha, beta, discount, count_file);
+
+		//////////
 		// TEST linkGossipAsync()
-		String count_file = prefix + "_out/" + dataname + "-gossip-async-" + step + "_" + String.format("%.1f",alpha) + "_" + 
-				String.format("%.1f",beta) + ".cnt";
-		
-		linkGossipAsync(G, step, alpha, beta, count_file);
+//		String count_file = prefix + "_out/" + dataname + "-gossip-async-" + step + "_" + String.format("%.1f",alpha) + "_" + 
+//				String.format("%.1f",beta) + ".cnt";
+//		
+//		linkGossipAsync(G, step, alpha, beta, count_file);
 		
 	}
 
