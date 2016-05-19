@@ -1,11 +1,16 @@
 /*
- * paper "Privacy via the Johnson-Lindenstrauss Transform" (2012)
+ * papers 
+ *  - "Privacy via the Johnson-Lindenstrauss Transform" (2012)
+ *  - "On Randomness Measures for Social Networks" (SDM'08)
  * May 19, 2016
+ * 	- distCosine() for paper SDM'08
  * 	- 
  */
 
 package dp.combined;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
@@ -39,8 +44,36 @@ public class RandomProjection {
 		return sum;	
 	}
 	
+	////
+	public static double distCosine(double[] a, double[] b){
+		double sum = 0.0;
+		double sum_a = 0.0;
+		double sum_b = 0.0;
+		for (int i = 0; i < a.length; i++){
+			sum += a[i] * b[i];
+			sum_a += a[i]*a[i];
+			sum_b += b[i]*b[i];
+		}
+		
+		//
+		return -sum/Math.sqrt(sum_a * sum_b);		// negative
+	}
+	
+	public static double dist(double[] a, double[] b, int dist_type){
+		switch (dist_type){
+			case 1:
+				return distL2(a,b);
+			case 2:
+				return distL1(a,b);
+			case 3:
+				return distCosine(a,b);
+			default:
+				return -1;
+		}
+	}
+	
 	//// k-means to c clusters
-	public static int[] kMeans(double[][] A2, int c, int steps){
+	public static int[] kMeans(double[][] A2, int c, int steps, int dist_type){
 		int n = A2.length;
 		int k = A2[0].length;
 		System.out.println("n = " + n + " k = " + k);
@@ -80,10 +113,10 @@ public class RandomProjection {
 		// find nearest center
 		for (int i = 0; i < n; i++){
 			int nearest = 0;
-			double dist = distL2(A2[i], centers[nearest]);
+			double dist = dist(A2[i], centers[nearest], dist_type);
 			
 			for (int ic = 0; ic < c; ic++){
-				double temp = distL2(A2[i], centers[ic]);
+				double temp = dist(A2[i], centers[ic], dist_type);
 				if (dist > temp){
 					dist = temp;
 					nearest = ic;
@@ -113,10 +146,10 @@ public class RandomProjection {
 			// find nearest center
 			for (int i = 0; i < n; i++){
 				int nearest = ret[i];
-				double dist = distL2(A2[i], centers[nearest]);
+				double dist = dist(A2[i], centers[nearest], dist_type);
 				
 				for (int ic = 0; ic < c; ic++){
-					double temp = distL2(A2[i], centers[ic]);
+					double temp = dist(A2[i], centers[ic], dist_type);
 					if (dist > temp){
 						dist = temp;
 						nearest = ic;
@@ -153,7 +186,7 @@ public class RandomProjection {
 	
 	
 	////
-	public static void privateProjection(EdgeWeightedGraph G, int k, double eps, double delta, int c, int steps){
+	public static void privateProjection(EdgeWeightedGraph G, int k, double eps, double delta, int c, int steps, int dist_type){
 		int n = G.V();
 		
 		// 0 - check privacy conditions
@@ -189,7 +222,7 @@ public class RandomProjection {
 			}
 		
 		//
-		int[] ret = kMeans(AP, c, steps);
+		int[] ret = kMeans(AP, c, steps, dist_type);
 		
 		int[] n_c = new int[c];
 		for (int i = 0; i < n; i++)
@@ -211,7 +244,7 @@ public class RandomProjection {
 			}
 		
 		// 2 - k-means on A2 (c clusters)
-		ret = kMeans(A2, c, steps);
+		ret = kMeans(A2, c, steps, dist_type);
 		
 		n_c = new int[c];
 		for (int i = 0; i < n; i++)
@@ -248,6 +281,45 @@ public class RandomProjection {
 		
 	}
 	
+	////
+	public static void spectralAnalysis(EdgeWeightedGraph G, int d, int c, int steps, String eigen_file, int dist_type) throws IOException{
+		int n = G.V();
+		
+		double [][] EV = new double[n][d];
+		
+		// read .10.ev file
+		BufferedReader br = new BufferedReader(new FileReader(eigen_file));
+		int i = 0;
+		while (true){
+        	String str = br.readLine();
+        	if (str == null)
+        		break;
+        	if (str.length() == 0)
+        		continue;
+        	
+        	String[] items = str.split(",");
+        	
+        	for (int j = 0; j < items.length; j++)
+        		EV[i][j] = Double.parseDouble(items[j]);
+
+        	i = i + 1;
+		}
+		br.close();
+
+		// k-means
+		int[] ret = kMeans(EV, c, steps, dist_type);
+		
+		int[] n_c = new int[c];
+		for (i = 0; i < n; i++)
+			n_c[ret[i]] += 1;
+		System.out.println("n_c : ");
+		for (i = 0; i < c; i++)
+			System.out.println(n_c[i]);
+		
+		double true_mod = CommunityMeasure.modularity(G, ret); 
+		System.out.println("true_mod = " + true_mod);
+		
+	}
 	
 	////////////////////////////////////////////////
 	public static void main(String[] args) throws Exception{
@@ -257,20 +329,25 @@ public class RandomProjection {
 //		String dataname = "karate";			// (34, 78)
 //		String dataname = "polbooks";		// (105, 441)		
 //		String dataname = "polblogs";		// (1224,16715) 	
-//		String dataname = "as20graph";		// (6474,12572)		
+		String dataname = "as20graph";		// (6474,12572)		
 //		String dataname = "wiki-Vote";		// (7115,100762)
 //		String dataname = "ca-HepPh";		// (12006,118489) 	
-//		String dataname = "ca-AstroPh";		// (18771,198050) 			
+//		String dataname = "ca-AstroPh";		// (18771,198050) 		
+		// WCC
+//		String dataname = "polblogs-wcc";			// (1222,16714) 	
+//		String dataname = "wiki-Vote-wcc";			// (7066,100736) 	
+//		String dataname = "ca-HepPh-wcc";			// (11204,117619) 
+//		String dataname = "ca-AstroPh-wcc";			// (17903,196972)
 		// LARGE
 //		String dataname = "com_amazon_ungraph";		// (334863,925872)		// privateProjection : 49s, writeSparseGraph: 52s
-		String dataname = "com_dblp_ungraph";		// (317080,1049866)		// 			writeSparseGraph: 65s
+//		String dataname = "com_dblp_ungraph";		// (317080,1049866)		// 			writeSparseGraph: 65s
 //		String dataname = "com_youtube_ungraph";	// (1134890,2987624) 
 
 		////
 		double eps = 4.0;	// 0.25, 0.5, 1.0, 2.0, 4.0
 		double delta = 0.01;
 		int k = 40;
-		int c = 100;
+		int c = 3;
 		int steps = 20;
 		System.out.println("eps = " + eps + " delta = " + delta + " k = " + k);
 
@@ -289,15 +366,27 @@ public class RandomProjection {
 		System.out.println("#edges = " + G.E());
 		
 		//// TEST privateProjection()
+//		int dist_type = 1;
 //		start = System.currentTimeMillis();
 //		privateProjection(G, k, eps, delta, c, steps);
 //		System.out.println("privateProjection - DONE, elapsed " + (System.currentTimeMillis() - start));
 		
-		////
-		start = System.currentTimeMillis();
-		String matlab_file = prefix + "_data/" + dataname + ".mat";
-		writeSparseGraph(G, matlab_file);
-		System.out.println("writeSparseGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
+		//// TEST writeSparseGraph() --> see uncertain-graph/dp/test.py for better implementation !
+//		start = System.currentTimeMillis();
+//		String matlab_file = prefix + "_data/" + dataname + ".mat";
+//		writeSparseGraph(G, matlab_file);
+//		System.out.println("writeSparseGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
+		
+		//// TEST spectralAnalysis() --> call distCosine() in kMeans()
+		int d = 2;
+		String eigen_file = "D:/git/itce2011/uncertain-graph/_data/" + dataname + "." + d + ".ev";		// adj matrix A
+//		String eigen_file = "D:/git/itce2011/uncertain-graph/_data/" + dataname + "." + d + ".lap";	// laplacian L
+
+		System.out.println("eigen_file = " + eigen_file);
+		c = 30;
+		int dist_type = 3;
+		spectralAnalysis(G, d, c, steps, eigen_file, dist_type);
+		
 	}
 
 }
