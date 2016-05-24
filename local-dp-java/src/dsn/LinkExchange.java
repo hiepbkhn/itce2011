@@ -660,10 +660,16 @@ public class LinkExchange {
 	public static void main(String[] args) throws Exception{
 		String prefix = "";
 //		String dataname = "pl_1000_5_01";		// diameter = 5
-		String dataname = "pl_10000_5_01";		// diameter = 6,  Dup: round=3 (OutOfMem, 7GB ok), 98s (Acer)
+//		String dataname = "pl_10000_5_01";		// diameter = 6,  Dup: round=3 (OutOfMem, 7GB ok), 98s (Acer)
 												//				NoDup: round=3 (4.5GB), 376s (Acer)
+//		String dataname = "er_1000_001";		// diameter = 5
+//		String dataname = "er_10000_0001";		// diameter = 7, NoDup: round=3 (2.5GB), 23s (PC)
 		
+//		String dataname = "sm_1000_005_11";		// diameter = 9
+		String dataname = "sm_10000_005_11";	// diameter = 12, NoDup: round=3 (1.2GB), 5s (PC), round=4 (1.7GB), 12s (PC)
+												// 						round=5 (3.0GB), 29s (PC), round=6 (3.3GB), 74s (PC)
 		
+		//
 		String filename = prefix + "_data/" + dataname + ".gr";
 		
 		//
@@ -675,12 +681,12 @@ public class LinkExchange {
 		System.out.println("#edges = " + G.E());
 
 		// compute diameter
-//		graphMetric(filename, G.V());
+		graphMetric(filename, G.V());
 		
 		
 		//
-//		int round = 3; 		// flood
-		int round = 10; 	// gossip
+		int round = 6; 		// flood
+//		int round = 10; 	// gossip
 		int step = 100000;	// gossip-async
 		double alpha = 0.5;
 		double discount = 1.0;
@@ -710,10 +716,10 @@ public class LinkExchange {
 		
 		
 		// TEST linkExchangeNoDup()
-//		String count_file = prefix + "_out/" + dataname + "-nodup-" + round + "_" + String.format("%.1f",alpha) + "_" + 
-//				String.format("%.1f",beta) + "_" + String.format("%.1f",discount) + ".cnt";
-//		
-//		linkExchangeNoDup(G, round, alpha, beta, discount, count_file);
+		String count_file = prefix + "_out/" + dataname + "-nodup-" + round + "_" + String.format("%.1f",alpha) + "_" + 
+				String.format("%.1f",beta) + "_" + String.format("%.1f",discount) + ".cnt";
+		
+		linkExchangeNoDup(G, round, alpha, beta, discount, count_file);
 		
 		
 		//////////
@@ -724,10 +730,10 @@ public class LinkExchange {
 //		linkGossip(G, round, alpha, beta, count_file);
 		
 		// TEST linkGossipNoDup()
-		String count_file = prefix + "_out/" + dataname + "-gossip-nodup-" + round + "_" + String.format("%.1f",alpha) + "_" + 
-				String.format("%.1f",beta) + "_" + String.format("%.1f",discount) + ".cnt";
-		
-		linkGossipNoDup(G, round, alpha, beta, discount, count_file);
+//		String count_file = prefix + "_out/" + dataname + "-gossip-nodup-" + round + "_" + String.format("%.1f",alpha) + "_" + 
+//				String.format("%.1f",beta) + "_" + String.format("%.1f",discount) + ".cnt";
+//		
+//		linkGossipNoDup(G, round, alpha, beta, discount, count_file);
 
 		//////////
 		// TEST linkGossipAsync()

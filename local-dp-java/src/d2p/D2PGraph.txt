@@ -30,3 +30,15 @@ total_size = 13867194
 max_size = 1396
 min_size = 2
 computeGroupByDistance - DONE, elapsed 3906
+
+
+dataname = com_youtube_ungraph
+readGraph - DONE, elapsed 3896
+#nodes = 1134890
+#edges = 2987624
+max_deg = 28754
+total_size = 2520319206
+max_size = 350936
+min_size = 2
+computeGroupByDistance - DONE, elapsed 188024
+
