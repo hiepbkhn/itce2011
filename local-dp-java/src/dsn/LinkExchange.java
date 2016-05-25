@@ -5,6 +5,8 @@
  * 	- add graphMetric(), sampleLinkNoDup(), linkExchangeNoDup()
  * Apr 6
  * 	- add linkGossip(), linkGossipNoDup(), linkGossipAsync()
+ * May 25
+ * 	- add approxVertexCover()
  */
 
 package dsn;
@@ -660,21 +662,143 @@ public class LinkExchange {
 		
 	}
 	
+	////
+	public static int binarySearch(List<Int2> edges, int u){
+		int ret = -1;
+		
+		int lo = 0;
+		int hi = edges.size()-1;
+		int mid = (lo + hi)/2;
+		
+		boolean found = false;
+		while (true){
+			Int2 e = edges.get(mid);
+			if (e.val0 < u){
+				lo = mid + 1;
+			}else if (e.val0 > u){
+				hi = mid - 1;
+			}else{
+				found = true;
+				break;
+			}
+			
+			mid = (lo + hi)/2;
+			
+			if (lo > hi)
+				break;
+		}
+		
+		if (!found)
+			ret = -1;
+		else{
+			ret = mid;
+			while (ret > 0){		// find the leftmost
+				if (edges.get(ret).val0 == u)
+					ret = ret - 1;
+				else
+					break;
+			}
+				
+		}
+		
+		//
+		return ret;
+	}
+	
+	////
+	public static void approxVertexCover(EdgeIntGraph G){
+		int n = G.V();
+		
+		List<Int2> edges = new ArrayList<Int2>();
+		for (EdgeInt e : G.edges()){
+			int u = e.either();
+			int v = e.other(u);
+			edges.add(new Int2(u,v));
+		}
+		
+		// sort edges
+		normalizeEdges(edges);
+		Collections.sort(edges);
+		
+		//
+		List<Integer> cover = new ArrayList<Integer>();
+		Random random = new Random();
+		while (edges.size() > 0){
+			// pick a random edge
+			int id = random.nextInt(edges.size());
+			Int2 e = edges.get(id);
+			
+			int u = e.val0;
+			int v = e.val1;
+			cover.add(u);
+			cover.add(v);
+//			System.out.println(u + "-" + v);
+			
+//			if (cover.size() % 1000 == 0)
+//				System.out.println(cover.size());
+			
+			// remove all edges containing u,v
+			id = binarySearch(edges, u);
+			System.out.println(id + " " + edges.size());
+			while (edges.get(id).val0 == u)
+				edges.remove(id);
+			id += 1;
+			if (id == edges.size())
+				break;
+			
+			id = binarySearch(edges, v);
+			if (id == -1)
+				continue;
+			while (edges.get(id).val0 == v)
+				edges.remove(id);
+			
+		}
+		
+		//
+		System.out.println("cover.size = " + cover.size());
+		if (cover.size() < 100){
+			for (int u : cover)
+				System.out.print(u + " ");
+			System.out.println();
+		}
+		
+	}
+	
+	
 	////////////////////////////////////////////////
 	public static void main(String[] args) throws Exception{
 		String prefix = "";
+
+		
 //		String dataname = "pl_1000_5_01";		// diameter = 5
 //		String dataname = "pl_10000_5_01";		// diameter = 6,  Dup: round=3 (OutOfMem, 7GB ok), 98s (Acer)
 												//				NoDup: round=3 (4.5GB), 376s (Acer)
+												// cover.size = 8278
 //		String dataname = "ba_1000_5";			// diameter = 5
-		String dataname = "ba_10000_5";			// diameter = 6, NoDup: round=3 (4.5GB), 430s (Acer), totalLink = 255633393
+//		String dataname = "ba_10000_5";			// diameter = 6, NoDup: round=3 (5.1GB), 430s (Acer), 350s (PC), totalLink = 255633393
+												// cover.size = 8384
 		
 //		String dataname = "er_1000_001";		// diameter = 5
 //		String dataname = "er_10000_0001";		// diameter = 7, NoDup: round=3 (2.5GB), 23s (PC)
-		
+												// cover.size = 9076
 //		String dataname = "sm_1000_005_11";		// diameter = 9
 //		String dataname = "sm_10000_005_11";	// diameter = 12, NoDup: round=3 (1.2GB), 5s (PC), round=4 (1.7GB), 12s (PC)
 												// 						round=5 (3.0GB), 29s (PC), round=6 (3.3GB), 74s (PC)
+												// cover.size = 9448
+		//
+//		String dataname = "example";			// 		diameter = 5, cover.size = 10
+		String dataname = "karate";				// (34, 78)	diameter = 5, cover.size = 20
+//		String dataname = "polbooks";			// (105, 441)		
+//		String dataname = "polblogs";			// (1224,16715) 	
+//		String dataname = "as20graph";			// (6474,12572)		
+//		String dataname = "wiki-Vote";			// (7115,100762)
+//		String dataname = "ca-HepPh";			// (12006,118489) 	
+//		String dataname = "ca-AstroPh";			// (18771,198050) 			
+		// LARGE
+//		String dataname = "com_amazon_ungraph";		// (334863,925872)	
+//		String dataname = "com_dblp_ungraph";		// (317080,1049866)	
+//		String dataname = "com_youtube_ungraph";	// (1134890,2987624) 
+		
 		
 		//
 		String filename = prefix + "_data/" + dataname + ".gr";
@@ -688,7 +812,7 @@ public class LinkExchange {
 		System.out.println("#edges = " + G.E());
 
 		// compute diameter
-		graphMetric(filename, G.V());
+//		graphMetric(filename, G.V());
 		
 		
 		//
@@ -723,10 +847,10 @@ public class LinkExchange {
 		
 		
 		// TEST linkExchangeNoDup()
-		String count_file = prefix + "_out/" + dataname + "-nodup-" + round + "_" + String.format("%.1f",alpha) + "_" + 
-				String.format("%.1f",beta) + "_" + String.format("%.1f",discount) + ".cnt";
-		
-		linkExchangeNoDup(G, round, alpha, beta, discount, count_file);
+//		String count_file = prefix + "_out/" + dataname + "-nodup-" + round + "_" + String.format("%.1f",alpha) + "_" + 
+//				String.format("%.1f",beta) + "_" + String.format("%.1f",discount) + ".cnt";
+//		
+//		linkExchangeNoDup(G, round, alpha, beta, discount, count_file);
 		
 		
 		//////////
@@ -748,6 +872,12 @@ public class LinkExchange {
 //				String.format("%.1f",beta) + ".cnt";
 //		
 //		linkGossipAsync(G, step, alpha, beta, count_file);
+		
+		
+		
+		/////////
+		// TEST approxVertexCover()
+		approxVertexCover(G);
 		
 	}
 
