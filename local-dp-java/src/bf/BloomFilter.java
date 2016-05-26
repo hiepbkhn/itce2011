@@ -438,4 +438,17 @@ public class BloomFilter<E> implements Serializable {
     public double getBitsPerElement() {
         return this.bitSetSize / (double)numberOfAddedElements;
     }
+    
+    /////////////////////////////////////////////
+    /* 
+     * hiepnh
+     */
+    public int getBitSetSize(){
+    	return this.bitSetSize;
+    }
+    
+    public void union(BloomFilter<E> other){
+    	this.bitset.or(other.bitset);
+    }
+    
 }

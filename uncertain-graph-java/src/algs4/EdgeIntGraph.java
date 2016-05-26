@@ -5,6 +5,8 @@
  * 	- readEdgeListWithNodes()
  * Dec 2
  * 	- writeGraph(), writeGraphWithWeights()
+ * May 26, 2016
+ * 	- allEdges()
  */
 
 package algs4;
@@ -242,6 +244,20 @@ public class EdgeIntGraph {
             }
         }
         return list;
+    }
+    
+    ////
+    public List<Int2> allEdges() {
+    	List<Int2> ret = new ArrayList<Int2>();
+    	for (int v = 0; v < V; v++) {
+            int selfLoops = 0;
+            for (EdgeInt e : adj.get(v).values()) {
+            	int u = e.other(v);
+                if (u > v) 
+                    ret.add(new Int2(v, e.other(v)));
+            }
+    	}
+    	return ret;
     }
 
     /**

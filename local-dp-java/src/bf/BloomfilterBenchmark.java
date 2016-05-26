@@ -55,6 +55,7 @@ public class BloomfilterBenchmark {
 
         System.out.println("Testing " + elementCount + " elements");
         System.out.println("k is " + bf.getK());
+        System.out.println("bitSetSize is " + bf.getBitSetSize());
         
 
         // Add elements
@@ -78,9 +79,7 @@ public class BloomfilterBenchmark {
         // Check for existing elements with containsAll()
         System.out.print("containsAll(), existing: ");
         long start_containsAll = System.currentTimeMillis();
-        for (int i = 0; i < elementCount; i++) {
-            bf.contains(existingElements.get(i));
-        }
+        bf.containsAll(existingElements);
         long end_containsAll = System.currentTimeMillis();
         printStat(start_containsAll, end_containsAll);
 
@@ -96,11 +95,13 @@ public class BloomfilterBenchmark {
         // Check for nonexisting elements with containsAll()
         System.out.print("containsAll(), nonexisting: ");
         long start_ncontainsAll = System.currentTimeMillis();
-        for (int i = 0; i < elementCount; i++) {
-            bf.contains(nonExistingElements.get(i));
-        }
+        bf.containsAll(nonExistingElements);
         long end_ncontainsAll = System.currentTimeMillis();
         printStat(start_ncontainsAll, end_ncontainsAll);
 
+        
+        //
+        System.out.println("numberOfAddedElements is " + bf.count());
+        System.out.println("bitsPerElement is " + bf.getBitsPerElement());
     }
 }
