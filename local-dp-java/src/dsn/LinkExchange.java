@@ -675,7 +675,7 @@ public class LinkExchange {
 
 		
 //		String dataname = "pl_1000_5_01";		// diameter = 5
-		String dataname = "pl_10000_5_01";		// diameter = 6,  Dup: round=3 (OutOfMem, 7GB ok), 98s (Acer)
+//		String dataname = "pl_10000_5_01";		// diameter = 6,  Dup: round=3 (OutOfMem, 7GB ok), 98s (Acer)
 												//				NoDup: round=3 (4.5GB), 376s (Acer)
 //		String dataname = "ba_1000_5";			// diameter = 5
 //		String dataname = "ba_10000_5";			// diameter = 6, NoDup: round=3 (5.1GB), 430s (Acer), 350s (PC), totalLink = 255633393
@@ -696,7 +696,7 @@ public class LinkExchange {
 //		String dataname = "ca-HepPh";			// (12006,118489) 		
 //		String dataname = "ca-AstroPh";			// (18771,198050) 			
 		// LARGE
-//		String dataname = "com_amazon_ungraph";		// (334863,925872)	
+		String dataname = "com_amazon_ungraph";		// (334863,925872)	round=1 (11s), totalLink = 19354729
 //		String dataname = "com_dblp_ungraph";		// (317080,1049866)	
 //		String dataname = "com_youtube_ungraph";	// (1134890,2987624) 
 		
@@ -717,7 +717,7 @@ public class LinkExchange {
 		
 		
 		//
-		int round = 2; 		// flood
+		int round = 1; 		// flood
 //		int round = 10; 	// gossip
 		int step = 100000;	// gossip-async
 		double alpha = 1.0;
