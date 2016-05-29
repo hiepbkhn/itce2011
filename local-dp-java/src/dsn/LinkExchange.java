@@ -5,8 +5,6 @@
  * 	- add graphMetric(), sampleLinkNoDup(), linkExchangeNoDup()
  * Apr 6
  * 	- add linkGossip(), linkGossipNoDup(), linkGossipAsync()
- * May 25
- * 	- add approxVertexCover(), greedyVertexCover()
  */
 
 package dsn;

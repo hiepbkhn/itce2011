@@ -44,7 +44,9 @@ public class LinkExchangeBloomFilter {
 		PathMetric path = new PathMetric();
 		double[] distance_dist;
 		
-		distance_dist = UtilityMeasure.getDistanceDistr(aG, path);
+//		distance_dist = UtilityMeasure.getDistanceDistr(aG, path);
+//		
+//		System.out.println("diameter = " + path.s_Diam);
 		
 		int max_deg = 0;
 		int min_deg = aG.V();
@@ -57,8 +59,7 @@ public class LinkExchangeBloomFilter {
 		System.out.println("max_deg = " + max_deg);
 		System.out.println("min_deg = " + min_deg);
 		
-		//
-		System.out.println("diameter = " + path.s_Diam);
+		
 	}
 	
 	////
@@ -324,12 +325,12 @@ public class LinkExchangeBloomFilter {
 
 		
 //		String dataname = "pl_1000_5_01";		// diameter = 5
-		String dataname = "pl_10000_5_01";		// diameter = 6,  Dup: round=3 (OutOfMem, 7GB ok), 98s (Acer)
+//		String dataname = "pl_10000_5_01";		// diameter = 6,  Dup: round=3 (OutOfMem, 7GB ok), 98s (Acer)
 												//				NoDup: round=3 (4.5GB), 376s (Acer)
 //		String dataname = "pl_100000_5_01";		// diameter = 6,
 		
 //		String dataname = "ba_1000_5";			// diameter = 5
-//		String dataname = "ba_10000_5";			// diameter = 6, NoDup: round=3 (5.1GB), 430s (Acer), 350s (PC), totalLink = 255633393
+		String dataname = "ba_10000_5";			// diameter = 6, NoDup: round=3 (5.1GB), 430s (Acer), 350s (PC), totalLink = 255633393
 		
 //		String dataname = "er_1000_001";		// diameter = 5
 //		String dataname = "er_10000_0001";		// diameter = 7, NoDup: round=3 (2.5GB), 23s (PC)
@@ -365,7 +366,7 @@ public class LinkExchangeBloomFilter {
 		System.out.println("#edges = " + G.E());
 
 		// compute diameter
-//		graphMetric(filename, G.V());
+		graphMetric(filename, G.V());
 		
 		
 		//
