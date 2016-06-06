@@ -182,9 +182,8 @@ public class LinkExchangeBloomFilter {
 		
 		
         // 
-        List<List<Int2>> links = new ArrayList<List<Int2>>();
-		
 		long start = System.currentTimeMillis();
+		List<Int2> allEdges = new ArrayList<Int2>();
 		// initial stage
 		for (int u = 0; u < n; u++){
 			List<Int2> temp = new ArrayList<Int2>();
@@ -194,7 +193,7 @@ public class LinkExchangeBloomFilter {
 			List<Int2> newLinks = createFalseLink(G, u, beta);
 			temp.addAll(newLinks);
 			
-			links.add(temp);
+			allEdges.addAll(temp);		// used in extractFilterWithEdgeSet
 			
 			// hash links[u] to filters[u]
 			for (Int2 e : temp){
@@ -214,7 +213,7 @@ public class LinkExchangeBloomFilter {
 				bf = new BloomFilter<Long>(falsePositive, m);
 				
 				for (int v : G.adj(u).keySet())
-					bf.union(filters.get(v));
+					bf.union(filters.get(v));		// take union
 				
 				//
 				newFilters.add(bf);
@@ -226,14 +225,31 @@ public class LinkExchangeBloomFilter {
 		
 		System.out.println("linkExchangeFalsePos - DONE, elapsed " + (System.currentTimeMillis() - start));
 		
-		//
-		for (int u = 0; u < 20; u++){
+		// extract (recover) edges from filters			
+		List<List<Int2>> links = new ArrayList<List<Int2>>();
+		for (int u = 0; u < n; u++){
 //			List<Int2> ret = extractFilterBlind(filters.get(u), n);
-			List<Int2> ret = extractFilterWithEdgeSet(filters.get(u), n, G.allEdges());
+//			List<Int2> ret = extractFilterWithEdgeSet(filters.get(u), n, G.allEdges());
 			
-			System.out.println(G.degree(u) + " " + ret.size());
+			List<Int2> ret = extractFilterWithEdgeSet(filters.get(u), n, allEdges);		// ret MAY contain duplicate falseLinks
+			
+			links.add(ret);
 		}
 		
+		//
+		int[] trueLinks = new int[n];
+		int[] falseLinks = new int[n];
+		int[] dupLinks = new int[n];
+		
+		LinkExchange.countTrueFalseDupLinks(G, links, trueLinks, falseLinks, dupLinks);
+		
+		//
+		BufferedWriter bw = new BufferedWriter(new FileWriter(count_file));
+		for (int u = 0; u < n; u++){
+			bw.write(trueLinks[u] + "\t" + falseLinks[u] + "\t" + dupLinks[u] + "\n");
+		}
+		bw.close();
+		System.out.println("Written to count_file.");
 	}
 	
 	
@@ -325,19 +341,19 @@ public class LinkExchangeBloomFilter {
 
 		
 //		String dataname = "pl_1000_5_01";		// diameter = 5
-//		String dataname = "pl_10000_5_01";		// diameter = 6,  Dup: round=3 (OutOfMem, 7GB ok), 98s (Acer)
-												//				NoDup: round=3 (4.5GB), 376s (Acer)
+		String dataname = "pl_10000_5_01";		// diameter = 6, round=2  
+												//				
 //		String dataname = "pl_100000_5_01";		// diameter = 6,
 		
 //		String dataname = "ba_1000_5";			// diameter = 5
-		String dataname = "ba_10000_5";			// diameter = 6, NoDup: round=3 (5.1GB), 430s (Acer), 350s (PC), totalLink = 255633393
+//		String dataname = "ba_10000_5";			// diameter = 6, 
 		
 //		String dataname = "er_1000_001";		// diameter = 5
-//		String dataname = "er_10000_0001";		// diameter = 7, NoDup: round=3 (2.5GB), 23s (PC)
+//		String dataname = "er_10000_0001";		// diameter = 7, 
 		
 //		String dataname = "sm_1000_005_11";		// diameter = 9
-//		String dataname = "sm_10000_005_11";	// diameter = 12, NoDup: round=3 (1.2GB), 5s (PC), round=4 (1.7GB), 12s (PC)
-												// 						round=5 (3.0GB), 29s (PC), round=6 (3.3GB), 74s (PC)
+//		String dataname = "sm_10000_005_11";	// diameter = 12,
+												// 				
 		//
 //		String dataname = "example";			// 	diameter = 5, 
 //		String dataname = "karate";				// (34, 78)	diameter = 5
@@ -366,20 +382,21 @@ public class LinkExchangeBloomFilter {
 		System.out.println("#edges = " + G.E());
 
 		// compute diameter
-		graphMetric(filename, G.V());
+//		graphMetric(filename, G.V());
 		
 		
 		//
-		int round = 1; 		// flood
+		int round = 2; 		// flood
 //		int round = 10; 	// gossip
 		int step = 100000;	// gossip-async
 		double alpha = 0.5;
 		double discount = 1.0;
-		double beta = 0.0;
+		double beta = 1.0;
 		double falsePositive = 0.1;
 		
 		// TEST linkExchange()
-		String count_file = prefix + "_out/" + dataname + "-" + round + "_" + String.format("%.1f",alpha) + "_" + String.format("%.1f",beta) + ".cnt";
+		String count_file = prefix + "_out/" + dataname + "-bf-" + round + "_" + String.format("%.1f",alpha) + "_" + String.format("%.1f",beta) + ".cnt";
+		System.out.println("count_file = " + count_file);
 		
 		// alpha = 1.0
 		linkExchangeFalsePos(G, round, falsePositive, beta, count_file);

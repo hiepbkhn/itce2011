@@ -5,13 +5,18 @@
  * 	- add graphMetric(), sampleLinkNoDup(), linkExchangeNoDup()
  * Apr 6
  * 	- add linkGossip(), linkGossipNoDup(), linkGossipAsync()
+ * Jun 6
+ * 	- add sampleNodeByDegree(), saveLocalGraph(), computeLocalGraph()
+ * 	- refactor countTrueFalseDupLinks()
  */
 
 package dsn;
 
 import hist.Int2;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,6 +28,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import com.jmatio.io.MatFileWriter;
+import com.jmatio.types.MLArray;
+import com.jmatio.types.MLDouble;
+import com.jmatio.types.MLInt32;
+
+import dp.DegreeMetric;
 import dp.PathMetric;
 import dp.UtilityMeasure;
 import algs4.EdgeInt;
@@ -52,6 +63,162 @@ public class LinkExchange {
 		//
 		System.out.println("diameter = " + path.s_Diam);
 	}
+	
+	////
+	public static int[] sampleNodeByDegree(int[] deg, int k){
+		int n = deg.length;
+		int[] ret = new int[k];
+		
+		int[] index = new int[n];
+		for (int u = 0; u < n; u++)
+			index[u] = u;
+		
+		//
+		Util.quicksort(deg, index);
+		
+		for (int i = 0; i < k; i++)
+			ret[i] = index[i*n/k];
+		
+		//
+		return ret;
+	}
+	
+	////
+	public static void saveLocalGraph(List<List<Int2>> links, int[] selectedNodes, String sample_file) throws IOException{
+		
+		BufferedWriter bw = new BufferedWriter(new FileWriter(sample_file));
+		
+		// number of selected nodes
+		bw.write(selectedNodes.length + "\n");
+		for (int u : selectedNodes){
+			List<Int2> edges = links.get(u);
+			// node : #edges
+			bw.write(u + "," + edges.size() + "\n");
+			for (Int2 e : edges)
+				bw.write(e.val0 + "\t" + e.val1 + "\n");
+			
+		}
+		bw.close();
+		System.out.println("Written to sample_file.");
+		
+	}
+	
+	////
+	public static void computeUtility(EdgeIntGraph aG, DegreeMetric deg, double[] deg_dist, PathMetric path, double[] distance_dist) throws IOException{
+		// 1. degree distribution
+		System.arraycopy(UtilityMeasure.getDegreeDistr(aG, deg), 0, deg_dist, 0, aG.V());
+		
+		// 2. distance distribution
+//		distance_dist = UtilityMeasure.getDistanceDistr(G, path);	// hyperANF
+		UnweightedGraph bG = new UnweightedGraph(aG);
+		System.arraycopy(UtilityMeasure.getDistanceDistr(bG, path), 0, distance_dist, 0, 50);	// BFS
+		
+		
+	}
+	
+	////
+	public static void computeLocalGraph(String sample_file, String matlab_file, int n_nodes) throws IOException{
+		
+		BufferedReader br = new BufferedReader(new FileReader(sample_file));
+		
+		String str = br.readLine();
+		int k = Integer.parseInt(str);
+		System.out.println("#selected nodes = " + k);
+		
+		// for MATLAB
+		double[] a_AD = new double[k];
+		double[] a_DV = new double[k];
+		double[] a_MD = new double[k];
+		double[] a_PL = new double[k];
+		double[] a_CC = new double[k];
+		
+		double[] a_APD = new double[k];
+		double[] a_CL = new double[k];
+		double[] a_EDiam = new double[k];
+		double[] a_Diam = new double[k];
+		
+		double[] a_degree = new double[k*n_nodes];
+		double[] a_distance = new double[k*50];
+		
+		for(int i = 0; i < k; i++){
+			str = br.readLine();
+			String[] items = str.split(",");
+			int u = Integer.parseInt(items[0]);
+			int size = Integer.parseInt(items[1]);
+			System.out.println("u = " + u + ", size = " + size);
+			
+			// build local graph
+			EdgeIntGraph aG = new EdgeIntGraph(n_nodes); 
+			for (int j = 0; j < size; j++){
+				str = br.readLine();
+				items = str.split("\t");
+				int v = Integer.parseInt(items[0]);
+				int w = Integer.parseInt(items[1]);
+				
+				aG.addEdge(new EdgeInt(v,w,1));
+			}
+			System.out.println("#nodes = " + aG.V());
+			System.out.println("#edges = " + aG.E());
+				
+			// compute utility
+			DegreeMetric deg = new DegreeMetric();
+			double[] deg_dist = new double[n_nodes]; 
+			PathMetric path = new PathMetric();
+			double[] distance_dist = new double[50];
+			
+			computeUtility(aG, deg, deg_dist, path, distance_dist);
+			
+			a_AD[i] = deg.s_AD;
+			a_DV[i] = deg.s_DV;
+			a_MD[i] = deg.s_MD;
+			a_PL[i] = deg.s_PL;
+			a_CC[i] = deg.s_CC;
+			
+			a_APD[i] = path.s_APD;
+			a_CL[i] = path.s_CL;
+			a_EDiam[i] = path.s_EDiam;
+			a_Diam[i] = path.s_Diam;
+			
+			for (int j = 0; j < n_nodes; j++)
+				a_degree[i + j*k] = deg_dist[j];		// packed by column
+			for (int j = 0; j < 50; j++)
+				a_distance[i + j*k] = distance_dist[j];	// packed by column
+		}
+		br.close();
+		
+		// write to MATLAB
+		MLDouble degArr = new MLDouble("degArr", a_degree, k);
+		MLDouble distArr = new MLDouble("distArr", a_distance, k);
+		
+		MLDouble s_AD = new MLDouble("a_AD", a_AD, 1);
+		MLDouble s_MD = new MLDouble("a_MD", a_MD, 1);
+		MLDouble s_DV = new MLDouble("a_DV", a_DV, 1);
+		MLDouble s_CC = new MLDouble("a_CC", a_CC, 1);
+		MLDouble s_PL = new MLDouble("a_PL", a_PL, 1);
+		
+		MLDouble s_APD = new MLDouble("a_APD", a_APD, 1);
+		MLDouble s_CL = new MLDouble("a_CL", a_CL, 1);
+		MLDouble s_EDiam = new MLDouble("a_EDiam", a_EDiam, 1);
+		MLDouble s_Diam = new MLDouble("a_Diam", a_Diam, 1);
+		
+        ArrayList<MLArray> towrite = new ArrayList<MLArray>();
+        towrite.add(degArr); 
+        towrite.add(distArr);
+        towrite.add(s_AD);
+        towrite.add(s_MD);
+        towrite.add(s_DV);
+        towrite.add(s_CC);
+        towrite.add(s_PL);
+        towrite.add(s_APD);
+        towrite.add(s_CL);
+        towrite.add(s_EDiam);
+        towrite.add(s_Diam);
+        
+        new MatFileWriter(matlab_file, towrite );
+        System.out.println("Written to MATLAB file.");
+		
+	}
+	
 	
 	////
 	public static List<Int2> createFalseLink(EdgeIntGraph G, int u, double beta){
@@ -113,6 +280,37 @@ public class LinkExchange {
 		
 	}
 	
+	//// return totalLink
+	public static long countTrueFalseDupLinks(EdgeIntGraph G, List<List<Int2>> links, int[] trueLinks, int[] falseLinks, int[] dupLinks){
+		int n = links.size();
+		
+		long totalLink = 0;
+		for (int u = 0; u < n; u++){
+			Map<Int2, Integer> dup = new HashMap<Int2, Integer>();
+			for(Int2 p : links.get(u)){
+				if(p.val0 > p.val1){	// normalize
+					int temp = p.val0;
+					p.val0 = p.val1;
+					p.val1 = temp;
+				}
+				
+				if (dup.containsKey(p)){
+					dupLinks[u] += 1;
+				}else{
+					dup.put(p, 1);
+					if (G.areEdgesAdjacent(p.val0, p.val1))
+						trueLinks[u] += 1;
+					else
+						falseLinks[u] += 1;
+				}
+			}
+			
+			totalLink += links.get(u).size();
+		}
+		//
+		return totalLink;
+	}
+	
 	////
 	public static void linkExchange(EdgeIntGraph G, int round, double alpha, double beta, String count_file) throws IOException{
 		int n = G.V();
@@ -160,27 +358,9 @@ public class LinkExchange {
 		int[] trueLinks = new int[n];
 		int[] falseLinks = new int[n];
 		int[] dupLinks = new int[n];
-		for (int u = 0; u < n; u++){
-			Map<Int2, Integer> dup = new HashMap<Int2, Integer>();
-			for(Int2 p : links.get(u)){
-				if(p.val0 > p.val1){	// normalize
-					int temp = p.val0;
-					p.val0 = p.val1;
-					p.val1 = temp;
-				}
-				
-				if (dup.containsKey(p)){
-					dupLinks[u] += 1;
-				}else{
-					dup.put(p, 1);
-					if (G.areEdgesAdjacent(p.val0, p.val1))
-						trueLinks[u] += 1;
-					else
-						falseLinks[u] += 1;
-				}
-			}
-			
-		}
+		
+		countTrueFalseDupLinks(G, links, trueLinks, falseLinks, dupLinks);
+		
 		System.out.println("linkExchange - DONE, elapsed " + (System.currentTimeMillis() - start));
 		
 		// write to file
@@ -246,27 +426,9 @@ public class LinkExchange {
 		int[] trueLinks = new int[n];
 		int[] falseLinks = new int[n];
 		int[] dupLinks = new int[n];
-		for (int u = 0; u < n; u++){
-			Map<Int2, Integer> dup = new HashMap<Int2, Integer>();
-			for(Int2 p : links.get(u)){
-				if(p.val0 > p.val1){	// normalize
-					int temp = p.val0;
-					p.val0 = p.val1;
-					p.val1 = temp;
-				}
-				
-				if (dup.containsKey(p)){
-					dupLinks[u] += 1;
-				}else{
-					dup.put(p, 1);
-					if (G.areEdgesAdjacent(p.val0, p.val1))
-						trueLinks[u] += 1;
-					else
-						falseLinks[u] += 1;
-				}
-			}
-			
-		}
+		
+		countTrueFalseDupLinks(G, links, trueLinks, falseLinks, dupLinks);
+		
 		System.out.println("linkGossip - DONE, elapsed " + (System.currentTimeMillis() - start));
 		
 		// write to file
@@ -341,7 +503,7 @@ public class LinkExchange {
 	}
 	
 	////
-	public static void linkExchangeNoDup(EdgeIntGraph G, int round, double alpha, double beta, double discount, String count_file) throws IOException{
+	public static void linkExchangeNoDup(EdgeIntGraph G, int round, double alpha, double beta, double discount, int nSample, String count_file, String sample_file) throws IOException{
 		int n = G.V();
 		System.out.println("round = " + round);
 		System.out.println("alpha = " + alpha);
@@ -421,38 +583,26 @@ public class LinkExchange {
 		int[] trueLinks = new int[n];
 		int[] falseLinks = new int[n];
 		int[] dupLinks = new int[n];
-		long totalLink = 0;
-		for (int u = 0; u < n; u++){
-			Map<Int2, Integer> dup = new HashMap<Int2, Integer>();
-			for(Int2 p : links.get(u)){
-				// p is already normalized 
-				if (p.val0 > p.val1)
-					System.err.println("error");
-				
-				if (dup.containsKey(p)){
-					dupLinks[u] += 1;
-				}else{
-					dup.put(p, 1);
-					if (G.areEdgesAdjacent(p.val0, p.val1))
-						trueLinks[u] += 1;
-					else
-						falseLinks[u] += 1;
-				}
-			}
-			
-			totalLink += links.get(u).size();
-			
-		}
+		long totalLink = countTrueFalseDupLinks(G, links, trueLinks, falseLinks, dupLinks);
 		System.out.println("linkExchangeNoDup - DONE, elapsed " + (System.currentTimeMillis() - start));
 		System.out.println("totalLink = " + totalLink);
 		
-		// write to file
+		// write to count_file
 		BufferedWriter bw = new BufferedWriter(new FileWriter(count_file));
 		for (int u = 0; u < n; u++){
 			bw.write(trueLinks[u] + "\t" + falseLinks[u] + "\t" + dupLinks[u] + "\n");
 		}
 		bw.close();
 		System.out.println("Written to count_file.");
+		
+		// sample nodes and save local graphs
+		int[] deg = new int[n];
+		
+		for (int u = 0; u < n; u++)
+			deg[u] = G.degree(u);
+		int[] selectedNodes = sampleNodeByDegree(deg, nSample);
+		
+		saveLocalGraph(links, selectedNodes, sample_file);
 		
 	}
 	
@@ -535,25 +685,9 @@ public class LinkExchange {
 		int[] trueLinks = new int[n];
 		int[] falseLinks = new int[n];
 		int[] dupLinks = new int[n];
-		for (int u = 0; u < n; u++){
-			Map<Int2, Integer> dup = new HashMap<Int2, Integer>();
-			for(Int2 p : links.get(u)){
-				// p is already normalized 
-				if (p.val0 > p.val1)
-					System.err.println("error");
-				
-				if (dup.containsKey(p)){
-					dupLinks[u] += 1;
-				}else{
-					dup.put(p, 1);
-					if (G.areEdgesAdjacent(p.val0, p.val1))
-						trueLinks[u] += 1;
-					else
-						falseLinks[u] += 1;
-				}
-			}
-			
-		}
+		
+		countTrueFalseDupLinks(G, links, trueLinks, falseLinks, dupLinks);
+		
 		System.out.println("linkGossipNoDup - DONE, elapsed " + (System.currentTimeMillis() - start));
 		
 		// write to file
@@ -635,25 +769,9 @@ public class LinkExchange {
 		int[] trueLinks = new int[n];
 		int[] falseLinks = new int[n];
 		int[] dupLinks = new int[n];
-		for (int u = 0; u < n; u++){
-			Map<Int2, Integer> dup = new HashMap<Int2, Integer>();
-			for(Int2 p : links.get(u)){
-				// p is already normalized 
-				if (p.val0 > p.val1)
-					System.err.println("error");
-				
-				if (dup.containsKey(p)){
-					dupLinks[u] += 1;
-				}else{
-					dup.put(p, 1);
-					if (G.areEdgesAdjacent(p.val0, p.val1))
-						trueLinks[u] += 1;
-					else
-						falseLinks[u] += 1;
-				}
-			}
-			
-		}
+		
+		countTrueFalseDupLinks(G, links, trueLinks, falseLinks, dupLinks);
+		
 		System.out.println("linkGossipAsync - DONE, elapsed " + (System.currentTimeMillis() - start));
 		
 		// write to file
@@ -676,7 +794,7 @@ public class LinkExchange {
 //		String dataname = "pl_10000_5_01";		// diameter = 6,  Dup: round=3 (OutOfMem, 7GB ok), 98s (Acer)
 												//				NoDup: round=3 (4.5GB), 376s (Acer)
 //		String dataname = "ba_1000_5";			// diameter = 5
-//		String dataname = "ba_10000_5";			// diameter = 6, NoDup: round=3 (5.1GB), 430s (Acer), 350s (PC), totalLink = 255633393
+		String dataname = "ba_10000_5";			// diameter = 6, NoDup: round=3 (5.1GB), 430s (Acer), 350s (PC), totalLink = 255633393
 		
 //		String dataname = "er_1000_001";		// diameter = 5
 //		String dataname = "er_10000_0001";		// diameter = 7, NoDup: round=3 (2.5GB), 23s (PC)
@@ -694,7 +812,7 @@ public class LinkExchange {
 //		String dataname = "ca-HepPh";			// (12006,118489) 		
 //		String dataname = "ca-AstroPh";			// (18771,198050) 			
 		// LARGE
-		String dataname = "com_amazon_ungraph";		// (334863,925872)	round=1 (11s), totalLink = 19354729
+//		String dataname = "com_amazon_ungraph";		// (334863,925872)	round=1 (11s), totalLink = 19354729
 //		String dataname = "com_dblp_ungraph";		// (317080,1049866)	
 //		String dataname = "com_youtube_ungraph";	// (1134890,2987624) 
 		
@@ -715,12 +833,13 @@ public class LinkExchange {
 		
 		
 		//
-		int round = 1; 		// flood
+		int round = 2; 		// flood
 //		int round = 10; 	// gossip
 		int step = 100000;	// gossip-async
 		double alpha = 1.0;
-		double discount = 1.0;
 		double beta = 0.0;
+		double discount = 1.0;
+		int nSample = 50;			// number of local graphs written to file
 		
 		// TEST linkExchange()
 //		String count_file = prefix + "_out/" + dataname + "-" + round + "_" + String.format("%.1f",alpha) + "_" + String.format("%.1f",beta) + ".cnt";
@@ -746,10 +865,15 @@ public class LinkExchange {
 		
 		
 		// TEST linkExchangeNoDup()
-		String count_file = prefix + "_out/" + dataname + "-nodup-" + round + "_" + String.format("%.1f",alpha) + "_" + 
-				String.format("%.1f",beta) + "_" + String.format("%.1f",discount) + ".cnt";
+		String name = dataname + "-nodup-" + round + "_" + String.format("%.1f",alpha) + "_" + String.format("%.1f",beta) + "_" + String.format("%.1f",discount) + "_" + nSample;
+		String count_file = prefix + "_out/" + name + ".cnt";
+		String sample_file = prefix + "_sample/" + name + ".out";
+		String matlab_file = prefix + "_matlab/" + name + ".mat";
+		System.out.println("count_file = " + count_file);
 		
-		linkExchangeNoDup(G, round, alpha, beta, discount, count_file);
+		linkExchangeNoDup(G, round, alpha, beta, discount, nSample, count_file, sample_file);
+		
+		computeLocalGraph(sample_file, matlab_file, 10000);
 		
 		
 		//////////

@@ -9,6 +9,10 @@
  * 	- hyperANF(): use loadGraph()
  * Nov 18
  * 	- use EdgeIntGraph in place of Grph
+ * May 30, 2016
+ * 	- faster globalClusteringCoeff(): see http://theory.stanford.edu/~tim/s14/l/l1.pdf
+ * Jun 6
+ * 	- fix getDegreeDistr()
  */
 package dp;
 
@@ -95,7 +99,8 @@ public class UtilityMeasure {
 		
 		// normalize
 		for (int d = 0; d < n_nodes; d++){
-			dist[d] = dist[d]/(2*n_edges);
+//			dist[d] = dist[d]/(2*n_edges);		// WRONG
+			dist[d] = dist[d]/n_nodes;
 		}
 		
 //		deg.s_CC = G.getClusteringCoefficient();		// Error: compile external sources
@@ -364,6 +369,24 @@ public class UtilityMeasure {
 		double triples = 0.0;
 		double triangles = 0.0;
 		
+		//
+//		for (int u = 0; u < n_nodes; u++){
+//			Set<Integer> nb = G.adj(u).keySet();
+//			
+//			triples += nb.size() * (nb.size()-1)/2;
+//			
+//			for (int v : nb)
+//				for (int t : nb)
+//					if (v > u && t > v && G.areEdgesAdjacent(v, t))
+//						triangles += 1;
+//		}
+//		ret = 3*triangles/triples;
+		
+		// FASTER (youtute: 60s -> 47s)
+//		long start = System.currentTimeMillis();
+		int[] deg = new int[n_nodes];
+		for (int u = 0; u < n_nodes; u++)
+			deg[u] = G.degree(u);
 		for (int u = 0; u < n_nodes; u++){
 			Set<Integer> nb = G.adj(u).keySet();
 			
@@ -371,11 +394,19 @@ public class UtilityMeasure {
 			
 			for (int v : nb)
 				for (int t : nb)
-					if (v > u && t > v && G.areEdgesAdjacent(v, t))
-						triangles += 1;
+					if (t > v){
+						if (deg[v] > deg[u] && deg[t] > deg[u] && G.areEdgesAdjacent(v, t))
+							triangles += 1;
+						else if (deg[v] == deg[u] && deg[t] > deg[u] && v > u && G.areEdgesAdjacent(v, t))
+							triangles += 1;
+						else if (deg[v] > deg[u] && deg[t] == deg[u] && t > u && G.areEdgesAdjacent(v, t))
+							triangles += 1;
+						else if (deg[v] == deg[u] && deg[t] == deg[u] && v > u && t > v && G.areEdgesAdjacent(v, t))
+							triangles += 1;
+				}
 		}
-			
 		ret = 3*triangles/triples;
+//		System.out.println("globalClusteringCoeff, elapsed " + (System.currentTimeMillis() - start));
 				
 		//
 		return ret;
@@ -630,13 +661,13 @@ public class UtilityMeasure {
 //		String dataname = "sm_100000_005_11";	// (100000,500000) 	WAY-1: OutOfMemory, 	WAY-2: 805s
 		// LARGE
 //		String dataname = "com_amazon_ungraph"; 	// (334863,925872) 
-//		String dataname = "com_dblp_ungraph";  		// (317080,1049866) 
+		String dataname = "com_dblp_ungraph";  		// (317080,1049866) 
 //		String dataname = "com_youtube_ungraph"; 	// (1134890,2987624)	bfsSamples 1000 nodes (UnweightedGraph: 210s, 1.7GB) (int queue: 200s, 0.6GB)
 		// WCC
 //		String dataname = "polblogs-wcc";			// (1222,16714) 	
 //		String dataname = "wiki-Vote-wcc";			// (7066,100736) 	
 //		String dataname = "ca-HepPh-wcc";			// (11204,117619) 
-		String dataname = "ca-AstroPh-wcc";			// (17903,196972) 	bfsSamples 1000 nodes (Grph: 131s), (UnweightedGraph: 5.6s)
+//		String dataname = "ca-AstroPh-wcc";			// (17903,196972) 	bfsSamples 1000 nodes (Grph: 131s), (UnweightedGraph: 5.6s)
 		
 		String filename = "_data/" + dataname + ".gr";
 		String louvain_file = "_sample/" + dataname + "_louvain";	// by community detection algo
@@ -648,47 +679,47 @@ public class UtilityMeasure {
 	    int n_queries = 1000;
 	    
 	    // COMMAND-LINE
- 		String prefix = "";
- 	    int n_samples = 20;
- 	    String graph_name = "";
- 	   int n_nodes = 0;
- 	   
- 		if(args.length >= 5){
- 			prefix = args[0];
- 			dataname = args[1];
- 			n_samples = Integer.parseInt(args[2]);
- 			graph_name = args[3];
- 			n_nodes = Integer.parseInt(args[4]);
- 		
-	 		System.out.println("dataname = " + dataname);
-	 		System.out.println("graph_name = " + graph_name);
-	 		
-	 		String cut_query_file = prefix + "_data/" + dataname + ".cut";
-	 		String graph_file = prefix + "_sample/" + graph_name;
-	 		String matlab_file = prefix + "_matlab/" + graph_name;
-		    
-	 		for (int i = 0; i < n_samples; i++){
-		    	System.out.println("sample i = " + i);
-		    	
-				
-				long start = System.currentTimeMillis();
-			    computeUtility(graph_file + "." + i, cut_query_file, matlab_file + "." + i + ".mat", n_queries, n_nodes);
-			    System.out.println("computeUtility - DONE, elapsed " + (System.currentTimeMillis() - start));
-	 		}
- 		}else{	// run on true graph (3 arguments)
- 			prefix = args[0];
- 			dataname = args[1];
- 			n_nodes = Integer.parseInt(args[2]);
- 			
- 			System.out.println("dataname = " + dataname);
- 			String graph_file = prefix + "_data/" + dataname + ".gr";
-	 		String matlab_file = prefix + "_matlab/" + dataname + ".mat";
- 			String cut_query_file = prefix + "_data/" + dataname + ".cut";
- 			
- 			long start = System.currentTimeMillis();
-		    computeUtility(graph_file, cut_query_file, matlab_file, n_queries, n_nodes);
-		    System.out.println("computeUtility - DONE, elapsed " + (System.currentTimeMillis() - start));
- 		}
+// 		String prefix = "";
+// 	    int n_samples = 20;
+// 	    String graph_name = "";
+// 	    int n_nodes = 0;
+// 	   
+// 		if(args.length >= 5){
+// 			prefix = args[0];
+// 			dataname = args[1];
+// 			n_samples = Integer.parseInt(args[2]);
+// 			graph_name = args[3];
+// 			n_nodes = Integer.parseInt(args[4]);
+// 		
+//	 		System.out.println("dataname = " + dataname);
+//	 		System.out.println("graph_name = " + graph_name);
+//	 		
+//	 		String cut_query_file = prefix + "_data/" + dataname + ".cut";
+//	 		String graph_file = prefix + "_sample/" + graph_name;
+//	 		String matlab_file = prefix + "_matlab/" + graph_name;
+//		    
+//	 		for (int i = 0; i < n_samples; i++){
+//		    	System.out.println("sample i = " + i);
+//		    	
+//				
+//				long start = System.currentTimeMillis();
+//			    computeUtility(graph_file + "." + i, cut_query_file, matlab_file + "." + i + ".mat", n_queries, n_nodes);
+//			    System.out.println("computeUtility - DONE, elapsed " + (System.currentTimeMillis() - start));
+//	 		}
+// 		}else{	// run on true graph (3 arguments)
+// 			prefix = args[0];
+// 			dataname = args[1];
+// 			n_nodes = Integer.parseInt(args[2]);
+// 			
+// 			System.out.println("dataname = " + dataname);
+// 			String graph_file = prefix + "_data/" + dataname + ".gr";
+//	 		String matlab_file = prefix + "_matlab/" + dataname + ".mat";
+// 			String cut_query_file = prefix + "_data/" + dataname + ".cut";
+// 			
+// 			long start = System.currentTimeMillis();
+//		    computeUtility(graph_file, cut_query_file, matlab_file, n_queries, n_nodes);
+//		    System.out.println("computeUtility - DONE, elapsed " + (System.currentTimeMillis() - start));
+// 		}
  		
 	    
 	    //
@@ -724,13 +755,18 @@ public class UtilityMeasure {
 //		System.out.println("generateCutQueries - DONE");
 		
 	    // TEST 
-//	    DegreeMetric deg = new DegreeMetric();
-//	    double[] dist = getDegreeDistr(G, deg);
-//	    System.out.println("s_AD = " + deg.s_AD);
-//	    System.out.println("s_MD = " + deg.s_MD);
-//	    System.out.println("s_DV = " + deg.s_DV);
-//	    System.out.println("s_PL = " + deg.s_PL);
-//	    System.out.println("s_CC = " + deg.s_CC);
+	    String graph_file = "_data/" + dataname + ".gr";
+	    EdgeIntGraph G = EdgeIntGraph.readEdgeListWithNodes(graph_file, "\t", 317080);
+		System.out.println("#nodes = " + G.V());
+		System.out.println("#edges = " + G.E());
+		
+	    DegreeMetric deg = new DegreeMetric();
+	    double[] dist = getDegreeDistr(G, deg);
+	    System.out.println("s_AD = " + deg.s_AD);
+	    System.out.println("s_MD = " + deg.s_MD);
+	    System.out.println("s_DV = " + deg.s_DV);
+	    System.out.println("s_PL = " + deg.s_PL);
+	    System.out.println("s_CC = " + deg.s_CC);
 	    
 	    
 		// TEST computeUtility()

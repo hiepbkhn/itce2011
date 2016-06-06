@@ -1,6 +1,8 @@
 /*
  * Sep 21, 2015
  * 	- copied from EdgeWeightedGraph, use EdgeInt
+ * Jun 6, 2016
+ * 	- add UnweightedGraph(EdgeIntGraph G)
  */
 
 package algs4;
@@ -39,6 +41,22 @@ public class UnweightedGraph {
             adj.add(new ArrayList<Integer>());
         }
     }
+    
+    ////
+    public UnweightedGraph(EdgeIntGraph G) {
+        this.V = G.V();
+        this.E = 0;
+        adj = new ArrayList<List<Integer>>();
+        for (int v = 0; v < V; v++) {
+            adj.add(new ArrayList<Integer>());
+        }
+        for (EdgeInt e : G.edges()){
+        	int v = e.either();
+        	int w = e.other(v);
+        	addEdge(v,w);
+        }
+    }
+
 
 
     /**
