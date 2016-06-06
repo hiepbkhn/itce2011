@@ -1,6 +1,8 @@
 /*
  * May 26, 2016
- * 	- add approxVertexCover(), greedyVertexCover()
+ * 	- add linkExchangeFalsePos(), linkExchangeFixedM(), extractFilterBlind(), extractFilterWithEdgeSet()
+ * Jun 6
+ * 	- count true/false/dup links in linkExchangeFalsePos()
  */
 
 package dsn;
@@ -183,7 +185,9 @@ public class LinkExchangeBloomFilter {
 		
         // 
 		long start = System.currentTimeMillis();
-		List<Int2> allEdges = new ArrayList<Int2>();
+		List<Int2> allEdges = new ArrayList<Int2>();	// // used in extractFilterWithEdgeSet() below
+		allEdges.addAll(G.allEdges());
+		
 		// initial stage
 		for (int u = 0; u < n; u++){
 			List<Int2> temp = new ArrayList<Int2>();
@@ -193,7 +197,7 @@ public class LinkExchangeBloomFilter {
 			List<Int2> newLinks = createFalseLink(G, u, beta);
 			temp.addAll(newLinks);
 			
-			allEdges.addAll(temp);		// used in extractFilterWithEdgeSet
+			allEdges.addAll(newLinks);		
 			
 			// hash links[u] to filters[u]
 			for (Int2 e : temp){
@@ -201,8 +205,8 @@ public class LinkExchangeBloomFilter {
 				long eid = e.val0 * n + e.val1;
 				filters.get(u).add(eid);
 			}
-				
 		}
+		System.out.println("allEdges.size = " + allEdges.size());
 		
 		// loop
 		for(int t = 1; t < round+1; t++){
@@ -225,7 +229,9 @@ public class LinkExchangeBloomFilter {
 		
 		System.out.println("linkExchangeFalsePos - DONE, elapsed " + (System.currentTimeMillis() - start));
 		
-		// extract (recover) edges from filters			
+		// extract (recover) edges from filters		
+		start = System.currentTimeMillis();
+		
 		List<List<Int2>> links = new ArrayList<List<Int2>>();
 		for (int u = 0; u < n; u++){
 //			List<Int2> ret = extractFilterBlind(filters.get(u), n);
@@ -235,6 +241,7 @@ public class LinkExchangeBloomFilter {
 			
 			links.add(ret);
 		}
+		System.out.println("extractFilterWithEdgeSet - DONE, elapsed " + (System.currentTimeMillis() - start));
 		
 		//
 		int[] trueLinks = new int[n];
@@ -341,7 +348,7 @@ public class LinkExchangeBloomFilter {
 
 		
 //		String dataname = "pl_1000_5_01";		// diameter = 5
-		String dataname = "pl_10000_5_01";		// diameter = 6, round=2  
+		String dataname = "pl_10000_5_01";		// diameter = 6, round=2  extractFilterWithEdgeSet(656s, Acer)
 												//				
 //		String dataname = "pl_100000_5_01";		// diameter = 6,
 		
@@ -389,13 +396,13 @@ public class LinkExchangeBloomFilter {
 		int round = 2; 		// flood
 //		int round = 10; 	// gossip
 		int step = 100000;	// gossip-async
-		double alpha = 0.5;
+		double alpha = 1.0;
 		double discount = 1.0;
 		double beta = 1.0;
 		double falsePositive = 0.1;
 		
 		// TEST linkExchange()
-		String count_file = prefix + "_out/" + dataname + "-bf-" + round + "_" + String.format("%.1f",alpha) + "_" + String.format("%.1f",beta) + ".cnt";
+		String count_file = prefix + "_out/" + dataname + "-bf-" + round + "_" + String.format("%.1f",beta) + ".cnt"; // no alpha
 		System.out.println("count_file = " + count_file);
 		
 		// alpha = 1.0
