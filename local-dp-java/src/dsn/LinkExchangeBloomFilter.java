@@ -3,6 +3,9 @@
  * 	- add linkExchangeFalsePos(), linkExchangeFixedM(), extractFilterBlind(), extractFilterWithEdgeSet()
  * Jun 6
  * 	- count true/false/dup links in linkExchangeFalsePos()
+ * Jun 7
+ * 	- replace BloomFilter<Long> with BloomFilter
+ * 	- add extractAllFiltersWithEdgeSet()
  */
 
 package dsn;
@@ -14,6 +17,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,6 +26,7 @@ import java.util.Map;
 import java.util.Random;
 
 import bf.BloomFilter;
+import bf.BloomFilterLong;
 import dp.PathMetric;
 import dp.UtilityMeasure;
 import algs4.EdgeInt;
@@ -37,6 +42,18 @@ public class LinkExchangeBloomFilter {
 			System.out.print("(" + e.val0 + "," + e.val1 + ") ");
 		System.out.println();
 	}
+	
+	////
+	public static void writeDegreeSeq(EdgeIntGraph G, String deg_file) throws IOException{
+		int n = G.V();
+		BufferedWriter bw = new BufferedWriter(new FileWriter(deg_file));
+		for (int u = 0; u < n; u++){
+			bw.write(G.degree(u) + "\n");
+		}
+		bw.close();
+		System.out.println("Written to deg_file.");
+	}
+	
 	////
 	public static void graphMetric(String graph_file, int n_nodes) throws IOException{
 		UnweightedGraph aG = UnweightedGraph.readEdgeListWithNodes(graph_file, "\t", n_nodes);
@@ -133,7 +150,7 @@ public class LinkExchangeBloomFilter {
 	}
 	
 	//// extract links from a bloomfiter
-	public static List<Int2> extractFilterBlind(BloomFilter<Long> bf, int n){
+	public static List<Int2> extractFilterBlind(BloomFilterLong bf, int n){
 		List<Int2> ret = new ArrayList<Int2>();
 		
 		for (long eid = 0; eid < n*n; eid++)
@@ -148,7 +165,7 @@ public class LinkExchangeBloomFilter {
 	}
 	
 	////extract links from a bloomfiter
-	public static List<Int2> extractFilterWithEdgeSet(BloomFilter<Long> bf, int n, List<Int2> edges){
+	public static List<Int2> extractFilterWithEdgeSet(BloomFilterLong bf, int n, List<Int2> edges){
 		List<Int2> ret = new ArrayList<Int2>();
 		
 		for (Int2 e : edges){
@@ -162,33 +179,53 @@ public class LinkExchangeBloomFilter {
 		return ret;
 	}
 	
-	//// alpha = 1.0
-	public static void linkExchangeFalsePos(EdgeIntGraph G, int round, double falsePositive, double beta, String count_file) throws IOException{
+	////
+	public static List<List<Int2>> extractAllFiltersWithEdgeSet(List<BloomFilterLong> filters, int n, List<Int2> edges){
+		List<List<Int2>> ret = new ArrayList<List<Int2>>();
+		for (int i = 0; i < n; i++)
+			ret.add(new ArrayList<Int2>());
+		
+		for (Int2 e : edges){
+			normalizeEdge(e);
+			long eid = e.val0 * n + e.val1;
+			
+			boolean[] check = BloomFilterLong.containsListBF(eid, filters);
+			for (int i = 0; i < n; i++)
+				if (check[i] == true)
+					ret.get(i).add(e);
+		}
+		//
+		return ret;
+	}
+	
+	//// alpha <= 1.0
+	public static void linkExchangeFalsePos(EdgeIntGraph G, int round, double falsePositive, double alpha, double beta, String count_file) throws IOException{
 		int n = G.V();
 		int m = G.E();
 		System.out.println("round = " + round);
 		System.out.println("falsePositive = " + falsePositive);
+		System.out.println("alpha = " + alpha);
 		System.out.println("beta = " + beta);
 		
 		//
-		BloomFilter<Long> bf = new BloomFilter<Long>(falsePositive, m);
+		BloomFilterLong bf = new BloomFilterLong(falsePositive, m);
 		
 		System.out.println("k is " + bf.getK());
         System.out.println("bitSetSize is " + bf.getBitSetSize());
 
 		// Bloom filters at nodes
-		List<BloomFilter<Long>> filters = new ArrayList<BloomFilter<Long>>();
+		List<BloomFilterLong> filters = new ArrayList<BloomFilterLong>();
 		for (int u = 0; u < n; u++){
-			filters.add(new BloomFilter<Long>(falsePositive, m));
+			filters.add(new BloomFilterLong(falsePositive, m));
 		}
 		
 		
         // 
 		long start = System.currentTimeMillis();
-		List<Int2> allEdges = new ArrayList<Int2>();	// // used in extractFilterWithEdgeSet() below
+		List<Int2> allEdges = new ArrayList<Int2>();	// used in extractFilterWithEdgeSet() below
 		allEdges.addAll(G.allEdges());
 		
-		// initial stage
+		// 1 - initial stage
 		for (int u = 0; u < n; u++){
 			List<Int2> temp = new ArrayList<Int2>();
 			for (int v:G.adj(u).keySet())
@@ -208,16 +245,19 @@ public class LinkExchangeBloomFilter {
 		}
 		System.out.println("allEdges.size = " + allEdges.size());
 		
-		// loop
+		// 2 - loop
+		Random random = new Random();
 		for(int t = 1; t < round+1; t++){
-			List<BloomFilter<Long>> newFilters = new ArrayList<BloomFilter<Long>>();		// new links received at each node
+			List<BloomFilterLong> newFilters = new ArrayList<BloomFilterLong>();		// new links received at each node
 			
 			// for each node u
 			for (int u = 0; u < n; u++){
-				bf = new BloomFilter<Long>(falsePositive, m);
+				bf = new BloomFilterLong(falsePositive, m);
+				bf.union(filters.get(u));			// set to u
 				
 				for (int v : G.adj(u).keySet())
-					bf.union(filters.get(v));		// take union
+//					bf.union(filters.get(v);
+					bf.union(filters.get(v).removeBits(alpha, random));		// take union with v in N(u)
 				
 				//
 				newFilters.add(bf);
@@ -229,21 +269,26 @@ public class LinkExchangeBloomFilter {
 		
 		System.out.println("linkExchangeFalsePos - DONE, elapsed " + (System.currentTimeMillis() - start));
 		
-		// extract (recover) edges from filters		
+		// 3 - extract (recover) edges from filters		
 		start = System.currentTimeMillis();
 		
 		List<List<Int2>> links = new ArrayList<List<Int2>>();
-		for (int u = 0; u < n; u++){
-//			List<Int2> ret = extractFilterBlind(filters.get(u), n);
-//			List<Int2> ret = extractFilterWithEdgeSet(filters.get(u), n, G.allEdges());
-			
-			List<Int2> ret = extractFilterWithEdgeSet(filters.get(u), n, allEdges);		// ret MAY contain duplicate falseLinks
-			
-			links.add(ret);
-		}
-		System.out.println("extractFilterWithEdgeSet - DONE, elapsed " + (System.currentTimeMillis() - start));
+		// WAY-1
+//		for (int u = 0; u < n; u++){
+////			List<Int2> ret = extractFilterBlind(filters.get(u), n);
+////			List<Int2> ret = extractFilterWithEdgeSet(filters.get(u), n, G.allEdges());
+//			
+//			List<Int2> ret = extractFilterWithEdgeSet(filters.get(u), n, allEdges);		// ret MAY contain duplicate falseLinks
+//			
+//			links.add(ret);
+//		}
+//		System.out.println("extractFilterWithEdgeSet - DONE, elapsed " + (System.currentTimeMillis() - start));
 		
-		//
+		// WAY-2
+		links = extractAllFiltersWithEdgeSet(filters, n, allEdges);
+		System.out.println("extractAllFiltersWithEdgeSet - DONE, elapsed " + (System.currentTimeMillis() - start));
+		
+		// 4 - count true/false/duplicate links and write to file
 		int[] trueLinks = new int[n];
 		int[] falseLinks = new int[n];
 		int[] dupLinks = new int[n];
@@ -273,15 +318,15 @@ public class LinkExchangeBloomFilter {
 		m = n/10; //(int)Math.ceil(Math.sqrt(m));
 		
 		//
-		BloomFilter<Long> bf = new BloomFilter<Long>(c, m, k);
+		BloomFilterLong bf = new BloomFilterLong(c, m, k);
 		
 		System.out.println("k is " + bf.getK());
        System.out.println("bitSetSize is " + bf.getBitSetSize());
 
 		// Bloom filters at nodes
-		List<BloomFilter<Long>> filters = new ArrayList<BloomFilter<Long>>();
+		List<BloomFilterLong> filters = new ArrayList<BloomFilterLong>();
 		for (int u = 0; u < n; u++){
-			filters.add(new BloomFilter<Long>(c, m, k));
+			filters.add(new BloomFilterLong(c, m, k));
 			
 		}
 		
@@ -312,14 +357,15 @@ public class LinkExchangeBloomFilter {
 		
 		// loop
 		for(int t = 1; t < round+1; t++){
-			List<BloomFilter<Long>> newFilters = new ArrayList<BloomFilter<Long>>();		// new links received at each node
+			List<BloomFilterLong> newFilters = new ArrayList<BloomFilterLong>();		// new links received at each node
 			
 			// for each node u
 			for (int u = 0; u < n; u++){
-				bf = new BloomFilter<Long>(c, m, k);
+				bf = new BloomFilterLong(c, m, k);
+				bf.union(filters.get(u));			// set to u
 				
 				for (int v : G.adj(u).keySet())
-					bf.union(filters.get(v));
+					bf.union(filters.get(v));		// take union with v in N(u)
 				
 				//
 				newFilters.add(bf);
@@ -348,15 +394,16 @@ public class LinkExchangeBloomFilter {
 
 		
 //		String dataname = "pl_1000_5_01";		// diameter = 5
-		String dataname = "pl_10000_5_01";		// diameter = 6, round=2  extractFilterWithEdgeSet(656s, Acer)
-												//				
+		String dataname = "pl_10000_5_01";		// diameter = 6, round=2  extractFilterWithEdgeSet(656s Acer, 527s PC)	extractAllFiltersWithEdgeSet (84s)
+												//				 round=3  extractAllFiltersWithEdgeSet(209s PC, 8.8GB)
 //		String dataname = "pl_100000_5_01";		// diameter = 6,
 		
 //		String dataname = "ba_1000_5";			// diameter = 5
 //		String dataname = "ba_10000_5";			// diameter = 6, 
 		
 //		String dataname = "er_1000_001";		// diameter = 5
-//		String dataname = "er_10000_0001";		// diameter = 7, 
+//		String dataname = "er_10000_0001";		// diameter = 7, round=2  extractFilterWithEdgeSet(519s PC, BloomFilterLong 401s), extractAllFiltersWithEdgeSet (60s PC)
+												// 				 round=3  extractAllFiltersWithEdgeSet (124s PC)
 		
 //		String dataname = "sm_1000_005_11";		// diameter = 9
 //		String dataname = "sm_10000_005_11";	// diameter = 12,
@@ -393,20 +440,37 @@ public class LinkExchangeBloomFilter {
 		
 		
 		//
-		int round = 2; 		// flood
+		int round = 3; 		// flood
 //		int round = 10; 	// gossip
 		int step = 100000;	// gossip-async
-		double alpha = 1.0;
+		double alpha = 0.75;
 		double discount = 1.0;
 		double beta = 1.0;
 		double falsePositive = 0.1;
 		
+		//
+//		String deg_file = prefix + "_out/" + dataname + ".deg";
+//		writeDegreeSeq(G, deg_file);
+		
+		// TEST BitSet
+//		BitSet a = new BitSet(10);
+//		System.out.println("a.length = " + a.length());
+//		System.out.println("a.size = " + a.size());
+//		System.out.println("a.cardinality = " + a.cardinality());
+//		a.set(1);	
+//		a.set(5);
+//		System.out.println("a.length = " + a.length());
+//		System.out.println("a.size = " + a.size());
+//		System.out.println("a.cardinality = " + a.cardinality());
+		
 		// TEST linkExchange()
-		String count_file = prefix + "_out/" + dataname + "-bf-" + round + "_" + String.format("%.1f",beta) + ".cnt"; // no alpha
+//		String count_file = prefix + "_out/" + dataname + "-bf-" + round + "_" + String.format("%.1f",beta) + ".cnt"; // no alpha
+		String count_file = prefix + "_out/" + dataname + "-bf-" + round + "_" + String.format("%.2f",alpha) + "_" + String.format("%.1f",beta) + ".cnt";
+		
 		System.out.println("count_file = " + count_file);
 		
 		// alpha = 1.0
-		linkExchangeFalsePos(G, round, falsePositive, beta, count_file);
+		linkExchangeFalsePos(G, round, falsePositive, alpha, beta, count_file);
 		
 		
 		
