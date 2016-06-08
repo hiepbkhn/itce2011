@@ -6,6 +6,9 @@
  * Jun 7
  * 	- replace BloomFilter<Long> with BloomFilter
  * 	- add extractAllFiltersWithEdgeSet()
+ * 	- call removeBits() in LinkExchangeFalsePos() (for alpha < 1)
+ * Jun 8
+ * 	- add testArithmeticCoding()
  */
 
 package dsn;
@@ -321,7 +324,7 @@ public class LinkExchangeBloomFilter {
 		BloomFilterLong bf = new BloomFilterLong(c, m, k);
 		
 		System.out.println("k is " + bf.getK());
-       System.out.println("bitSetSize is " + bf.getBitSetSize());
+		System.out.println("bitSetSize is " + bf.getBitSetSize());
 
 		// Bloom filters at nodes
 		List<BloomFilterLong> filters = new ArrayList<BloomFilterLong>();
@@ -331,8 +334,8 @@ public class LinkExchangeBloomFilter {
 		}
 		
 		
-       // 
-       List<List<Int2>> links = new ArrayList<List<Int2>>();
+        // 
+        List<List<Int2>> links = new ArrayList<List<Int2>>();
 		
 		long start = System.currentTimeMillis();
 		// initial stage
@@ -387,6 +390,42 @@ public class LinkExchangeBloomFilter {
 		
 	}
 	
+	////
+	public static void testArithmeticCoding(double falsePositive, int n, int m) throws IOException{
+		
+		BloomFilterLong bf = new BloomFilterLong(falsePositive, m);
+		System.out.println("k is " + bf.getK());
+        System.out.println("bitSetSize is " + bf.getBitSetSize());
+        
+		// insert some edge ids
+		Random random = new Random();
+		int numE = m/1000;
+		System.out.println("numE = " + numE);
+		long[] edges = new long[numE];
+		for (int i = 0; i < numE; i++){
+			edges[i] = random.nextLong() % (n*n);
+			bf.add(edges[i]);
+		}
+		
+		
+		System.out.println("bf.bitSet: #bytes = " + bf.getBitSet().toByteArray().length);
+		
+		// compress
+		byte[] data = BloomFilterLong.compressBF(bf);
+		
+		System.out.println("compressed data: #bytes = " + data.length);
+		
+		// decompress
+		bf = BloomFilterLong.decompressBF(data, falsePositive, m, numE);
+		
+		// test membership of edges
+		for (long eid : edges){
+			if (! bf.contains(eid))
+				System.err.println("error ! " + eid);
+		}
+		System.out.println("decompress - DONE.");
+		System.out.println("bf.bitSet: #bytes = " + bf.getBitSet().toByteArray().length);
+	}
 	
 	////////////////////////////////////////////////
 	public static void main(String[] args) throws Exception{
@@ -394,7 +433,7 @@ public class LinkExchangeBloomFilter {
 
 		
 //		String dataname = "pl_1000_5_01";		// diameter = 5
-		String dataname = "pl_10000_5_01";		// diameter = 6, round=2  extractFilterWithEdgeSet(656s Acer, 527s PC)	extractAllFiltersWithEdgeSet (84s)
+//		String dataname = "pl_10000_5_01";		// diameter = 6, round=2  extractFilterWithEdgeSet(656s Acer, 527s PC)	extractAllFiltersWithEdgeSet (84s)
 												//				 round=3  extractAllFiltersWithEdgeSet(209s PC, 8.8GB)
 //		String dataname = "pl_100000_5_01";		// diameter = 6,
 		
@@ -402,7 +441,7 @@ public class LinkExchangeBloomFilter {
 //		String dataname = "ba_10000_5";			// diameter = 6, 
 		
 //		String dataname = "er_1000_001";		// diameter = 5
-//		String dataname = "er_10000_0001";		// diameter = 7, round=2  extractFilterWithEdgeSet(519s PC, BloomFilterLong 401s), extractAllFiltersWithEdgeSet (60s PC)
+		String dataname = "er_10000_0001";		// diameter = 7, round=2  extractFilterWithEdgeSet(519s PC, BloomFilterLong 401s), extractAllFiltersWithEdgeSet (60s PC)
 												// 				 round=3  extractAllFiltersWithEdgeSet (124s PC)
 		
 //		String dataname = "sm_1000_005_11";		// diameter = 9
@@ -440,10 +479,10 @@ public class LinkExchangeBloomFilter {
 		
 		
 		//
-		int round = 3; 		// flood
+		int round = 1; 		// flood
 //		int round = 10; 	// gossip
 		int step = 100000;	// gossip-async
-		double alpha = 0.75;
+		double alpha = 0.25;
 		double discount = 1.0;
 		double beta = 1.0;
 		double falsePositive = 0.1;
@@ -462,7 +501,7 @@ public class LinkExchangeBloomFilter {
 //		System.out.println("a.length = " + a.length());
 //		System.out.println("a.size = " + a.size());
 //		System.out.println("a.cardinality = " + a.cardinality());
-		
+
 		// TEST linkExchange()
 //		String count_file = prefix + "_out/" + dataname + "-bf-" + round + "_" + String.format("%.1f",beta) + ".cnt"; // no alpha
 		String count_file = prefix + "_out/" + dataname + "-bf-" + round + "_" + String.format("%.2f",alpha) + "_" + String.format("%.1f",beta) + ".cnt";
@@ -470,8 +509,11 @@ public class LinkExchangeBloomFilter {
 		System.out.println("count_file = " + count_file);
 		
 		// alpha = 1.0
-		linkExchangeFalsePos(G, round, falsePositive, alpha, beta, count_file);
+//		linkExchangeFalsePos(G, round, falsePositive, alpha, beta, count_file);
 		
+		// testArithmeticCoding()
+//		testArithmeticCoding(falsePositive, G.V(), G.E());
+		testArithmeticCoding(falsePositive, 1000000, 10000000);
 		
 		
 	}

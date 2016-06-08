@@ -18,10 +18,16 @@
  * 	- copied from BloomFilter, use Long data type instead of generic
  * 	- add containsListBF()
  * 	- add removeBits() to realize the case alpha < 1
+ * Jun 8
+ * 	- add compressBF(), decompressBF()
  */
 
 package bf;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
@@ -30,6 +36,13 @@ import java.util.BitSet;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
+
+import nayuki.arithcode.ArithmeticCompress;
+import nayuki.arithcode.ArithmeticDecompress;
+import nayuki.arithcode.BitInputStream;
+import nayuki.arithcode.BitOutputStream;
+import nayuki.arithcode.FrequencyTable;
+import nayuki.arithcode.SimpleFrequencyTable;
 
 /**
  * Implementation of a Bloom-filter, as described here:
@@ -379,65 +392,7 @@ public class BloomFilterLong implements Serializable {
         return true;
     }
     
-    //// hiepnh - Jun 7, 2016
-    // check one element against a list of filters
-    public static boolean[] containsListBF(long element, List<BloomFilterLong> filters) {
-    	byte[] bytes = longToBytes(element);
-    	
-    	int k = filters.get(0).getK();
-    	int bitSetSize = filters.get(0).getBitSetSize();
-    	int n = filters.size();
-    	
-    	boolean[] ret = new boolean[n];
-    	for (int i = 0; i < n; i++)
-    		ret[i] = true;
-    	
-        int[] hashes = createHashes(bytes, k);		// locations of 1-bits
-        
-        
-        for (int i = 0; i < n; i++){
-        	BloomFilterLong bf = filters.get(i);
-        	for (int hash : hashes){ 
-	            if (!bf.bitset.get(Math.abs(hash % bitSetSize))) {
-	            	ret[i] = false;
-	            	break;
-	            }
-        	}
-        }
-        //
-        return ret;
-    }
-    
-    //// remove (1-alpha) fraction of 1 bits
-    public BloomFilterLong removeBits(double alpha, Random random){
-    	
-    	BloomFilterLong ret = this.clone();
-    	
-    	// remove bits
-    	int d = (int)( ret.bitset.cardinality() * (1 - Math.pow(alpha, 1.0/ret.k)) );	// 
-    	
-    	// pick d bits from ret and set them to false
-    	// WAY - 1 (not random, first d bits)
-    	int count = 0;
-    	for (int i = ret.bitset.nextSetBit(0); i >= 0; i = ret.bitset.nextSetBit(i+1)) {
-    		ret.bitset.set(i, false);
-    		count ++;
-    		if (count == d)
-    			break;
-    	}
-    	// WAY - 2 ??
-//    	int count = 0;
-//    	for (int i = ret.bitset.nextSetBit(0); i >= 0; i = ret.bitset.nextSetBit(i+1)) {
-//    		ret.bitset.set(i, false);
-//    		count ++;
-//    		if (count == d)
-//    			break;
-//    	}
-    	
-    	
-    	//
-    	return ret;
-    }
+
 
     /**
      * Returns true if all the elements of a Collection could have been inserted
@@ -533,12 +488,117 @@ public class BloomFilterLong implements Serializable {
     /* 
      * hiepnh
      */
+    ////
     public int getBitSetSize(){
     	return this.bitSetSize;
     }
     
+    ////
     public void union(BloomFilterLong other){
     	this.bitset.or(other.bitset);
     }
     
+    
+    //// hiepnh - Jun 7, 2016
+    // check one element against a list of filters
+    public static boolean[] containsListBF(long element, List<BloomFilterLong> filters) {
+    	byte[] bytes = longToBytes(element);
+    	
+    	int k = filters.get(0).getK();
+    	int bitSetSize = filters.get(0).getBitSetSize();
+    	int n = filters.size();
+    	
+    	boolean[] ret = new boolean[n];
+    	for (int i = 0; i < n; i++)
+    		ret[i] = true;
+    	
+        int[] hashes = createHashes(bytes, k);		// locations of 1-bits
+        
+        
+        for (int i = 0; i < n; i++){
+        	BloomFilterLong bf = filters.get(i);
+        	for (int hash : hashes){ 
+	            if (!bf.bitset.get(Math.abs(hash % bitSetSize))) {
+	            	ret[i] = false;
+	            	break;
+	            }
+        	}
+        }
+        //
+        return ret;
+    }
+    
+    //// remove (1-alpha) fraction of 1 bits
+    public BloomFilterLong removeBits(double alpha, Random random){
+    	
+    	BloomFilterLong ret = this.clone();
+    	
+    	// remove bits
+    	int d = (int)( ret.bitset.cardinality() * (1 - Math.pow(alpha, 1.0/ret.k)) );	// 
+    	
+    	// pick d bits from ret and set them to false
+    	// WAY - 1 (not random, first d bits)
+    	int count = 0;
+    	for (int i = ret.bitset.nextSetBit(0); i >= 0; i = ret.bitset.nextSetBit(i+1)) {
+    		ret.bitset.set(i, false);
+    		count ++;
+    		if (count == d)
+    			break;
+    	}
+    	// WAY - 2 ??
+//    	int count = 0;
+//    	for (int i = ret.bitset.nextSetBit(0); i >= 0; i = ret.bitset.nextSetBit(i+1)) {
+//    		ret.bitset.set(i, false);
+//    		count ++;
+//    		if (count == d)
+//    			break;
+//    	}
+    	
+    	
+    	//
+    	return ret;
+    }
+    
+    ////
+    public static byte[] compressBF(BloomFilterLong bf) throws IOException{
+    	byte[] b = bf.bitset.toByteArray();
+    	
+    	InputStream in = new ByteArrayInputStream(b);
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		BitOutputStream bitOut = new BitOutputStream(out);
+		
+		FrequencyTable freq = new SimpleFrequencyTable(new int[257]);
+		for (byte x : b)
+			freq.increment(x & 0xFF);
+		freq.increment(256);  // EOF symbol gets a frequency of 1
+		
+		//
+		ArithmeticCompress.writeFrequencies(bitOut, freq);
+		ArithmeticCompress.compress(freq, in, bitOut);
+		bitOut.close();
+		return out.toByteArray();
+    }
+    
+    ////
+    public static BloomFilterLong decompressBF(byte[] b, double falsePositive, int m, int numberOfAddedElements) throws IOException{
+    	BloomFilterLong bf = new BloomFilterLong(falsePositive, m);
+    	bf.numberOfAddedElements = numberOfAddedElements;
+    	//
+    	InputStream in = new ByteArrayInputStream(b);
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		BitInputStream bitIn = new BitInputStream(in);
+		
+		FrequencyTable freq = ArithmeticDecompress.readFrequencies(bitIn);
+		ArithmeticDecompress.decompress(freq, bitIn, out);
+		
+		bf.bitset = BitSet.valueOf(out.toByteArray());
+		
+		return bf;
+    }
+    
+	////////////////////////////////////////////////
+	public static void main(String[] args) throws Exception{
+		
+		
+	}
 }

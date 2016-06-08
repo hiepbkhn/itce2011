@@ -7,6 +7,8 @@
  * 	- writeGraph(), writeGraphWithWeights()
  * May 26, 2016
  * 	- allEdges()
+ * Jun 8
+ * 	- subGraph()
  */
 
 package algs4;
@@ -405,9 +407,30 @@ public class EdgeIntGraph {
     	bw.close();
     }
     
-    /**
-     * Unit tests the <tt>EdgeWeightedGraph</tt> data type.
-     */
+    //// return aG and nodeMap
+    public static EdgeIntGraph subGraph(EdgeIntGraph G, List<Integer> nodes, Map<Integer, Integer> nodeMap){
+    	int n = nodes.size();
+
+    	int i = 0;
+    	for (int u : nodes){
+    		nodeMap.put(u, i);
+    		i++;
+    	}
+    	
+    	EdgeIntGraph aG = new EdgeIntGraph(n);
+    	for (Int2 e : G.allEdges()){
+    		int u = e.val0;
+    		int v = e.val1;
+    		if (nodeMap.containsKey(u) && nodeMap.containsKey(v)){
+    			aG.addEdge(new EdgeInt(nodeMap.get(u), nodeMap.get(v), 1));
+    		}
+    	}
+    	
+    	//
+    	return aG;
+    }
+    
+    ////////////////////////////////////////////////
     public static void main(String[] args) {
         In in = new In(args[0]);
         EdgeIntGraph G = new EdgeIntGraph(in);

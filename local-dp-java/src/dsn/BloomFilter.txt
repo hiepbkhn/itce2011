@@ -1,0 +1,166 @@
+filename = _data/er_10000_0001.gr
+readGraph - DONE, elapsed 72
+#nodes = 10000
+#edges = 50424
+count_file = _out/er_10000_0001-bf-1_0.25_1.0.cnt
+k is 4
+bitSetSize is 290986
+numE = 50
+bf.bitSet: #bytes = 36373
+compressed data: #bytes = 1325
+decompress - DONE.
+bf.bitSet: #bytes = 36373
+
+
+filename = _data/er_10000_0001.gr
+readGraph - DONE, elapsed 73
+#nodes = 10000
+#edges = 50424
+count_file = _out/er_10000_0001-bf-1_0.25_1.0.cnt
+k is 4
+bitSetSize is 290986
+numE = 500
+bf.bitSet: #bytes = 36332
+compressed data: #bytes = 3171
+decompress - DONE.
+bf.bitSet: #bytes = 36332
+
+filename = _data/er_10000_0001.gr
+readGraph - DONE, elapsed 64
+#nodes = 10000
+#edges = 50424
+count_file = _out/er_10000_0001-bf-1_0.25_1.0.cnt
+k is 4
+bitSetSize is 290986
+numE = 5000
+bf.bitSet: #bytes = 36373
+compressed data: #bytes = 13822
+decompress - DONE.
+bf.bitSet: #bytes = 36373
+
+filename = _data/er_10000_0001.gr
+readGraph - DONE, elapsed 66
+#nodes = 10000
+#edges = 50424
+count_file = _out/er_10000_0001-bf-1_0.25_1.0.cnt
+k is 4
+bitSetSize is 290986
+numE = 50000
+bf.bitSet: #bytes = 36373
+compressed data: #bytes = 37375
+decompress - DONE.
+bf.bitSet: #bytes = 36373
+
+--------------------------- n=10^5, m=10^6
+filename = _data/er_10000_0001.gr
+readGraph - DONE, elapsed 71
+#nodes = 10000
+#edges = 50424
+count_file = _out/er_10000_0001-bf-1_0.25_1.0.cnt
+k is 4
+bitSetSize is 5770781
+#nodes = 100000
+#edges = 1000000
+bf.bitSet: #bytes = 721042
+compressed data: #bytes = 6993
+decompress - DONE.
+bf.bitSet: #bytes = 721042
+
+filename = _data/er_10000_0001.gr
+readGraph - DONE, elapsed 76
+#nodes = 100000
+#edges = 1000000
+count_file = _out/er_10000_0001-bf-1_0.25_1.0.cnt
+k is 4
+bitSetSize is 5770781
+numE = 10000
+bf.bitSet: #bytes = 721256
+compressed data: #bytes = 43969
+decompress - DONE.
+bf.bitSet: #bytes = 721256
+
+
+filename = _data/er_10000_0001.gr
+readGraph - DONE, elapsed 63
+#nodes = 100000
+#edges = 1000000
+count_file = _out/er_10000_0001-bf-1_0.25_1.0.cnt
+k is 4
+bitSetSize is 5770781
+numE = 100000
+bf.bitSet: #bytes = 721348
+compressed data: #bytes = 256708
+decompress - DONE.
+bf.bitSet: #bytes = 721348
+
+
+filename = _data/er_10000_0001.gr
+readGraph - DONE, elapsed 69
+#nodes = 100000
+#edges = 1000000
+count_file = _out/er_10000_0001-bf-1_0.25_1.0.cnt
+k is 4
+bitSetSize is 5770781
+numE = 1000000
+bf.bitSet: #bytes = 721348
+compressed data: #bytes = 722350
+decompress - DONE.
+bf.bitSet: #bytes = 721348
+
+
+--------------------------- n=10^6, m=10^7
+filename = _data/er_10000_0001.gr
+readGraph - DONE, elapsed 69
+#nodes = 1000000
+#edges = 10000000
+count_file = _out/er_10000_0001-bf-1_0.25_1.0.cnt
+k is 4
+bitSetSize is 57707802
+numE = 10000
+bf.bitSet: #bytes = 7213471
+compressed data: #bytes = 60677
+decompress - DONE.
+bf.bitSet: #bytes = 7213471
+
+
+filename = _data/er_10000_0001.gr
+readGraph - DONE, elapsed 69
+#nodes = 1000000
+#edges = 10000000
+count_file = _out/er_10000_0001-bf-1_0.25_1.0.cnt
+k is 4
+bitSetSize is 57707802
+numE = 100000
+bf.bitSet: #bytes = 7213470
+compressed data: #bytes = 430299
+decompress - DONE.
+bf.bitSet: #bytes = 7213470
+
+
+filename = _data/er_10000_0001.gr
+readGraph - DONE, elapsed 70
+#nodes = 1000000
+#edges = 10000000
+count_file = _out/er_10000_0001-bf-1_0.25_1.0.cnt
+k is 4
+bitSetSize is 57707802
+numE = 1000000
+bf.bitSet: #bytes = 7213473
+compressed data: #bytes = 2557090
+decompress - DONE.
+bf.bitSet: #bytes = 7213473
+
+filename = _data/er_10000_0001.gr
+readGraph - DONE, elapsed 67
+#nodes = 1000000
+#edges = 10000000
+count_file = _out/er_10000_0001-bf-1_0.25_1.0.cnt
+k is 4
+bitSetSize is 57707802
+numE = 10000000
+bf.bitSet: #bytes = 7213475
+compressed data: #bytes = 7214449
+decompress - DONE.
+bf.bitSet: #bytes = 7213475
+
+

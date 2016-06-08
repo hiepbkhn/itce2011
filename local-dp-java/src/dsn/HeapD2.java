@@ -1,14 +1,14 @@
 /*
- * May 26, 2016
- * 	- source: http://www.code2learn.com/2011/09/heapsort-array-based-implementation-in.html
+ * Jun 8, 2016
+ * 	- copied from Heap.java, adjusted for distance-2 Vertex Cover
  */
 
 package dsn;
 
 import hist.Int2;
 
-public class Heap {
-	public Int2[] a;	// a[i].val0: node id, a[i].val1: node value (degree)
+public class HeapD2 {
+	public Int2[] a;	// a[i].val0: node id, a[i].val1: node value (degree at distance 2)
 	public int[] loc;	// loc[u] = i <--> a[i].val0 = u OR a[loc[u]].val0 = u
 	private int n;
 	private int left;
@@ -16,7 +16,7 @@ public class Heap {
 	private int largest;
 
 	////
-	public Heap(Int2[] a){
+	public HeapD2(Int2[] a){
 		this.a = a;
 		this.loc = new int[a.length];
 		for (int i = 0; i < a.length; i++)
@@ -51,8 +51,8 @@ public class Heap {
 	}
 
 	////
-	public void update(int v){
-		a[loc[v]].val1 -= 1;
+	public void update(int v, int d){
+		a[loc[v]].val1 -= d;
 		maxheap(loc[v]);
 	}
 	
@@ -96,21 +96,7 @@ public class Heap {
 	
 	////////////////////////////////////////////////
 	public static void main(String[] args) {
-		Int2[] a1 = { new Int2(0,4), new Int2(1,1), new Int2(2,3), new Int2(3,2), new Int2(4,16), 
-				new Int2(5,9), new Int2(6,10), new Int2(7,14), new Int2(8,8), new Int2(9,7) };
-		
-		Heap heap = new Heap(a1);
-		heap.sort();
-		for (int i = 0; i < a1.length; i++)
-			System.out.print(heap.loc[i] + " ");
-		System.out.println();
-		
-		for (int i = 0; i < a1.length; i++)
-			System.out.print(a1[i].val0 + " ");
-		System.out.println();
-		
-		for (int i = 0; i < a1.length; i++)
-			System.out.print(a1[i].val1 + " ");
+
 		
 	}
 }

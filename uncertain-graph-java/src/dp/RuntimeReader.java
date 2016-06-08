@@ -367,22 +367,22 @@ public class RuntimeReader {
 		int n_samples = 20;
 		
 		// TmF, EdgeFlip, 1k-series
-		for (int i = 0; i < n_list.length; i++){
-			String dataname = dataname_list[i];
-			int n = n_list[i];
-			double log_n = Math.log(n);
-			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
-//			double[] epsArr = new double[]{log_n, 1.5*log_n, 2*log_n, 3*log_n};									// EdgeFlip
-			
-			for (double eps : epsArr){
-				readTmF(prefix, dataname, n_samples, eps);
-//				readEdgeFlip(prefix, dataname, n_samples, eps);
-//				read1k(prefix, dataname, n_samples, eps);
-				
-			}
-			
-			System.out.println("DONE.");
-		}
+//		for (int i = 0; i < n_list.length; i++){
+//			String dataname = dataname_list[i];
+//			int n = n_list[i];
+//			double log_n = Math.log(n);
+//			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
+////			double[] epsArr = new double[]{log_n, 1.5*log_n, 2*log_n, 3*log_n};									// EdgeFlip
+//			
+//			for (double eps : epsArr){
+//				readTmF(prefix, dataname, n_samples, eps);
+////				readEdgeFlip(prefix, dataname, n_samples, eps);
+////				read1k(prefix, dataname, n_samples, eps);
+//				
+//			}
+//			
+//			System.out.println("DONE.");
+//		}
 		
 		// DER
 //		dataname_list = new String[]{"polbooks", "polblogs-wcc", "as20graph", "wiki-Vote-wcc", "ca-HepPh-wcc", "ca-AstroPh-wcc"};
@@ -462,26 +462,26 @@ public class RuntimeReader {
 //		}
 		
 		// HRG-Fixed
-//		dataname_list = new String[]{"polbooks", "polblogs-wcc", "as20graph", "wiki-Vote-wcc", "ca-HepPh-wcc", "ca-AstroPh-wcc", 
-//				"com_amazon_ungraph", "com_dblp_ungraph", "com_youtube_ungraph"};
-//		n_list = new int[]{105, 1222, 6474, 7066, 11204, 17903,
-//				334863, 317080, 1134890};
-//		int burn_factor = 1000;
-//		
-//		for (int i = 0; i < n_list.length; i++){
-//			String dataname = dataname_list[i];
-//			int n = n_list[i];
-//			double log_n = Math.log(n);
-//			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
-//			
-//			int sample_freq = n;
-//			for (double eps : epsArr){
-//				readHRGFixed(prefix, dataname, n_samples, sample_freq, burn_factor, eps);
-//				
-//			}
-//			
-//			System.out.println("DONE.");
-//		}
+		dataname_list = new String[]{"polbooks", "polblogs-wcc", "as20graph", "wiki-Vote-wcc", "ca-HepPh-wcc", "ca-AstroPh-wcc", 
+				"com_amazon_ungraph", "com_dblp_ungraph", "com_youtube_ungraph"};
+		n_list = new int[]{105, 1222, 6474, 7066, 11204, 17903,
+				334863, 317080, 1134890};
+		int burn_factor = 1000;
+		
+		for (int i = 0; i < n_list.length; i++){
+			String dataname = dataname_list[i];
+			int n = n_list[i];
+			double log_n = Math.log(n);
+			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
+			
+			int sample_freq = n;
+			for (double eps : epsArr){
+				readHRGFixed(prefix, dataname, n_samples, sample_freq, burn_factor, eps);
+				
+			}
+			
+			System.out.println("DONE.");
+		}
 		
 	}
 
