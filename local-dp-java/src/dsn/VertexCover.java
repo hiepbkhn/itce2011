@@ -513,6 +513,8 @@ public class VertexCover {
 			for (int u = 0; u < n; u++)
 				if (marked[u] == false && deg[top] < deg[u])
 					top = u;
+			
+			System.out.println("top = " + top);
 			//
 			cover.add(top);
 			marked[top] = true;
@@ -602,17 +604,19 @@ public class VertexCover {
 		
 		heap.buildheap();
 //		heap.print();
+		checkHeap(heap, n);	
 		
 		int count = 0;
 		while (true){
 			// find top-degree node
 			heap.exchange(0, n-1);
-//			heap.print();
+			
 			
 			int top = heap.a[n-1].val0;
 			heap.a[n-1].val1 = -1;		// marked as processed
-//			System.out.print("top = " + top);
 			n = n - 1;
+			System.out.println("top = " + top);
+			
 			
 			//
 			cover.add(top);
@@ -629,6 +633,7 @@ public class VertexCover {
 					count += 1;
 				}
 			heap.maxheap(0);
+//			heap.print();
 			
 //			System.out.println(" , count = " + count + " n = " + n);
 //			System.out.println("after update v");
@@ -636,6 +641,8 @@ public class VertexCover {
 			
 			if (count == G.E())
 				break;
+			
+//			checkHeap(heap, n);	
 		}
 
 		//
@@ -647,7 +654,7 @@ public class VertexCover {
 		}
 		
 		// check
-//		checkVertexCover(G, cover);
+		checkVertexCover(G, cover);
 		
 		// subgraph
 		Map<Integer, Integer> nodeMap = new HashMap<Integer, Integer>();
@@ -684,8 +691,10 @@ public class VertexCover {
 		HeapD2 heap = new HeapD2(deg);
 //		heap.print();
 		
-		heap.buildheap();
+		heap.buildheap(n-1);
 //		heap.print();
+		checkHeapD2(heap, n);
+//		System.out.println("-------------------");
 		
 		int count = 0;
 		while (true){
@@ -694,12 +703,14 @@ public class VertexCover {
 			
 			// find top-degree node
 			heap.exchange(0, n-1);
-//			heap.print();
+			System.out.println("n = " + n);
 			
 			int top = heap.a[n-1].val0;
 			heap.a[n-1].val1 = -1;		// marked as processed
-			System.out.println("top = " + top);
 			n = n - 1;
+			
+			System.out.println("top = " + top);
+			
 			
 			//
 			cover.add(top);
@@ -725,29 +736,54 @@ public class VertexCover {
 					heap.a[n-1].val1 = -1;
 					n = n - 1;
 					
+//					heap.maxheap(heap.loc[v]);
+					
+					for (int w : G.adj(v).keySet())
+						if (marked[w] == false)
+//							heap.update(w, G.degree(v));
+							heap.a[heap.loc[w]].val1 -= G.degree(v);
+					
 //					heap.print();
 					
 					count += 1;
+					
+					
+//					for (int w : G.adj(v).keySet())
+//						if (marked[w] == false)
+//							heap.maxheap(heap.loc[w]);
+					
+					
 				}
+				
+					
 			}
 			if (check_n)
 				break;
 			
+			// REBUILD heap ! --> always correct
+			heap.buildheap(n-1);
 			
-			Set<Integer> updated = new HashSet<Integer>();		// to avoid multiple heap.update() the same w
+//			heap.print();
 			
-			for (int v : G.adj(top).keySet()){
-				for (int w : G.adj(v).keySet())
-					if (marked[w] == false && !updated.contains(w)){
-						heap.update(w, G.degree(v));
-						updated.add(w);
-					}
-			}
+//			checkHeapD2(heap, n);	
 			
+			
+//			Set<Integer> updated = new HashSet<Integer>();		// to avoid multiple heap.update() the same w
+			
+//			for (int v : G.adj(top).keySet()){
+//				for (int w : G.adj(v).keySet())
+//					if (marked[w] == false){
+//						heap.a[heap.loc[w]].val1 -= G.degree(v);
+////						heap.update(w, G.degree(v));
+//						
+////						updated.add(w);
+//					}
+//			}
+//			
 			if (count == G.V())
 				break;
 			
-			heap.maxheap(0);
+			
 			
 //			System.out.println(" , count = " + count + " n = " + n);
 //			System.out.println("after update v");
@@ -828,22 +864,48 @@ public class VertexCover {
 		System.out.println("valid = " + valid);
 	}
 	
+	////
+	public static void checkHeap(Heap heap, int n){
+		boolean check = true;
+		for (int i = 0; i < n/2; i++)
+			if (heap.a[i].val1 < heap.a[2*i].val1 || heap.a[i].val1 < heap.a[2*i+1].val1){
+				check = false;
+				System.out.println("ERROR at " + i + " val0 = " + heap.a[i].val0);
+				break;
+			}
+		if (check)
+			System.out.println("heap OK !");
+	}
+		
+	////
+	public static void checkHeapD2(HeapD2 heap, int n){
+		boolean check = true;
+		for (int i = 0; i < n/2; i++)
+			if (heap.a[i].val1 < heap.a[2*i].val1 || heap.a[i].val1 < heap.a[2*i+1].val1){
+				check = false;
+				System.out.println("ERROR at " + i + " val0 = " + heap.a[i].val0);
+				break;
+			}
+		if (check)
+			System.out.println("heap OK !");
+	}
+	
 	////////////////////////////////////////////////
 	public static void main(String[] args) throws Exception{
 		String prefix = "";
 
 		
-//		String dataname = "pl_1000_5_01";		// diameter = 5
-		String dataname = "pl_10000_5_01";		// diameter = 6,  cover.size = 8278,	cover.size = 6046 (greedyN), cover.size = 3005 (greedyND2)
+//		String dataname = "pl_1000_5_01";		// diameter = 5		cover.size = 6046 (greedy), 
+//		String dataname = "pl_10000_5_01";		// diameter = 6, cover.size = 8278, 6046 (greedyN), 6033 (greedy), 3005 (greedyND2), 2309 (greedyD2)
 		
 //		String dataname = "ba_1000_5";			// diameter = 5
 //		String dataname = "ba_10000_5";			// diameter = 6, cover.size = 8384,	cover.size = 6043 (greedy)	
 		
 //		String dataname = "er_1000_001";		// diameter = 5
-//		String dataname = "er_10000_0001";		// diameter = 7, cover.size = 9076,	cover.size = 7227 (greedyN), cover.size = 7219 (greedy), cover.size = 2048 (greedyND2)
+//		String dataname = "er_10000_0001";		// diameter = 7, cover.size = 9076,	7227 (greedyN), 7219 (greedy), 2048 (greedyND2), 1882 (greedyD2)
 		
 //		String dataname = "sm_1000_005_11";		// diameter = 9
-//		String dataname = "sm_10000_005_11";	// diameter = 12, cover.size = 9448,	cover.size = 8207 (greedyN), cover.size = 8246 (greedy)	
+		String dataname = "sm_10000_005_11";	// diameter = 12, cover.size = 9448, 8207 (greedyN), 8246 (greedy), 1279 (greedyD2) 	
 		//
 //		String dataname = "example";			// 		diameter = 5, cover.size = 10, cover.size = 8 (greedy)
 //		String dataname = "karate";				// (34, 78)	diameter = 5, cover.size = 20, cover.size = 14 (greedy)
@@ -855,10 +917,11 @@ public class VertexCover {
 //		String dataname = "ca-AstroPh";			// (18771,198050) 		cover.size = 12057	
 		// LARGE
 //		String dataname = "com_amazon_ungraph";		// (334863,925872)	, cover.size = 240510 (43s, Acer), cover.size = 162093 (greedyN), subgraph(162130, 349835)
-													//					cover.size = 91727 (52s, PC, greedyND2)
+													//					cover.size = 91727 (52s, PC, greedyND2), 88739 (greedyD2, 30s)
 //		String dataname = "com_dblp_ungraph";		// (317080,1049866)	, cover.size = 225870 (63s, Acer), cover.size = 165269 (greedy), subgraph(165269, 625594)	
-													//					cover.size = 116252 (82s, PC, greedyND2)
+													//					cover.size = 116252 (82s, PC, greedyND2), 102127 (greedyD2, 33s)
 //		String dataname = "com_youtube_ungraph";	// (1134890,2987624), 									cover.size = 279128 (greedy, 1s) subgraph: 1305093 edges
+													//					cover.size = 682938 (1663s, PC, greedyD2)
 		
 		
 		//
@@ -883,16 +946,16 @@ public class VertexCover {
 //		approxVertexCover(G);
 //		System.out.println("approxVertexCover - DONE, elapsed " + (System.currentTimeMillis() - start));
 		
-//		start = System.currentTimeMillis();
-////		greedyVertexCoverNaive(G);
-//		greedyVertexCover(G);
-//		System.out.println("greedyVertexCoverNaive - DONE, elapsed " + (System.currentTimeMillis() - start));
+		start = System.currentTimeMillis();
+//		greedyVertexCoverNaive(G);
+		greedyVertexCover(G);
+		System.out.println("greedyVertexCoverNaive - DONE, elapsed " + (System.currentTimeMillis() - start));
 		
 		// TEST greedyVertexCoverNaiveD2()
-		start = System.currentTimeMillis();
-//		greedyVertexCoverNaiveD2(G);
-		greedyVertexCoverD2(G);
-		System.out.println("greedyVertexCoverNaiveD2 - DONE, elapsed " + (System.currentTimeMillis() - start));
+//		start = System.currentTimeMillis();
+////		greedyVertexCoverNaiveD2(G);
+//		greedyVertexCoverD2(G);
+//		System.out.println("greedyVertexCoverNaiveD2 - DONE, elapsed " + (System.currentTimeMillis() - start));
 	}
 
 }

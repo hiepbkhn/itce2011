@@ -21,11 +21,11 @@ public class HeapD2 {
 		this.loc = new int[a.length];
 		for (int i = 0; i < a.length; i++)
 			loc[i] = i;
+		this.n = a.length-1;
 	}
 	
 	////
-	public void buildheap() {
-		n = a.length - 1;
+	public void buildheap(int n) {
 		for (int i = n / 2; i >= 0; i--) {
 			maxheap(i);
 		}
@@ -74,7 +74,7 @@ public class HeapD2 {
 
 	////
 	public void sort() {
-		buildheap();
+		buildheap(n);
 
 		for (int i = n; i > 0; i--) {
 			exchange(0, i);
@@ -96,7 +96,21 @@ public class HeapD2 {
 	
 	////////////////////////////////////////////////
 	public static void main(String[] args) {
-
+		Int2[] a1 = { new Int2(0,4), new Int2(1,1), new Int2(2,3), new Int2(3,2), new Int2(4,16), 
+				new Int2(5,9), new Int2(6,10), new Int2(7,14), new Int2(8,8), new Int2(9,7) };
 		
+		HeapD2 heap = new HeapD2(a1);
+		heap.sort();
+		
+		for (int i = 0; i < a1.length; i++)
+			System.out.print(heap.loc[i] + " ");
+		System.out.println();
+		
+		for (int i = 0; i < a1.length; i++)
+			System.out.print(a1[i].val0 + " ");
+		System.out.println();
+		
+		for (int i = 0; i < a1.length; i++)
+			System.out.print(a1[i].val1 + " ");
 	}
 }
