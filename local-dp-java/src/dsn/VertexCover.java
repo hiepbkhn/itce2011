@@ -615,7 +615,7 @@ public class VertexCover {
 			int top = heap.a[n-1].val0;
 			heap.a[n-1].val1 = -1;		// marked as processed
 			n = n - 1;
-			System.out.println("top = " + top);
+//			System.out.println("top = " + top);
 			
 			
 			//
@@ -662,6 +662,14 @@ public class VertexCover {
 		System.out.println("#nodes = " + aG.V());
 		System.out.println("#edges = " + aG.E());
 		
+		int[] comp = EdgeIntGraph.components(aG);
+		int numComp = 0;
+		for (int c : comp)
+			if (numComp < c)
+				numComp = c;
+		numComp += 1;
+		System.out.println("#components = " + numComp);
+		
 //		System.out.println("nodeMap");
 //		for (Entry<Integer, Integer> e : nodeMap.entrySet())
 //			System.out.println(e.getKey() + " " + e.getValue());
@@ -703,13 +711,13 @@ public class VertexCover {
 			
 			// find top-degree node
 			heap.exchange(0, n-1);
-			System.out.println("n = " + n);
+//			System.out.println("n = " + n);
 			
 			int top = heap.a[n-1].val0;
 			heap.a[n-1].val1 = -1;		// marked as processed
 			n = n - 1;
 			
-			System.out.println("top = " + top);
+//			System.out.println("top = " + top);
 			
 			
 			//
@@ -801,6 +809,23 @@ public class VertexCover {
 		
 		// check
 		checkVertexCoverD2(G, cover);
+		
+		// subgraph
+		Map<Integer, Integer> nodeMap = new HashMap<Integer, Integer>();
+		EdgeIntGraph aG = EdgeIntGraph.subGraph(G, cover, nodeMap);
+		System.out.println("#nodes = " + aG.V());
+		System.out.println("#edges = " + aG.E());
+		aG = EdgeIntGraph.subGraphD2(G, cover, nodeMap);				// NOTE: subGraphD2()
+		System.out.println("#nodes = " + aG.V());
+		System.out.println("#edges = " + aG.E());
+		
+		int[] comp = EdgeIntGraph.components(aG);
+		int numComp = 0;
+		for (int c : comp)
+			if (numComp < c)
+				numComp = c;
+		numComp += 1;
+		System.out.println("#components = " + numComp);
 	}
 	
 	////
@@ -895,29 +920,29 @@ public class VertexCover {
 		String prefix = "";
 
 		
-//		String dataname = "pl_1000_5_01";		// diameter = 5		cover.size = 6046 (greedy), 
-//		String dataname = "pl_10000_5_01";		// diameter = 6, cover.size = 8278, 6046 (greedyN), 6033 (greedy), 3005 (greedyND2), 2309 (greedyD2)
+//		String dataname = "pl_1000_5_01";		// diameter = 5	 cover.size = 601 (greedy), 229 (greedyD2), 
+//		String dataname = "pl_10000_5_01";		// diameter = 6, cover.size = 8278 (approx), 6046 (greedyN), 6033 (greedy) comp=2, 3005 (greedyND2), 2309 (greedyD2) 
 		
 //		String dataname = "ba_1000_5";			// diameter = 5
-//		String dataname = "ba_10000_5";			// diameter = 6, cover.size = 8384,	cover.size = 6043 (greedy)	
+//		String dataname = "ba_10000_5";			// diameter = 6, cover.size = 8384,	cover.size = 6043 (greedy) comp=3, 2318 (greedyD2)	
 		
 //		String dataname = "er_1000_001";		// diameter = 5
-//		String dataname = "er_10000_0001";		// diameter = 7, cover.size = 9076,	7227 (greedyN), 7219 (greedy), 2048 (greedyND2), 1882 (greedyD2)
+//		String dataname = "er_10000_0001";		// diameter = 7, cover.size = 9076,	7227 (greedyN), 7219 (greedy) comp=2, 2048 (greedyND2), 1882 (greedyD2)
 		
 //		String dataname = "sm_1000_005_11";		// diameter = 9
-		String dataname = "sm_10000_005_11";	// diameter = 12, cover.size = 9448, 8207 (greedyN), 8246 (greedy), 1279 (greedyD2) 	
+//		String dataname = "sm_10000_005_11";	// diameter = 12, cover.size = 9448, 8207 (greedyN), 8246 (greedy) comp=1, 1279 (greedyD2) 	
 		//
 //		String dataname = "example";			// 		diameter = 5, cover.size = 10, cover.size = 8 (greedy)
 //		String dataname = "karate";				// (34, 78)	diameter = 5, cover.size = 20, cover.size = 14 (greedy)
 //		String dataname = "polbooks";			// (105, 441)			cover.size = 62
 //		String dataname = "polblogs";			// (1224,16715) 		cover.size = 563
-//		String dataname = "as20graph";			// (6474,12572)			cover.size = 1055 (greedy)
+		String dataname = "as20graph";			// (6474,12572)			cover.size = 1055 (greedy)
 //		String dataname = "wiki-Vote";			// (7115,100762)		cover.size = 2372
 //		String dataname = "ca-HepPh";			// (12006,118489) 		cover.size = 7037
 //		String dataname = "ca-AstroPh";			// (18771,198050) 		cover.size = 12057	
 		// LARGE
 //		String dataname = "com_amazon_ungraph";		// (334863,925872)	, cover.size = 240510 (43s, Acer), cover.size = 162093 (greedyN), subgraph(162130, 349835)
-													//					cover.size = 91727 (52s, PC, greedyND2), 88739 (greedyD2, 30s)
+													//					cover.size = 91727 (52s, PC, greedyND2), 88678 (greedyD2, 30s)
 //		String dataname = "com_dblp_ungraph";		// (317080,1049866)	, cover.size = 225870 (63s, Acer), cover.size = 165269 (greedy), subgraph(165269, 625594)	
 													//					cover.size = 116252 (82s, PC, greedyND2), 102127 (greedyD2, 33s)
 //		String dataname = "com_youtube_ungraph";	// (1134890,2987624), 									cover.size = 279128 (greedy, 1s) subgraph: 1305093 edges
@@ -926,6 +951,7 @@ public class VertexCover {
 		
 		//
 		String filename = prefix + "_data/" + dataname + ".gr";
+		System.out.println("dataname = " + dataname);
 		
 		//
 		long start = System.currentTimeMillis();
@@ -946,16 +972,18 @@ public class VertexCover {
 //		approxVertexCover(G);
 //		System.out.println("approxVertexCover - DONE, elapsed " + (System.currentTimeMillis() - start));
 		
-		start = System.currentTimeMillis();
-//		greedyVertexCoverNaive(G);
-		greedyVertexCover(G);
-		System.out.println("greedyVertexCoverNaive - DONE, elapsed " + (System.currentTimeMillis() - start));
+//		start = System.currentTimeMillis();
+////		greedyVertexCoverNaive(G);
+//		greedyVertexCover(G);
+//		System.out.println("greedyVertexCoverNaive - DONE, elapsed " + (System.currentTimeMillis() - start));
 		
 		// TEST greedyVertexCoverNaiveD2()
-//		start = System.currentTimeMillis();
-////		greedyVertexCoverNaiveD2(G);
-//		greedyVertexCoverD2(G);
-//		System.out.println("greedyVertexCoverNaiveD2 - DONE, elapsed " + (System.currentTimeMillis() - start));
+		start = System.currentTimeMillis();
+//		greedyVertexCoverNaiveD2(G);
+		greedyVertexCoverD2(G);
+		System.out.println("greedyVertexCoverNaiveD2 - DONE, elapsed " + (System.currentTimeMillis() - start));
+		
+		
 	}
 
 }

@@ -8,6 +8,8 @@
  * Jun 6
  * 	- add sampleNodeByDegree(), saveLocalGraph(), computeLocalGraph()
  * 	- refactor countTrueFalseDupLinks()
+ * Jun 9
+ * 	- add computeTrueGraph()
  */
 
 package dsn;
@@ -117,6 +119,52 @@ public class LinkExchange {
 	}
 	
 	////
+	public static void computeTrueGraph(EdgeIntGraph G, String matlab_file) throws IOException{
+		int n_nodes = G.V();
+		
+		// compute utility
+		DegreeMetric deg = new DegreeMetric();
+		double[] deg_dist = new double[n_nodes]; 
+		PathMetric path = new PathMetric();
+		double[] distance_dist = new double[50];
+		
+		computeUtility(G, deg, deg_dist, path, distance_dist);
+			
+		
+		// write to MATLAB
+		MLDouble degArr = new MLDouble("degArr", deg_dist, 1);
+		MLDouble distArr = new MLDouble("distArr", distance_dist, 1);
+		
+		MLDouble s_AD = new MLDouble("s_AD", new double[]{deg.s_AD}, 1);
+		MLDouble s_MD = new MLDouble("s_MD", new double[]{deg.s_MD}, 1);
+		MLDouble s_DV = new MLDouble("s_DV", new double[]{deg.s_DV}, 1);
+		MLDouble s_CC = new MLDouble("s_CC", new double[]{deg.s_CC}, 1);
+		MLDouble s_PL = new MLDouble("s_PL", new double[]{deg.s_PL}, 1);
+		
+		MLDouble s_APD = new MLDouble("s_APD", new double[]{path.s_APD}, 1);
+		MLDouble s_CL = new MLDouble("s_CL", new double[]{path.s_CL}, 1);
+		MLDouble s_EDiam = new MLDouble("s_EDiam", new double[]{path.s_EDiam}, 1);
+		MLDouble s_Diam = new MLDouble("s_Diam", new double[]{path.s_Diam}, 1);
+		
+        ArrayList<MLArray> towrite = new ArrayList<MLArray>();
+        towrite.add(degArr); 
+        towrite.add(distArr);
+        towrite.add(s_AD);
+        towrite.add(s_MD);
+        towrite.add(s_DV);
+        towrite.add(s_CC);
+        towrite.add(s_PL);
+        towrite.add(s_APD);
+        towrite.add(s_CL);
+        towrite.add(s_EDiam);
+        towrite.add(s_Diam);
+        
+        new MatFileWriter(matlab_file, towrite );
+        System.out.println("Written to MATLAB file.");
+		
+	}
+	
+	////
 	public static void computeLocalGraph(String sample_file, String matlab_file, int n_nodes) throws IOException{
 		
 		BufferedReader br = new BufferedReader(new FileReader(sample_file));
@@ -218,7 +266,6 @@ public class LinkExchange {
         System.out.println("Written to MATLAB file.");
 		
 	}
-	
 	
 	////
 	public static List<Int2> createFalseLink(EdgeIntGraph G, int u, double beta){
@@ -794,10 +841,10 @@ public class LinkExchange {
 //		String dataname = "pl_10000_5_01";		// diameter = 6,  Dup: round=3 (OutOfMem, 7GB ok), 98s (Acer)
 												//				NoDup: round=3 (4.5GB), 376s (Acer)
 //		String dataname = "ba_1000_5";			// diameter = 5
-		String dataname = "ba_10000_5";			// diameter = 6, NoDup: round=3 (5.1GB), 430s (Acer), 350s (PC), totalLink = 255633393
+//		String dataname = "ba_10000_5";			// diameter = 6, NoDup: round=3 (5.1GB), 430s (Acer), 350s (PC), totalLink = 255633393
 		
 //		String dataname = "er_1000_001";		// diameter = 5
-//		String dataname = "er_10000_0001";		// diameter = 7, NoDup: round=3 (2.5GB), 23s (PC)
+		String dataname = "er_10000_0001";		// diameter = 7, NoDup: round=3 (2.5GB), 23s (PC)
 		
 //		String dataname = "sm_1000_005_11";		// diameter = 9
 //		String dataname = "sm_10000_005_11";	// diameter = 12, NoDup: round=3 (1.2GB), 5s (PC), round=4 (1.7GB), 12s (PC)
@@ -831,6 +878,7 @@ public class LinkExchange {
 		// compute diameter
 //		graphMetric(filename, G.V());
 		
+		computeTrueGraph(G, "_matlab/" + dataname + ".mat");
 		
 		//
 		int round = 2; 		// flood
@@ -871,9 +919,9 @@ public class LinkExchange {
 		String matlab_file = prefix + "_matlab/" + name + ".mat";
 		System.out.println("count_file = " + count_file);
 		
-		linkExchangeNoDup(G, round, alpha, beta, discount, nSample, count_file, sample_file);
-		
-		computeLocalGraph(sample_file, matlab_file, 10000);
+//		linkExchangeNoDup(G, round, alpha, beta, discount, nSample, count_file, sample_file);
+//		
+//		computeLocalGraph(sample_file, matlab_file, 10000);
 		
 		
 		//////////
