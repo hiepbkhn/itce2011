@@ -16,15 +16,26 @@ public class Int3 implements Comparable<Int3> {
 		this.val1 = val1;
 	}
 	
+	public Int3(int val0, int val1, int c) {
+		this.val0 = val0;
+		this.val1 = val1;
+		this.c = c;
+	}
+	
 	////
 	public int compareTo(Int3 other) {
-		if (this.val0 < other.val0)
+//		if (this.val0 < other.val0)
+//			return -1;
+//		if (this.val0 == other.val0 && this.val1 < other.val1)
+//			return -1;
+//		if (this.val0 > other.val0)
+//			return 1;
+//		if (this.val0 == other.val0 && this.val1 > other.val1)
+//			return 1;
+		
+		if (this.c < other.c)
 			return -1;
-		if (this.val0 == other.val0 && this.val1 < other.val1)
-			return -1;
-		if (this.val0 > other.val0)
-			return 1;
-		if (this.val0 == other.val0 && this.val1 > other.val1)
+		if (this.c > other.c)
 			return 1;
 		return 0;
 	}

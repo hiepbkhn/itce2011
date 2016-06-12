@@ -12,7 +12,7 @@
  * 	- add computeTrueGraph()
  * Jun 12
  * 	- use Int3, update insertLink(), saveLocalGraph() to take into account the counter of (duplicate) edges
- * 	- add attackLocalGraph()
+ * 	- add attackLocalGraph(), inferEdges()
  */
 
 package dsn;
@@ -22,6 +22,7 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.security.AllPermission;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -836,8 +837,53 @@ public class LinkExchange {
 		
 	}
 	
-	//// read sample file, compute edge inference probabilities, 
-	public static void attackLocalGraph(EdgeIntGraph G, String sample_file, String attack_file) throws IOException{
+	//// subgraph aG at node u
+	public static AttackMetric inferEdges(EdgeIntGraph G, EdgeIntGraph aG, int u, double beta){
+		AttackMetric ret = new AttackMetric();
+		
+		List<Int3> edges = new ArrayList<Int3>();
+		
+		for (EdgeInt e : aG.edges()){
+			int v = e.either();
+			int w = e.other(v);
+			edges.add(new Int3(v,w,e.weight()));
+		}
+		// sort by weight (ascending)
+		Collections.sort(edges);
+		
+//		System.out.println(edges.get(0).c + " " + edges.get(1).c + " " + edges.get(edges.size()-1).c);
+		
+		// top 1/(1+2*beta) edges (from mid to end)
+//		int mid = (int) (2*beta/(1+2*beta) * edges.size());
+		int mid = (int) (beta/(1+beta) * edges.size());
+		
+		for (int i = 0; i < mid; i++){
+			Int3 e = edges.get(i);
+			if (e.val0 == u || e.val1 == u)			// skip friends (true links)
+				continue;
+			if (G.areEdgesAdjacent(e.val0, e.val1))
+				ret.FN += 1;
+			else
+				ret.TN += 1;
+		}
+		
+		for (int i = mid; i < edges.size(); i++){
+			Int3 e = edges.get(i);
+			if (e.val0 == u || e.val1 == u)			// skip friends (true links)
+				continue;
+			if (G.areEdgesAdjacent(e.val0, e.val1))
+				ret.TP += 1;
+			else
+				ret.FP += 1;
+		}
+		
+		//
+		return ret;
+		
+	}
+	
+	//// read sample file, compute edge inference probabilities, export to attack_file (MATLAB)
+	public static void attackLocalGraph(EdgeIntGraph G, double beta, String sample_file, String attack_file) throws IOException{
 		int n_nodes = G.V();
 		
 		BufferedReader br = new BufferedReader(new FileReader(sample_file));
@@ -846,7 +892,11 @@ public class LinkExchange {
 		int k = Integer.parseInt(str);		// number of sample graphs
 		System.out.println("#selected nodes = " + k);
 		
+		// for MATLAB
+		double[] a_attack = new double[k*4];
+		
 		for(int i = 0; i < k; i++){
+			System.out.println("subgraph i = " + i);
 			str = br.readLine();
 			String[] items = str.split(",");
 			int u = Integer.parseInt(items[0]);
@@ -862,12 +912,29 @@ public class LinkExchange {
 				int w = Integer.parseInt(items[1]);
 				int	c = Integer.parseInt(items[2]);		// edge counter (see Int3)
 				
-				aG.addEdge(new EdgeInt(v,w,c));
+				aG.addEdge(new EdgeInt(v,w,c));			// save c as edge weight
 			}
 			System.out.println("#nodes = " + aG.V());
 			System.out.println("#edges = " + aG.E());
+			
+			// infer true links by edge weights
+			AttackMetric at = inferEdges(G, aG, u, beta);
+			
+			a_attack[i + 0*k] = at.TP;	// packed by column
+			a_attack[i + 1*k] = at.TN;
+			a_attack[i + 2*k] = at.FP;
+			a_attack[i + 3*k] = at.FN;
 		}
 		br.close();
+		
+		// write to MATLAB
+		MLDouble atArr = new MLDouble("atArr", a_attack, k);
+
+		ArrayList<MLArray> towrite = new ArrayList<MLArray>();
+        towrite.add(atArr); 
+        
+        new MatFileWriter(attack_file, towrite );
+        System.out.println("Written to MATLAB file.");
 	}
 
 	////////////////////////////////////////////////
@@ -955,13 +1022,15 @@ public class LinkExchange {
 		String count_file = prefix + "_out/" + name + ".cnt";
 		String sample_file = prefix + "_sample/" + name + ".out";
 		String matlab_file = prefix + "_matlab/" + name + ".mat";
+		String attack_file = prefix + "_matlab/" + name + "_attack.mat";
 		System.out.println("count_file = " + count_file);
 		
 		//
-		linkExchangeNoDup(G, round, alpha, beta, discount, nSample, count_file, sample_file);
+//		linkExchangeNoDup(G, round, alpha, beta, discount, nSample, count_file, sample_file);
 		
 //		computeLocalGraph(sample_file, matlab_file, 10000);
 		
+		attackLocalGraph(G, beta, sample_file, attack_file);
 		
 		//////////
 		// TEST linkGossip()
