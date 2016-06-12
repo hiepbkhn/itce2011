@@ -9,6 +9,8 @@
  * 	- call removeBits() in LinkExchangeFalsePos() (for alpha < 1)
  * Jun 8
  * 	- add testArithmeticCoding()
+ * Jun 12
+ * 	- copy countTrueFalseDupLinks() from LinkExchange.java, use Int2
  */
 
 package dsn;
@@ -150,6 +152,37 @@ public class LinkExchangeBloomFilter {
 			e.val0 = e.val1;
 			e.val1 = temp;
 		}
+	}
+	
+	////return totalLink
+	public static long countTrueFalseDupLinks(EdgeIntGraph G, List<List<Int2>> links, int[] trueLinks, int[] falseLinks, int[] dupLinks){
+		int n = links.size();
+		
+		long totalLink = 0;
+		for (int u = 0; u < n; u++){
+			Map<Int2, Integer> dup = new HashMap<Int2, Integer>();
+			for(Int2 p : links.get(u)){
+				if(p.val0 > p.val1){	// normalize
+					int temp = p.val0;
+					p.val0 = p.val1;
+					p.val1 = temp;
+				}
+				
+				if (dup.containsKey(p)){
+					dupLinks[u] += 1;
+				}else{
+					dup.put(p, 1);
+					if (G.areEdgesAdjacent(p.val0, p.val1))
+						trueLinks[u] += 1;
+					else
+						falseLinks[u] += 1;
+				}
+			}
+			
+			totalLink += links.get(u).size();
+		}
+		//
+		return totalLink;
 	}
 	
 	//// extract links from a bloomfiter
@@ -296,7 +329,7 @@ public class LinkExchangeBloomFilter {
 		int[] falseLinks = new int[n];
 		int[] dupLinks = new int[n];
 		
-		LinkExchange.countTrueFalseDupLinks(G, links, trueLinks, falseLinks, dupLinks);
+		countTrueFalseDupLinks(G, links, trueLinks, falseLinks, dupLinks);
 		
 		//
 		BufferedWriter bw = new BufferedWriter(new FileWriter(count_file));
