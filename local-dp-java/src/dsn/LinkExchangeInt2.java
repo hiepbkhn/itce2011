@@ -10,9 +10,6 @@
  * 	- refactor countTrueFalseDupLinks()
  * Jun 9
  * 	- add computeTrueGraph()
- * Jun 12
- * 	- use Int2, update insertLink(), saveLocalGraph() to take into account the counter of (duplicate) edges
- * 	- add attackLocalGraph(), inferEdges()
  */
 
 package dsn;
@@ -311,6 +308,9 @@ public class LinkExchangeInt2 {
 	
 	////
 	public static List<Int2> sampleLinkNoDup(List<Int2> srcList, double alpha){
+		if (alpha == 1.0)
+			return srcList;
+		
 		List<Int2> ret = new ArrayList<Int2>();
 		
 		Map<Integer, Integer> dup = new HashMap<Integer, Integer>();
@@ -844,114 +844,13 @@ public class LinkExchangeInt2 {
 		
 	}
 	
-	//// subgraph aG at node u
-//	public static AttackMetric inferEdges(EdgeIntGraph G, EdgeIntGraph aG, int u, double beta){
-//		AttackMetric ret = new AttackMetric();
-//		
-//		List<Int2> edges = new ArrayList<Int2>();
-//		
-//		for (EdgeInt e : aG.edges()){
-//			int v = e.either();
-//			int w = e.other(v);
-//			edges.add(new Int2(v,w));
-//		}
-//		// sort by weight (ascending)
-//		Collections.sort(edges);
-//		
-////		System.out.println(edges.get(0).c + " " + edges.get(1).c + " " + edges.get(edges.size()-1).c);
-//		
-//		// top 1/(1+2*beta) edges (from mid to end)
-////		int mid = (int) (2*beta/(1+2*beta) * edges.size());
-//		int mid = (int) (beta/(1+beta) * edges.size());
-//		
-//		for (int i = 0; i < mid; i++){
-//			Int2 e = edges.get(i);
-//			if (e.val0 == u || e.val1 == u)			// skip friends (true links)
-//				continue;
-//			if (G.areEdgesAdjacent(e.val0, e.val1))
-//				ret.FN += 1;
-//			else
-//				ret.TN += 1;
-//		}
-//		
-//		for (int i = mid; i < edges.size(); i++){
-//			Int2 e = edges.get(i);
-//			if (e.val0 == u || e.val1 == u)			// skip friends (true links)
-//				continue;
-//			if (G.areEdgesAdjacent(e.val0, e.val1))
-//				ret.TP += 1;
-//			else
-//				ret.FP += 1;
-//		}
-//		
-//		//
-//		return ret;
-//		
-//	}
-	
-	//// read sample file, compute edge inference probabilities, export to attack_file (MATLAB)
-//	public static void attackLocalGraph(EdgeIntGraph G, double beta, String sample_file, String attack_file) throws IOException{
-//		int n_nodes = G.V();
-//		
-//		BufferedReader br = new BufferedReader(new FileReader(sample_file));
-//		
-//		String str = br.readLine();
-//		int k = Integer.parseInt(str);		// number of sample graphs
-//		System.out.println("#selected nodes = " + k);
-//		
-//		// for MATLAB
-//		double[] a_attack = new double[k*4];
-//		
-//		for(int i = 0; i < k; i++){
-//			System.out.println("subgraph i = " + i);
-//			str = br.readLine();
-//			String[] items = str.split(",");
-//			int u = Integer.parseInt(items[0]);
-//			int size = Integer.parseInt(items[1]);
-//			System.out.println("u = " + u + ", size = " + size);
-//			
-//			// read local graph
-//			EdgeIntGraph aG = new EdgeIntGraph(n_nodes); 
-//			for (int j = 0; j < size; j++){
-//				str = br.readLine();
-//				items = str.split("\t");
-//				int v = Integer.parseInt(items[0]);
-//				int w = Integer.parseInt(items[1]);
-//				int	c = Integer.parseInt(items[2]);		// edge counter (see Int2)
-//				
-//				aG.addEdge(new EdgeInt(v,w,c));			// save c as edge weight
-//			}
-//			System.out.println("#nodes = " + aG.V());
-//			System.out.println("#edges = " + aG.E());
-//			
-//			// infer true links by edge weights
-//			AttackMetric at = inferEdges(G, aG, u, beta);
-//			
-//			a_attack[i + 0*k] = at.TP;	// packed by column
-//			a_attack[i + 1*k] = at.TN;
-//			a_attack[i + 2*k] = at.FP;
-//			a_attack[i + 3*k] = at.FN;
-//		}
-//		br.close();
-//		
-//		// write to MATLAB
-//		MLDouble atArr = new MLDouble("atArr", a_attack, k);
-//
-//		ArrayList<MLArray> towrite = new ArrayList<MLArray>();
-//        towrite.add(atArr); 
-//        
-//        new MatFileWriter(attack_file, towrite );
-//        System.out.println("Written to MATLAB file.");
-//	}
-
-	
 	////////////////////////////////////////////////
 	public static void main(String[] args) throws Exception{
 		String prefix = "";
 
 		
 //		String dataname = "pl_1000_5_01";		// diameter = 5
-		String dataname = "pl_10000_5_01";		// diameter = 6,  Dup: round=3 (OutOfMem, 7GB ok), 98s (Acer)
+//		String dataname = "pl_10000_5_01";		// diameter = 6,  Dup: round=3 (OutOfMem, 7GB ok), 98s (Acer)
 												//				NoDup: round=3 (a=0.5, b=1.0, 4.5GB), 376s (Acer)
 												//				NoDup: roudn=3 (a=1.0, b=1.0, 13GB), not run
 //		String dataname = "ba_1000_5";			// diameter = 5
@@ -966,7 +865,7 @@ public class LinkExchangeInt2 {
 		//
 //		String dataname = "example";			// 	diameter = 5, 
 //		String dataname = "karate";				// (34, 78)	diameter = 5
-//		String dataname = "polbooks";			// (105, 441)			
+		String dataname = "polbooks";			// (105, 441)			
 //		String dataname = "polblogs";			// (1224,16715) 		
 //		String dataname = "as20graph";			// (6474,12572)			
 //		String dataname = "wiki-Vote";			// (7115,100762)		
@@ -995,7 +894,7 @@ public class LinkExchangeInt2 {
 //		computeTrueGraph(G, "_matlab/" + dataname + ".mat");
 		
 		//
-		int round = 3; 		// flood
+		int round = 0; 		// flood
 //		int round = 10; 	// gossip
 		int step = 100000;	// gossip-async
 		double alpha = 1.0;

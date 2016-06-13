@@ -1,18 +1,6 @@
 /*
- * Mar 18, 2016
- * 	- "Link Exchange" problem(s)
- * Mar 27
- * 	- add graphMetric(), sampleLinkNoDup(), linkExchangeNoDup()
- * Apr 6
- * 	- add linkGossip(), linkGossipNoDup(), linkGossipAsync()
- * Jun 6
- * 	- add sampleNodeByDegree(), saveLocalGraph(), computeLocalGraph()
- * 	- refactor countTrueFalseDupLinks()
- * Jun 9
- * 	- add computeTrueGraph()
- * Jun 12
- * 	- use Int2, update insertLink(), saveLocalGraph() to take into account the counter of (duplicate) edges
- * 	- add attackLocalGraph(), inferEdges()
+ * Jun 13, 2016
+ * 	- use BitSet for each node
  */
 
 package dsn;
@@ -70,6 +58,31 @@ public class LinkExchange{
 		
 		//
 		return ret;
+	}
+	
+	////
+	public static List<Integer> sampleLinkNoDup(List<Integer> srcList, double alpha){
+		if (alpha == 1.0)
+			return srcList;
+			
+		List<Integer> ret = new ArrayList<Integer>();
+		
+		Map<Integer, Integer> dup = new HashMap<Integer, Integer>();
+		
+		Random random = new Random();
+		for (int i = 0; i < alpha*srcList.size(); i++){
+			int k = random.nextInt(srcList.size());
+			while(dup.containsKey(k) == true)
+				k = random.nextInt(srcList.size());
+			
+			dup.put(k, 1);
+			ret.add(srcList.get(k));
+			
+		}
+		
+		//
+		return ret;
+		
 	}
 	
 	//// return totalLink (NO dupLinks !)
@@ -214,7 +227,7 @@ public class LinkExchange{
 				
 				// sample edges and send to v
 				for (int v : G.adj(u).keySet()){
-					List<Integer> listU = sampleLink(u_edges, alpha);
+					List<Integer> listU = sampleLinkNoDup(u_edges, alpha);
 					
 					for (int id : listU)
 						exBitList.get(v).set(id);
@@ -267,15 +280,15 @@ public class LinkExchange{
 
 		
 //		String dataname = "pl_1000_5_01";		// diameter = 5
-//		String dataname = "pl_10000_5_01";		// diameter = 6,  	NoDup: round=3 (a=0.5, b=1.0, 2.3GB), 29+21s (Acer), totalLink=150M 
-												//					NoDup: round=3 (a=1.0, b=1.0, 2GB), 67+49s (Acer), totalLink=427M
-												//					NoDup: round=4 (a=1.0, b=1.0, 2GB), 375+125s (Acer), totalLink=1429M
+		String dataname = "pl_10000_5_01";		// diameter = 6,  	NoDup: round=3 (a=0.5, b=1.0, 1.6GB), 54+27s (Acer), totalLink=245M 
+												//					NoDup: round=3 (a=1.0, b=1.0, GB), 
+												//					NoDup: round=4 (a=1.0, b=1.0, GB), 
 //		String dataname = "ba_1000_5";			// diameter = 5
-//		String dataname = "ba_10000_5";			// diameter = 6, 	NoDup: round=3 (a=0.5, b=1.0, 2.2GB), 29+21s (Acer), totalLink=158M 
+//		String dataname = "ba_10000_5";			// diameter = 6, 	NoDup: round=3 (a=0.5, b=1.0, GB), s (Acer), totalLink=M 
 		
 //		String dataname = "er_1000_001";		// diameter = 5
-		String dataname = "er_10000_0001";		// diameter = 7, 	NoDup: round=3 (a=0.5, b=1.0, GB), 22+10s (Acer), totalLink=22M
-												//					NoDup: round=3 (a=1.0, b=1.0, 2.1GB), 24+16s (Acer), totalLink=70M
+//		String dataname = "er_10000_0001";		// diameter = 7, 	NoDup: round=3 (a=0.5, b=1.0, GB), 
+												//					NoDup: round=3 (a=1.0, b=1.0, GB), 
 //		String dataname = "sm_1000_005_11";		// diameter = 9
 //		String dataname = "sm_10000_005_11";	// diameter = 12, NoDup: round=3
 												// 						round=5 
@@ -314,7 +327,7 @@ public class LinkExchange{
 		int round = 3; 		// flood
 //		int round = 10; 	// gossip
 		int step = 100000;	// gossip-async
-		double alpha = 1.0;
+		double alpha = 0.5;
 		double beta = 1.0;
 		double discount = 1.0;
 		int nSample = 20;	// 20, 50, 100  number of local graphs written to file
