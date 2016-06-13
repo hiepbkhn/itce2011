@@ -11,13 +11,13 @@
  * Jun 9
  * 	- add computeTrueGraph()
  * Jun 12
- * 	- use Short2, update insertLink(), saveLocalGraph() to take into account the counter of (duplicate) edges
+ * 	- use Int2, update insertLink(), saveLocalGraph() to take into account the counter of (duplicate) edges
  * 	- add attackLocalGraph(), inferEdges()
  */
 
 package dsn;
 
-import hist.Short2;
+import hist.Int2;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.security.AllPermission;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -47,511 +48,80 @@ import algs4.EdgeIntGraph;
 import algs4.UnweightedGraph;
 
 
-public class LinkExchange {
+public class LinkExchange{
 
 	////
-	public static void printEdges(List<Short2> list){
-		for(Short2 e:list)
+	public static void printEdges(List<Int2> list){
+		for(Int2 e:list)
 			System.out.print("(" + e.val0 + "," + e.val1 + ") ");
 		System.out.println();
 	}
-	////
-	public static void graphMetric(String graph_file, int n_nodes) throws IOException{
-		UnweightedGraph aG = UnweightedGraph.readEdgeListWithNodes(graph_file, "\t", n_nodes);
-		System.out.println("#nodes = " + aG.V());
-		System.out.println("#edges = " + aG.E());
-		
-		PathMetric path = new PathMetric();
-		double[] distance_dist;
-		
-		distance_dist = UtilityMeasure.getDistanceDistr(aG, path);
-		
-		//
-		System.out.println("diameter = " + path.s_Diam);
-	}
 	
 	////
-	public static int[] sampleNodeByDegree(int[] deg, int k){
-		int n = deg.length;
-		int[] ret = new int[k];
+	public static List<Integer> sampleLink(List<Integer> srcList, double alpha){
+		List<Integer> ret = new ArrayList<Integer>();
 		
-		int[] index = new int[n];
-		for (int u = 0; u < n; u++)
-			index[u] = u;
-		
-		//
-		Util.quicksort(deg, index);
-		
-		for (int i = 0; i < k; i++)
-			ret[i] = index[i*n/k];
+		Random random = new Random();
+		for (int i = 0; i < alpha*srcList.size(); i++){
+			int k = random.nextInt(srcList.size());
+			
+			ret.add(srcList.get(k));
+		}
 		
 		//
 		return ret;
 	}
 	
-	////
-	public static void saveLocalGraph(List<List<Short2>> links, int[] selectedNodes, String sample_file) throws IOException{
-		
-		BufferedWriter bw = new BufferedWriter(new FileWriter(sample_file));
-		
-		// number of selected nodes
-		bw.write(selectedNodes.length + "\n");
-		for (int u : selectedNodes){
-			List<Short2> edges = links.get(u);
-			// node : #edges
-			bw.write(u + "," + edges.size() + "\n");
-			for (Short2 e : edges)
-				bw.write(e.val0 + "\t" + e.val1 + "\n");
-			
-		}
-		bw.close();
-		System.out.println("Written to sample_file.");
-		
-	}
-	
-	////
-	public static void computeUtility(EdgeIntGraph aG, DegreeMetric deg, double[] deg_dist, PathMetric path, double[] distance_dist) throws IOException{
-		// 1. degree distribution
-		System.arraycopy(UtilityMeasure.getDegreeDistr(aG, deg), 0, deg_dist, 0, aG.V());
-		
-		// 2. distance distribution
-//		distance_dist = UtilityMeasure.getDistanceDistr(G, path);	// hyperANF
-		UnweightedGraph bG = new UnweightedGraph(aG);
-		System.arraycopy(UtilityMeasure.getDistanceDistr(bG, path), 0, distance_dist, 0, 50);	// BFS
-		
-		
-	}
-	
-	////
-	public static void computeTrueGraph(EdgeIntGraph G, String matlab_file) throws IOException{
-		int n_nodes = G.V();
-		
-		// compute utility
-		DegreeMetric deg = new DegreeMetric();
-		double[] deg_dist = new double[n_nodes]; 
-		PathMetric path = new PathMetric();
-		double[] distance_dist = new double[50];
-		
-		computeUtility(G, deg, deg_dist, path, distance_dist);
-			
-		
-		// write to MATLAB
-		MLDouble degArr = new MLDouble("degArr", deg_dist, 1);
-		MLDouble distArr = new MLDouble("distArr", distance_dist, 1);
-		
-		MLDouble s_AD = new MLDouble("s_AD", new double[]{deg.s_AD}, 1);
-		MLDouble s_MD = new MLDouble("s_MD", new double[]{deg.s_MD}, 1);
-		MLDouble s_DV = new MLDouble("s_DV", new double[]{deg.s_DV}, 1);
-		MLDouble s_CC = new MLDouble("s_CC", new double[]{deg.s_CC}, 1);
-		MLDouble s_PL = new MLDouble("s_PL", new double[]{deg.s_PL}, 1);
-		
-		MLDouble s_APD = new MLDouble("s_APD", new double[]{path.s_APD}, 1);
-		MLDouble s_CL = new MLDouble("s_CL", new double[]{path.s_CL}, 1);
-		MLDouble s_EDiam = new MLDouble("s_EDiam", new double[]{path.s_EDiam}, 1);
-		MLDouble s_Diam = new MLDouble("s_Diam", new double[]{path.s_Diam}, 1);
-		
-        ArrayList<MLArray> towrite = new ArrayList<MLArray>();
-        towrite.add(degArr); 
-        towrite.add(distArr);
-        towrite.add(s_AD);
-        towrite.add(s_MD);
-        towrite.add(s_DV);
-        towrite.add(s_CC);
-        towrite.add(s_PL);
-        towrite.add(s_APD);
-        towrite.add(s_CL);
-        towrite.add(s_EDiam);
-        towrite.add(s_Diam);
-        
-        new MatFileWriter(matlab_file, towrite );
-        System.out.println("Written to MATLAB file.");
-		
-	}
-	
-	////
-	public static void computeLocalGraph(String sample_file, String matlab_file, int n_nodes) throws IOException{
-		
-		BufferedReader br = new BufferedReader(new FileReader(sample_file));
-		
-		String str = br.readLine();
-		int k = Integer.parseInt(str);
-		System.out.println("#selected nodes = " + k);
-		
-		// for MATLAB
-		double[] a_AD = new double[k];
-		double[] a_DV = new double[k];
-		double[] a_MD = new double[k];
-		double[] a_PL = new double[k];
-		double[] a_CC = new double[k];
-		
-		double[] a_APD = new double[k];
-		double[] a_CL = new double[k];
-		double[] a_EDiam = new double[k];
-		double[] a_Diam = new double[k];
-		
-		double[] a_degree = new double[k*n_nodes];
-		double[] a_distance = new double[k*50];
-		
-		for(int i = 0; i < k; i++){
-			str = br.readLine();
-			String[] items = str.split(",");
-			int u = Integer.parseInt(items[0]);
-			int size = Integer.parseInt(items[1]);
-			System.out.println("u = " + u + ", size = " + size);
-			
-			// build local graph
-			EdgeIntGraph aG = new EdgeIntGraph(n_nodes); 
-			for (int j = 0; j < size; j++){
-				str = br.readLine();
-				items = str.split("\t");
-				int v = Integer.parseInt(items[0]);
-				int w = Integer.parseInt(items[1]);
-				
-				aG.addEdge(new EdgeInt(v,w,1));
-			}
-			System.out.println("#nodes = " + aG.V());
-			System.out.println("#edges = " + aG.E());
-				
-			// compute utility
-			DegreeMetric deg = new DegreeMetric();
-			double[] deg_dist = new double[n_nodes]; 
-			PathMetric path = new PathMetric();
-			double[] distance_dist = new double[50];
-			
-			computeUtility(aG, deg, deg_dist, path, distance_dist);
-			
-			a_AD[i] = deg.s_AD;
-			a_DV[i] = deg.s_DV;
-			a_MD[i] = deg.s_MD;
-			a_PL[i] = deg.s_PL;
-			a_CC[i] = deg.s_CC;
-			
-			a_APD[i] = path.s_APD;
-			a_CL[i] = path.s_CL;
-			a_EDiam[i] = path.s_EDiam;
-			a_Diam[i] = path.s_Diam;
-			
-			for (int j = 0; j < n_nodes; j++)
-				a_degree[i + j*k] = deg_dist[j];		// packed by column
-			for (int j = 0; j < 50; j++)
-				a_distance[i + j*k] = distance_dist[j];	// packed by column
-		}
-		br.close();
-		
-		// write to MATLAB
-		MLDouble degArr = new MLDouble("degArr", a_degree, k);
-		MLDouble distArr = new MLDouble("distArr", a_distance, k);
-		
-		MLDouble s_AD = new MLDouble("a_AD", a_AD, 1);
-		MLDouble s_MD = new MLDouble("a_MD", a_MD, 1);
-		MLDouble s_DV = new MLDouble("a_DV", a_DV, 1);
-		MLDouble s_CC = new MLDouble("a_CC", a_CC, 1);
-		MLDouble s_PL = new MLDouble("a_PL", a_PL, 1);
-		
-		MLDouble s_APD = new MLDouble("a_APD", a_APD, 1);
-		MLDouble s_CL = new MLDouble("a_CL", a_CL, 1);
-		MLDouble s_EDiam = new MLDouble("a_EDiam", a_EDiam, 1);
-		MLDouble s_Diam = new MLDouble("a_Diam", a_Diam, 1);
-		
-        ArrayList<MLArray> towrite = new ArrayList<MLArray>();
-        towrite.add(degArr); 
-        towrite.add(distArr);
-        towrite.add(s_AD);
-        towrite.add(s_MD);
-        towrite.add(s_DV);
-        towrite.add(s_CC);
-        towrite.add(s_PL);
-        towrite.add(s_APD);
-        towrite.add(s_CL);
-        towrite.add(s_EDiam);
-        towrite.add(s_Diam);
-        
-        new MatFileWriter(matlab_file, towrite );
-        System.out.println("Written to MATLAB file.");
-		
-	}
-	
-	////
-	public static List<Short2> createFalseLink(EdgeIntGraph G, short u, double beta){
-		List<Short2> ret = new ArrayList<Short2>();
-		
+	//// return totalLink (NO dupLinks !)
+	public static long countTrueFalseDupLinks(EdgeIntGraph G, Int2[] elist, List<BitSet> bitList, int n_edges, 
+			int[] trueLinks, int[] falseLinks, int[] dupLinks){
 		int n = G.V();
-		//
-		Random random = new Random();
-		for (short i = 0; i < beta*G.degree(u); i++){
-			short w = (short)random.nextInt(n);
-			while (G.areEdgesAdjacent(u, w))
-				w = (short)random.nextInt(n);
-			
-			ret.add(new Short2(u, w));
-			
-		}
-		
-		
-		//
-		return ret;
-	}
-	
-	////
-	public static List<Short2> sampleLink(List<Short2> srcList, double alpha){
-		List<Short2> ret = new ArrayList<Short2>();
-		
-		Random random = new Random();
-		for (int i = 0; i < alpha*srcList.size(); i++){
-			int k = random.nextInt(srcList.size());
-			
-			ret.add(srcList.get(k));
-			
-		}
-		
-		//
-		return ret;
-		
-	}
-	
-	////
-	public static List<Short2> sampleLinkNoDup(List<Short2> srcList, double alpha){
-		List<Short2> ret = new ArrayList<Short2>();
-		
-		Map<Integer, Integer> dup = new HashMap<Integer, Integer>();
-		
-		Random random = new Random();
-		for (int i = 0; i < alpha*srcList.size(); i++){
-			int k = random.nextInt(srcList.size());
-			while(dup.containsKey(k) == true)
-				k = random.nextInt(srcList.size());
-			
-			dup.put(k, 1);
-			ret.add(srcList.get(k));
-			
-		}
-		
-		//
-		return ret;
-		
-	}
-	
-	//// return totalLink
-	public static long countTrueFalseDupLinks(EdgeIntGraph G, List<List<Short2>> links, int[] trueLinks, int[] falseLinks, int[] dupLinks){
-		int n = links.size();
 		
 		long totalLink = 0;
 		for (int u = 0; u < n; u++){
-			Map<Short2, Integer> dup = new HashMap<Short2, Integer>();
-			for(Short2 p : links.get(u)){
-				if(p.val0 > p.val1){	// normalize
-					short temp = p.val0;
-					p.val0 = p.val1;
-					p.val1 = temp;
-				}
-				
-				if (dup.containsKey(p)){
-					dupLinks[u] += 1;
-				}else{
-					dup.put(p, 1);
-					if (G.areEdgesAdjacent(p.val0, p.val1))
-						trueLinks[u] += 1;
-					else
-						falseLinks[u] += 1;
-				}
+			// recover edge ids
+			List<Integer> u_edges = new ArrayList<Integer>();
+			for (int eid = 0; eid < n_edges; eid++)
+				if (bitList.get(u).get(eid) == true)
+					u_edges.add(eid);
+			
+			// 
+			for (int eid : u_edges){
+				Int2 p = elist[eid];
+				if (G.areEdgesAdjacent(p.val0, p.val1))
+					trueLinks[u] += 1;
+				else
+					falseLinks[u] += 1;
 			}
 			
-			totalLink += links.get(u).size();
+			totalLink += u_edges.size();
 		}
 		//
 		return totalLink;
 	}
 	
 	////
-	public static void linkExchange(EdgeIntGraph G, int round, double alpha, double beta, String count_file) throws IOException{
-		int n = G.V();
+	public static void saveLocalGraph(Int2[] elist, List<BitSet> bitList, int n_edges, int[] selectedNodes, String sample_file) throws IOException{
 		
-		List<List<Short2>> links = new ArrayList<List<Short2>>();
+		BufferedWriter bw = new BufferedWriter(new FileWriter(sample_file));
 		
-		long start = System.currentTimeMillis();
-		// initial stage
-		for (short u = 0; u < n; u++){
-			List<Short2> temp = new ArrayList<Short2>();
-			for (int v:G.adj(u).keySet())
-				temp.add(new Short2(u, (short)v));
+		// number of selected nodes
+		bw.write(selectedNodes.length + "\n");
+		for (int u : selectedNodes){
+			List<Integer> u_edges = new ArrayList<Integer>();
+			for (int eid = 0; eid < n_edges; eid++)
+				if (bitList.get(u).get(eid) == true)
+					u_edges.add(eid);
 			
-			List<Short2> newLinks = createFalseLink(G, u, beta);
-			temp.addAll(newLinks);
-			
-			links.add(temp);
-		}
-		
-		// loop
-		for(int t = 1; t < round+1; t++){
-			List<List<Short2>> exLinks = new ArrayList<List<Short2>>();		// new links received at each node
-			for (int u = 0; u < n; u++)
-				exLinks.add(new ArrayList<Short2>());
-			
-			// for each pair of nodes (u,v)
-			for (EdgeInt e: G.edges()){
-				int u = e.either();
-				int v = e.other(u);
-				
-				List<Short2> listU = sampleLink(links.get(u), alpha);
-				List<Short2> listV = sampleLink(links.get(v), alpha);
-				
-				//
-				exLinks.get(u).addAll(listV);
-				exLinks.get(v).addAll(listU);
-				
+			// node : #edges
+			bw.write(u + "," + u_edges.size() + "\n");
+			for (int eid : u_edges){
+				Int2 e = elist[eid];
+				bw.write(e.val0 + "\t" + e.val1 + "\n");
 			}
-			// expand lists, accept duplicate links
-			for (int u = 0; u < n; u++)
-				links.get(u).addAll(exLinks.get(u));
-		}
-		
-		// count true/false/duplicate links
-		int[] trueLinks = new int[n];
-		int[] falseLinks = new int[n];
-		int[] dupLinks = new int[n];
-		
-		countTrueFalseDupLinks(G, links, trueLinks, falseLinks, dupLinks);
-		
-		System.out.println("linkExchange - DONE, elapsed " + (System.currentTimeMillis() - start));
-		
-		// write to file
-		BufferedWriter bw = new BufferedWriter(new FileWriter(count_file));
-		for (int u = 0; u < n; u++){
-			bw.write(trueLinks[u] + "\t" + falseLinks[u] + "\t" + dupLinks[u] + "\n");
 		}
 		bw.close();
-		System.out.println("Written to count_file.");
-		
-	}
-	
-	////
-	public static void linkGossip(EdgeIntGraph G, int round, double alpha, double beta, String count_file) throws IOException{
-		int n = G.V();
-		
-		List<List<Short2>> links = new ArrayList<List<Short2>>();
-		
-		// compute adj lists
-		List<List<Integer>> adj = new ArrayList<List<Integer>>();
-		for (int u = 0; u < n; u++){
-			List<Integer> nblist = new ArrayList<Integer>(G.adj(u).keySet());
-			adj.add(nblist);
-		}
-		
-		
-		long start = System.currentTimeMillis();
-		// initial stage
-		for (short u = 0; u < n; u++){
-			List<Short2> temp = new ArrayList<Short2>();
-			for (int v:G.adj(u).keySet())
-				temp.add(new Short2(u, (short)v));
-			
-			List<Short2> newLinks = createFalseLink(G, u, beta);
-			temp.addAll(newLinks);
-			
-			links.add(temp);
-		}
-		
-		// loop
-		Random random = new Random();
-		for(int t = 1; t < round+1; t++){
-			List<List<Short2>> exLinks = new ArrayList<List<Short2>>();		// new links received at each node
-			for (int u = 0; u < n; u++)
-				exLinks.add(new ArrayList<Short2>());
-			
-			// for each node u
-			for (int u = 0; u < n; u++){
-				int v = adj.get(u).get(random.nextInt(G.degree(u)));
-				
-				List<Short2> listU = sampleLink(links.get(u), alpha);
-				
-				//
-				exLinks.get(v).addAll(listU);
-				
-			}
-			// expand lists, accept duplicate links
-			for (int u = 0; u < n; u++)
-				links.get(u).addAll(exLinks.get(u));
-		}
-		
-		// count true/false/duplicate links
-		int[] trueLinks = new int[n];
-		int[] falseLinks = new int[n];
-		int[] dupLinks = new int[n];
-		
-		countTrueFalseDupLinks(G, links, trueLinks, falseLinks, dupLinks);
-		
-		System.out.println("linkGossip - DONE, elapsed " + (System.currentTimeMillis() - start));
-		
-		// write to file
-		BufferedWriter bw = new BufferedWriter(new FileWriter(count_file));
-		for (int u = 0; u < n; u++){
-			bw.write(trueLinks[u] + "\t" + falseLinks[u] + "\t" + dupLinks[u] + "\n");
-		}
-		bw.close();
-		System.out.println("Written to count_file.");
-		
-	}
-	
-	//// insert link e to a sorted list
-	public static boolean insertLink(List<Short2> list, Short2 e){
-		// normalize e
-		normalizeEdge(e);
-		
-		//
-		int lo = 0;
-		int hi = list.size()-1;
-		int mid = (lo + hi)/2;
-		int comp = 0;
-		boolean found = false;
-		while (true){
-			comp = e.compareTo(list.get(mid));
-			
-			if (comp < 0){
-				hi = mid-1;
-			}else if(comp > 0){
-				lo = mid+1;
-			}else{
-				found = true;
-				break;
-			}
-			
-			mid = (lo + hi)/2;
-			
-			if (lo > hi)
-				break;
-			
-		}
-		
-		if (!found){
-			comp = list.get(mid).compareTo(e);
-			if (comp < 0)
-				list.add(mid+1, e);
-			else if (comp > 0)
-				list.add(mid, e);
-			else
-				System.err.println("ERROR in insertLink");
-			return true;
-		}else{
-			return false;
-		}
-			
-		
-	}
-	
-	////
-	public static void normalizeEdge(Short2 e){
-		if (e.val0 > e.val1){
-			short temp = e.val0;
-			e.val0 = e.val1;
-			e.val1 = temp;
-		}
-	}
-	
-	////
-	public static void normalizeEdges(List<Short2> list){
-		for (Short2 e:list){
-			normalizeEdge(e);
-		}
+		System.out.println("Written to sample_file.");
 		
 	}
 	
@@ -564,19 +134,19 @@ public class LinkExchange {
 		System.out.println("count_file = " + count_file);
 		
 		//
-		List<List<Short2>> links = new ArrayList<List<Short2>>();
+		List<List<Int2>> links = new ArrayList<List<Int2>>();
 		
 		long start = System.currentTimeMillis();
 		
 		// initial stage
-		for (short u = 0; u < n; u++){
-			List<Short2> temp = new ArrayList<Short2>();
+		for (int u = 0; u < n; u++){
+			List<Int2> temp = new ArrayList<Int2>();
 			for (int v:G.adj(u).keySet())
-				temp.add(new Short2(u, (short)v));
+				temp.add(new Int2(u, v));
 			links.add(temp);
 			
 			// normalize and sort
-			normalizeEdges(links.get(u));
+			LinkExchangeInt2.normalizeEdges(links.get(u));
 			Collections.sort(links.get(u));
 			
 			// add false links (u,w)
@@ -585,14 +155,13 @@ public class LinkExchange {
 				int w = random.nextInt(n);
 				
 				while (true){
-					
 					if (w == u || G.areEdgesAdjacent(u, w) == true){
 						w = random.nextInt(n);
 						continue;
 					}
 					
-					Short2 e = new Short2((short)u, (short)w);
-					boolean isNew = insertLink(links.get(u), e);
+					Int2 e = new Int2(u, w);
+					boolean isNew = LinkExchangeInt2.insertLink(links.get(u), e);
 					if (isNew == true)
 						break;
 					else
@@ -602,49 +171,73 @@ public class LinkExchange {
 			}
 		}
 		
+		//
+		Map<Integer,Integer> map = new HashMap<Integer, Integer>();
+		int n_edges = (int)Math.ceil((2+2*beta)*G.E());
+		Int2[] elist = new Int2[n_edges];
+		int eid = 0;
+		List<BitSet> bitList = new ArrayList<BitSet>();
+		
+		for (int u = 0; u < n; u++){
+			bitList.add(new BitSet(n_edges));
+			
+			for(Int2 e : links.get(u)){
+				int key = e.val0*n + e.val1;
+				if (!map.containsKey(key)){
+					map.put(key, eid);
+					elist[eid] = e;
+					eid += 1;
+				}
+				bitList.get(u).set(map.get(key));	
+			}
+		}
+		n_edges = eid;
+		System.out.println("n_edges = " + n_edges);
+		System.out.println("init - DONE");
+		
 		
 		// loop
 		for(int t = 1; t < round+1; t++){
 			System.out.println("round = " + t);
 			
-			List<List<Short2>> exLinks = new ArrayList<List<Short2>>();		// new links received at each node
+			List<BitSet> exBitList = new ArrayList<BitSet>();		// new links received at each node
 			for (int u = 0; u < n; u++)
-				exLinks.add(new ArrayList<Short2>());
+				exBitList.add((BitSet)bitList.get(u).clone());		// copy BitSet
 			
-			// for each pair of nodes (u,v)
-			int count = 0;
-			for (EdgeInt e: G.edges()){
-				count += 1;
-				if (t == 3 && count % 1000 == 0)
-					System.out.println("count = " + count);
-				
-				int u = e.either();
-				int v = e.other(u);
-				
-				List<Short2> listU = sampleLinkNoDup(links.get(u), alpha);
-				List<Short2> listV = sampleLinkNoDup(links.get(v), alpha);
-				
-				//
-				exLinks.get(u).addAll(listV);
-				exLinks.get(v).addAll(listU);
-				
-			}
-			// expand lists, do not accept duplicate links
+			// for each node u
 			for (int u = 0; u < n; u++){
-				for (Short2 e:exLinks.get(u))
-					insertLink(links.get(u), e);
+				// recover edge ids from u's BitSet
+				List<Integer> u_edges = new ArrayList<Integer>();
+				for (eid = 0; eid < n_edges; eid++)
+					if (bitList.get(u).get(eid) == true)
+						u_edges.add(eid);
+				
+				// sample edges and send to v
+				for (int v : G.adj(u).keySet()){
+					List<Integer> listU = sampleLink(u_edges, alpha);
+					
+					for (int id : listU)
+						exBitList.get(v).set(id);
+				}
+				
 			}
+			// update bitList = exBitList
+			for (int u = 0; u < n; u++)
+				bitList.set(u, (BitSet)exBitList.get(u).clone());
 			
 			//
 			alpha = alpha * discount;
 		}
+		System.out.println("loop - DONE");
+		System.out.println("linkExchangeNoDup - DONE, elapsed " + (System.currentTimeMillis() - start));
 		
+		start = System.currentTimeMillis();
 		// count true/false/duplicate links
 		int[] trueLinks = new int[n];
 		int[] falseLinks = new int[n];
 		int[] dupLinks = new int[n];
-		long totalLink = countTrueFalseDupLinks(G, links, trueLinks, falseLinks, dupLinks);
-		System.out.println("linkExchangeNoDup - DONE, elapsed " + (System.currentTimeMillis() - start));
+		long totalLink = countTrueFalseDupLinks(G, elist, bitList, n_edges, trueLinks, falseLinks, dupLinks);
+		System.out.println("countTrueFalseDupLinks - DONE, elapsed " + (System.currentTimeMillis() - start));
 		System.out.println("totalLink = " + totalLink);
 		
 		// write to count_file
@@ -660,290 +253,13 @@ public class LinkExchange {
 		
 		for (int u = 0; u < n; u++)
 			deg[u] = G.degree(u);
-		int[] selectedNodes = sampleNodeByDegree(deg, nSample);
+		int[] selectedNodes = LinkExchangeInt2.sampleNodeByDegree(deg, nSample);
 		
-		saveLocalGraph(links, selectedNodes, sample_file);
-		
-	}
-	
-	////
-	public static void linkGossipNoDup(EdgeIntGraph G, int round, double alpha, double beta, double discount, String count_file) throws IOException{
-		int n = G.V();
-		
-		List<List<Short2>> links = new ArrayList<List<Short2>>();
-		// compute adj lists
-		List<List<Integer>> adj = new ArrayList<List<Integer>>();
-		for (int u = 0; u < n; u++){
-			List<Integer> nblist = new ArrayList<Integer>(G.adj(u).keySet());
-			adj.add(nblist);
-		}
-				
-		long start = System.currentTimeMillis();
-		// initial stage
-		for (short u = 0; u < n; u++){
-			List<Short2> temp = new ArrayList<Short2>();
-			for (int v:G.adj(u).keySet())
-				temp.add(new Short2(u, (short)v));
-			links.add(temp);
-			
-			// normalize and sort
-			normalizeEdges(links.get(u));
-			Collections.sort(links.get(u));
-			
-			// add false links (u,w)
-			Random random = new Random();
-			for (int i = 0; i < beta*G.degree(u); i++){
-				int w = random.nextInt(n);
-				
-				while (true){
-					
-					if (w == u || G.areEdgesAdjacent(u, w) == true){
-						w = random.nextInt(n);
-						continue;
-					}
-					
-					Short2 e = new Short2(u, (short)w);
-					boolean isNew = insertLink(links.get(u), e);
-					if (isNew == true)
-						break;
-					else
-						w = random.nextInt(n);
-					
-				}
-			}
-		}
-		
-		
-		// loop
-		Random random = new Random();
-		for(int t = 1; t < round+1; t++){
-			List<List<Short2>> exLinks = new ArrayList<List<Short2>>();		// new links received at each node
-			for (int u = 0; u < n; u++)
-				exLinks.add(new ArrayList<Short2>());
-			
-			// for each node u
-			for (int u = 0; u < n; u++){
-				int v = adj.get(u).get(random.nextInt(G.degree(u)));
-				
-				List<Short2> listU = sampleLinkNoDup(links.get(u), alpha);
-				
-				//
-				exLinks.get(v).addAll(listU);
-				
-			}
-			// expand lists, do not accept duplicate links
-			for (int u = 0; u < n; u++){
-				for (Short2 e:exLinks.get(u))
-					insertLink(links.get(u), e);
-			}
-			
-			//
-			alpha = alpha * discount;
-		}
-		
-		// count true/false/duplicate links
-		int[] trueLinks = new int[n];
-		int[] falseLinks = new int[n];
-		int[] dupLinks = new int[n];
-		
-		countTrueFalseDupLinks(G, links, trueLinks, falseLinks, dupLinks);
-		
-		System.out.println("linkGossipNoDup - DONE, elapsed " + (System.currentTimeMillis() - start));
-		
-		// write to file
-		BufferedWriter bw = new BufferedWriter(new FileWriter(count_file));
-		for (int u = 0; u < n; u++){
-			bw.write(trueLinks[u] + "\t" + falseLinks[u] + "\t" + dupLinks[u] + "\n");
-		}
-		bw.close();
-		System.out.println("Written to count_file.");
+		saveLocalGraph(elist, bitList, n_edges, selectedNodes, sample_file);
 		
 	}
 	
 	
-	//// run by step (not round)
-	public static void linkGossipAsync(EdgeIntGraph G, int step, double alpha, double beta, String count_file) throws IOException{
-		int n = G.V();
-		
-		List<List<Short2>> links = new ArrayList<List<Short2>>();
-		// compute adj lists
-		List<List<Integer>> adj = new ArrayList<List<Integer>>();
-		for (int u = 0; u < n; u++){
-			List<Integer> nblist = new ArrayList<Integer>(G.adj(u).keySet());
-			adj.add(nblist);
-		}
-				
-		long start = System.currentTimeMillis();
-		// initial stage
-		for (short u = 0; u < n; u++){
-			List<Short2> temp = new ArrayList<Short2>();
-			for (int v:G.adj(u).keySet())
-				temp.add(new Short2(u, (short)v));
-			links.add(temp);
-			
-			// normalize and sort
-			normalizeEdges(links.get(u));
-			Collections.sort(links.get(u));
-			
-			// add false links (u,w)
-			Random random = new Random();
-			for (int i = 0; i < beta*G.degree(u); i++){
-				int w = random.nextInt(n);
-				
-				while (true){
-					
-					if (w == u || G.areEdgesAdjacent(u, w) == true){
-						w = random.nextInt(n);
-						continue;
-					}
-					
-					Short2 e = new Short2(u, (short)w);
-					boolean isNew = insertLink(links.get(u), e);
-					if (isNew == true)
-						break;
-					else
-						w = random.nextInt(n);
-					
-				}
-			}
-		}
-		
-		
-		// loop
-		Random random = new Random();
-		for(int t = 1; t < step+1; t++){
-			// select node u
-			int u = random.nextInt(n);
-			int v = adj.get(u).get(random.nextInt(G.degree(u)));
-			
-			List<Short2> listU = sampleLinkNoDup(links.get(u), alpha);
-			
-			
-			// expand lists, do not accept duplicate links
-			for (Short2 e:listU)
-				insertLink(links.get(v), e);
-			
-		}
-		
-		// count true/false/duplicate links
-		int[] trueLinks = new int[n];
-		int[] falseLinks = new int[n];
-		int[] dupLinks = new int[n];
-		
-		countTrueFalseDupLinks(G, links, trueLinks, falseLinks, dupLinks);
-		
-		System.out.println("linkGossipAsync - DONE, elapsed " + (System.currentTimeMillis() - start));
-		
-		// write to file
-		BufferedWriter bw = new BufferedWriter(new FileWriter(count_file));
-		for (int u = 0; u < n; u++){
-			bw.write(trueLinks[u] + "\t" + falseLinks[u] + "\t" + dupLinks[u] + "\n");
-		}
-		bw.close();
-		System.out.println("Written to count_file.");
-		
-	}
-	
-	//// subgraph aG at node u
-//	public static AttackMetric inferEdges(EdgeIntGraph G, EdgeIntGraph aG, int u, double beta){
-//		AttackMetric ret = new AttackMetric();
-//		
-//		List<Short2> edges = new ArrayList<Short2>();
-//		
-//		for (EdgeInt e : aG.edges()){
-//			int v = e.either();
-//			int w = e.other(v);
-//			edges.add(new Short2(v,w));
-//		}
-//		// sort by weight (ascending)
-//		Collections.sort(edges);
-//		
-////		System.out.println(edges.get(0).c + " " + edges.get(1).c + " " + edges.get(edges.size()-1).c);
-//		
-//		// top 1/(1+2*beta) edges (from mid to end)
-////		int mid = (int) (2*beta/(1+2*beta) * edges.size());
-//		int mid = (int) (beta/(1+beta) * edges.size());
-//		
-//		for (int i = 0; i < mid; i++){
-//			Short2 e = edges.get(i);
-//			if (e.val0 == u || e.val1 == u)			// skip friends (true links)
-//				continue;
-//			if (G.areEdgesAdjacent(e.val0, e.val1))
-//				ret.FN += 1;
-//			else
-//				ret.TN += 1;
-//		}
-//		
-//		for (int i = mid; i < edges.size(); i++){
-//			Short2 e = edges.get(i);
-//			if (e.val0 == u || e.val1 == u)			// skip friends (true links)
-//				continue;
-//			if (G.areEdgesAdjacent(e.val0, e.val1))
-//				ret.TP += 1;
-//			else
-//				ret.FP += 1;
-//		}
-//		
-//		//
-//		return ret;
-//		
-//	}
-	
-	//// read sample file, compute edge inference probabilities, export to attack_file (MATLAB)
-//	public static void attackLocalGraph(EdgeIntGraph G, double beta, String sample_file, String attack_file) throws IOException{
-//		int n_nodes = G.V();
-//		
-//		BufferedReader br = new BufferedReader(new FileReader(sample_file));
-//		
-//		String str = br.readLine();
-//		int k = Integer.parseInt(str);		// number of sample graphs
-//		System.out.println("#selected nodes = " + k);
-//		
-//		// for MATLAB
-//		double[] a_attack = new double[k*4];
-//		
-//		for(int i = 0; i < k; i++){
-//			System.out.println("subgraph i = " + i);
-//			str = br.readLine();
-//			String[] items = str.split(",");
-//			int u = Integer.parseInt(items[0]);
-//			int size = Integer.parseInt(items[1]);
-//			System.out.println("u = " + u + ", size = " + size);
-//			
-//			// read local graph
-//			EdgeIntGraph aG = new EdgeIntGraph(n_nodes); 
-//			for (int j = 0; j < size; j++){
-//				str = br.readLine();
-//				items = str.split("\t");
-//				int v = Integer.parseInt(items[0]);
-//				int w = Integer.parseInt(items[1]);
-//				int	c = Integer.parseInt(items[2]);		// edge counter (see Short2)
-//				
-//				aG.addEdge(new EdgeInt(v,w,c));			// save c as edge weight
-//			}
-//			System.out.println("#nodes = " + aG.V());
-//			System.out.println("#edges = " + aG.E());
-//			
-//			// infer true links by edge weights
-//			AttackMetric at = inferEdges(G, aG, u, beta);
-//			
-//			a_attack[i + 0*k] = at.TP;	// packed by column
-//			a_attack[i + 1*k] = at.TN;
-//			a_attack[i + 2*k] = at.FP;
-//			a_attack[i + 3*k] = at.FN;
-//		}
-//		br.close();
-//		
-//		// write to MATLAB
-//		MLDouble atArr = new MLDouble("atArr", a_attack, k);
-//
-//		ArrayList<MLArray> towrite = new ArrayList<MLArray>();
-//        towrite.add(atArr); 
-//        
-//        new MatFileWriter(attack_file, towrite );
-//        System.out.println("Written to MATLAB file.");
-//	}
-
 	
 	////////////////////////////////////////////////
 	public static void main(String[] args) throws Exception{
@@ -951,18 +267,18 @@ public class LinkExchange {
 
 		
 //		String dataname = "pl_1000_5_01";		// diameter = 5
-		String dataname = "pl_10000_5_01";		// diameter = 6,  Dup: round=3 (OutOfMem, 7GB ok), 98s (Acer)
-												//				NoDup: round=3 (a=0.5, b=1.0, 4.5GB), 376s (Acer)
-												//				NoDup: roudn=3 (a=1.0, b=1.0, 13GB), not run
+//		String dataname = "pl_10000_5_01";		// diameter = 6,  	NoDup: round=3 (a=0.5, b=1.0, 2.3GB), 29+21s (Acer), totalLink=150M 
+												//					NoDup: round=3 (a=1.0, b=1.0, 2GB), 67+49s (Acer), totalLink=427M
+												//					NoDup: round=4 (a=1.0, b=1.0, 2GB), 375+125s (Acer), totalLink=1429M
 //		String dataname = "ba_1000_5";			// diameter = 5
-//		String dataname = "ba_10000_5";			// diameter = 6, NoDup: round=3 (5.1GB), 430s (Acer), 350s (PC), totalLink = 255633393
+//		String dataname = "ba_10000_5";			// diameter = 6, 	NoDup: round=3 (a=0.5, b=1.0, 2.2GB), 29+21s (Acer), totalLink=158M 
 		
 //		String dataname = "er_1000_001";		// diameter = 5
-//		String dataname = "er_10000_0001";		// diameter = 7, NoDup: round=3 (2.5GB), 23s (PC)
-		
+		String dataname = "er_10000_0001";		// diameter = 7, 	NoDup: round=3 (a=0.5, b=1.0, GB), 22+10s (Acer), totalLink=22M
+												//					NoDup: round=3 (a=1.0, b=1.0, 2.1GB), 24+16s (Acer), totalLink=70M
 //		String dataname = "sm_1000_005_11";		// diameter = 9
-//		String dataname = "sm_10000_005_11";	// diameter = 12, NoDup: round=3 (1.2GB), 5s (PC), round=4 (1.7GB), 12s (PC)
-												// 						round=5 (3.0GB), 29s (PC), round=6 (3.3GB), 74s (PC)
+//		String dataname = "sm_10000_005_11";	// diameter = 12, NoDup: round=3
+												// 						round=5 
 		//
 //		String dataname = "example";			// 	diameter = 5, 
 //		String dataname = "karate";				// (34, 78)	diameter = 5
@@ -1009,10 +325,10 @@ public class LinkExchange {
 //		linkExchange(G, round, alpha, beta, count_file);
 		
 		// TEST normalizeEdges(), insertLink()
-//		List<Short2> list = new ArrayList<Short2>();
-//		list.add(new Short2(2,3));
-//		list.add(new Short2(3,4));
-//		list.add(new Short2(4,2));
+//		List<Int2> list = new ArrayList<Int2>();
+//		list.add(new Int2(2,3));
+//		list.add(new Int2(3,4));
+//		list.add(new Int2(4,2));
 //		printEdges(list);
 //		
 //		normalizeEdges(list);
@@ -1021,7 +337,7 @@ public class LinkExchange {
 //		Collections.sort(list);
 //		printEdges(list);
 //		
-//		Short2 e1 = new Short2(2,5);
+//		Int2 e1 = new Int2(2,5);
 //		insertLink(list, e1);
 //		printEdges(list);
 		
