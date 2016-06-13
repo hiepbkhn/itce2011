@@ -1,4 +1,4 @@
-/lppm
-/diffpart
+*.class
+/dsn
 /bf
-/gt
+/lppm

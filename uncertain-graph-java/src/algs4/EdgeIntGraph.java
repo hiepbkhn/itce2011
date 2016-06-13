@@ -9,6 +9,8 @@
  * 	- allEdges()
  * Jun 8
  * 	- subGraph()
+ * Jun 9
+ * 	- components(), subGraphD2()
  */
 
 package algs4;
@@ -22,6 +24,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 /******************************************************************************
@@ -45,6 +48,7 @@ import java.util.Map;
  *  7: 2-7 0.34000  1-7 0.19000  0-7 0.16000  5-7 0.28000  4-7 0.37000
  *
  ******************************************************************************/
+import java.util.Queue;
 
 /**
  *  The <tt>EdgeWeightedGraph</tt> class represents an edge-weighted
@@ -430,13 +434,91 @@ public class EdgeIntGraph {
     	return aG;
     }
     
+    //// subgraph at distance-2: (u,v) connected if d(u,v) = 2
+    // 	 return aG and nodeMap
+    public static EdgeIntGraph subGraphD2(EdgeIntGraph G, List<Integer> nodes, Map<Integer, Integer> nodeMap){
+	   	int n = nodes.size();
+	
+	   	int i = 0;
+	   	for (int u : nodes){
+	   		nodeMap.put(u, i);
+	   		i++;
+	   	}
+	   	
+	   	EdgeIntGraph aG = new EdgeIntGraph(n);
+	   	for (Int2 e : G.allEdges()){
+	   		int u = e.val0;
+	   		int v = e.val1;
+	   		if (nodeMap.containsKey(u)){
+	   			for (int w : G.adj(v).keySet())
+	   				if (w > u && nodeMap.containsKey(w))
+	   					aG.addEdge(new EdgeInt(nodeMap.get(u), nodeMap.get(w), 1));
+	   		}
+	   		
+	   		if (nodeMap.containsKey(v)){
+	   			for (int w : G.adj(u).keySet())
+	   				if (w > v && nodeMap.containsKey(w))
+	   					aG.addEdge(new EdgeInt(nodeMap.get(v), nodeMap.get(w), 1));
+	   		}
+	   	}
+	   	
+	   	//
+	   	return aG;
+    }
+    
+    //// connected components
+    public static int[] components(EdgeIntGraph G){
+    	int n = G.V();
+    	int[] ret = new int[n];
+
+    	for (int u = 0; u < n; u++)
+    		ret[u] = -1;
+    	// BFS
+    	int comp = 0;
+    	int cur = 0;
+    	while (true){
+    		// find next cur
+    		while (cur < n && ret[cur] != -1)
+    			cur += 1;
+    		if (cur == n)
+    			break;
+    		
+    		//
+    		ret[cur] = comp;
+    		Queue<Integer> queue = new LinkedList<Integer>();
+    		queue.add(cur);
+    		while(queue.size() > 0){
+    			int top = queue.remove();
+    			for (int u : G.adj(top).keySet())
+    				if (ret[u] == -1){
+    					ret[u] = comp;
+    					queue.add(u);
+    				}
+    		}
+    		
+    		comp += 1;
+    			
+    	}
+    	
+    	//
+    	return ret;
+    }
+    
+    
     ////////////////////////////////////////////////
     public static void main(String[] args) {
-        In in = new In(args[0]);
-        EdgeIntGraph G = new EdgeIntGraph(in);
-        StdOut.println(G);
-        
-        System.out.println("areEdgesAdjacent = " + G.areEdgesAdjacent(0, 5));
+
+    	EdgeIntGraph G = new EdgeIntGraph(5);
+    	
+    	G.addEdge(new EdgeInt(0,1,1));
+    	G.addEdge(new EdgeInt(2,3,1));
+    	G.addEdge(new EdgeInt(2,4,1));
+    	System.out.println("#nodes = " + G.V());
+		System.out.println("#edges = " + G.E());
+    	
+    	int[] comp = EdgeIntGraph.components(G);
+    	for (int u = 0; u < G.V(); u++)
+    		System.out.print(comp[u] + " ");
     }
 
 }
