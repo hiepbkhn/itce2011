@@ -11,13 +11,13 @@
  * Jun 9
  * 	- add computeTrueGraph()
  * Jun 12
- * 	- use Short2, update insertLink(), saveLocalGraph() to take into account the counter of (duplicate) edges
+ * 	- use Int2, update insertLink(), saveLocalGraph() to take into account the counter of (duplicate) edges
  * 	- add attackLocalGraph(), inferEdges()
  */
 
 package dsn;
 
-import hist.Short2;
+import hist.Int2;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -47,11 +47,11 @@ import algs4.EdgeIntGraph;
 import algs4.UnweightedGraph;
 
 
-public class LinkExchange {
+public class LinkExchangeInt2 {
 
 	////
-	public static void printEdges(List<Short2> list){
-		for(Short2 e:list)
+	public static void printEdges(List<Int2> list){
+		for(Int2 e:list)
 			System.out.print("(" + e.val0 + "," + e.val1 + ") ");
 		System.out.println();
 	}
@@ -90,17 +90,17 @@ public class LinkExchange {
 	}
 	
 	////
-	public static void saveLocalGraph(List<List<Short2>> links, int[] selectedNodes, String sample_file) throws IOException{
+	public static void saveLocalGraph(List<List<Int2>> links, int[] selectedNodes, String sample_file) throws IOException{
 		
 		BufferedWriter bw = new BufferedWriter(new FileWriter(sample_file));
 		
 		// number of selected nodes
 		bw.write(selectedNodes.length + "\n");
 		for (int u : selectedNodes){
-			List<Short2> edges = links.get(u);
+			List<Int2> edges = links.get(u);
 			// node : #edges
 			bw.write(u + "," + edges.size() + "\n");
-			for (Short2 e : edges)
+			for (Int2 e : edges)
 				bw.write(e.val0 + "\t" + e.val1 + "\n");
 			
 		}
@@ -272,18 +272,18 @@ public class LinkExchange {
 	}
 	
 	////
-	public static List<Short2> createFalseLink(EdgeIntGraph G, short u, double beta){
-		List<Short2> ret = new ArrayList<Short2>();
+	public static List<Int2> createFalseLink(EdgeIntGraph G, int u, double beta){
+		List<Int2> ret = new ArrayList<Int2>();
 		
 		int n = G.V();
 		//
 		Random random = new Random();
-		for (short i = 0; i < beta*G.degree(u); i++){
-			short w = (short)random.nextInt(n);
+		for (int i = 0; i < beta*G.degree(u); i++){
+			int w = random.nextInt(n);
 			while (G.areEdgesAdjacent(u, w))
-				w = (short)random.nextInt(n);
+				w = random.nextInt(n);
 			
-			ret.add(new Short2(u, w));
+			ret.add(new Int2(u, w));
 			
 		}
 		
@@ -293,8 +293,8 @@ public class LinkExchange {
 	}
 	
 	////
-	public static List<Short2> sampleLink(List<Short2> srcList, double alpha){
-		List<Short2> ret = new ArrayList<Short2>();
+	public static List<Int2> sampleLink(List<Int2> srcList, double alpha){
+		List<Int2> ret = new ArrayList<Int2>();
 		
 		Random random = new Random();
 		for (int i = 0; i < alpha*srcList.size(); i++){
@@ -310,8 +310,8 @@ public class LinkExchange {
 	}
 	
 	////
-	public static List<Short2> sampleLinkNoDup(List<Short2> srcList, double alpha){
-		List<Short2> ret = new ArrayList<Short2>();
+	public static List<Int2> sampleLinkNoDup(List<Int2> srcList, double alpha){
+		List<Int2> ret = new ArrayList<Int2>();
 		
 		Map<Integer, Integer> dup = new HashMap<Integer, Integer>();
 		
@@ -332,15 +332,15 @@ public class LinkExchange {
 	}
 	
 	//// return totalLink
-	public static long countTrueFalseDupLinks(EdgeIntGraph G, List<List<Short2>> links, int[] trueLinks, int[] falseLinks, int[] dupLinks){
+	public static long countTrueFalseDupLinks(EdgeIntGraph G, List<List<Int2>> links, int[] trueLinks, int[] falseLinks, int[] dupLinks){
 		int n = links.size();
 		
 		long totalLink = 0;
 		for (int u = 0; u < n; u++){
-			Map<Short2, Integer> dup = new HashMap<Short2, Integer>();
-			for(Short2 p : links.get(u)){
+			Map<Int2, Integer> dup = new HashMap<Int2, Integer>();
+			for(Int2 p : links.get(u)){
 				if(p.val0 > p.val1){	// normalize
-					short temp = p.val0;
+					int temp = p.val0;
 					p.val0 = p.val1;
 					p.val1 = temp;
 				}
@@ -366,16 +366,16 @@ public class LinkExchange {
 	public static void linkExchange(EdgeIntGraph G, int round, double alpha, double beta, String count_file) throws IOException{
 		int n = G.V();
 		
-		List<List<Short2>> links = new ArrayList<List<Short2>>();
+		List<List<Int2>> links = new ArrayList<List<Int2>>();
 		
 		long start = System.currentTimeMillis();
 		// initial stage
-		for (short u = 0; u < n; u++){
-			List<Short2> temp = new ArrayList<Short2>();
+		for (int u = 0; u < n; u++){
+			List<Int2> temp = new ArrayList<Int2>();
 			for (int v:G.adj(u).keySet())
-				temp.add(new Short2(u, (short)v));
+				temp.add(new Int2(u, v));
 			
-			List<Short2> newLinks = createFalseLink(G, u, beta);
+			List<Int2> newLinks = createFalseLink(G, u, beta);
 			temp.addAll(newLinks);
 			
 			links.add(temp);
@@ -383,17 +383,17 @@ public class LinkExchange {
 		
 		// loop
 		for(int t = 1; t < round+1; t++){
-			List<List<Short2>> exLinks = new ArrayList<List<Short2>>();		// new links received at each node
+			List<List<Int2>> exLinks = new ArrayList<List<Int2>>();		// new links received at each node
 			for (int u = 0; u < n; u++)
-				exLinks.add(new ArrayList<Short2>());
+				exLinks.add(new ArrayList<Int2>());
 			
 			// for each pair of nodes (u,v)
 			for (EdgeInt e: G.edges()){
 				int u = e.either();
 				int v = e.other(u);
 				
-				List<Short2> listU = sampleLink(links.get(u), alpha);
-				List<Short2> listV = sampleLink(links.get(v), alpha);
+				List<Int2> listU = sampleLink(links.get(u), alpha);
+				List<Int2> listV = sampleLink(links.get(v), alpha);
 				
 				//
 				exLinks.get(u).addAll(listV);
@@ -428,7 +428,7 @@ public class LinkExchange {
 	public static void linkGossip(EdgeIntGraph G, int round, double alpha, double beta, String count_file) throws IOException{
 		int n = G.V();
 		
-		List<List<Short2>> links = new ArrayList<List<Short2>>();
+		List<List<Int2>> links = new ArrayList<List<Int2>>();
 		
 		// compute adj lists
 		List<List<Integer>> adj = new ArrayList<List<Integer>>();
@@ -440,12 +440,12 @@ public class LinkExchange {
 		
 		long start = System.currentTimeMillis();
 		// initial stage
-		for (short u = 0; u < n; u++){
-			List<Short2> temp = new ArrayList<Short2>();
+		for (int u = 0; u < n; u++){
+			List<Int2> temp = new ArrayList<Int2>();
 			for (int v:G.adj(u).keySet())
-				temp.add(new Short2(u, (short)v));
+				temp.add(new Int2(u, v));
 			
-			List<Short2> newLinks = createFalseLink(G, u, beta);
+			List<Int2> newLinks = createFalseLink(G, u, beta);
 			temp.addAll(newLinks);
 			
 			links.add(temp);
@@ -454,15 +454,15 @@ public class LinkExchange {
 		// loop
 		Random random = new Random();
 		for(int t = 1; t < round+1; t++){
-			List<List<Short2>> exLinks = new ArrayList<List<Short2>>();		// new links received at each node
+			List<List<Int2>> exLinks = new ArrayList<List<Int2>>();		// new links received at each node
 			for (int u = 0; u < n; u++)
-				exLinks.add(new ArrayList<Short2>());
+				exLinks.add(new ArrayList<Int2>());
 			
 			// for each node u
 			for (int u = 0; u < n; u++){
 				int v = adj.get(u).get(random.nextInt(G.degree(u)));
 				
-				List<Short2> listU = sampleLink(links.get(u), alpha);
+				List<Int2> listU = sampleLink(links.get(u), alpha);
 				
 				//
 				exLinks.get(v).addAll(listU);
@@ -493,7 +493,7 @@ public class LinkExchange {
 	}
 	
 	//// insert link e to a sorted list
-	public static boolean insertLink(List<Short2> list, Short2 e){
+	public static boolean insertLink(List<Int2> list, Int2 e){
 		// normalize e
 		normalizeEdge(e);
 		
@@ -539,17 +539,17 @@ public class LinkExchange {
 	}
 	
 	////
-	public static void normalizeEdge(Short2 e){
+	public static void normalizeEdge(Int2 e){
 		if (e.val0 > e.val1){
-			short temp = e.val0;
+			int temp = e.val0;
 			e.val0 = e.val1;
 			e.val1 = temp;
 		}
 	}
 	
 	////
-	public static void normalizeEdges(List<Short2> list){
-		for (Short2 e:list){
+	public static void normalizeEdges(List<Int2> list){
+		for (Int2 e:list){
 			normalizeEdge(e);
 		}
 		
@@ -564,15 +564,15 @@ public class LinkExchange {
 		System.out.println("count_file = " + count_file);
 		
 		//
-		List<List<Short2>> links = new ArrayList<List<Short2>>();
+		List<List<Int2>> links = new ArrayList<List<Int2>>();
 		
 		long start = System.currentTimeMillis();
 		
 		// initial stage
-		for (short u = 0; u < n; u++){
-			List<Short2> temp = new ArrayList<Short2>();
+		for (int u = 0; u < n; u++){
+			List<Int2> temp = new ArrayList<Int2>();
 			for (int v:G.adj(u).keySet())
-				temp.add(new Short2(u, (short)v));
+				temp.add(new Int2(u, v));
 			links.add(temp);
 			
 			// normalize and sort
@@ -591,7 +591,7 @@ public class LinkExchange {
 						continue;
 					}
 					
-					Short2 e = new Short2((short)u, (short)w);
+					Int2 e = new Int2(u, w);
 					boolean isNew = insertLink(links.get(u), e);
 					if (isNew == true)
 						break;
@@ -607,9 +607,9 @@ public class LinkExchange {
 		for(int t = 1; t < round+1; t++){
 			System.out.println("round = " + t);
 			
-			List<List<Short2>> exLinks = new ArrayList<List<Short2>>();		// new links received at each node
+			List<List<Int2>> exLinks = new ArrayList<List<Int2>>();		// new links received at each node
 			for (int u = 0; u < n; u++)
-				exLinks.add(new ArrayList<Short2>());
+				exLinks.add(new ArrayList<Int2>());
 			
 			// for each pair of nodes (u,v)
 			int count = 0;
@@ -621,8 +621,8 @@ public class LinkExchange {
 				int u = e.either();
 				int v = e.other(u);
 				
-				List<Short2> listU = sampleLinkNoDup(links.get(u), alpha);
-				List<Short2> listV = sampleLinkNoDup(links.get(v), alpha);
+				List<Int2> listU = sampleLinkNoDup(links.get(u), alpha);
+				List<Int2> listV = sampleLinkNoDup(links.get(v), alpha);
 				
 				//
 				exLinks.get(u).addAll(listV);
@@ -631,7 +631,7 @@ public class LinkExchange {
 			}
 			// expand lists, do not accept duplicate links
 			for (int u = 0; u < n; u++){
-				for (Short2 e:exLinks.get(u))
+				for (Int2 e:exLinks.get(u))
 					insertLink(links.get(u), e);
 			}
 			
@@ -670,7 +670,7 @@ public class LinkExchange {
 	public static void linkGossipNoDup(EdgeIntGraph G, int round, double alpha, double beta, double discount, String count_file) throws IOException{
 		int n = G.V();
 		
-		List<List<Short2>> links = new ArrayList<List<Short2>>();
+		List<List<Int2>> links = new ArrayList<List<Int2>>();
 		// compute adj lists
 		List<List<Integer>> adj = new ArrayList<List<Integer>>();
 		for (int u = 0; u < n; u++){
@@ -680,10 +680,10 @@ public class LinkExchange {
 				
 		long start = System.currentTimeMillis();
 		// initial stage
-		for (short u = 0; u < n; u++){
-			List<Short2> temp = new ArrayList<Short2>();
+		for (int u = 0; u < n; u++){
+			List<Int2> temp = new ArrayList<Int2>();
 			for (int v:G.adj(u).keySet())
-				temp.add(new Short2(u, (short)v));
+				temp.add(new Int2(u, v));
 			links.add(temp);
 			
 			// normalize and sort
@@ -702,7 +702,7 @@ public class LinkExchange {
 						continue;
 					}
 					
-					Short2 e = new Short2(u, (short)w);
+					Int2 e = new Int2(u, w);
 					boolean isNew = insertLink(links.get(u), e);
 					if (isNew == true)
 						break;
@@ -717,15 +717,15 @@ public class LinkExchange {
 		// loop
 		Random random = new Random();
 		for(int t = 1; t < round+1; t++){
-			List<List<Short2>> exLinks = new ArrayList<List<Short2>>();		// new links received at each node
+			List<List<Int2>> exLinks = new ArrayList<List<Int2>>();		// new links received at each node
 			for (int u = 0; u < n; u++)
-				exLinks.add(new ArrayList<Short2>());
+				exLinks.add(new ArrayList<Int2>());
 			
 			// for each node u
 			for (int u = 0; u < n; u++){
 				int v = adj.get(u).get(random.nextInt(G.degree(u)));
 				
-				List<Short2> listU = sampleLinkNoDup(links.get(u), alpha);
+				List<Int2> listU = sampleLinkNoDup(links.get(u), alpha);
 				
 				//
 				exLinks.get(v).addAll(listU);
@@ -733,7 +733,7 @@ public class LinkExchange {
 			}
 			// expand lists, do not accept duplicate links
 			for (int u = 0; u < n; u++){
-				for (Short2 e:exLinks.get(u))
+				for (Int2 e:exLinks.get(u))
 					insertLink(links.get(u), e);
 			}
 			
@@ -765,7 +765,7 @@ public class LinkExchange {
 	public static void linkGossipAsync(EdgeIntGraph G, int step, double alpha, double beta, String count_file) throws IOException{
 		int n = G.V();
 		
-		List<List<Short2>> links = new ArrayList<List<Short2>>();
+		List<List<Int2>> links = new ArrayList<List<Int2>>();
 		// compute adj lists
 		List<List<Integer>> adj = new ArrayList<List<Integer>>();
 		for (int u = 0; u < n; u++){
@@ -775,10 +775,10 @@ public class LinkExchange {
 				
 		long start = System.currentTimeMillis();
 		// initial stage
-		for (short u = 0; u < n; u++){
-			List<Short2> temp = new ArrayList<Short2>();
+		for (int u = 0; u < n; u++){
+			List<Int2> temp = new ArrayList<Int2>();
 			for (int v:G.adj(u).keySet())
-				temp.add(new Short2(u, (short)v));
+				temp.add(new Int2(u, v));
 			links.add(temp);
 			
 			// normalize and sort
@@ -797,7 +797,7 @@ public class LinkExchange {
 						continue;
 					}
 					
-					Short2 e = new Short2(u, (short)w);
+					Int2 e = new Int2(u, w);
 					boolean isNew = insertLink(links.get(u), e);
 					if (isNew == true)
 						break;
@@ -816,11 +816,11 @@ public class LinkExchange {
 			int u = random.nextInt(n);
 			int v = adj.get(u).get(random.nextInt(G.degree(u)));
 			
-			List<Short2> listU = sampleLinkNoDup(links.get(u), alpha);
+			List<Int2> listU = sampleLinkNoDup(links.get(u), alpha);
 			
 			
 			// expand lists, do not accept duplicate links
-			for (Short2 e:listU)
+			for (Int2 e:listU)
 				insertLink(links.get(v), e);
 			
 		}
@@ -848,12 +848,12 @@ public class LinkExchange {
 //	public static AttackMetric inferEdges(EdgeIntGraph G, EdgeIntGraph aG, int u, double beta){
 //		AttackMetric ret = new AttackMetric();
 //		
-//		List<Short2> edges = new ArrayList<Short2>();
+//		List<Int2> edges = new ArrayList<Int2>();
 //		
 //		for (EdgeInt e : aG.edges()){
 //			int v = e.either();
 //			int w = e.other(v);
-//			edges.add(new Short2(v,w));
+//			edges.add(new Int2(v,w));
 //		}
 //		// sort by weight (ascending)
 //		Collections.sort(edges);
@@ -865,7 +865,7 @@ public class LinkExchange {
 //		int mid = (int) (beta/(1+beta) * edges.size());
 //		
 //		for (int i = 0; i < mid; i++){
-//			Short2 e = edges.get(i);
+//			Int2 e = edges.get(i);
 //			if (e.val0 == u || e.val1 == u)			// skip friends (true links)
 //				continue;
 //			if (G.areEdgesAdjacent(e.val0, e.val1))
@@ -875,7 +875,7 @@ public class LinkExchange {
 //		}
 //		
 //		for (int i = mid; i < edges.size(); i++){
-//			Short2 e = edges.get(i);
+//			Int2 e = edges.get(i);
 //			if (e.val0 == u || e.val1 == u)			// skip friends (true links)
 //				continue;
 //			if (G.areEdgesAdjacent(e.val0, e.val1))
@@ -917,7 +917,7 @@ public class LinkExchange {
 //				items = str.split("\t");
 //				int v = Integer.parseInt(items[0]);
 //				int w = Integer.parseInt(items[1]);
-//				int	c = Integer.parseInt(items[2]);		// edge counter (see Short2)
+//				int	c = Integer.parseInt(items[2]);		// edge counter (see Int2)
 //				
 //				aG.addEdge(new EdgeInt(v,w,c));			// save c as edge weight
 //			}
@@ -1009,10 +1009,10 @@ public class LinkExchange {
 //		linkExchange(G, round, alpha, beta, count_file);
 		
 		// TEST normalizeEdges(), insertLink()
-//		List<Short2> list = new ArrayList<Short2>();
-//		list.add(new Short2(2,3));
-//		list.add(new Short2(3,4));
-//		list.add(new Short2(4,2));
+//		List<Int2> list = new ArrayList<Int2>();
+//		list.add(new Int2(2,3));
+//		list.add(new Int2(3,4));
+//		list.add(new Int2(4,2));
 //		printEdges(list);
 //		
 //		normalizeEdges(list);
@@ -1021,7 +1021,7 @@ public class LinkExchange {
 //		Collections.sort(list);
 //		printEdges(list);
 //		
-//		Short2 e1 = new Short2(2,5);
+//		Int2 e1 = new Int2(2,5);
 //		insertLink(list, e1);
 //		printEdges(list);
 		
