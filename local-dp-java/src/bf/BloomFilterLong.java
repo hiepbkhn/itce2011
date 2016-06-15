@@ -535,6 +535,9 @@ public class BloomFilterLong implements Serializable {
     	
     	// remove bits
     	int d = (int)( ret.bitset.cardinality() * (1 - Math.pow(alpha, 1.0/ret.k)) );	// 
+
+    	if (d == 0)
+    		return ret;
     	
     	// pick d bits from ret and set them to false
     	// WAY - 1 (not random, first d bits)

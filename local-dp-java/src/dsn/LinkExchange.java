@@ -1,6 +1,9 @@
 /*
  * Jun 13, 2016
  * 	- use BitSet for each node
+ * Jun 15
+ * 	- add linkExchangeNoDupD2()
+ * 	- factorize exchangeNoDup()
  */
 
 package dsn;
@@ -140,52 +143,13 @@ public class LinkExchange{
 		
 	}
 	
+	
 	////
-	public static void linkExchangeNoDup(EdgeIntGraph G, int round, double alpha, double beta, double discount, int nSample, String count_file, String sample_file) throws IOException{
+	public static void exchangeNoDup(EdgeIntGraph G, List<List<Int2>> links, int round, double alpha, double beta, 
+			int nSample, String count_file, String sample_file) throws IOException{
 		int n = G.V();
-		System.out.println("round = " + round);
-		System.out.println("alpha = " + alpha);
-		System.out.println("beta = " + beta);
-		System.out.println("count_file = " + count_file);
-		
-		//
-		List<List<Int2>> links = new ArrayList<List<Int2>>();
 		
 		long start = System.currentTimeMillis();
-		
-		// initial stage
-		for (int u = 0; u < n; u++){
-			List<Int2> temp = new ArrayList<Int2>();
-			for (int v:G.adj(u).keySet())
-				temp.add(new Int2(u, v));
-			links.add(temp);
-			
-			// normalize and sort
-			LinkExchangeInt2.normalizeEdges(links.get(u));
-			Collections.sort(links.get(u));
-			
-			// add false links (u,w)
-			Random random = new Random();
-			for (int i = 0; i < beta*G.degree(u); i++){
-				int w = random.nextInt(n);
-				
-				while (true){
-					if (w == u || G.areEdgesAdjacent(u, w) == true){
-						w = random.nextInt(n);
-						continue;
-					}
-					
-					Int2 e = new Int2(u, w);
-					boolean isNew = LinkExchangeInt2.insertLink(links.get(u), e);
-					if (isNew == true)
-						break;
-					else
-						w = random.nextInt(n);
-					
-				}
-			}
-		}
-		
 		//
 		Map<Integer,Integer> map = new HashMap<Integer, Integer>();
 		int n_edges = (int)Math.ceil((2+2*beta)*G.E());
@@ -241,10 +205,10 @@ public class LinkExchange{
 				bitList.set(u, (BitSet)exBitList.get(u).clone());
 			
 			//
-			alpha = alpha * discount;
+//			alpha = alpha * discount;
 		}
 		System.out.println("loop - DONE");
-		System.out.println("linkExchangeNoDup - DONE, elapsed " + (System.currentTimeMillis() - start));
+		System.out.println("exchangeNoDup - DONE, elapsed " + (System.currentTimeMillis() - start));
 		
 		start = System.currentTimeMillis();
 		// count true/false/duplicate links
@@ -271,10 +235,195 @@ public class LinkExchange{
 		int[] selectedNodes = LinkExchangeInt2.sampleNodeByDegree(deg, nSample);
 		
 		saveLocalGraph(elist, bitList, n_edges, selectedNodes, sample_file);
-		
 	}
 	
 	
+	////
+	public static void linkExchangeNoDup(EdgeIntGraph G, int round, double alpha, double beta, int nSample, String count_file, String sample_file) throws IOException{
+		int n = G.V();
+		System.out.println("round = " + round);
+		System.out.println("alpha = " + alpha);
+		System.out.println("beta = " + beta);
+		System.out.println("count_file = " + count_file);
+		
+		//
+		List<List<Int2>> links = new ArrayList<List<Int2>>();
+		
+		long start = System.currentTimeMillis();
+		
+		// initial stage
+		for (int u = 0; u < n; u++){
+			List<Int2> temp = new ArrayList<Int2>();
+			for (int v:G.adj(u).keySet())
+				temp.add(new Int2(u, v));
+			links.add(temp);
+			
+			// normalize and sort
+			LinkExchangeInt2.normalizeEdges(links.get(u));
+			Collections.sort(links.get(u));
+			
+			// add false links (u,w)
+			Random random = new Random();
+			for (int i = 0; i < beta*G.degree(u); i++){
+				int w = random.nextInt(n);
+				
+				while (true){
+					if (w == u || G.areEdgesAdjacent(u, w) == true){
+						w = random.nextInt(n);
+						continue;
+					}
+					
+					Int2 e = new Int2(u, w);
+					boolean isNew = LinkExchangeInt2.insertLink(links.get(u), e);
+					if (isNew == true)
+						break;
+					else
+						w = random.nextInt(n);
+					
+				}
+			}
+		}
+		
+		// exchange loop
+		System.out.println("linkExchangeNoDup");
+		exchangeNoDup(G, links, round, alpha, beta, nSample, count_file, sample_file);
+				
+	}
+	
+	
+	//// new param gamma
+	public static void linkExchangeNoDupD2(EdgeIntGraph G, int round, double alpha, double beta, double gamma, int nSample, String count_file, String sample_file) throws IOException{
+		int n = G.V();
+		System.out.println("round = " + round);
+		if (round < 1){
+			System.out.println("round must be at least 1");
+			return;
+		}
+		System.out.println("alpha = " + alpha);
+		System.out.println("beta = " + beta);
+		System.out.println("gamma = " + gamma);
+		System.out.println("count_file = " + count_file);
+		
+		//
+		List<List<Int2>> links = new ArrayList<List<Int2>>();
+		
+		long start = System.currentTimeMillis();
+		
+		// 1 - initial stage t = 0
+		for (int u = 0; u < n; u++){
+			List<Int2> temp = new ArrayList<Int2>();
+			for (int v:G.adj(u).keySet())
+				temp.add(new Int2(u, v));
+			links.add(temp);
+			
+			// normalize and sort
+			LinkExchangeInt2.normalizeEdges(links.get(u));
+			Collections.sort(links.get(u));
+			
+			// add false links (u,w)
+			Random random = new Random();
+			for (int i = 0; i < gamma*beta*G.degree(u); i++){
+				int w = random.nextInt(n);
+				
+				while (true){
+					if (w == u || G.areEdgesAdjacent(u, w) == true){
+						w = random.nextInt(n);
+						continue;
+					}
+					
+					Int2 e = new Int2(u, w);
+					boolean isNew = LinkExchangeInt2.insertLink(links.get(u), e);
+					if (isNew == true)
+						break;
+					else
+						w = random.nextInt(n);
+				}
+			}
+		}
+		
+		// 
+		List<List<Int2>> exLinks = new ArrayList<List<Int2>>();		// new links received at each node
+		for (int u = 0; u < n; u++)
+			exLinks.add(new ArrayList<Int2>());
+		
+		// for each pair of nodes (u,v)
+		System.out.println("pre-round");
+		for (EdgeInt e: G.edges()){
+			int u = e.either();
+			int v = e.other(u);
+			
+			List<Int2> listU = LinkExchangeInt2.sampleLinkNoDup(links.get(u), alpha);
+			List<Int2> listV = LinkExchangeInt2.sampleLinkNoDup(links.get(v), alpha);
+			
+			//
+			exLinks.get(u).addAll(listV);
+			exLinks.get(v).addAll(listU);
+			
+		}
+		// expand lists, do not accept duplicate links
+		for (int u = 0; u < n; u++){
+			for (Int2 e:exLinks.get(u))
+				LinkExchangeInt2.insertLink(links.get(u), e);
+		}
+		
+		// initialization of (1-gamma)*beta links
+		for (int u = 0; u < n; u++){
+			// u collects nodes not in N(u)
+			List<Integer> d2nodes = new ArrayList<Integer>();
+			for (Int2 e : links.get(u)){
+				int v = e.val0;
+				int w = e.val1;
+				if (v != u && !G.areEdgesAdjacent(u, v))
+					d2nodes.add(v);
+				if (w != u && !G.areEdgesAdjacent(u, w))
+					d2nodes.add(w);
+			}
+			// create (1-gamma)*beta links	
+			Random random = new Random();
+			for (int i = 0; i < (1-gamma)*beta*G.degree(u); i++){
+				int w = random.nextInt(d2nodes.size());
+				
+				while (true){
+					Int2 e = new Int2(u, w);
+					boolean isNew = LinkExchangeInt2.insertLink(links.get(u), e);
+					if (isNew == true)
+						break;
+					else
+						w = random.nextInt(d2nodes.size());
+				}
+			}
+		}
+		
+		
+		// 2 - exchange loop
+		System.out.println("linkExchangeNoDupD2");
+		exchangeNoDup(G, links, round-1, alpha, beta, nSample, count_file, sample_file);	// round-1
+		
+	}
+	
+	////
+	public static void readCountFile(String count_file) throws IOException{
+		System.out.println("readCountFile, count_file = " + count_file);
+		BufferedReader br = new BufferedReader(new FileReader(count_file));
+		long totalLink = 0;
+		long totalTrueLink = 0;
+		while (true){
+			String str = br.readLine();
+			if (str == null)
+				break;
+			String[] items = str.split("\t");
+			int trueLinks = Integer.parseInt(items[0]);
+			int falseLinks = Integer.parseInt(items[1]);
+			int dupLinks = Integer.parseInt(items[2]);
+			
+			totalLink += trueLinks + falseLinks + dupLinks;
+			totalTrueLink += trueLinks;
+		}
+		System.out.println("readCountFile, totalLink = " + totalLink);
+		System.out.println("readCountFile, totalTrueLink = " + totalTrueLink);
+		
+		br.close();
+	}
 	
 	////////////////////////////////////////////////
 	public static void main(String[] args) throws Exception{
@@ -284,9 +433,11 @@ public class LinkExchange{
 //		String dataname = "pl_1000_5_01";		// diameter = 5
 		String dataname = "pl_10000_5_01";		// diameter = 6,  	NoDup: round=3 (a=0.5, b=1.0, 2.1GB), 27+22s (PC), totalLink=245M (16.4%)
 												//					NoDup: round=4 (a=0.5, b=1.0, 2.5GB), 94+58s (PC), totalLink=863M (57.6%)
-												//					NoDup: round=5 (a=0.5, b=1.0, 2.9GB), 270+80s (PC), totalLink=863M (92.2%)
+												//					NoDup: round=5 (a=0.5, b=1.0, 2.9GB), 270+80s (PC), totalLink=1381M (92.2%)
+												//					NoDup: round=2 (a=1.0, b=1.0, 1.8GB), 11+10s (PC),	totalLink=105M (7%)
 												//					NoDup: round=3 (a=1.0, b=1.0, 2.5GB), 22+49s (PC),	totalLink=797M (53%)
 												//					NoDup: round=4 (a=1.0, b=1.0, 2.9GB), 52+79s (PC),	totalLink=1470M (98%)
+												//				NoDupD2: round=3 (a=0.5, b=1.0, g=0.5, 2.1GB), 20+21s (PC), totalLink=191M ()
 //		String dataname = "pl_10000_10_01";
 //		String dataname = "pl_10000_3_01";
 		// BA
@@ -337,11 +488,12 @@ public class LinkExchange{
 //		LinkExchangeInt2.computeTrueGraph(G, "_matlab/" + dataname + ".mat");
 		
 		//
-		int round = 5; 		// flood
+		int round = 2; 		// flood
 //		int round = 10; 	// gossip
 		int step = 100000;	// gossip-async
-		double alpha = 0.5;
+		double alpha = 1.0;
 		double beta = 1.0;
+		double gamma = 0.0;
 		double discount = 1.0;
 		int nSample = 20;	// 20, 50, 100  number of local graphs written to file
 		
@@ -369,7 +521,7 @@ public class LinkExchange{
 		
 		
 		// TEST linkExchangeNoDup()
-		String name = dataname + "-nodup-" + round + "_" + String.format("%.1f",alpha) + "_" + String.format("%.1f",beta) + "_" + String.format("%.1f",discount) + "_" + nSample;
+		String name = dataname + "-nodup-" + round + "_" + String.format("%.1f",alpha) + "_" + String.format("%.1f",beta) + "_" + nSample;
 		String count_file = prefix + "_out/" + name + ".cnt";
 		String sample_file = prefix + "_sample/" + name + ".out";
 		String matlab_file = prefix + "_matlab/" + name + ".mat";
@@ -377,11 +529,26 @@ public class LinkExchange{
 		System.out.println("count_file = " + count_file);
 		
 		//
-		linkExchangeNoDup(G, round, alpha, beta, discount, nSample, count_file, sample_file);
+		linkExchangeNoDup(G, round, alpha, beta, nSample, count_file, sample_file);
 		
 //		computeLocalGraph(sample_file, matlab_file, 10000);
 		
 //		attackLocalGraph(G, beta, sample_file, attack_file);
+		
+//		readCountFile("_out/pl_10000_5_01-nodup-3_1.0_1.0_1.0_20.cnt");
+		
+		
+		// TEST linkExchangeNoDupD2() - distance-2
+//		String name = dataname + "-nodup-d2-" + round + "_" + String.format("%.1f",alpha) + "_" + String.format("%.1f",beta) + "_" + String.format("%.1f",gamma) + "_" + nSample;
+//		String count_file = prefix + "_out/" + name + ".cnt";
+//		String sample_file = prefix + "_sample/" + name + ".out";
+//		String matlab_file = prefix + "_matlab/" + name + ".mat";
+//		String attack_file = prefix + "_matlab/" + name + "_attack.mat";
+//		System.out.println("count_file = " + count_file);
+//		
+//		//
+//		linkExchangeNoDupD2(G, round, alpha, beta, gamma, nSample, count_file, sample_file);
+		
 		
 		//////////
 		// TEST linkGossip()

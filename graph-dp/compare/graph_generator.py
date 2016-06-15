@@ -205,6 +205,7 @@ if __name__ == '__main__':
 #    generate_ER_graph(10000, 0.005, "../data/er_10000_0005.gr")
 #    generate_ER_graph(10000, 0.002, "../data/er_10000_0002.gr")
 #    generate_ER_graph(10000, 0.001, "../data/er_10000_0001.gr")
+    generate_ER_graph(10000, 0.0006, "../data/er_10000_00006.gr")
     
 #    generate_ER_graph(20000, 0.002, "../data/er_20000_0002.gr")
 #    generate_ER_graph(20000, 0.0005, "../data/er_20000_00005.gr")
@@ -228,6 +229,8 @@ if __name__ == '__main__':
 #    generate_PL_graph(1000, 5, 0.1, "../data/pl_1000_5_01.gr")
     
 #    generate_PL_graph(10000, 5, 0.1, "../data/pl_10000_5_01.gr")
+#    generate_PL_graph(10000, 10, 0.1, "../data/pl_10000_10_01.gr")
+#    generate_PL_graph(10000, 3, 0.1, "../data/pl_10000_3_01.gr")
 #    generate_PL_graph(100000, 5, 0.1, "../data/pl_100000_5_01.gr")
 
     ### FF - disconnected graphs --> need convert_to_connected()
@@ -302,18 +305,18 @@ if __name__ == '__main__':
 #    out_file = "../data/ff_100000_045_connected.metis"
     
     # TEST normalize_and_save_graph() + convert to METIS file
-    print "in_file =", in_file
-    print "out_file =", out_file
-    start = time.clock()
-    G = nx.read_edgelist("../data/com_youtube_ungraph_org.gr", '#', '\t', None, nodetype=int, data=False)
-#    G = nx.read_edgelist(in_file, '#', '\t', None, nodetype=int, data=False)        # undirected G even ?for directed graphs !
-    print "#edges =", G.number_of_edges()
-    print "#selfloops =", G.number_of_selfloops()
-    print "Read graph - elapsed ", time.clock() - start
-    
-    start = time.clock()
-    normalize_and_save_graph(G, "../data/com_youtube_ungraph-2.gr", "../data/com_youtube_ungraph.nodemap")   #zero-based node ids and remove selfloops
-    print "Normalize and save graph - elapsed ", time.clock() - start
+#    print "in_file =", in_file
+#    print "out_file =", out_file
+#    start = time.clock()
+#    G = nx.read_edgelist("../data/com_youtube_ungraph_org.gr", '#', '\t', None, nodetype=int, data=False)
+##    G = nx.read_edgelist(in_file, '#', '\t', None, nodetype=int, data=False)        # undirected G even ?for directed graphs !
+#    print "#edges =", G.number_of_edges()
+#    print "#selfloops =", G.number_of_selfloops()
+#    print "Read graph - elapsed ", time.clock() - start
+#    
+#    start = time.clock()
+#    normalize_and_save_graph(G, "../data/com_youtube_ungraph-2.gr", "../data/com_youtube_ungraph.nodemap")   #zero-based node ids and remove selfloops
+#    print "Normalize and save graph - elapsed ", time.clock() - start
     
 #    start = time.clock()
 #    convert_to_metis_file(G, out_file)
