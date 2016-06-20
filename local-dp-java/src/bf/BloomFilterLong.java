@@ -20,6 +20,8 @@
  * 	- add removeBits() to realize the case alpha < 1
  * Jun 8
  * 	- add compressBF(), decompressBF()
+ * Jun 16
+ * 	- update removeBits()
  */
 
 package bf;
@@ -541,14 +543,6 @@ public class BloomFilterLong implements Serializable {
     	
     	// pick d bits from ret and set them to false
     	// WAY - 1 (not random, first d bits)
-    	int count = 0;
-    	for (int i = ret.bitset.nextSetBit(0); i >= 0; i = ret.bitset.nextSetBit(i+1)) {
-    		ret.bitset.set(i, false);
-    		count ++;
-    		if (count == d)
-    			break;
-    	}
-    	// WAY - 2 ??
 //    	int count = 0;
 //    	for (int i = ret.bitset.nextSetBit(0); i >= 0; i = ret.bitset.nextSetBit(i+1)) {
 //    		ret.bitset.set(i, false);
@@ -556,6 +550,28 @@ public class BloomFilterLong implements Serializable {
 //    		if (count == d)
 //    			break;
 //    	}
+    	
+    	// WAY - 2 (random loc, right exploration then left)
+    	int count = 0;
+    	int first = ret.bitset.nextSetBit(0);
+    	int last = ret.bitset.length();
+    	int loc = first + random.nextInt(last-first);
+    	// right
+    	for (int i = ret.bitset.nextSetBit(loc); i >= 0; i = ret.bitset.nextSetBit(i+1)) {
+    		ret.bitset.set(i, false);
+    		count ++;
+    		if (count == d)
+    			break;
+    	}
+    	if (count == d)
+    		return ret;
+    	// left
+    	for (int i = ret.bitset.previousSetBit(loc-1); i >= 0; i = ret.bitset.previousSetBit(i-1)) {
+    		ret.bitset.set(i, false);
+    		count ++;
+    		if (count == d)
+    			break;
+    	}
     	
     	
     	//
