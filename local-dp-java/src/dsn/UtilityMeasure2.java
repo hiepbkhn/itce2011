@@ -1,6 +1,6 @@
 package dsn;
 
-public class UtilityMeasure {
+public class UtilityMeasure2 {
 
 
 	////////////////////////////////////////////////
@@ -8,7 +8,7 @@ public class UtilityMeasure {
 		
 		String prefix = "";
 		String sample_name = "";
-		int nRun = 2;	// 10
+		int nRun = 2; // 10
 		int round = 0;
 		int nSample = 100;
 		int n_nodes = 10000;
@@ -34,7 +34,7 @@ public class UtilityMeasure {
 			for (int i = 0; i < nRun; i++){
 				System.out.println("run i = " + i);
 				
-				String sample_file = prefix + "_sample/" + sample_name + "_" + nSample + "-" + t + ".out." + i;
+				String sample_file = prefix + "_sample/" + sample_name + "-" + t + ".out." + i;
 				String matlab_file = prefix + "_matlab/" + sample_name + "_" + nSample + "-" + t + "." + i + ".mat";
 				System.out.println("sample_file = " + sample_file);
 				System.out.println("matlab_file = " + matlab_file);

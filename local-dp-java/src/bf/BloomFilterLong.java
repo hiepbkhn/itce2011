@@ -22,6 +22,8 @@
  * 	- add compressBF(), decompressBF()
  * Jun 16
  * 	- update removeBits()
+ * Jun 24
+ * 	- add compressBFAdaptive(), decompressBFAdaptive()
  */
 
 package bf;
@@ -39,6 +41,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
+import nayuki.arithcode.AdaptiveArithmeticCompress;
+import nayuki.arithcode.AdaptiveArithmeticDecompress;
 import nayuki.arithcode.ArithmeticCompress;
 import nayuki.arithcode.ArithmeticDecompress;
 import nayuki.arithcode.BitInputStream;
@@ -609,6 +613,35 @@ public class BloomFilterLong implements Serializable {
 		
 		FrequencyTable freq = ArithmeticDecompress.readFrequencies(bitIn);
 		ArithmeticDecompress.decompress(freq, bitIn, out);
+		
+		bf.bitset = BitSet.valueOf(out.toByteArray());
+		
+		return bf;
+    }
+    
+    ////
+    public static byte[] compressBFAdaptive(BloomFilterLong bf) throws IOException{
+    	byte[] b = bf.bitset.toByteArray();
+    	
+    	InputStream in = new ByteArrayInputStream(b);
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		BitOutputStream bitOut = new BitOutputStream(out);
+		
+		AdaptiveArithmeticCompress.compress(in, bitOut);
+		bitOut.close();
+		return out.toByteArray();
+    }
+    
+    ////
+    public static BloomFilterLong decompressBFAdaptive(byte[] b, double falsePositive, int m, int numberOfAddedElements) throws IOException{
+    	BloomFilterLong bf = new BloomFilterLong(falsePositive, m);
+    	bf.numberOfAddedElements = numberOfAddedElements;
+    	//
+    	InputStream in = new ByteArrayInputStream(b);
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		BitInputStream bitIn = new BitInputStream(in);
+		
+		AdaptiveArithmeticDecompress.decompress(bitIn, out);
 		
 		bf.bitset = BitSet.valueOf(out.toByteArray());
 		

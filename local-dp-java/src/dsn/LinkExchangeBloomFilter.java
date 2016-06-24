@@ -13,6 +13,9 @@
  * 	- copy countTrueFalseDupLinks() from LinkExchange.java, use Int2
  * Jun 15
  * 	- update extractAllFiltersWithEdgeSet(), countTrueFalseDupLinks(), saveLocalGraph(), use Integer (eid)
+ * Jun 24
+ * 	- update testArithmeticCoding(): adaptive method runs slower but not better
+ * 	- linkExchangeCompression(): test compression ratio of Bloom filters
  */
 
 package dsn;
@@ -31,6 +34,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import com.jmatio.io.MatFileWriter;
+import com.jmatio.types.MLArray;
+import com.jmatio.types.MLDouble;
+import com.jmatio.types.MLInt32;
 
 import bf.BloomFilter;
 import bf.BloomFilterLong;
@@ -406,9 +414,124 @@ public class LinkExchangeBloomFilter {
 //		links = extractAllFiltersWithEdgeSet(filters, n, allEdges);
 //		System.out.println("extractAllFiltersWithEdgeSet - DONE, elapsed " + (System.currentTimeMillis() - start));
 		
+	}
+	
+	//// alpha <= 1.0
+	public static void linkExchangeCompression(EdgeIntGraph G, String dataname, String prefix, int round, double falsePositive, double alpha, double beta, int iRun) throws IOException{
+		int n = G.V();
+		// choice of m 
+		int m = G.E();
+//		int m = (int)((1+beta)*G.E());
+//		int m = G.E() / 2;
+		
+		System.out.println("round = " + round);
+		System.out.println("falsePositive = " + falsePositive);
+		System.out.println("alpha = " + alpha);
+		System.out.println("beta = " + beta);
+		
+		// for MATLAB
+		int[] fullArr = new int[n * round];			// full sizes of Bloom filters
+		int[] compressArr = new int[n * round];		// compressed sizes
+		
+		//
+		BloomFilterLong bf = new BloomFilterLong(falsePositive, m);
+		
+		System.out.println("k is " + bf.getK());
+		System.out.println("bitSetSize is " + bf.getBitSetSize());
+		int d = (int)( bf.getBitSet().cardinality() * (1 - Math.pow(alpha, 1.0/bf.getK())) );
+		System.out.println("d = " + d);
+
+		// Bloom filters at nodes
+		List<BloomFilterLong> filters = new ArrayList<BloomFilterLong>();
+		for (int u = 0; u < n; u++){
+			filters.add(new BloomFilterLong(falsePositive, m));
+		}
 		
 		
+		// 
+		long start = System.currentTimeMillis();
+		int n_edges = (int)Math.ceil((2+2*beta)*G.E());
+		Int2[] elist = new Int2[n_edges];
+		int i = 0;
+		for (Int2 e : G.allEdges())
+			elist[i++] = e;
 		
+		// 1 - initial stage
+		for (int u = 0; u < n; u++){
+			List<Int2> temp = new ArrayList<Int2>();
+			for (int v:G.adj(u).keySet())
+				temp.add(new Int2(u, v));
+			
+			List<Int2> newLinks = createFalseLink(G, u, beta);
+			temp.addAll(newLinks);
+			
+			for (Int2 e : newLinks)
+				elist[i++] = e;		
+			
+			// hash links[u] to filters[u]
+			for (Int2 e : temp){
+				normalizeEdge(e);
+				long eid = e.val0 * n + e.val1;
+				filters.get(u).add(eid);
+			}
+			
+			// MATLAB
+			fullArr[u] = filters.get(u).getBitSet().toByteArray().length;
+			byte[] data = BloomFilterLong.compressBF(filters.get(u));
+			compressArr[u] = data.length;
+		}
+		n_edges = i;
+		System.out.println("elist.length = " + elist.length);
+		System.out.println("Initialization - DONE, elapsed " + (System.currentTimeMillis() - start));
+		
+		// 2 - loop
+		Random random = new Random();
+		for(int t = 1; t < round+1; t++){
+			start = System.currentTimeMillis();
+			System.out.println("round = " + t);
+			
+			List<BloomFilterLong> newFilters = new ArrayList<BloomFilterLong>();		// new links received at each node
+			
+			// for each node u
+			for (int u = 0; u < n; u++){
+				bf = new BloomFilterLong(falsePositive, m);
+				bf.union(filters.get(u));			// set to u
+				
+				for (int v : G.adj(u).keySet())
+//					bf.union(filters.get(v);
+					bf.union(filters.get(v).removeBits(alpha, random));		// take union with v in N(u)
+				
+				//
+				newFilters.add(bf);
+			}
+			
+			for (int u = 0; u < n; u++){
+				filters.set(u, newFilters.get(u));
+				
+				if (t < round){
+					fullArr[u + t*n] = filters.get(u).getBitSet().toByteArray().length;
+					byte[] data = BloomFilterLong.compressBF(filters.get(u));
+					compressArr[u + t*n] = data.length;
+				}
+			}
+			
+			System.out.println("exchangeNoDup - DONE, elapsed " + (System.currentTimeMillis() - start));
+			
+		}
+		System.out.println("linkExchangeFalsePos - DONE, elapsed " + (System.currentTimeMillis() - start));
+		
+		// 3 - write to MATLAB
+    	String matlab_file = prefix + "_compress/" + dataname + "-bf-" + round + "_" + String.format("%.2f",alpha) + "_" + 
+				String.format("%.2f",beta) + "_" + falsePositive + "_compress." + iRun + ".mat";
+		
+    	MLInt32 fullA = new MLInt32("fullArr", fullArr, n);				// round columns
+    	MLInt32 compressA = new MLInt32("compressArr", compressArr, n);
+        ArrayList<MLArray> towrite = new ArrayList<MLArray>();
+        towrite.add(fullA);
+        towrite.add(compressA);
+        
+        new MatFileWriter(matlab_file, towrite );
+        System.out.println("Written to MATLAB file.");
 	}
 	
 	
@@ -503,7 +626,7 @@ public class LinkExchangeBloomFilter {
         
 		// insert some edge ids
 		Random random = new Random();
-		int numE = m/1000;
+		int numE = m/10;
 		System.out.println("numE = " + numE);
 		long[] edges = new long[numE];
 		for (int i = 0; i < numE; i++){
@@ -514,10 +637,11 @@ public class LinkExchangeBloomFilter {
 		
 		System.out.println("bf.bitSet: #bytes = " + bf.getBitSet().toByteArray().length);
 		
+		//// Fixed Frequency
 		// compress
 		byte[] data = BloomFilterLong.compressBF(bf);
 		
-		System.out.println("compressed data: #bytes = " + data.length);
+		System.out.println("Fixed - compressed data: #bytes = " + data.length);
 		
 		// decompress
 		bf = BloomFilterLong.decompressBF(data, falsePositive, m, numE);
@@ -529,7 +653,27 @@ public class LinkExchangeBloomFilter {
 		}
 		System.out.println("decompress - DONE.");
 		System.out.println("bf.bitSet: #bytes = " + bf.getBitSet().toByteArray().length);
+		
+		//// Adaptive
+		// compress
+		data = BloomFilterLong.compressBFAdaptive(bf);
+		
+		System.out.println("Adaptive - compressed data: #bytes = " + data.length);
+		
+		// decompress
+		bf = BloomFilterLong.decompressBFAdaptive(data, falsePositive, m, numE);
+		
+		// test membership of edges
+		for (long eid : edges){
+			if (! bf.contains(eid))
+				System.err.println("error ! " + eid);
+		}
+		System.out.println("decompress - DONE.");
+		System.out.println("bf.bitSet: #bytes = " + bf.getBitSet().toByteArray().length);
 	}
+	
+	////
+	
 	
 	////////////////////////////////////////////////
 	public static void main(String[] args) throws Exception{
@@ -579,8 +723,6 @@ public class LinkExchangeBloomFilter {
 //		String dataname = "com_dblp_ungraph";		// (317080,1049866)	
 //		String dataname = "com_youtube_ungraph";	// (1134890,2987624) 
 		
-		
-		
 
 		//
 		int round = 4; 		// flood
@@ -597,19 +739,93 @@ public class LinkExchangeBloomFilter {
 //		String deg_file = prefix + "_out/" + dataname + ".deg";
 //		writeDegreeSeq(G, deg_file);
 		
-		// TEST BitSet
-//		BitSet a = new BitSet(10);
-//		System.out.println("a.length = " + a.length());
-//		System.out.println("a.size = " + a.size());
-//		System.out.println("a.cardinality = " + a.cardinality());
-//		a.set(1);	
-//		a.set(5);
-//		System.out.println("a.length = " + a.length());
-//		System.out.println("a.size = " + a.size());
-//		System.out.println("a.cardinality = " + a.cardinality());
 
 		// COMMAND-LINE <prefix> <dataname> <round> <alpha> <beta> <falsePositive> <nRun> <nSample>
-		if(args.length >= 8){
+//		if(args.length >= 8){
+//			prefix = args[0];
+//			dataname = args[1];
+//			round = Integer.parseInt(args[2]);
+//			alpha = Double.parseDouble(args[3]);
+//			beta = Double.parseDouble(args[4]);
+//			falsePositive = Double.parseDouble(args[5]);
+//			nRun = Integer.parseInt(args[6]);
+//			nSample = Integer.parseInt(args[7]);
+//		}
+//		
+//		
+////		String count_file = prefix + "_out/" + dataname + "-bf-" + round + "_" + String.format("%.1f",beta) + ".cnt"; // no alpha
+//		String name = dataname + "-bf-" + round + "_" + String.format("%.2f",alpha) + "_" + String.format("%.2f",beta) + "_" + String.format("%.2f",falsePositive);
+//		String count_file = prefix + "_out/" + name; // + ".cnt";
+//		String sample_file = prefix + "_sample/" + name; // + ".out";
+//		System.out.println("count_file = " + count_file);
+//		
+//		System.out.println("dataname = " + dataname);
+//		System.out.println("round = " + round);
+//		System.out.println("alpha = " + alpha);
+//		System.out.println("beta = " + beta);
+//		System.out.println("falsePositive = " + falsePositive);
+//		System.out.println("nRun = " + nRun);
+//		System.out.println("nSample = " + nSample);
+//		
+//		//
+//		String filename = prefix + "_data/" + dataname + ".gr";
+//		
+//		//
+//		System.out.println("filename = " + filename);
+//		long start = System.currentTimeMillis();
+//		EdgeIntGraph G = EdgeIntGraph.readEdgeList(filename, "\t");	// "\t" or " "
+//		System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
+//		
+//		System.out.println("#nodes = " + G.V());
+//		System.out.println("#edges = " + G.E());
+//		
+//		// TEST linkExchangeFalsePos()
+//		for (int i = 0; i < nRun; i++){
+//			System.out.println("run i = " + i);
+//		
+//			linkExchangeFalsePos(G, round, falsePositive, alpha, beta, nSample, count_file, sample_file, i);
+//		}
+		
+		
+		////////// BLOOM FILTER COMPRESSION
+		// testArithmeticCoding()
+////	testArithmeticCoding(falsePositive, G.V(), G.E());
+//	testArithmeticCoding(falsePositive, 1000000, 10000000);
+		
+		// 
+//		String[] dataname_list = new String[]{"pl_10000_5_01", "er_10000_0001"};
+//		int[] diam_list = new int[]{6,7};
+//		double[] alphaArr = new double[]{0.25, 0.5, 0.75, 1};
+//		double[] betaArr = new double[]{0.5, 1};
+//		double[] falsePositiveArr = new double[]{0.1};		// 0.25, 0.1, 0.01
+//		
+//		for (int k = 0; k < dataname_list.length; k++){
+//			dataname = dataname_list[k];
+//			round = diam_list[k];
+//		
+//			String filename = prefix + "_data/" + dataname + ".gr";
+//		
+//			//
+//			System.out.println("filename = " + filename);
+//			long start = System.currentTimeMillis();
+//			EdgeIntGraph G = EdgeIntGraph.readEdgeList(filename, "\t");	// "\t" or " "
+//			System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
+//			
+//			System.out.println("#nodes = " + G.V());
+//			System.out.println("#edges = " + G.E());
+//			
+//			// TEST linkExchangeFalsePos()
+//			for (double alphaC : alphaArr)
+//				for (double betaC : alphaArr)
+//					for (int i = 0; i < nRun; i++){
+//						System.out.println("run i = " + i);
+//					
+//						linkExchangeCompression(G, dataname, round, falsePositive, alphaC, betaC, i);
+//					}
+//		}
+		
+		// COMMAND-LINE <prefix> <dataname> <round> <alpha> <beta> <falsePositive> <nRun> 
+		if(args.length >= 7){
 			prefix = args[0];
 			dataname = args[1];
 			round = Integer.parseInt(args[2]);
@@ -617,28 +833,11 @@ public class LinkExchangeBloomFilter {
 			beta = Double.parseDouble(args[4]);
 			falsePositive = Double.parseDouble(args[5]);
 			nRun = Integer.parseInt(args[6]);
-			nSample = Integer.parseInt(args[7]);
 		}
-		
-		
-//		String count_file = prefix + "_out/" + dataname + "-bf-" + round + "_" + String.format("%.1f",beta) + ".cnt"; // no alpha
-		String name = dataname + "-bf-" + round + "_" + String.format("%.2f",alpha) + "_" + String.format("%.2f",beta) + "_" + String.format("%.2f",falsePositive);
-		String count_file = prefix + "_out/" + name; // + ".cnt";
-		String sample_file = prefix + "_sample/" + name; // + ".out";
-		System.out.println("count_file = " + count_file);
-		
-		System.out.println("dataname = " + dataname);
-		System.out.println("round = " + round);
-		System.out.println("alpha = " + alpha);
-		System.out.println("beta = " + beta);
-		System.out.println("falsePositive = " + falsePositive);
-		System.out.println("nRun = " + nRun);
-		System.out.println("nSample = " + nSample);
 		
 		//
 		String filename = prefix + "_data/" + dataname + ".gr";
-		
-		//
+
 		System.out.println("filename = " + filename);
 		long start = System.currentTimeMillis();
 		EdgeIntGraph G = EdgeIntGraph.readEdgeList(filename, "\t");	// "\t" or " "
@@ -647,18 +846,11 @@ public class LinkExchangeBloomFilter {
 		System.out.println("#nodes = " + G.V());
 		System.out.println("#edges = " + G.E());
 		
-		// TEST linkExchangeFalsePos()
 		for (int i = 0; i < nRun; i++){
 			System.out.println("run i = " + i);
 		
-			linkExchangeFalsePos(G, round, falsePositive, alpha, beta, nSample, count_file, sample_file, i);
+			linkExchangeCompression(G, dataname, prefix, round, falsePositive, alpha, beta, i);
 		}
-		
-		
-		// testArithmeticCoding()
-////		testArithmeticCoding(falsePositive, G.V(), G.E());
-//		testArithmeticCoding(falsePositive, 1000000, 10000000);
-		
 		
 	}
 

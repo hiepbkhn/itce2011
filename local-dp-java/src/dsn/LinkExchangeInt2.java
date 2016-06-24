@@ -108,13 +108,34 @@ public class LinkExchangeInt2 {
 	
 	////
 	public static void computeUtility(EdgeIntGraph aG, DegreeMetric deg, double[] deg_dist, PathMetric path, double[] distance_dist) throws IOException{
+		if (aG.E() == 0)
+			return;
+		
 		// 1. degree distribution
 		System.arraycopy(UtilityMeasure.getDegreeDistr(aG, deg), 0, deg_dist, 0, aG.V());
 		
 		// 2. distance distribution
-//		distance_dist = UtilityMeasure.getDistanceDistr(G, path);	// hyperANF
 		UnweightedGraph bG = new UnweightedGraph(aG);
 		System.arraycopy(UtilityMeasure.getDistanceDistr(bG, path), 0, distance_dist, 0, 50);	// BFS
+		
+		
+	}
+	
+	//// call hyperANF
+	public static void computeUtilityHyperANF(EdgeIntGraph aG, DegreeMetric deg, double[] deg_dist, PathMetric path, double[] distance_dist) throws IOException{
+		if (aG.E() == 0)
+			return;
+		
+		// 1. degree distribution
+		System.arraycopy(UtilityMeasure.getDegreeDistr(aG, deg), 0, deg_dist, 0, aG.V());
+		
+		// 2. distance distribution
+		double[] ret = UtilityMeasure.getDistanceDistr(aG, path);		// hyperANF
+		if (ret.length <= 50)
+			System.arraycopy(ret, 0, distance_dist, 0, ret.length);
+		else
+			System.arraycopy(ret, 0, distance_dist, 0, 50);
+		System.out.println("max_dist = " + ret.length);	
 		
 		
 	}
@@ -215,7 +236,8 @@ public class LinkExchangeInt2 {
 			PathMetric path = new PathMetric();
 			double[] distance_dist = new double[50];
 			
-			computeUtility(aG, deg, deg_dist, path, distance_dist);
+//			computeUtility(aG, deg, deg_dist, path, distance_dist);				// BFS
+			computeUtilityHyperANF(aG, deg, deg_dist, path, distance_dist);		// hyperANF
 			
 			a_AD[i] = deg.s_AD;
 			a_DV[i] = deg.s_DV;

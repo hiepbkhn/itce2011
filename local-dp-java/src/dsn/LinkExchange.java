@@ -302,10 +302,6 @@ public class LinkExchange{
 			System.out.println("round must be at least 1");
 			return;
 		}
-		System.out.println("alpha = " + alpha);
-		System.out.println("beta = " + beta);
-		System.out.println("gamma = " + gamma);
-		System.out.println("count_file = " + count_file);
 		
 		//
 		List<List<Int2>> links = new ArrayList<List<Int2>>();
@@ -343,8 +339,11 @@ public class LinkExchange{
 				}
 			}
 		}
+		System.out.println("Initialization - DONE, elapsed " + (System.currentTimeMillis() - start));
 		
 		// 
+		start = System.currentTimeMillis();
+		
 		List<List<Int2>> exLinks = new ArrayList<List<Int2>>();		// new links received at each node
 		for (int u = 0; u < n; u++)
 			exLinks.add(new ArrayList<Int2>());
@@ -396,7 +395,7 @@ public class LinkExchange{
 				}
 			}
 		}
-		
+		System.out.println("Pre-round - DONE, elapsed " + (System.currentTimeMillis() - start));
 		
 		// 2 - exchange loop
 		System.out.println("linkExchangeNoDupD2");
@@ -509,7 +508,7 @@ public class LinkExchange{
 //		printEdges(list);
 		
 		
-		// COMMAND-LINE <prefix> <dataname> <round> <alpha> <beta> <nSample>
+		// COMMAND-LINE <prefix> <dataname> <round> <alpha> <beta> <nRun> <nSample>
 		if(args.length >= 7){
 			prefix = args[0];
 			dataname = args[1];
@@ -525,7 +524,7 @@ public class LinkExchange{
 		String sample_file = prefix + "_sample/" + name; // + ".out";
 		String matlab_file = prefix + "_matlab/" + name + ".mat";
 		String attack_file = prefix + "_matlab/" + name + "_attack.mat";
-		System.out.println("count_file = " + count_file);
+		
 		
 		System.out.println("dataname = " + dataname);
 		System.out.println("round = " + round);
@@ -533,6 +532,17 @@ public class LinkExchange{
 		System.out.println("beta = " + beta);
 		System.out.println("nRun = " + nRun);
 		System.out.println("nSample = " + nSample);
+		
+		if(args.length >= 8){
+			gamma = Double.parseDouble(args[7]);
+			
+			System.out.println("gamma = " + gamma);
+			name = dataname + "-nodup-d2-" + round + "_" + String.format("%.2f",alpha) + "_" + String.format("%.2f",beta) + "_" + String.format("%.2f",gamma) + "_" + nSample;
+			count_file = prefix + "_out/" + name; // + ".cnt";
+			sample_file = prefix + "_sample/" + name; // + ".out";
+			matlab_file = prefix + "_matlab/" + name + ".mat";
+		}
+		System.out.println("count_file = " + count_file);
 		
 		//
 		String filename = prefix + "_data/" + dataname + ".gr";
@@ -551,11 +561,11 @@ public class LinkExchange{
 //		LinkExchangeInt2.computeTrueGraph(G, "_matlab/" + dataname + ".mat");
 		
 		// TEST linkExchangeNoDup()
-		for (int i = 0; i < nRun; i++){
-			System.out.println("run i = " + i);
-			
-			linkExchangeNoDup(G, round, alpha, beta, nSample, count_file, sample_file, i);
-		}
+//		for (int i = 0; i < nRun; i++){
+//			System.out.println("run i = " + i);
+//			
+//			linkExchangeNoDup(G, round, alpha, beta, nSample, count_file, sample_file, i);
+//		}
 		
 //		computeLocalGraph(sample_file, matlab_file, 10000);
 		
@@ -573,7 +583,11 @@ public class LinkExchange{
 //		System.out.println("count_file = " + count_file);
 //		
 //		//
-//		linkExchangeNoDupD2(G, round, alpha, beta, gamma, nSample, count_file, sample_file);
+		for (int i = 0; i < nRun; i++){
+			System.out.println("run i = " + i);
+			
+			linkExchangeNoDupD2(G, round+1, alpha, beta, gamma, nSample, count_file, sample_file, i);		// round+1
+		}
 		
 		
 		//////////
