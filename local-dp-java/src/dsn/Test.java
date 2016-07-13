@@ -194,19 +194,37 @@ public class Test {
 		
 	}
 	
+	////
+	public static void exportDegSeq(EdgeIntGraph G, String matlab_file) throws IOException{
+		int n = G.V();
+		double[] degSeq = new double[n];
+		
+		for (int u = 0; u < n; u++)
+			degSeq[u] = G.degree(u);
+		
+		// save to MATLAB
+		MLDouble degArr = new MLDouble("degSeq", degSeq, 1);
+		
+        ArrayList<MLArray> towrite = new ArrayList<MLArray>();
+        towrite.add(degArr); 
+        
+        new MatFileWriter(matlab_file, towrite );
+        System.out.println("Written to MATLAB file.");
+	}
+	
 	////////////////////////////////////////////////
 	public static void main(String[] args) throws Exception {
 		String prefix = "";
 		
 //		String dataname = "pl_1000_5_01";		// diameter = 5
-		String dataname = "pl_10000_5_01";		// diameter = 6,  Dup: round=3 (OutOfMem, 7GB ok), 98s (Acer)
+//		String dataname = "pl_10000_5_01";		// diameter = 6,  Dup: round=3 (OutOfMem, 7GB ok), 98s (Acer)
 												//				NoDup: round=3 (a=0.5, b=1.0, 4.5GB), 376s (Acer)
 												//				NoDup: roudn=3 (a=1.0, b=1.0, 13GB), not run
 //		String dataname = "ba_1000_5";			// diameter = 5
 //		String dataname = "ba_10000_5";			// diameter = 6, NoDup: round=3 (5.1GB), 430s (Acer), 350s (PC), totalLink = 255633393
 		
 //		String dataname = "er_1000_001";		// diameter = 5
-//		String dataname = "er_10000_0001";		// diameter = 7, NoDup: round=3 (2.5GB), 23s (PC)
+		String dataname = "er_10000_0001";		// diameter = 7, NoDup: round=3 (2.5GB), 23s (PC)
 		
 //		String dataname = "sm_1000_005_11";		// diameter = 9
 //		String dataname = "sm_10000_005_11";	// diameter = 12, NoDup: round=3 (1.2GB), 5s (PC), round=4 (1.7GB), 12s (PC)
@@ -239,9 +257,9 @@ public class Test {
 
 //		computeTrueGraph(G, "_matlab/" + dataname + ".mat");
 		
-//		String sample_file = "_sample/er_10000_00006-nodup-10_0.50_1.00_100-7.out.0";
-		String sample_file = "_sample/er_10000_00006-nodup-10_0.25_0.50_100-9.out.0";
-		computeLocalGraph(sample_file, "", 10000);
+////		String sample_file = "_sample/er_10000_00006-nodup-10_0.50_1.00_100-7.out.0";
+//		String sample_file = "_sample/er_10000_00006-nodup-10_0.25_0.50_100-9.out.0";
+//		computeLocalGraph(sample_file, "", 10000);
 		
 		
 		// TEST BitSet
@@ -255,6 +273,8 @@ public class Test {
 //		System.out.println("a.size = " + a.size());
 //		System.out.println("a.cardinality = " + a.cardinality());
 		
+		// TEST exportDegSeq()
+		exportDegSeq(G, "_data/" + dataname + "_deg.mat");
 	}
 
 }

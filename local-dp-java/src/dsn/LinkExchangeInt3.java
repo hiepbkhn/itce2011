@@ -546,7 +546,7 @@ public class LinkExchangeInt3 {
 	}
 	
 	////
-	public static void linkExchangeNoDup(EdgeIntGraph G, int round, double alpha, double beta, double discount, int nSample, String count_file, String sample_file) throws IOException{
+	public static void linkExchangeNoDup(EdgeIntGraph G, int round, double alpha, double beta, int nSample, String count_file, String sample_file, int iRun) throws IOException{
 		int n = G.V();
 		System.out.println("round = " + round);
 		System.out.println("alpha = " + alpha);
@@ -595,6 +595,8 @@ public class LinkExchangeInt3 {
 		
 		// loop
 		for(int t = 1; t < round+1; t++){
+			System.out.println("round = " + t);
+			
 			List<List<Int3>> exLinks = new ArrayList<List<Int3>>();		// new links received at each node
 			for (int u = 0; u < n; u++)
 				exLinks.add(new ArrayList<Int3>());
@@ -619,7 +621,7 @@ public class LinkExchangeInt3 {
 			}
 			
 			//
-			alpha = alpha * discount;
+//			alpha = alpha * discount;
 		}
 		
 		// count true/false/duplicate links
@@ -631,7 +633,7 @@ public class LinkExchangeInt3 {
 		System.out.println("totalLink = " + totalLink);
 		
 		// write to count_file
-		BufferedWriter bw = new BufferedWriter(new FileWriter(count_file));
+		BufferedWriter bw = new BufferedWriter(new FileWriter(count_file + "." + iRun + ".cnt"));
 		for (int u = 0; u < n; u++){
 			bw.write(trueLinks[u] + "\t" + falseLinks[u] + "\t" + dupLinks[u] + "\n");
 		}
@@ -645,7 +647,7 @@ public class LinkExchangeInt3 {
 			deg[u] = G.degree(u);
 		int[] selectedNodes = sampleNodeByDegree(deg, nSample);
 		
-		saveLocalGraph(links, selectedNodes, sample_file);
+		saveLocalGraph(links, selectedNodes, sample_file + "." + iRun + ".out");
 		
 	}
 	
@@ -873,10 +875,10 @@ public class LinkExchangeInt3 {
 	}
 	
 	//// read sample file, compute edge inference probabilities, export to attack_file (MATLAB)
-	public static void attackLocalGraph(EdgeIntGraph G, double beta, String sample_file, String attack_file) throws IOException{
+	public static void attackLocalGraph(EdgeIntGraph G, double beta, String sample_file, String attack_file, int iRun) throws IOException{
 		int n_nodes = G.V();
 		
-		BufferedReader br = new BufferedReader(new FileReader(sample_file));
+		BufferedReader br = new BufferedReader(new FileReader(sample_file + "." + iRun + ".out"));
 		
 		String str = br.readLine();
 		int k = Integer.parseInt(str);		// number of sample graphs
@@ -923,7 +925,7 @@ public class LinkExchangeInt3 {
 		ArrayList<MLArray> towrite = new ArrayList<MLArray>();
         towrite.add(atArr); 
         
-        new MatFileWriter(attack_file, towrite );
+        new MatFileWriter(attack_file+ "_attack." + iRun + ".mat", towrite );
         System.out.println("Written to MATLAB file.");
 	}
 
@@ -933,13 +935,13 @@ public class LinkExchangeInt3 {
 
 		
 //		String dataname = "pl_1000_5_01";		// diameter = 5
-		String dataname = "pl_10000_5_01";		// diameter = 6,  Dup: round=3 (OutOfMem, 7GB ok), 98s (Acer)
+//		String dataname = "pl_10000_5_01";		// diameter = 6,  Dup: round=3 (OutOfMem, 7GB ok), 98s (Acer)
 												//				NoDup: round=3 (a=0.5, b=1.0, 4.5GB), 376s (Acer)
 //		String dataname = "ba_1000_5";			// diameter = 5
 //		String dataname = "ba_10000_5";			// diameter = 6, NoDup: round=3 (5.1GB), 430s (Acer), 350s (PC), totalLink = 255633393
 		
 //		String dataname = "er_1000_001";		// diameter = 5
-//		String dataname = "er_10000_0001";		// diameter = 7, NoDup: round=3 (2.5GB), 23s (PC)
+		String dataname = "er_10000_0001";		// diameter = 7, NoDup: round=3 (2.5GB), 23s (PC)
 		
 //		String dataname = "sm_1000_005_11";		// diameter = 9
 //		String dataname = "sm_10000_005_11";	// diameter = 12, NoDup: round=3 (1.2GB), 5s (PC), round=4 (1.7GB), 12s (PC)
@@ -982,7 +984,8 @@ public class LinkExchangeInt3 {
 		double alpha = 0.5;
 		double beta = 1.0;
 		double discount = 1.0;
-		int nSample = 20;	// 20, 50, 100  number of local graphs written to file
+		int nSample = 100;	// 20, 50, 100  number of local graphs written to file
+		int nRun = 10;
 		
 		// TEST linkExchange()
 //		String count_file = prefix + "_out/" + dataname + "-" + round + "_" + String.format("%.1f",alpha) + "_" + String.format("%.1f",beta) + ".cnt";
@@ -1008,19 +1011,23 @@ public class LinkExchangeInt3 {
 		
 		
 		// TEST linkExchangeNoDup()
-		String name = dataname + "-nodup-" + round + "_" + String.format("%.1f",alpha) + "_" + String.format("%.1f",beta) + "_" + String.format("%.1f",discount) + "_" + nSample;
-		String count_file = prefix + "_out/" + name + ".cnt";
-		String sample_file = prefix + "_sample/" + name + ".out";
+		String name = dataname + "-nodup-" + round + "_" + String.format("%.1f",alpha) + "_" + String.format("%.1f",beta) + "_" + nSample;
+		String count_file = prefix + "_attack/" + name;				// _out -> _attack
+		String sample_file = prefix + "_attack/" + name;			// _sample -> _attack
 		String matlab_file = prefix + "_matlab/" + name + ".mat";
-		String attack_file = prefix + "_matlab/" + name + "_attack.mat";
+		String attack_file = prefix + "_attack/" + name;	// _matlab -> _attack
 		System.out.println("count_file = " + count_file);
 		
 		//
-//		linkExchangeNoDup(G, round, alpha, beta, discount, nSample, count_file, sample_file);
+		for (int i = 0; i < nRun; i++){
+			System.out.println("run i = " + i);
+			linkExchangeNoDup(G, round, alpha, beta, nSample, count_file, sample_file, i);	
+			
+	//		computeLocalGraph(sample_file, matlab_file, 10000);
+			
+			attackLocalGraph(G, beta, sample_file, attack_file, i);
+		}
 		
-//		computeLocalGraph(sample_file, matlab_file, 10000);
-		
-		attackLocalGraph(G, beta, sample_file, attack_file);
 		
 		//////////
 		// TEST linkGossip()

@@ -65,11 +65,11 @@ public class RuntimeParser {
 	////
 	public static void exportCountFileMATLAB() throws IOException{
 		
-		String[] dataname_list = new String[]{"pl_10000_3_01", "pl_10000_5_01", "pl_10000_10_01", "er_10000_00006", "er_10000_0001", "er_10000_0002"};
-		int[] diam_list = new int[]{7,6,5,10,7,5};	//diameter
-		double[] alphaArr = new double[]{0.25, 0.5, 0.75, 1};
+		String[] dataname_list = new String[]{"pl_10000_5_01", "er_10000_0001"}; //{"pl_10000_3_01", "pl_10000_5_01", "pl_10000_10_01", "er_10000_00006", "er_10000_0001", "er_10000_0002"};
+		int[] diam_list = new int[]{6,7};	//diameter 7,6,5,10,7,5
+		double[] alphaArr = new double[]{0.5, 1.0}; // 0.25, 0.5, 0.75, 1
 		double[] betaArr = new double[]{0.5, 1};
-		double[] falsePositiveArr = new double[]{0.1};		// 0.25, 0.1, 0.01
+		double[] falsePositiveArr = new double[]{0.01, 0.001};		// 0.25, 0.1, 0.01
 		
 		int nRun = 10;
 		int nSample = 100;
@@ -204,31 +204,31 @@ public class RuntimeParser {
 	public static void main(String[] args) throws Exception{
 
 		//
-//		exportCountFileMATLAB();
+		exportCountFileMATLAB();
 		
 		//
-		String[] dataname_list = new String[]{"pl_10000_3_01", "pl_10000_5_01", "pl_10000_10_01", "er_10000_00006", "er_10000_0001", "er_10000_0002"};
-		int[] diam_list = new int[]{7,6,5,10,7,5};	//diameter
-		double[] alphaArr = new double[]{0.25, 0.5, 0.75, 1};
-		double[] betaArr = new double[]{0.5, 1};
-		double[] falsePositiveArr = new double[]{0.1};		// 0.25, 0.1, 0.01
-		
-		int nRun = 10;
-		int nSample = 100;
-		
-		// readBaseline()
-		for (int i = 0; i < 6; i++){
-			String dataname = dataname_list[i];
-			int round = diam_list[i];
-			
-			for (double alpha : alphaArr)
-				for (double beta : betaArr){
-					readBaseline(dataname, round, nRun, nSample, alpha, beta);
-					readBloomFilter(dataname, round, nRun, nSample, alpha, beta, 0.1);
-				}
-					
-		}
-		System.out.println("DONE.");
+//		String[] dataname_list = new String[]{"pl_10000_3_01", "pl_10000_5_01", "pl_10000_10_01", "er_10000_00006", "er_10000_0001", "er_10000_0002"};
+//		int[] diam_list = new int[]{7,6,5,10,7,5};	//diameter
+//		double[] alphaArr = new double[]{0.25, 0.5, 0.75, 1};
+//		double[] betaArr = new double[]{0.5, 1};
+//		double[] falsePositiveArr = new double[]{0.1};		// 0.25, 0.1, 0.01
+//		
+//		int nRun = 10;
+//		int nSample = 100;
+//		
+//		// readBaseline()
+//		for (int i = 0; i < 6; i++){
+//			String dataname = dataname_list[i];
+//			int round = diam_list[i];
+//			
+//			for (double alpha : alphaArr)
+//				for (double beta : betaArr){
+//					readBaseline(dataname, round, nRun, nSample, alpha, beta);
+//					readBloomFilter(dataname, round, nRun, nSample, alpha, beta, 0.1);
+//				}
+//					
+//		}
+//		System.out.println("DONE.");
 		
 		
 		

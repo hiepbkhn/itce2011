@@ -164,3 +164,40 @@ decompress - DONE.
 bf.bitSet: #bytes = 7213475
 
 
+----------- Jun 24, 2016
+k is 4
+bitSetSize is 57707802
+numE = 10000
+bf.bitSet: #bytes = 7213446
+Fixed - compressed data: #bytes = 60684
+decompress - DONE.
+bf.bitSet: #bytes = 7213446
+Adaptive - compressed data: #bytes = 60164
+decompress - DONE.
+bf.bitSet: #bytes = 7213446
+
+
+k is 4
+bitSetSize is 57707802
+numE = 100000
+bf.bitSet: #bytes = 7213426
+Fixed - compressed data: #bytes = 430244
+decompress - DONE.
+bf.bitSet: #bytes = 7213426
+Adaptive - compressed data: #bytes = 429696
+decompress - DONE.
+bf.bitSet: #bytes = 7213426
+
+
+k is 4
+bitSetSize is 57707802
+numE = 1000000
+bf.bitSet: #bytes = 7213473
+Fixed - compressed data: #bytes = 2557585
+decompress - DONE.
+bf.bitSet: #bytes = 7213473
+Adaptive - compressed data: #bytes = 2556929
+decompress - DONE.
+bf.bitSet: #bytes = 7213473
+
+

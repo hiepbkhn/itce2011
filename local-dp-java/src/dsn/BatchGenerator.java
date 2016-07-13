@@ -357,7 +357,7 @@ public class BatchGenerator {
 		diam_list = new int[]{6,7};	//diameter
 		alphaArr = new double[]{0.25, 0.5, 0.75, 1};
 		betaArr = new double[]{0.5, 1};
-		falsePositiveArr = new double[]{0.1}; //, 0.01, 0.001};		// 0.25, 0.1, 0.01
+		falsePositiveArr = new double[]{0.01, 0.001}; //, 0.01, 0.001};		// 0.25, 0.1, 0.01
 
 		for (int i = 0; i < dataname_list.length; i++){
 			String dataname = dataname_list[i];
