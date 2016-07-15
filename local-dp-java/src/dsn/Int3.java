@@ -6,6 +6,8 @@
 
 package dsn;
 
+import java.util.Comparator;
+
 public class Int3 implements Comparable<Int3> {
 	public int val0;
 	public int val1;
@@ -24,19 +26,20 @@ public class Int3 implements Comparable<Int3> {
 	
 	////
 	public int compareTo(Int3 other) {
-//		if (this.val0 < other.val0)
+		if (this.val0 < other.val0)
+			return -1;
+		if (this.val0 == other.val0 && this.val1 < other.val1)
+			return -1;
+		if (this.val0 > other.val0)
+			return 1;
+		if (this.val0 == other.val0 && this.val1 > other.val1)
+			return 1;
+		
+//		if (this.c < other.c)
 //			return -1;
-//		if (this.val0 == other.val0 && this.val1 < other.val1)
-//			return -1;
-//		if (this.val0 > other.val0)
-//			return 1;
-//		if (this.val0 == other.val0 && this.val1 > other.val1)
+//		if (this.c > other.c)
 //			return 1;
 		
-		if (this.c < other.c)
-			return -1;
-		if (this.c > other.c)
-			return 1;
 		return 0;
 	}
 
@@ -62,5 +65,16 @@ public class Int3 implements Comparable<Int3> {
 	}
 	
 	////
-	
+	public static class Comparators {
+
+		public static Comparator<Int3> COUNT = new Comparator<Int3>() {
+			public int compare(Int3 o1, Int3 o2) {
+				if (o1.c < o2.c)
+					return -1;
+				if (o1.c > o2.c)
+					return 1;
+				return 0;
+			}
+		};
+	}
 }

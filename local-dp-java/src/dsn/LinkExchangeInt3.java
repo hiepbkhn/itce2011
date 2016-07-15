@@ -841,7 +841,7 @@ public class LinkExchangeInt3 {
 			edges.add(new Int3(v,w,e.weight()));
 		}
 		// sort by weight (ascending)
-		Collections.sort(edges);
+		Collections.sort(edges, Int3.Comparators.COUNT);
 		
 //		System.out.println(edges.get(0).c + " " + edges.get(1).c + " " + edges.get(edges.size()-1).c);
 		
@@ -935,13 +935,13 @@ public class LinkExchangeInt3 {
 
 		
 //		String dataname = "pl_1000_5_01";		// diameter = 5
-//		String dataname = "pl_10000_5_01";		// diameter = 6,  Dup: round=3 (OutOfMem, 7GB ok), 98s (Acer)
+		String dataname = "pl_10000_5_01";		// diameter = 6,  Dup: round=3 (OutOfMem, 7GB ok), 98s (Acer)
 												//				NoDup: round=3 (a=0.5, b=1.0, 4.5GB), 376s (Acer)
 //		String dataname = "ba_1000_5";			// diameter = 5
 //		String dataname = "ba_10000_5";			// diameter = 6, NoDup: round=3 (5.1GB), 430s (Acer), 350s (PC), totalLink = 255633393
 		
 //		String dataname = "er_1000_001";		// diameter = 5
-		String dataname = "er_10000_0001";		// diameter = 7, NoDup: round=3 (2.5GB), 23s (PC)
+//		String dataname = "er_10000_0001";		// diameter = 7, NoDup: round=3 (2.5GB), 23s (PC)
 		
 //		String dataname = "sm_1000_005_11";		// diameter = 9
 //		String dataname = "sm_10000_005_11";	// diameter = 12, NoDup: round=3 (1.2GB), 5s (PC), round=4 (1.7GB), 12s (PC)
@@ -981,8 +981,8 @@ public class LinkExchangeInt3 {
 		int round = 3; 		// flood
 //		int round = 10; 	// gossip
 		int step = 100000;	// gossip-async
-		double alpha = 0.5;
-		double beta = 1.0;
+		double alpha = 1.0;
+		double beta = 0.5;
 		double discount = 1.0;
 		int nSample = 100;	// 20, 50, 100  number of local graphs written to file
 		int nRun = 10;
