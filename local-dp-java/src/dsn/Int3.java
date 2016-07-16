@@ -2,6 +2,9 @@
  * Jun 12, 2016
  * 	- copied from Int2.java
  * 	- add field c
+ * Jul 15
+ * 	- fix compareTo() used in LinkExchangeInt3.insertLink()
+ * 	- add Comparators()used in LinkExchangeInt3.inferEdges() 
  */
 
 package dsn;

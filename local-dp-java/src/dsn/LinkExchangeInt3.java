@@ -875,58 +875,60 @@ public class LinkExchangeInt3 {
 	}
 	
 	//// read sample file, compute edge inference probabilities, export to attack_file (MATLAB)
-	public static void attackLocalGraph(EdgeIntGraph G, double beta, String sample_file, String attack_file, int iRun) throws IOException{
+	public static void attackLocalGraph(EdgeIntGraph G, double beta, String sample_file, String attack_file, int round, int iRun) throws IOException{
 		int n_nodes = G.V();
 		
-		BufferedReader br = new BufferedReader(new FileReader(sample_file + "." + iRun + ".out"));
-		
-		String str = br.readLine();
-		int k = Integer.parseInt(str);		// number of sample graphs
-		System.out.println("#selected nodes = " + k);
-		
-		// for MATLAB
-		double[] a_attack = new double[k*4];
-		
-		for(int i = 0; i < k; i++){
-			System.out.println("subgraph i = " + i);
-			str = br.readLine();
-			String[] items = str.split(",");
-			int u = Integer.parseInt(items[0]);
-			int size = Integer.parseInt(items[1]);
-			System.out.println("u = " + u + ", size = " + size);
+		for (int t = 1; t <= round; t++){
+			BufferedReader br = new BufferedReader(new FileReader(sample_file + "-" + t + "." + iRun + ".out"));
 			
-			// read local graph
-			EdgeIntGraph aG = new EdgeIntGraph(n_nodes); 
-			for (int j = 0; j < size; j++){
+			String str = br.readLine();
+			int k = Integer.parseInt(str);		// number of sample graphs
+			System.out.println("#selected nodes = " + k);
+			
+			// for MATLAB
+			double[] a_attack = new double[k*4];
+			
+			for(int i = 0; i < k; i++){
+				System.out.println("subgraph i = " + i);
 				str = br.readLine();
-				items = str.split("\t");
-				int v = Integer.parseInt(items[0]);
-				int w = Integer.parseInt(items[1]);
-				int	c = Integer.parseInt(items[2]);		// edge counter (see Int3)
+				String[] items = str.split(",");
+				int u = Integer.parseInt(items[0]);
+				int size = Integer.parseInt(items[1]);
+				System.out.println("u = " + u + ", size = " + size);
 				
-				aG.addEdge(new EdgeInt(v,w,c));			// save c as edge weight
+				// read local graph
+				EdgeIntGraph aG = new EdgeIntGraph(n_nodes); 
+				for (int j = 0; j < size; j++){
+					str = br.readLine();
+					items = str.split("\t");
+					int v = Integer.parseInt(items[0]);
+					int w = Integer.parseInt(items[1]);
+					int	c = Integer.parseInt(items[2]);		// edge counter (see Int3)
+					
+					aG.addEdge(new EdgeInt(v,w,c));			// save c as edge weight
+				}
+				System.out.println("#nodes = " + aG.V());
+				System.out.println("#edges = " + aG.E());
+				
+				// infer true links by edge weights
+				AttackMetric at = inferEdges(G, aG, u, beta);
+				
+				a_attack[i + 0*k] = at.TP;	// packed by column
+				a_attack[i + 1*k] = at.TN;
+				a_attack[i + 2*k] = at.FP;
+				a_attack[i + 3*k] = at.FN;
 			}
-			System.out.println("#nodes = " + aG.V());
-			System.out.println("#edges = " + aG.E());
+			br.close();
 			
-			// infer true links by edge weights
-			AttackMetric at = inferEdges(G, aG, u, beta);
-			
-			a_attack[i + 0*k] = at.TP;	// packed by column
-			a_attack[i + 1*k] = at.TN;
-			a_attack[i + 2*k] = at.FP;
-			a_attack[i + 3*k] = at.FN;
+			// write to MATLAB
+			MLDouble atArr = new MLDouble("atArr", a_attack, k);
+	
+			ArrayList<MLArray> towrite = new ArrayList<MLArray>();
+	        towrite.add(atArr); 
+	        
+	        new MatFileWriter(attack_file+ "-" + t + "_attack." + iRun + ".mat", towrite );
+	        System.out.println("Written to MATLAB file.");
 		}
-		br.close();
-		
-		// write to MATLAB
-		MLDouble atArr = new MLDouble("atArr", a_attack, k);
-
-		ArrayList<MLArray> towrite = new ArrayList<MLArray>();
-        towrite.add(atArr); 
-        
-        new MatFileWriter(attack_file+ "_attack." + iRun + ".mat", towrite );
-        System.out.println("Written to MATLAB file.");
 	}
 
 	////////////////////////////////////////////////
@@ -1025,7 +1027,7 @@ public class LinkExchangeInt3 {
 			
 	//		computeLocalGraph(sample_file, matlab_file, 10000);
 			
-			attackLocalGraph(G, beta, sample_file, attack_file, i);
+			attackLocalGraph(G, beta, sample_file, attack_file, round, i);
 		}
 		
 		

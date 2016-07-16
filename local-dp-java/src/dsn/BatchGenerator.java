@@ -205,6 +205,26 @@ public class BatchGenerator {
 		
 	}
 	
+	////
+	public static void generateAttack(String batch_file, String prefix, String dataname, int round, int nRun, int nSample, 
+			double[] alphaArr, double[] betaArr) throws IOException{
+		
+		BufferedWriter bw = new BufferedWriter(new FileWriter(batch_file));
+		for (double alpha : alphaArr)
+			for (double beta : betaArr){
+					
+				String cmd = "java -Xmx9000m dsn.LinkExchangeAttack " + prefix + " " + dataname + " " + round + " " + String.format("%.2f",alpha) + " " + 
+						String.format("%.2f",beta) + " " + nRun + " " + nSample + 
+						" > ../_console/" + dataname + "-bf-" + round + "_" + String.format("%.2f",alpha) + "_" + 
+							String.format("%.2f",beta) + "_" + nRun + "_" + nSample + "-ATTACK.txt";
+				bw.write(cmd + "\n");
+			bw.write("\n");
+		}
+
+		bw.close();
+		
+	}
+	
 	////////////////////////////////////////////////
 	public static void main(String[] args) throws Exception{
 		String prefix = "../";		// run in D:/git/itce2011/local-dp-java/_cmd
@@ -353,22 +373,39 @@ public class BatchGenerator {
 		
 		
 		//////////////// COMPRESSION
+//		dataname_list = new String[]{"pl_10000_5_01", "er_10000_0001"};
+//		diam_list = new int[]{6,7};	//diameter
+//		alphaArr = new double[]{0.25, 0.5, 0.75, 1};
+//		betaArr = new double[]{0.5, 1};
+//		falsePositiveArr = new double[]{0.01, 0.001}; //, 0.01, 0.001};		// 0.25, 0.1, 0.01
+//
+//		for (int i = 0; i < dataname_list.length; i++){
+//			String dataname = dataname_list[i];
+//			int round = diam_list[i];
+//			
+//			String batch_file = "_cmd/CompressionBloomFilter_" + dataname + ".cmd";
+//			
+//			generateCompression(batch_file, prefix, dataname, round, nRun, alphaArr, betaArr, falsePositiveArr);
+//		}
+//		System.out.println("DONE.");
+		
+		
+		//////////////// ATTACK
 		dataname_list = new String[]{"pl_10000_5_01", "er_10000_0001"};
 		diam_list = new int[]{6,7};	//diameter
-		alphaArr = new double[]{0.25, 0.5, 0.75, 1};
+		alphaArr = new double[]{0.5, 1};
 		betaArr = new double[]{0.5, 1};
-		falsePositiveArr = new double[]{0.01, 0.001}; //, 0.01, 0.001};		// 0.25, 0.1, 0.01
-
+		nRun = 2;
+		
 		for (int i = 0; i < dataname_list.length; i++){
 			String dataname = dataname_list[i];
 			int round = diam_list[i];
 			
-			String batch_file = "_cmd/CompressionBloomFilter_" + dataname + ".cmd";
+			String batch_file = "_cmd/Attack_" + dataname + ".cmd";
 			
-			generateCompression(batch_file, prefix, dataname, round, nRun, alphaArr, betaArr, falsePositiveArr);
+			generateAttack(batch_file, prefix, dataname, round, nRun, nSample, alphaArr, betaArr);
 		}
 		System.out.println("DONE.");
-		
 		
 	}
 
