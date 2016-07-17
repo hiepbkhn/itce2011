@@ -386,7 +386,7 @@ public class LinkExchangeAttack{
 		for (int i = 0; i < nRun; i++){
 			System.out.println("run i = " + i);
 			
-			linkExchangeNoDup(G, round, alpha, beta, nSample, count_file, sample_file, i);
+//			linkExchangeNoDup(G, round, alpha, beta, nSample, count_file, sample_file, i);
 			
 			LinkExchangeInt3.attackLocalGraph(G, beta, sample_file, attack_file, round, i);
 			

@@ -299,6 +299,9 @@ public class LinkExchangeInt3 {
 	
 	////
 	public static List<Int3> sampleLinkNoDup(List<Int3> srcList, double alpha){
+		if (alpha == 1)
+			return srcList;
+		
 		List<Int3> ret = new ArrayList<Int3>();
 		
 		Map<Integer, Integer> dup = new HashMap<Integer, Integer>();
@@ -480,6 +483,41 @@ public class LinkExchangeInt3 {
 		
 	}
 	
+	//// used in initial stage (true if existed)
+	public static boolean checkLink(List<Int3> list, Int3 e){
+		// normalize e
+		normalizeEdge(e);
+		
+		//
+		int lo = 0;
+		int hi = list.size()-1;
+		int mid = (lo + hi)/2;
+		int comp = 0;
+		boolean found = false;
+		while (true){
+			comp = e.compareTo(list.get(mid));
+			
+			if (comp < 0){
+				hi = mid-1;
+			}else if(comp > 0){
+				lo = mid+1;
+			}else{
+				found = true;
+				break;
+			}
+			
+			mid = (lo + hi)/2;
+			
+			if (lo > hi)
+				break;
+			
+		}
+		
+		return found;
+			
+		
+	}
+	
 	//// insert link e to a sorted list
 	public static boolean insertLink(List<Int3> list, Int3 e){
 		// normalize e
@@ -582,15 +620,22 @@ public class LinkExchangeInt3 {
 					}
 					
 					Int3 e = new Int3(u, w);
-					boolean isNew = insertLink(links.get(u), e);
-					if (isNew == true)
+					boolean isNew = checkLink(links.get(u), e);
+					if (isNew == false){	// if not existed
+						insertLink(links.get(u), e);
 						break;
-					else
+					}else
 						w = random.nextInt(n);
 					
 				}
 			}
 		}
+		// debug - OK, all counts are 0
+//		for (int u = 0; u < n; u++){
+//			for (Int3 e : links.get(u))
+//				System.out.print("(" + e.val0 + "," + e.val1 + ":" + e.c + ") ");
+//			System.out.println();
+//		}
 		
 		
 		// loop
@@ -616,7 +661,7 @@ public class LinkExchangeInt3 {
 			}
 			// expand lists, do not accept duplicate links
 			for (int u = 0; u < n; u++){
-				for (Int3 e:exLinks.get(u))
+				for (Int3 e : exLinks.get(u))
 					insertLink(links.get(u), e);
 			}
 			
@@ -688,10 +733,11 @@ public class LinkExchangeInt3 {
 					}
 					
 					Int3 e = new Int3(u, w);
-					boolean isNew = insertLink(links.get(u), e);
-					if (isNew == true)
+					boolean isNew = checkLink(links.get(u), e);
+					if (isNew == false){	// if not existed
+						insertLink(links.get(u), e);
 						break;
-					else
+					}else
 						w = random.nextInt(n);
 					
 				}
@@ -783,10 +829,11 @@ public class LinkExchangeInt3 {
 					}
 					
 					Int3 e = new Int3(u, w);
-					boolean isNew = insertLink(links.get(u), e);
-					if (isNew == true)
+					boolean isNew = checkLink(links.get(u), e);
+					if (isNew == false){	// if not existed
+						insertLink(links.get(u), e);
 						break;
-					else
+					}else
 						w = random.nextInt(n);
 					
 				}
@@ -888,27 +935,34 @@ public class LinkExchangeInt3 {
 			// for MATLAB
 			double[] a_attack = new double[k*4];
 			
+			int max_all_c = 0;
 			for(int i = 0; i < k; i++){
 				System.out.println("subgraph i = " + i);
 				str = br.readLine();
 				String[] items = str.split(",");
 				int u = Integer.parseInt(items[0]);
 				int size = Integer.parseInt(items[1]);
-				System.out.println("u = " + u + ", size = " + size);
+				System.out.println("u = " + u + ", size = " + size + ", deg_u = " + G.degree(u));
 				
 				// read local graph
 				EdgeIntGraph aG = new EdgeIntGraph(n_nodes); 
+				int max_c = 0;
 				for (int j = 0; j < size; j++){
 					str = br.readLine();
 					items = str.split("\t");
 					int v = Integer.parseInt(items[0]);
 					int w = Integer.parseInt(items[1]);
 					int	c = Integer.parseInt(items[2]);		// edge counter (see Int3)
+					if (max_c < c)
+						max_c = c;
 					
 					aG.addEdge(new EdgeInt(v,w,c));			// save c as edge weight
 				}
 				System.out.println("#nodes = " + aG.V());
 				System.out.println("#edges = " + aG.E());
+				System.out.println("max_c = " + max_c);
+				if (max_all_c < max_c)
+					max_all_c = max_c;
 				
 				// infer true links by edge weights
 				AttackMetric at = inferEdges(G, aG, u, beta);
@@ -918,6 +972,7 @@ public class LinkExchangeInt3 {
 				a_attack[i + 2*k] = at.FP;
 				a_attack[i + 3*k] = at.FN;
 			}
+			System.out.println("max_all_c = " + max_all_c);
 			br.close();
 			
 			// write to MATLAB
@@ -937,7 +992,7 @@ public class LinkExchangeInt3 {
 
 		
 //		String dataname = "pl_1000_5_01";		// diameter = 5
-		String dataname = "pl_10000_5_01";		// diameter = 6,  Dup: round=3 (OutOfMem, 7GB ok), 98s (Acer)
+//		String dataname = "pl_10000_5_01";		// diameter = 6,  Dup: round=3 (OutOfMem, 7GB ok), 98s (Acer)
 												//				NoDup: round=3 (a=0.5, b=1.0, 4.5GB), 376s (Acer)
 //		String dataname = "ba_1000_5";			// diameter = 5
 //		String dataname = "ba_10000_5";			// diameter = 6, NoDup: round=3 (5.1GB), 430s (Acer), 350s (PC), totalLink = 255633393
@@ -949,7 +1004,7 @@ public class LinkExchangeInt3 {
 //		String dataname = "sm_10000_005_11";	// diameter = 12, NoDup: round=3 (1.2GB), 5s (PC), round=4 (1.7GB), 12s (PC)
 												// 						round=5 (3.0GB), 29s (PC), round=6 (3.3GB), 74s (PC)
 		//
-//		String dataname = "example";			// 	diameter = 5, 
+		String dataname = "example";			// 	diameter = 5, 
 //		String dataname = "karate";				// (34, 78)	diameter = 5
 //		String dataname = "polbooks";			// (105, 441)			
 //		String dataname = "polblogs";			// (1224,16715) 		
@@ -980,14 +1035,14 @@ public class LinkExchangeInt3 {
 //		computeTrueGraph(G, "_matlab/" + dataname + ".mat");
 		
 		//
-		int round = 3; 		// flood
+		int round = 2; 		// flood
 //		int round = 10; 	// gossip
 		int step = 100000;	// gossip-async
 		double alpha = 1.0;
-		double beta = 0.5;
+		double beta = 1.0;
 		double discount = 1.0;
-		int nSample = 100;	// 20, 50, 100  number of local graphs written to file
-		int nRun = 10;
+		int nSample = 13;	// 20, 50, 100  number of local graphs written to file
+		int nRun = 1;
 		
 		// TEST linkExchange()
 //		String count_file = prefix + "_out/" + dataname + "-" + round + "_" + String.format("%.1f",alpha) + "_" + String.format("%.1f",beta) + ".cnt";
@@ -1025,9 +1080,9 @@ public class LinkExchangeInt3 {
 			System.out.println("run i = " + i);
 			linkExchangeNoDup(G, round, alpha, beta, nSample, count_file, sample_file, i);	
 			
-	//		computeLocalGraph(sample_file, matlab_file, 10000);
+//			computeLocalGraph(sample_file, matlab_file, 10000);
 			
-			attackLocalGraph(G, beta, sample_file, attack_file, round, i);
+//			attackLocalGraph(G, beta, sample_file, attack_file, round, i);
 		}
 		
 		
