@@ -354,20 +354,20 @@ public class RuntimeParser {
 		int n_samples = 20;
 		
 		// 1K, EdgeFlip, TmF
-		for (int i = 0; i < 1; i++){
-			String dataname = dataname_list[i];
-			int n = n_list[i];
-			double log_n = Math.log(n);
-			double[] epsArr = new double[]{0.1*log_n, 0.2*log_n, 0.3*log_n, 0.4*log_n, 0.5*log_n}; //
-			
-			for (double eps : epsArr){
-//				read1k(prefix, dataname, n_samples, eps);
-				readEdgeFlip(prefix, dataname, n_samples, eps);
-//				readTmF(prefix, dataname, n_samples, eps);
-			}
-			
-			System.out.println("DONE.");
-		}
+//		for (int i = 0; i < 1; i++){
+//			String dataname = dataname_list[i];
+//			int n = n_list[i];
+//			double log_n = Math.log(n);
+//			double[] epsArr = new double[]{0.1*log_n, 0.2*log_n, 0.3*log_n, 0.4*log_n, 0.5*log_n}; //
+//			
+//			for (double eps : epsArr){
+////				read1k(prefix, dataname, n_samples, eps);
+//				readEdgeFlip(prefix, dataname, n_samples, eps);
+////				readTmF(prefix, dataname, n_samples, eps);
+//			}
+//			
+//			System.out.println("DONE.");
+//		}
 
 		// LouvainDP
 //		for (int i = 0; i < n_list.length; i++){
@@ -431,18 +431,20 @@ public class RuntimeParser {
 //		}
 		
 		// HRGFixed
-//		for (int i = 0; i < 3; i++){
-//			String dataname = dataname_list[i];
-//			int n = n_list[i];
-//			
-//			double log_n = Math.log(n);
-//			double[] epsArr = new double[]{0.1*log_n, 0.2*log_n, 0.3*log_n, 0.4*log_n, 0.5*log_n};
-//			int burn_factor = 1000;
-//			for (double eps : epsArr){
-//				readHRGFixed(prefix, dataname, n_samples, burn_factor, n, eps);
-//			}
-//			System.out.println("DONE.");
-//		}
+		dataname_list = new String[]{"ca-AstroPh-wcc"}; 
+		n_list = new int[]{17903};
+		for (int i = 0; i < dataname_list.length; i++){
+			String dataname = dataname_list[i];
+			int n = n_list[i];
+			
+			double log_n = Math.log(n);
+			double[] epsArr = new double[]{0.1*log_n, 0.2*log_n, 0.3*log_n, 0.4*log_n, 0.5*log_n};
+			int burn_factor = 1000;
+			for (double eps : epsArr){
+				readHRGFixed(prefix, dataname, n_samples, burn_factor, n, eps);
+			}
+			System.out.println("DONE.");
+		}
 	}
 
 }

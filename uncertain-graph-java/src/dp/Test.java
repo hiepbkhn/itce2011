@@ -19,6 +19,7 @@ import com.jmatio.types.MLArray;
 import com.jmatio.types.MLDouble;
 import com.jmatio.types.MLInt32;
 
+import dp.combined.CommunityMeasure;
 import dp.combined.Louvain;
 import dp.combined.NodeSetLouvain;
 import dp.mcmc.Dendrogram;
@@ -239,19 +240,50 @@ public class Test {
 //		System.out.println("best_cut.size = " + best_cut.size());
 		
 		//
-		EdgeWeightedGraph G = EdgeWeightedGraph.readEdgeList("_data/as20graph.gr");
-		System.out.println("#nodes = " + G.V());
-		System.out.println("#edges = " + G.E());
-		
-		Louvain lv = new Louvain();
-		long start = System.currentTimeMillis();
-		Map<Integer, Integer> part = lv.best_partition(G, null);
-		System.out.println("best_partition - DONE, elapsed " + (System.currentTimeMillis() - start));
+//		EdgeWeightedGraph G = EdgeWeightedGraph.readEdgeList("_data/as20graph.gr");
+//		System.out.println("#nodes = " + G.V());
+//		System.out.println("#edges = " + G.E());
+//		
+//		Louvain lv = new Louvain();
+//		long start = System.currentTimeMillis();
+//		Map<Integer, Integer> part = lv.best_partition(G, null);
+//		System.out.println("best_partition - DONE, elapsed " + (System.currentTimeMillis() - start));
 
 		
 		
 //		Louvain.writePart(part, "ca-AstroPh-wcc.louvain");
 //		System.out.println("writePart - DONE");
+		
+		// Jul 7, 2016 - test F1 score for subsets
+//		int p = 10;
+//		int q = 5;
+//		int N = p*q;
+//		int[] part_A = new int[N];
+//		int[] part_B = new int[N];
+//		for (int i = 0; i < p; i++)
+//			for (int j = 0; j < q; j++){
+//				part_A[i*q + j] = i*q + j;
+//				part_B[i*q + j] = i;
+//			}
+//		double f1score = CommunityMeasure.fastAvgF1Score(part_A, part_B);		// = 2/(1+q)
+//		System.out.println("f1score = " + f1score);
+		
+		// test F1 score for first round Louvain
+//		int n_nodes = 334863;
+//		String dataname = "com_amazon_ungraph";
+		int n_nodes = 1134890;
+		String dataname = "com_youtube_ungraph";
+		
+		String louvain_file = "_data/" + dataname + ".louvain";
+		int[] louvain_part = CommunityMeasure.readPart(louvain_file, n_nodes);
+		String compare_file = "_out/" + dataname + ".f1";
+		int[] compare_part = CommunityMeasure.readPart(compare_file, n_nodes);
+//		String compare_file = "_out/com_amazon_ungraph.s1";
+//		int[] compare_part = CommunityMeasure.readPart(compare_file, n_nodes);
+		
+		double f1score = CommunityMeasure.fastAvgF1Score(louvain_part, compare_part);
+		System.out.println("f1score = " + f1score);
+		
 	}
 
 }

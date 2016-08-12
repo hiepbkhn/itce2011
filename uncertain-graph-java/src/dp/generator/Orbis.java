@@ -44,14 +44,6 @@ import algs4.EdgeWeightedGraph;
 
 public class Orbis {
 
-	class Stub{
-		public int nodeid;
-		public int degree;
-		
-		public Stub(){
-			
-		}
-	}
 	
 	//// ex: as20graph_noisy.1k
 	public void read1kDistribution(String infile, Map<Integer, Integer> degNumNodesMap) throws IOException{
@@ -127,7 +119,7 @@ public class Orbis {
 	}
 	
 	////
-	public void dkShuffleList(List<Stub> freeStubList){
+	public static void dkShuffleList(List<Stub> freeStubList){
 		int listSize = freeStubList.size();
 		Stub[] theVector = new Stub[listSize];
 		

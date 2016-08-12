@@ -679,47 +679,47 @@ public class UtilityMeasure {
 	    int n_queries = 1000;
 	    
 	    // COMMAND-LINE
-// 		String prefix = "";
-// 	    int n_samples = 20;
-// 	    String graph_name = "";
-// 	    int n_nodes = 0;
-// 	   
-// 		if(args.length >= 5){
-// 			prefix = args[0];
-// 			dataname = args[1];
-// 			n_samples = Integer.parseInt(args[2]);
-// 			graph_name = args[3];
-// 			n_nodes = Integer.parseInt(args[4]);
-// 		
-//	 		System.out.println("dataname = " + dataname);
-//	 		System.out.println("graph_name = " + graph_name);
-//	 		
-//	 		String cut_query_file = prefix + "_data/" + dataname + ".cut";
-//	 		String graph_file = prefix + "_sample/" + graph_name;
-//	 		String matlab_file = prefix + "_matlab/" + graph_name;
-//		    
-//	 		for (int i = 0; i < n_samples; i++){
-//		    	System.out.println("sample i = " + i);
-//		    	
-//				
-//				long start = System.currentTimeMillis();
-//			    computeUtility(graph_file + "." + i, cut_query_file, matlab_file + "." + i + ".mat", n_queries, n_nodes);
-//			    System.out.println("computeUtility - DONE, elapsed " + (System.currentTimeMillis() - start));
-//	 		}
-// 		}else{	// run on true graph (3 arguments)
-// 			prefix = args[0];
-// 			dataname = args[1];
-// 			n_nodes = Integer.parseInt(args[2]);
-// 			
-// 			System.out.println("dataname = " + dataname);
-// 			String graph_file = prefix + "_data/" + dataname + ".gr";
-//	 		String matlab_file = prefix + "_matlab/" + dataname + ".mat";
-// 			String cut_query_file = prefix + "_data/" + dataname + ".cut";
-// 			
-// 			long start = System.currentTimeMillis();
-//		    computeUtility(graph_file, cut_query_file, matlab_file, n_queries, n_nodes);
-//		    System.out.println("computeUtility - DONE, elapsed " + (System.currentTimeMillis() - start));
-// 		}
+ 		String prefix = "";
+ 	    int n_samples = 20;
+ 	    String graph_name = "";
+ 	    int n_nodes = 0;
+ 	   
+ 		if(args.length >= 5){
+ 			prefix = args[0];
+ 			dataname = args[1];
+ 			n_samples = Integer.parseInt(args[2]);
+ 			graph_name = args[3];
+ 			n_nodes = Integer.parseInt(args[4]);
+ 		
+	 		System.out.println("dataname = " + dataname);
+	 		System.out.println("graph_name = " + graph_name);
+	 		
+	 		String cut_query_file = prefix + "_data/" + dataname + ".cut";
+	 		String graph_file = prefix + "_sample/" + graph_name;
+	 		String matlab_file = prefix + "_matlab/" + graph_name;
+		    
+	 		for (int i = 0; i < n_samples; i++){
+		    	System.out.println("sample i = " + i);
+		    	
+				
+				long start = System.currentTimeMillis();
+			    computeUtility(graph_file + "." + i, cut_query_file, matlab_file + "." + i + ".mat", n_queries, n_nodes);
+			    System.out.println("computeUtility - DONE, elapsed " + (System.currentTimeMillis() - start));
+	 		}
+ 		}else{	// run on true graph (3 arguments)
+ 			prefix = args[0];
+ 			dataname = args[1];
+ 			n_nodes = Integer.parseInt(args[2]);
+ 			
+ 			System.out.println("dataname = " + dataname);
+ 			String graph_file = prefix + "_data/" + dataname + ".gr";
+	 		String matlab_file = prefix + "_matlab/" + dataname + ".mat";
+ 			String cut_query_file = prefix + "_data/" + dataname + ".cut";
+ 			
+ 			long start = System.currentTimeMillis();
+		    computeUtility(graph_file, cut_query_file, matlab_file, n_queries, n_nodes);
+		    System.out.println("computeUtility - DONE, elapsed " + (System.currentTimeMillis() - start));
+ 		}
  		
 	    
 	    //
@@ -755,18 +755,18 @@ public class UtilityMeasure {
 //		System.out.println("generateCutQueries - DONE");
 		
 	    // TEST 
-	    String graph_file = "_data/" + dataname + ".gr";
-	    EdgeIntGraph G = EdgeIntGraph.readEdgeListWithNodes(graph_file, "\t", 317080);
-		System.out.println("#nodes = " + G.V());
-		System.out.println("#edges = " + G.E());
-		
-	    DegreeMetric deg = new DegreeMetric();
-	    double[] dist = getDegreeDistr(G, deg);
-	    System.out.println("s_AD = " + deg.s_AD);
-	    System.out.println("s_MD = " + deg.s_MD);
-	    System.out.println("s_DV = " + deg.s_DV);
-	    System.out.println("s_PL = " + deg.s_PL);
-	    System.out.println("s_CC = " + deg.s_CC);
+//	    String graph_file = "_data/" + dataname + ".gr";
+//	    EdgeIntGraph G = EdgeIntGraph.readEdgeListWithNodes(graph_file, "\t", 317080);
+//		System.out.println("#nodes = " + G.V());
+//		System.out.println("#edges = " + G.E());
+//		
+//	    DegreeMetric deg = new DegreeMetric();
+//	    double[] dist = getDegreeDistr(G, deg);
+//	    System.out.println("s_AD = " + deg.s_AD);
+//	    System.out.println("s_MD = " + deg.s_MD);
+//	    System.out.println("s_DV = " + deg.s_DV);
+//	    System.out.println("s_PL = " + deg.s_PL);
+//	    System.out.println("s_CC = " + deg.s_CC);
 	    
 	    
 		// TEST computeUtility()

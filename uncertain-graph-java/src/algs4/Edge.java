@@ -105,6 +105,13 @@ public class Edge implements Comparable<Edge> {
     	this.weight = new_weight;
     }
     
+    // hiepnh - Aug 12, 2016
+    public void incWeight(double value){
+    	this.weight += value;
+    }
+    public void decWeight(double value){
+    	this.weight -= value;
+    }
     
     /**
      * Unit tests the <tt>Edge</tt> data type.

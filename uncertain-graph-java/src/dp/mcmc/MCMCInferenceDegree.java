@@ -134,14 +134,14 @@ public class MCMCInferenceDegree {
 	    
 	    
 	    // TEST writeInternalNodes(), readInternalNodes()
-	    DendrogramDeg.writeInternalNodes(list_T, node_file);
+	    DendrogramDeg.writeInternalDeg(list_T, node_file);
 	    System.out.println("writeInternalNodes - DONE");
 		
 //	    ArrayList<DendrogramDeg> list_T2 = new ArrayList<DendrogramDeg>();
 //	    for (int i = 0; i < n_samples; i++)
 //	    	list_T2.add(new DendrogramDeg());
 //	    
-//	    DendrogramDeg.readInternalNodes(G, list_T2, node_file, n_samples);
+//	    DendrogramDeg.readInternalDeg(G, list_T2, node_file, n_samples);
 //	    for (DendrogramDeg T2 : list_T2)
 //	    	System.out.println("logLK = " + T2.logLK());
 //	    System.out.println("readInternalNodes - DONE");

@@ -16,6 +16,8 @@
  * - add genEqualPrivateLaplace()
  * May 8
  * - rename louvainAfterFirstPass() -> louvainGivenPartition()
+ * Aug 12
+ * - getGraphByPartition(): update comDict to <Long, Integer>
  */
 
 package dp.combined;
@@ -46,7 +48,7 @@ import algs4.EdgeWeightedGraph;
 
 
 public class LouvainDP {
-	
+	public static final long BIG_VAL = 1000000000;	// 10^9
 	
 	////return: map of <node to community>
 	// k: number of supernodes
@@ -157,7 +159,7 @@ public class LouvainDP {
 		k += 1;
 		
 		// create new weighted graph from part_init
-		Map<Int2, Integer> comDict = new HashMap<Int2, Integer>();		// (u_com, v_com) -> num edges
+		Map<Long, Integer> comDict = new HashMap<Long, Integer>();		// (u_com, v_com) -> num edges
 		for (Edge e : graph.edges()){
 			int u = e.either();
 			int v = e.other(u);
@@ -169,19 +171,20 @@ public class LouvainDP {
 				v_com = temp;
 			}
 			
-			Int2 key = new Int2(u_com, v_com);
+			long key = u_com * BIG_VAL + v_com;
 			int weight = 1;
 			if (comDict.containsKey(key))
 				comDict.put(key, comDict.get(key) + weight);
 			else
-				comDict.put(key,  weight);
+				comDict.put(key, weight);
 		}
+		System.out.println("getGraphByPartition.comDict.size = " + comDict.size());
 		//
 		EdgeWeightedGraph graph_new = new EdgeWeightedGraph(k);
-		for (Map.Entry<Int2, Integer> entry : comDict.entrySet()){
-			Int2 key = entry.getKey();
+		for (Map.Entry<Long, Integer> entry : comDict.entrySet()){
+			Long key = entry.getKey();
 			Integer value = entry.getValue();
-			graph_new.addEdge(new Edge(key.val0, key.val1, value));
+			graph_new.addEdge(new Edge((int)(key/BIG_VAL), (int)(key % BIG_VAL), value));
 		}
 		
 		//

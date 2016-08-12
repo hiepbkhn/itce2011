@@ -171,11 +171,18 @@ public class LinkExchangeAttack{
 		System.out.println("Init countArr - DONE, elapsed " + (System.currentTimeMillis() - start));
 		
 		// loop
+		short[][] exCountArr = new short[n][n_edges];
+		
 		for(int t = 1; t < round+1; t++){
 			start = System.currentTimeMillis();
 			System.out.println("round = " + t);
 			
-			short[][] exCountArr = new short[n][n_edges];				// new links received at each node
+			// empty exCountArr
+			for (int u = 0; u < n; u++)
+				for (eid = 0; eid < n_edges; eid++)
+					exCountArr[u][eid] = 0;
+			
+			// new links received at each node
 			for (int u = 0; u < n; u++)
 				System.arraycopy(countArr[u], 0, exCountArr[u], 0, n_edges); 			// copy countArr
 			
@@ -296,7 +303,7 @@ public class LinkExchangeAttack{
 
 		// PL
 //		String dataname = "pl_1000_5_01";		// diameter = 5
-		String dataname = "pl_10000_5_01";		// diameter = 6,  	NoDup: round=3 (a=0.5, b=1.0, 2.1GB), 27+22s (PC), totalLink=245M (16.4%)
+//		String dataname = "pl_10000_5_01";		// diameter = 6,  	NoDup: round=3 (a=0.5, b=1.0, 2.1GB), 27+22s (PC), totalLink=245M (16.4%)
 												//					NoDup: round=4 (a=0.5, b=1.0, 2.5GB), 94+58s (PC), totalLink=863M (57.6%)
 //		String dataname = "pl_10000_10_01";
 //		String dataname = "pl_10000_3_01";
@@ -306,7 +313,7 @@ public class LinkExchangeAttack{
 		
 		// ER
 //		String dataname = "er_1000_001";		// diameter = 5
-//		String dataname = "er_10000_0001";		// diameter = 7, 	NoDup: round=3 (a=0.5, b=1.0, GB), 
+		String dataname = "er_10000_0001";		// diameter = 7, 	NoDup: round=3 (a=0.5, b=1.0, GB), 
 												//					NoDup: round=4 (a=1.0, b=1.0, 2.8GB), 44+73s (PC),	totalLink=1111M (73%) 
 												//					NoDup: round=5 (a=1.0, b=1.0, 3.1GB), 70+91s (PC),	totalLink=1509M (99.8%)
 //		String dataname = "er_10000_0002";
@@ -333,7 +340,7 @@ public class LinkExchangeAttack{
 		
 		
 		//
-		int round = 6; 		// flood
+		int round = 7; 		// flood
 //		int round = 10; 	// gossip
 		double alpha = 1.0;
 		double beta = 1.0;
@@ -352,8 +359,8 @@ public class LinkExchangeAttack{
 		}
 		
 		String name = dataname + "-nodup-" + round + "_" + String.format("%.2f",alpha) + "_" + String.format("%.2f",beta) + "_" + nSample;
-		String count_file = prefix + "_attack/" + name; // + ".cnt";
-		String sample_file = prefix + "_attack/" + name; // + ".out";
+		String count_file = prefix + "_temp/" + name; // + ".cnt";
+		String sample_file = prefix + "_temp/" + name; // + ".out";
 		String attack_file = prefix + "_attack/" + name;
 		
 		
@@ -386,9 +393,9 @@ public class LinkExchangeAttack{
 		for (int i = 0; i < nRun; i++){
 			System.out.println("run i = " + i);
 			
-//			linkExchangeNoDup(G, round, alpha, beta, nSample, count_file, sample_file, i);
+			linkExchangeNoDup(G, round, alpha, beta, nSample, count_file, sample_file, i);
 			
-			LinkExchangeInt3.attackLocalGraph(G, beta, sample_file, attack_file, round, i);
+//			LinkExchangeInt3.attackLocalGraph(G, beta, sample_file, attack_file, round, i);
 			
 		}
 		

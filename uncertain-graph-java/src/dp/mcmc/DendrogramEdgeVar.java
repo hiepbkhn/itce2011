@@ -168,7 +168,8 @@ public class DendrogramEdgeVar extends DendrogramDeg{
  	
  	
  	////
-	static void writeInternalNodes(List<DendrogramEdgeVar> list_T, String node_file) throws Exception{
+ 	// 
+	static void writeInternalEdgeVar(List<DendrogramEdgeVar> list_T, String node_file) throws Exception{
 	    
 		int i = 0;
 	    for (DendrogramEdgeVar T : list_T){
@@ -179,7 +180,7 @@ public class DendrogramEdgeVar extends DendrogramDeg{
 	
 	////
 	// list_T: list of new DendrogramEdgeVar()
-	static void readInternalNodes(EdgeIntGraph G, List<DendrogramEdgeVar> list_T, String node_file, int n_samples) throws Exception{
+	static void readInternalEdgeVar(EdgeIntGraph G, List<DendrogramEdgeVar> list_T, String node_file, int n_samples) throws Exception{
 		int i = 0;
 	    for (DendrogramEdgeVar T : list_T){
 	    	String filename = node_file + "." + i;

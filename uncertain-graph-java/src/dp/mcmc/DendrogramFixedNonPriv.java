@@ -603,7 +603,7 @@ public class DendrogramFixedNonPriv extends Dendrogram{
 	
  	
  	////
-	static void writeInternalNodes(List<DendrogramFixedNonPriv> list_T, String node_file) throws Exception{
+	static void writeInternalFixedNonPriv(List<DendrogramFixedNonPriv> list_T, String node_file) throws Exception{
 	    
 		int i = 0;
 	    for (DendrogramFixedNonPriv T : list_T){
@@ -614,7 +614,7 @@ public class DendrogramFixedNonPriv extends Dendrogram{
 	
 	////
 	// list_T: list of new DendrogramDeg()
-	static void readInternalNodes(EdgeIntGraph G, List<DendrogramFixedNonPriv> list_T, String node_file, int n_samples) throws Exception{
+	static void readInternalFixedNonPriv(EdgeIntGraph G, List<DendrogramFixedNonPriv> list_T, String node_file, int n_samples) throws Exception{
 		int i = 0;
 	    for (DendrogramFixedNonPriv T : list_T){
 	    	String filename = node_file + "." + i;

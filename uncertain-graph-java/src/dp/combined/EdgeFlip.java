@@ -249,26 +249,26 @@ public class EdgeFlip {
 		System.out.println("sample_file = " + sample_file);
 		
 		//// perturbGraph
-//	    Grph G;
-//	    EdgeListReader reader = new EdgeListReader();
-//		RegularFile f = new RegularFile(filename);
-//		long start = System.currentTimeMillis();
-//		G = reader.readGraph(f);
-//		System.out.println("#nodes = " + G.getNumberOfVertices());
-//		System.out.println("#edges = " + G.getNumberOfEdges());  
-//		System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
-//	    
-//	    for (int i = 0; i < n_samples; i++){
-//	    	System.out.println("sample i = " + i);
-//	    	
-//	    	start = System.currentTimeMillis();
-//	    	Grph aG = perturbGraph(G, eps);
-//	    	System.out.println("perturbGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
-//	    	
-//			f = new RegularFile(sample_file + "." + i);
-//			EdgeListWriter writer = new EdgeListWriter();
-//	    	writer.writeGraph(aG, f);
-//	    }
+	    Grph G;
+	    EdgeListReader reader = new EdgeListReader();
+		RegularFile f = new RegularFile(filename);
+		long start = System.currentTimeMillis();
+		G = reader.readGraph(f);
+		System.out.println("#nodes = " + G.getNumberOfVertices());
+		System.out.println("#edges = " + G.getNumberOfEdges());  
+		System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
+	    
+	    for (int i = 0; i < n_samples; i++){
+	    	System.out.println("sample i = " + i);
+	    	
+	    	start = System.currentTimeMillis();
+	    	Grph aG = perturbGraph(G, eps);
+	    	System.out.println("perturbGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
+	    	
+			f = new RegularFile(sample_file + "." + i);
+			EdgeListWriter writer = new EdgeListWriter();
+	    	writer.writeGraph(aG, f);
+	    }
 	    
 	    //// perturbGraphFull (for eps <= 0.5ln n)
 //		long start = System.currentTimeMillis();
@@ -289,26 +289,26 @@ public class EdgeFlip {
 //	    }
 		
 		//// perturbGraphAndShrink (for all eps)
-		if(args.length >= 5){
-			sample_file = prefix + "_sample/" + dataname + "_ef_shrink_" + String.format("%.1f", eps) + "_" + String.format("%.1f", ratio);
-			
-			long start = System.currentTimeMillis();
-			EdgeIntGraph G = EdgeIntGraph.readEdgeList(filename, "\t");
-			
-			System.out.println("#nodes = " + G.V());
-			System.out.println("#edges = " + G.E());  
-			System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
-		    
-		    for (int i = 0; i < n_samples; i++){
-		    	System.out.println("sample i = " + i);
-		    	
-		    	start = System.currentTimeMillis();
-		    	EdgeIntGraph aG = perturbGraphAndShrink(G, eps, ratio);
-		    	System.out.println("perturbGraphAndShrink - DONE, elapsed " + (System.currentTimeMillis() - start));
-		    	
-		    	EdgeIntGraph.writeGraph(aG, sample_file + "." + i);
-		    }
-		}
+//		if(args.length >= 5){
+//			sample_file = prefix + "_sample/" + dataname + "_ef_shrink_" + String.format("%.1f", eps) + "_" + String.format("%.1f", ratio);
+//			
+//			long start = System.currentTimeMillis();
+//			EdgeIntGraph G = EdgeIntGraph.readEdgeList(filename, "\t");
+//			
+//			System.out.println("#nodes = " + G.V());
+//			System.out.println("#edges = " + G.E());  
+//			System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
+//		    
+//		    for (int i = 0; i < n_samples; i++){
+//		    	System.out.println("sample i = " + i);
+//		    	
+//		    	start = System.currentTimeMillis();
+//		    	EdgeIntGraph aG = perturbGraphAndShrink(G, eps, ratio);
+//		    	System.out.println("perturbGraphAndShrink - DONE, elapsed " + (System.currentTimeMillis() - start));
+//		    	
+//		    	EdgeIntGraph.writeGraph(aG, sample_file + "." + i);
+//		    }
+//		}
 	}
 
 }

@@ -143,14 +143,14 @@ public class MCMCInferenceEdgeVar {
 	    
 	    
 	    // TEST writeInternalNodes(), readInternalNodes()
-	    DendrogramEdgeVar.writeInternalNodes(list_T, node_file);
+	    DendrogramEdgeVar.writeInternalEdgeVar(list_T, node_file);
 	    System.out.println("writeInternalNodes - DONE");
 		
 //	    ArrayList<DendrogramEdgeVar> list_T2 = new ArrayList<DendrogramEdgeVar>();
 //	    for (int i = 0; i < n_samples; i++)
 //	    	list_T2.add(new DendrogramEdgeVar());
 //	    
-//	    DendrogramEdgeVar.readInternalNodes(G, list_T2, node_file, n_samples);
+//	    DendrogramEdgeVar.readInternalEdgeVar(G, list_T2, node_file, n_samples);
 //	    for (DendrogramEdgeVar T2 : list_T2)
 //	    	System.out.println("logLK = " + T2.logLK());
 //	    System.out.println("readInternalNodes - DONE");

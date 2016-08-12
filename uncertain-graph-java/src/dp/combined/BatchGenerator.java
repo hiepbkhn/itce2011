@@ -19,6 +19,8 @@
  * 	- ICWSM submission: generate scripts for epsilon=0.1->0.5ln n
  * Mar 10, 2016
  * 	- add generateLouvainDPLaplace()
+ * Aug 8, 2016
+ * 	- add generateAllInOne()
  */
 
 package dp.combined;
@@ -30,6 +32,79 @@ import java.util.List;
 
 
 public class BatchGenerator {
+	
+	////
+	public static void generateAllInOne(String batch_file, String prefix, String dataname, int sample_freq, int n_samples, double[] epsArr) 
+			throws IOException{
+		
+		BufferedWriter bw = new BufferedWriter(new FileWriter(batch_file));
+		int burn_factor = 1000;
+		
+		// EdgeFlip
+		for (double eps : epsArr){
+			String cmd = "java dp.combined.EdgeFlip " + prefix + " " + dataname + " " + n_samples + " " + String.format("%.2f", eps) + 
+					" > ../_console/" + dataname + "_ef_" + String.format("%.1f", eps) + "-CONSOLE.txt";
+			bw.write(cmd + "\n");
+		}
+		bw.write("\n");
+		
+		// TmF
+		for (double eps : epsArr){
+			String cmd = "java naive.GreedyReconstruct " + prefix + " " + dataname + " " + n_samples + " " + String.format("%.2f", eps) + 
+					" > ../_console/" + dataname + "_tmf_" + String.format("%.1f", eps) + "-CONSOLE.txt";
+			bw.write(cmd + "\n");
+		}
+		bw.write("\n");
+		
+		// 1K
+		for (double eps : epsArr){
+			String cmd = "java dp.generator.Orbis " + prefix + " " + dataname + " " + n_samples + " " + String.format("%.2f", eps) + 
+					" > ../_console/" + dataname + "_1k_" + String.format("%.1f", eps) + "-CONSOLE.txt";
+			bw.write(cmd + "\n");
+		}
+		bw.write("\n");
+		
+		if (sample_freq < 50000){	// only for 6 small graphs
+			// DER
+			double[] ratio = new double[]{4,2,1}; 
+			for (double eps : epsArr){
+				double sum_row = ratio[0] + ratio[1] + ratio[2];
+				double eps_c =  ratio[0]/ sum_row * eps;
+				double eps_p =  ratio[1]/ sum_row * eps;
+				double epsA =  ratio[2]/ sum_row * eps;
+				
+				String java_cmd = "java";
+				if (dataname.contains("ca-AstroPh"))
+					java_cmd = "java -Xmx7000m";
+				
+				String cmd = java_cmd + " dp.der.DensityExploreReconstruct " + prefix + " " + dataname + " " + n_samples + " " + String.format("%.1f", eps_c) + 
+						" " + String.format("%.1f", eps_p) + " " + String.format("%.1f", epsA) +
+						" > ../_console/" + dataname + "_der_" + String.format("%.1f", eps_c) + 
+						"_" + String.format("%.1f", eps_p) + "_" + String.format("%.1f", epsA) + "-CONSOLE.txt";
+				bw.write(cmd + "\n");
+			}
+			bw.write("\n");
+		
+			// HRG-MCMC
+			for (double eps1 : epsArr){
+				String cmd = "java dp.mcmc.MCMCInference " + prefix + " " + dataname + " " + n_samples + 
+									" " + sample_freq + " " + burn_factor + " " + String.format("%.1f", eps1) + 
+						" > ../_console/" + dataname + "_dendro_" + n_samples + "_" + sample_freq + "_" + burn_factor + "_" + String.format("%.1f", eps1) + "-CONSOLE.txt";
+				bw.write(cmd + "\n");
+			}
+			bw.write("\n");
+		}
+		
+		// HRG-Fixed
+		for (double eps1 : epsArr){
+			String cmd = "java dp.mcmc.MCMCInferenceFixed " + prefix + " " + dataname + " " + n_samples + 
+								" " + sample_freq + " " + burn_factor + " " + String.format("%.1f", eps1) +
+					" > ../_console/" + dataname + "_fixed_" + n_samples + "_" + sample_freq + "_" + burn_factor + "_" + String.format("%.1f", eps1) + "-CONSOLE.txt";
+			bw.write(cmd + "\n");
+		}
+		
+		bw.close();
+	}
 	
 	//// EdgeFlip
 	public static void generateEdgeFlip(String batch_file, String prefix, String dataname, int n_samples, double[] epsArr) 
@@ -622,6 +697,8 @@ public class BatchGenerator {
 	public static void utilityByGraph(String batch_file, String prefix, String dataname, int n_samples, int n_nodes,
 			int max_level, int lower_size, double[] epsArr, double[] ratioArr, double[] epsArr2, double[][] ratioDER) throws IOException{
 		
+		double log_n = Math.log(n_nodes);
+		
 		BufferedWriter bw = new BufferedWriter(new FileWriter(batch_file));
 		
 		// TmF
@@ -634,14 +711,14 @@ public class BatchGenerator {
 		bw.write("\n\n");
 		
 		// EdgeFlip
-		for (int i = 3; i < epsArr.length; i++){	// epsArr[3->6]
-			double eps = epsArr[i];
+		for (double eps : epsArr)
+			if (n_nodes < 50000 || eps >= log_n){	
 			
-			String graph_name = dataname + "_ef_" + String.format("%.1f", eps);
-			String cmd = "java dp.UtilityMeasure " + prefix + " " + dataname + " " + n_samples + " " + graph_name + " " + n_nodes +
-					" > ../_console/" + graph_name + "-UTIL.txt";
-			bw.write(cmd + "\n");
-		}
+				String graph_name = dataname + "_ef_" + String.format("%.1f", eps);
+				String cmd = "java dp.UtilityMeasure " + prefix + " " + dataname + " " + n_samples + " " + graph_name + " " + n_nodes +
+						" > ../_console/" + graph_name + "-UTIL.txt";
+				bw.write(cmd + "\n");
+			}
 		bw.write("\n\n");
 		
 		// DER
@@ -709,23 +786,23 @@ public class BatchGenerator {
 		bw.write("\n\n");
 		
 		// HRGDivisiveFit
-		burn_factor = 20;
-		sample_freq = n_nodes;
-		for (double eps2 : epsArr2){
-			for (double ratio : ratioArr){
-				for (double eps1 : epsArr){
-					String tree_file = dataname + "_hrgdiv_" + burn_factor + "_" + max_level + "_" + lower_size + "_" + String.format("%.1f", eps1) + 
-							"_" + String.format("%.2f", ratio) + "_tree";
-					String graph_name = tree_file + "_sample_" + String.format("%.1f", eps2);
-					
-					String cmd = "java dp.UtilityMeasure " + prefix + " " + dataname + " " + n_samples + " " + graph_name + " " + n_nodes +
-							" > ../_console/" + graph_name + "-UTIL.txt";
-					bw.write(cmd + "\n");
-				}
-				bw.write("\n");
-			}
-			bw.write("\n");
-		}
+//		burn_factor = 20;
+//		sample_freq = n_nodes;
+//		for (double eps2 : epsArr2){
+//			for (double ratio : ratioArr){
+//				for (double eps1 : epsArr){
+//					String tree_file = dataname + "_hrgdiv_" + burn_factor + "_" + max_level + "_" + lower_size + "_" + String.format("%.1f", eps1) + 
+//							"_" + String.format("%.2f", ratio) + "_tree";
+//					String graph_name = tree_file + "_sample_" + String.format("%.1f", eps2);
+//					
+//					String cmd = "java dp.UtilityMeasure " + prefix + " " + dataname + " " + n_samples + " " + graph_name + " " + n_nodes +
+//							" > ../_console/" + graph_name + "-UTIL.txt";
+//					bw.write(cmd + "\n");
+//				}
+//				bw.write("\n");
+//			}
+//			bw.write("\n");
+//		}
 		
 		bw.close();
 	}
@@ -748,6 +825,25 @@ public class BatchGenerator {
 		
 		int n_samples = 20;
 	
+		
+		/////// SUPPLEMENTARY epsilon=0.75ln, 1.25ln - Aug 8, 2016
+//		dataname_list = new String[]{"polbooks", "polblogs-wcc", "as20graph", "wiki-Vote-wcc", "ca-HepPh-wcc", "ca-AstroPh-wcc",
+//				"com_amazon_ungraph", "com_dblp_ungraph", "com_youtube_ungraph"};
+//		n_list = new int[]{105, 1222, 6474, 7066, 11204, 17903, 334863, 317080, 1134890};
+//		for (int i = 0; i < n_list.length; i++){
+//			String dataname = dataname_list[i];
+//			int n = n_list[i];
+//			
+//			double log_n = Math.log(n);
+//			double[] epsArr = new double[]{0.75*log_n, 1.25*log_n};	// 0.5*log_n 
+//			//
+//			String batch_file = "_cmd2/_All_" + dataname + ".cmd";
+//			
+//			
+//			int sample_freq = n;
+//			generateAllInOne(batch_file, prefix, dataname, sample_freq, n_samples, epsArr);
+//			System.out.println("DONE.");
+//		}
 		
 		
 		///////////////////// TODO: COMMUNITY
@@ -1002,7 +1098,7 @@ public class BatchGenerator {
 //		dataname_list = new String[]{"polbooks", "polblogs-wcc", "as20graph", "wiki-Vote-wcc", "ca-HepPh-wcc", "ca-AstroPh-wcc"};
 //		n_list = new int[]{105, 1222, 6474, 7066, 11204, 17903};
 //		int burn_factor = 1000;
-//		double[] epsArr2 = new double[]{1.0, 2.0, 4.0};
+//		double[] epsArr2 = new double[]{4.0}; //1.0, 2.0, 4.0};
 //		
 //		for (int i = 0; i < n_list.length; i++){
 //			String dataname = dataname_list[i];
@@ -1011,7 +1107,7 @@ public class BatchGenerator {
 //			//
 //			String batch_file = "_cmd2/sampleMCMCInference_" + dataname + ".cmd";
 //			double log_n = Math.log(n);
-//			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
+//			double[] epsArr = new double[]{0.75*log_n, 1.25*log_n}; //2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
 //			
 //			
 //			int sample_freq = n;
@@ -1025,7 +1121,7 @@ public class BatchGenerator {
 //		n_list = new int[]{105, 1222, 6474, 7066, 11204, 17903,
 //				334863, 317080, 1134890};
 //		int burn_factor = 1000;
-//		double[] epsArr2 = new double[]{1.0, 2.0, 4.0};
+//		double[] epsArr2 = new double[]{4.0}; //1.0, 2.0, 4.0};
 //		
 //		for (int i = 0; i < n_list.length; i++){
 //			String dataname = dataname_list[i];
@@ -1034,7 +1130,7 @@ public class BatchGenerator {
 //			//
 //			String batch_file = "_cmd2/sampleMCMCInferenceFixed_" + dataname + ".cmd";
 //			double log_n = Math.log(n);
-//			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
+//			double[] epsArr = new double[]{0.75*log_n, 1.25*log_n}; //2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
 //			
 //			int sample_freq = n;
 //			
@@ -1072,28 +1168,30 @@ public class BatchGenerator {
 		
 		
 		////////////////// TODO: UTILITY
-//		int[] max_level_list = new int[]{4, 6, 7, 7, 8, 8,
-//				11, 11, 12};
-//		int[] lower_size_list = new int[]{2, 2, 2, 2, 2, 2,
-//				2, 2, 2};
-//		double[] ratioArr = new double[]{2.0, 1.5, 1.0};
-//		double[] epsArr2 = new double[]{1.0, 2.0, 4.0};
-//		double[][] ratioDER = new double[][]{{1,1,1}, {2,1,1}, {4,1,1}, {4,2,1}, {8,4,1}};
-//		
-//		for (int i = 0; i < n_list.length; i++){
-//			String dataname = dataname_list[i];
-//			int n = n_list[i];
-//			int max_level = max_level_list[i];
-//			int lower_size = lower_size_list[i];
-//			
-//			//
-//			String batch_file = "_cmd2/utility_" + dataname + ".cmd";
-//			double log_n = Math.log(n);
-//			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
-//			
-//			utilityByGraph(batch_file, prefix, dataname, n_samples, n, max_level, lower_size, epsArr, ratioArr, epsArr2, ratioDER);
-//			System.out.println("DONE.");
-//		}
+		dataname_list = new String[]{"polbooks", "polblogs-wcc", "as20graph", "wiki-Vote-wcc", "ca-HepPh-wcc", "ca-AstroPh-wcc",
+																"com_amazon_ungraph", "com_dblp_ungraph", "com_youtube_ungraph"};
+		n_list = new int[]{105, 1222, 6474, 7066, 11204, 17903, 334863, 317080, 1134890};
+		int[] max_level_list = new int[]{4, 6, 7, 7, 8, 8, 11, 11, 12};	// for HRGDivisiveFit
+		int[] lower_size_list = new int[]{2, 2, 2, 2, 2, 2, 2, 2, 2};	// for HRGDivisiveFit
+		double[] ratioArr = new double[]{2.0, 1.5, 1.0};				// for HRGDivisiveFit
+		double[] epsArr2 = new double[]{4.0}; //1.0, 2.0, 4.0};
+		double[][] ratioDER = new double[][]{{4,2,1}}; //{1,1,1}, {2,1,1}, {4,1,1}, {4,2,1}, {8,4,1}};
+		
+		
+		for (int i = 0; i < n_list.length; i++){
+			String dataname = dataname_list[i];
+			int n = n_list[i];
+			int max_level = max_level_list[i];
+			int lower_size = lower_size_list[i];
+			
+			//
+			String batch_file = "_cmd2/utility_" + dataname + ".cmd";
+			double log_n = Math.log(n);
+			double[] epsArr = new double[]{0.75*log_n, 1.25*log_n}; //2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
+			
+			utilityByGraph(batch_file, prefix, dataname, n_samples, n, max_level, lower_size, epsArr, ratioArr, epsArr2, ratioDER);
+			System.out.println("DONE.");
+		}
 		
 		
 		//////////////////////////////// TODO: LOUVAIN
@@ -1246,10 +1344,10 @@ public class BatchGenerator {
 //			System.out.println("measureLouvainDP - DONE.");
 			
 			//
-			String batch_file = "_cmd/Metric_LouvainDP_Laplace_" + dataname + ".cmd";
-			int[] kArr = new int[]{4,8,16,32,64};
-			measureLouvainDPLaplace(batch_file, prefix, dataname, n_samples, epsArr, kArr);
-			System.out.println("measureLouvainDPLaplace - DONE.");			
+//			String batch_file = "_cmd/Metric_LouvainDP_Laplace_" + dataname + ".cmd";
+//			int[] kArr = new int[]{4,8,16,32,64};
+//			measureLouvainDPLaplace(batch_file, prefix, dataname, n_samples, epsArr, kArr);
+//			System.out.println("measureLouvainDPLaplace - DONE.");			
 			
 			/////
 //			String batch_file = "_cmd/Metric_MCMCInference_" + dataname + ".cmd";

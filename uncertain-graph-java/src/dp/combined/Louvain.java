@@ -1019,13 +1019,15 @@ public class Louvain {
 	public static void main(String[] args) throws Exception{
 		// load graph
 //		String dataname = "example";			// 
-		String dataname = "karate";			// (34, 78) 		ok
+//		String dataname = "karate";			// (34, 78) 		ok
 //		String dataname = "polbooks";		// (105, 441)		ok
-//		String dataname = "polblogs";		// (1224,16715)		ok 	
+		String dataname = "polblogs";		// (1224,16715)		ok 	
 //		String dataname = "as20graph";		// (6474,12572)		ok
 //		String dataname = "wiki-Vote";		// (7115,100762)	ok
 //		String dataname = "ca-HepPh";		// (12006,118489) 	ok
 //		String dataname = "ca-AstroPh";		// (18771,198050) 	ok		1.56s
+		//
+//		String dataname = "wiki-Vote-wcc";		// (7066,100736)	ok
 		// SYNTHETIC
 //		String dataname = "network10k";		// (10000,34810) 	ok
 //		String dataname = "network100k";	// (100000,232732) 	ok
@@ -1131,40 +1133,10 @@ public class Louvain {
 	    
 	    
 	    // Louvain on true graphs
-//	    System.out.println("dataname = " + dataname);
-//	    
-//		String filename = prefix + "_data/" + dataname + ".gr";
-//		String part_file = prefix + "_out/" + dataname + ".louvain";
-//		
-//		long start = System.currentTimeMillis();
-//		EdgeWeightedGraph G = EdgeWeightedGraph.readEdgeList(filename);
-//		System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
-//		
-//		System.out.println("#nodes = " + G.V());
-//		System.out.println("#edges = " + G.E());
-//		
-//		// TEST best_partition()
-//		Louvain lv = new Louvain();
-//		start = System.currentTimeMillis();
-//		Map<Integer, Integer> part = lv.best_partition(G, null);
-//		System.out.println("best_partition - DONE, elapsed " + (System.currentTimeMillis() - start));
-//
-//		Louvain.writePart(part, part_file);
-//		System.out.println("writePart - DONE");
-		
-	    
-		// example.gr
-////		int[] part1 = new int[]{0,0,0,1,1,2,2,3,3,3,3,2,2};
-//		int[] part1 = new int[]{0,0,0,2,2,2,2,3,3,3,3,2,2};
-//		System.out.println(CommunityMeasure.modularity(G, part1));
-		
-		
-		//// TEST generate_first_round(), generate_first_step()
 	    System.out.println("dataname = " + dataname);
 	    
 		String filename = "_data/" + dataname + ".gr";
-//		String part_file = "_out/" + dataname + ".f1";	// f1: full first round
-		String part_file = "_out/" + dataname + ".s1";	// s1: only first step
+		String part_file = "_data/" + dataname + ".louvain";
 		
 		long start = System.currentTimeMillis();
 		EdgeWeightedGraph G = EdgeWeightedGraph.readEdgeList(filename);
@@ -1176,15 +1148,45 @@ public class Louvain {
 		// TEST best_partition()
 		Louvain lv = new Louvain();
 		start = System.currentTimeMillis();
-		//
-//		Map<Integer, Integer> part = lv.generate_first_round(G, null);
-//		System.out.println("generate_first_round - DONE, elapsed " + (System.currentTimeMillis() - start));
-		//
-		Map<Integer, Integer> part = lv.generate_first_step(G, null);
-		System.out.println("generate_first_step - DONE, elapsed " + (System.currentTimeMillis() - start));
+		Map<Integer, Integer> part = lv.best_partition(G, null);
+		System.out.println("best_partition - DONE, elapsed " + (System.currentTimeMillis() - start));
 
 		Louvain.writePart(part, part_file);
 		System.out.println("writePart - DONE");
+		
+	    
+		// example.gr
+////		int[] part1 = new int[]{0,0,0,1,1,2,2,3,3,3,3,2,2};
+//		int[] part1 = new int[]{0,0,0,2,2,2,2,3,3,3,3,2,2};
+//		System.out.println(CommunityMeasure.modularity(G, part1));
+		
+		
+		//// TEST generate_first_round(), generate_first_step()
+//	    System.out.println("dataname = " + dataname);
+//	    
+//		String filename = "_data/" + dataname + ".gr";
+//		String part_file = "_out/" + dataname + ".f1";	// f1: full first round
+////		String part_file = "_out/" + dataname + ".s1";	// s1: only first step
+//		
+//		long start = System.currentTimeMillis();
+//		EdgeWeightedGraph G = EdgeWeightedGraph.readEdgeList(filename);
+//		System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
+//		
+//		System.out.println("#nodes = " + G.V());
+//		System.out.println("#edges = " + G.E());
+//		
+//		// TEST best_partition()
+//		Louvain lv = new Louvain();
+//		start = System.currentTimeMillis();
+//		//
+//		Map<Integer, Integer> part = lv.generate_first_round(G, null);
+//		System.out.println("generate_first_round - DONE, elapsed " + (System.currentTimeMillis() - start));
+//		//
+////		Map<Integer, Integer> part = lv.generate_first_step(G, null);
+////		System.out.println("generate_first_step - DONE, elapsed " + (System.currentTimeMillis() - start));
+//
+//		Louvain.writePart(part, part_file);
+//		System.out.println("writePart - DONE");
 		
 	}
 
