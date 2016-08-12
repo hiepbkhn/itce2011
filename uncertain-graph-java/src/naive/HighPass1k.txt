@@ -1,0 +1,98 @@
+#nodes = 18771
+#edges = 198050
+BEFORE: sum_deg = 395104
+n_ceil = 7565
+k = 137
+getGraphByPartition.comDict.size = 9453
+G_new.V = 137, G_new.E = 9453, G_new.totalWeight = 198050.0
+G_new.totalWeight = 198022.0
+part_init.size = 18771
+BEFORE: freeStubList.size = 395104
+AFTER : freeStubList.size = 395104
+count = 197552
+g.#nodes = 18771
+g.#edges = 197552
+
+
+#nodes = 18771
+#edges = 198050
+BEFORE: sum_deg = 395998
+n_ceil = 7304
+k = 26
+getGraphByPartition.comDict.size = 132640
+G_new.V = 721, G_new.E = 132640, G_new.totalWeight = 198050.0
+G_new.totalWeight = 262826.0
+part_init.size = 18771
+BEFORE: freeStubList.size = 395998
+AFTER : freeStubList.size = 395998
+count = 197999
+g.#nodes = 18771
+g.#edges = 197999
+
+
+#nodes = 6474
+#edges = 12572
+k = 8
+BEFORE: sum_deg = 25542
+n_ceil = -3251
+getGraphByPartition.comDict.size = 9338
+G_new.V = 809, G_new.E = 9338, G_new.totalWeight = 12572.0
+G_new.totalWeight = 17536.0
+part_init.size = 6474
+BEFORE: freeStubList.size = 28793
+AFTER : freeStubList.size = 28793
+count = 14395
+g.#nodes = 6474
+g.#edges = 14395
+recoverGraph - DONE, elapsed 275
+
+
+#nodes = 334863
+#edges = 925872
+BEFORE: sum_deg = 1851416
+n_ceil = 30555
+k = 578
+getGraphByPartition.comDict.size = 167017
+G_new.V = 579, G_new.E = 167017, G_new.totalWeight = 925872.0
+G_new.totalWeight = 943873.0
+part_init.size = 334863
+BEFORE: freeStubList.size = 1851416
+AFTER : freeStubList.size = 1851416
+count = 925708
+g.#nodes = 334863
+g.#edges = 925708
+recoverGraph - DONE, elapsed 2640
+
+
+#nodes = 1134890
+#edges = 2987624
+k = 1065
+BEFORE: sum_deg = 5982592
+n_ceil = -583965
+getGraphByPartition.comDict.size = 253554
+G_new.V = 1065, G_new.E = 253554, G_new.totalWeight = 2987624.0
+G_new.totalWeight = 3070833.0
+part_init.size = 1134890
+BEFORE: freeStubList.size = 6566557
+AFTER : freeStubList.size = 6566557
+count = 3283278
+g.#nodes = 1134890
+g.#edges = 3283278
+recoverGraph - DONE, elapsed 16701
+
+
+#nodes = 1134890
+#edges = 2987624
+k = 104
+BEFORE: sum_deg = 5985260
+n_ceil = -567276
+getGraphByPartition.comDict.size = 1070507
+G_new.V = 10912, G_new.E = 1070507, G_new.totalWeight = 2987624.0
+G_new.totalWeight = 3499032.0
+part_init.size = 1134890
+BEFORE: freeStubList.size = 6552536
+AFTER : freeStubList.size = 6552536
+count = 3276253
+g.#nodes = 1134890
+g.#edges = 3276253
+recoverGraph - DONE, elapsed 86212

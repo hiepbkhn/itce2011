@@ -1,0 +1,1 @@
+- LinkExchangeInt3: WRONG counting operations because Int3 objects are shared by linked lists

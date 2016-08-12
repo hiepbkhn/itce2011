@@ -21,6 +21,8 @@
  * 	- add generateLouvainDPLaplace()
  * Aug 8, 2016
  * 	- add generateAllInOne()
+ * Aug 12
+ * 	- add generateHighPass1k()
  */
 
 package dp.combined;
@@ -628,6 +630,19 @@ public class BatchGenerator {
 		bw.close();
 	}
 	
+	//// HighPass1k
+	public static void generateHighPass1k(String batch_file, String prefix, String dataname, int n_samples, double[] epsArr, int k) 
+			throws IOException{
+		
+		BufferedWriter bw = new BufferedWriter(new FileWriter(batch_file));
+		for (double eps : epsArr){
+			String cmd = "java naive.HighPass1k " + prefix + " " + dataname + " " + n_samples + " " + String.format("%.2f", eps) + " " + k + 
+					" > ../_console/" + dataname + "_sg1k_" + String.format("%.1f", eps) + "_" + k + "-CONSOLE.txt";
+			bw.write(cmd + "\n");
+		}
+		bw.close();
+	}
+	
 	
 	//// sampleMCMCInference
 	//	eps2: for noisy_nEdge
@@ -695,56 +710,66 @@ public class BatchGenerator {
 	
 	//// utilityByGraph
 	public static void utilityByGraph(String batch_file, String prefix, String dataname, int n_samples, int n_nodes,
-			int max_level, int lower_size, double[] epsArr, double[] ratioArr, double[] epsArr2, double[][] ratioDER) throws IOException{
+			int max_level, int lower_size, double[] epsArr, double[] ratioArr, double[] epsArr2, double[][] ratioDER, int[] kArr) throws IOException{
 		
 		double log_n = Math.log(n_nodes);
 		
 		BufferedWriter bw = new BufferedWriter(new FileWriter(batch_file));
 		
 		// TmF
-		for (double eps : epsArr){
-			String graph_name = dataname + "_tmf_" + String.format("%.1f", eps);
-			String cmd = "java dp.UtilityMeasure " + prefix + " " + dataname + " " + n_samples + " " + graph_name + " " + n_nodes +
-					" > ../_console/" + graph_name + "-UTIL.txt";
-			bw.write(cmd + "\n");
-		}
-		bw.write("\n\n");
+//		for (double eps : epsArr){
+//			String graph_name = dataname + "_tmf_" + String.format("%.1f", eps);
+//			String cmd = "java dp.UtilityMeasure " + prefix + " " + dataname + " " + n_samples + " " + graph_name + " " + n_nodes +
+//					" > ../_console/" + graph_name + "-UTIL.txt";
+//			bw.write(cmd + "\n");
+//		}
+//		bw.write("\n\n");
+//		
+//		// EdgeFlip
+//		for (double eps : epsArr)
+//			if (n_nodes < 50000 || eps >= log_n){	
+//			
+//				String graph_name = dataname + "_ef_" + String.format("%.1f", eps);
+//				String cmd = "java dp.UtilityMeasure " + prefix + " " + dataname + " " + n_samples + " " + graph_name + " " + n_nodes +
+//						" > ../_console/" + graph_name + "-UTIL.txt";
+//				bw.write(cmd + "\n");
+//			}
+//		bw.write("\n\n");
+//		
+//		// DER
+//		if (n_nodes < 50000){
+//			for (double eps : epsArr){
+//				for (int i = 0; i < ratioDER.length; i++){
+//					double sum_row = ratioDER[i][0] + ratioDER[i][1] + ratioDER[i][2];
+//					double eps_c =  ratioDER[i][0]/ sum_row * eps;
+//					double eps_p =  ratioDER[i][1]/ sum_row * eps;
+//					double epsA =  ratioDER[i][2]/ sum_row * eps;
+//					
+//					String graph_name = dataname + "_der_" + String.format("%.1f", eps_c) + 
+//							"_" + String.format("%.1f", eps_p) + "_" + String.format("%.1f", epsA);
+//					
+//					String cmd = "java dp.UtilityMeasure " + prefix + " " + dataname + " " + n_samples + " " + graph_name + " " + n_nodes +
+//							" > ../_console/" + graph_name + "-UTIL.txt";
+//					bw.write(cmd + "\n");
+//				}
+//				bw.write("\n");
+//			}
+//			bw.write("\n\n");
+//		}
+//		
+//		// 1k-Series
+//		for (double eps : epsArr){
+//			String graph_name = dataname + "_1k_" + String.format("%.1f", eps);
+//			String cmd = "java dp.UtilityMeasure " + prefix + " " + dataname + " " + n_samples + " " + graph_name + " " + n_nodes +
+//					" > ../_console/" + graph_name + "-UTIL.txt";
+//			bw.write(cmd + "\n");
+//		}
+//		bw.write("\n\n");
 		
-		// EdgeFlip
+		// HighPass1k
 		for (double eps : epsArr)
-			if (n_nodes < 50000 || eps >= log_n){	
-			
-				String graph_name = dataname + "_ef_" + String.format("%.1f", eps);
-				String cmd = "java dp.UtilityMeasure " + prefix + " " + dataname + " " + n_samples + " " + graph_name + " " + n_nodes +
-						" > ../_console/" + graph_name + "-UTIL.txt";
-				bw.write(cmd + "\n");
-			}
-		bw.write("\n\n");
-		
-		// DER
-		if (n_nodes < 50000){
-			for (double eps : epsArr){
-				for (int i = 0; i < ratioDER.length; i++){
-					double sum_row = ratioDER[i][0] + ratioDER[i][1] + ratioDER[i][2];
-					double eps_c =  ratioDER[i][0]/ sum_row * eps;
-					double eps_p =  ratioDER[i][1]/ sum_row * eps;
-					double epsA =  ratioDER[i][2]/ sum_row * eps;
-					
-					String graph_name = dataname + "_der_" + String.format("%.1f", eps_c) + 
-							"_" + String.format("%.1f", eps_p) + "_" + String.format("%.1f", epsA);
-					
-					String cmd = "java dp.UtilityMeasure " + prefix + " " + dataname + " " + n_samples + " " + graph_name + " " + n_nodes +
-							" > ../_console/" + graph_name + "-UTIL.txt";
-					bw.write(cmd + "\n");
-				}
-				bw.write("\n");
-			}
-			bw.write("\n\n");
-		}
-		
-		// 1k-Series
-		for (double eps : epsArr){
-			String graph_name = dataname + "_1k_" + String.format("%.1f", eps);
+			for (int k : kArr){
+			String graph_name = dataname + "_sg1k_" + String.format("%.1f", eps) + "_" + k;
 			String cmd = "java dp.UtilityMeasure " + prefix + " " + dataname + " " + n_samples + " " + graph_name + " " + n_nodes +
 					" > ../_console/" + graph_name + "-UTIL.txt";
 			bw.write(cmd + "\n");
@@ -752,47 +777,12 @@ public class BatchGenerator {
 		bw.write("\n\n");
 		
 		// MCMCInference
-		int burn_factor = 1000;
-		int sample_freq = n_nodes;
-		if (n_nodes < 50000){
-			for (double eps2 : epsArr2){
-				for (double eps : epsArr){
-					String tree_file = dataname + "_dendro_" + n_samples + "_" + sample_freq + "_" + burn_factor + "_" + String.format("%.1f", eps) + "_tree"; 
-					String graph_name = tree_file + "_sample_" + String.format("%.1f", eps2);
-					
-					String cmd = "java dp.UtilityMeasure " + prefix + " " + dataname + " " + n_samples + " " + graph_name + " " + n_nodes +
-							" > ../_console/" + graph_name + "-UTIL.txt";
-					bw.write(cmd + "\n");
-				}
-				bw.write("\n");
-			}
-		}
-		bw.write("\n\n");
-		
-		// MCMCInferenceFixed
-		burn_factor = 1000;
-		sample_freq = n_nodes;
-		for (double eps2 : epsArr2){
-			for (double eps : epsArr){
-				String tree_file = dataname + "_fixed_" + n_samples + "_" + sample_freq + "_" + burn_factor + "_" + String.format("%.1f", eps) + "_tree"; 
-				String graph_name = tree_file + "_sample_" + String.format("%.1f", eps2);
-				
-				String cmd = "java dp.UtilityMeasure " + prefix + " " + dataname + " " + n_samples + " " + graph_name + " " + n_nodes +
-						" > ../_console/" + graph_name + "-UTIL.txt";
-				bw.write(cmd + "\n");
-			}
-			bw.write("\n");
-		}
-		bw.write("\n\n");
-		
-		// HRGDivisiveFit
-//		burn_factor = 20;
-//		sample_freq = n_nodes;
-//		for (double eps2 : epsArr2){
-//			for (double ratio : ratioArr){
-//				for (double eps1 : epsArr){
-//					String tree_file = dataname + "_hrgdiv_" + burn_factor + "_" + max_level + "_" + lower_size + "_" + String.format("%.1f", eps1) + 
-//							"_" + String.format("%.2f", ratio) + "_tree";
+//		int burn_factor = 1000;
+//		int sample_freq = n_nodes;
+//		if (n_nodes < 50000){
+//			for (double eps2 : epsArr2){
+//				for (double eps : epsArr){
+//					String tree_file = dataname + "_dendro_" + n_samples + "_" + sample_freq + "_" + burn_factor + "_" + String.format("%.1f", eps) + "_tree"; 
 //					String graph_name = tree_file + "_sample_" + String.format("%.1f", eps2);
 //					
 //					String cmd = "java dp.UtilityMeasure " + prefix + " " + dataname + " " + n_samples + " " + graph_name + " " + n_nodes +
@@ -801,9 +791,26 @@ public class BatchGenerator {
 //				}
 //				bw.write("\n");
 //			}
+//		}
+//		bw.write("\n\n");
+//		
+//		// MCMCInferenceFixed
+//		burn_factor = 1000;
+//		sample_freq = n_nodes;
+//		for (double eps2 : epsArr2){
+//			for (double eps : epsArr){
+//				String tree_file = dataname + "_fixed_" + n_samples + "_" + sample_freq + "_" + burn_factor + "_" + String.format("%.1f", eps) + "_tree"; 
+//				String graph_name = tree_file + "_sample_" + String.format("%.1f", eps2);
+//				
+//				String cmd = "java dp.UtilityMeasure " + prefix + " " + dataname + " " + n_samples + " " + graph_name + " " + n_nodes +
+//						" > ../_console/" + graph_name + "-UTIL.txt";
+//				bw.write(cmd + "\n");
+//			}
 //			bw.write("\n");
 //		}
+//		bw.write("\n\n");
 		
+	
 		bw.close();
 	}
 	
@@ -1092,6 +1099,25 @@ public class BatchGenerator {
 //			System.out.println("DONE.");
 //		}
 		
+		// HighPass1k
+		dataname_list = new String[]{"polbooks", "polblogs-wcc", "as20graph", "wiki-Vote-wcc", "ca-HepPh-wcc", "ca-AstroPh-wcc",
+									"com_amazon_ungraph", "com_dblp_ungraph", "com_youtube_ungraph"};
+		n_list = new int[]{105, 1222, 6474, 7066, 11204, 17903, 334863, 317080, 1134890};
+		for (int i = 0; i < n_list.length; i++){
+			String dataname = dataname_list[i];
+			int n = n_list[i];
+			
+			int k = (int)Math.pow(n, 1.0/3);
+			
+			//
+			String batch_file = "_cmd2/SG1k_" + dataname + ".cmd";		// _cmd2
+			double log_n = Math.log(n);
+			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, 0.75*log_n, log_n, 1.25*log_n, 1.5*log_n}; // 0.5*log_n
+			
+			generateHighPass1k(batch_file, prefix, dataname, n_samples, epsArr, k);
+			System.out.println("DONE.");
+		}
+		
 		
 		//////////////// TODO: SAMPLE
 		// MCMCInference
@@ -1168,30 +1194,32 @@ public class BatchGenerator {
 		
 		
 		////////////////// TODO: UTILITY
-		dataname_list = new String[]{"polbooks", "polblogs-wcc", "as20graph", "wiki-Vote-wcc", "ca-HepPh-wcc", "ca-AstroPh-wcc",
-																"com_amazon_ungraph", "com_dblp_ungraph", "com_youtube_ungraph"};
-		n_list = new int[]{105, 1222, 6474, 7066, 11204, 17903, 334863, 317080, 1134890};
-		int[] max_level_list = new int[]{4, 6, 7, 7, 8, 8, 11, 11, 12};	// for HRGDivisiveFit
-		int[] lower_size_list = new int[]{2, 2, 2, 2, 2, 2, 2, 2, 2};	// for HRGDivisiveFit
-		double[] ratioArr = new double[]{2.0, 1.5, 1.0};				// for HRGDivisiveFit
-		double[] epsArr2 = new double[]{4.0}; //1.0, 2.0, 4.0};
-		double[][] ratioDER = new double[][]{{4,2,1}}; //{1,1,1}, {2,1,1}, {4,1,1}, {4,2,1}, {8,4,1}};
-		
-		
-		for (int i = 0; i < n_list.length; i++){
-			String dataname = dataname_list[i];
-			int n = n_list[i];
-			int max_level = max_level_list[i];
-			int lower_size = lower_size_list[i];
-			
-			//
-			String batch_file = "_cmd2/utility_" + dataname + ".cmd";
-			double log_n = Math.log(n);
-			double[] epsArr = new double[]{0.75*log_n, 1.25*log_n}; //2.0, 0.25*log_n, 0.5*log_n, log_n, 1.5*log_n, 2*log_n, 3*log_n};
-			
-			utilityByGraph(batch_file, prefix, dataname, n_samples, n, max_level, lower_size, epsArr, ratioArr, epsArr2, ratioDER);
-			System.out.println("DONE.");
-		}
+//		dataname_list = new String[]{"polbooks", "polblogs-wcc", "as20graph", "wiki-Vote-wcc", "ca-HepPh-wcc", "ca-AstroPh-wcc",
+//																"com_amazon_ungraph", "com_dblp_ungraph", "com_youtube_ungraph"};
+//		n_list = new int[]{105, 1222, 6474, 7066, 11204, 17903, 334863, 317080, 1134890};
+//		int[] max_level_list = new int[]{4, 6, 7, 7, 8, 8, 11, 11, 12};	// for HRGDivisiveFit
+//		int[] lower_size_list = new int[]{2, 2, 2, 2, 2, 2, 2, 2, 2};	// for HRGDivisiveFit
+//		double[] ratioArr = new double[]{2.0, 1.5, 1.0};				// for HRGDivisiveFit
+//		double[] epsArr2 = new double[]{4.0}; //1.0, 2.0, 4.0};
+//		double[][] ratioDER = new double[][]{{4,2,1}}; //{1,1,1}, {2,1,1}, {4,1,1}, {4,2,1}, {8,4,1}};
+//		
+//		
+//		for (int i = 0; i < n_list.length; i++){
+//			String dataname = dataname_list[i];
+//			int n = n_list[i];
+//			int max_level = max_level_list[i];
+//			int lower_size = lower_size_list[i];
+//			
+//			int[] kArr = new int[]{(int)Math.pow(n, 1.0/3)};
+//			
+//			//
+//			String batch_file = "_cmd2/utility_" + dataname + ".cmd";
+//			double log_n = Math.log(n);
+//			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, 0.75*log_n, log_n, 1.25*log_n, 1.5*log_n}; //, , 2*log_n, 3*log_n};	
+//			
+//			utilityByGraph(batch_file, prefix, dataname, n_samples, n, max_level, lower_size, epsArr, ratioArr, epsArr2, ratioDER, kArr);
+//			System.out.println("DONE.");
+//		}
 		
 		
 		//////////////////////////////// TODO: LOUVAIN

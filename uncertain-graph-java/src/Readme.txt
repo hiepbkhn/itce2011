@@ -42,7 +42,8 @@ CLASSPATH: D:\git\itce2011\uncertain-graph-java\bin;E:\caidat\Java\grph-1.6.29-s
 - DensityExploreReconstruct.java
 
 [dp.naive] TmF
-- GreedyReconstruct.java
+- GreedyReconstruct.java	(TmF)
+- HighPass1k.java			(1k + supergraph consistency)
 
 [dp.hist] MCMC by edge switching
 - DegreeSeqHist.java
@@ -87,6 +88,10 @@ CLASSPATH: D:\git\itce2011\uncertain-graph-java\bin;E:\caidat\Java\grph-1.6.29-s
 - NodeSetLouvainOpt.java: k-ary tree, copy from NodeSetLouvain, used in LouvainOpt
 
 - EdgeFlip: implement paper EDBTw'15
+
+- SparseVector.java + NodeSetCut.java
+
+- RandomProjection.java
 
 - CommunityMeasure: clustering metrics
 
