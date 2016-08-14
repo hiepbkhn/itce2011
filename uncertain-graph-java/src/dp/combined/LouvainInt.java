@@ -602,7 +602,7 @@ public class LouvainInt {
 //	    		System.out.print(key + ":" + status.sizes.get(key) + ", ");
 //	    	System.out.println();
 			
-			Map<Int2, Integer> comDict = new HashMap<Int2, Integer>();		// (u_com, v_com) -> num edges
+			Map<Long, Integer> comDict = new HashMap<Long, Integer>();		// (u_com, v_com) -> num edges
 			
 			int i = edgeList.size() - 1;
 			while (i >= 0){
@@ -618,7 +618,7 @@ public class LouvainInt {
 						u_com = v_com;
 						v_com = temp;
 					}
-					Int2 key = new Int2(u_com, v_com);
+					long key = u_com * Const.BIG_VAL + v_com;
 					if (comDict.containsKey(key))
 						comDict.put(key, comDict.get(key) + 1);
 					else
@@ -636,9 +636,9 @@ public class LouvainInt {
 //			System.out.println();
 			
 			// compute logLK
-			for (Int2 com : comDict.keySet()){
-				int ni = status.sizes.get(com.val0);
-				int nj = status.sizes.get(com.val1);
+			for (Long com : comDict.keySet()){
+				int ni = status.sizes.get((int)(com/Const.BIG_VAL));
+				int nj = status.sizes.get((int)(com % Const.BIG_VAL));
 				double e_ij = comDict.get(com);
 				double p_ij = e_ij/(ni*nj);
 				if (p_ij > 0.0 && p_ij < 1.0)

@@ -36,6 +36,7 @@ import java.util.Random;
 
 import dp.DPUtil;
 import dp.IndexSorter;
+import dp.combined.Const;
 import dp.combined.Louvain;
 import toools.io.file.RegularFile;
 import toools.set.IntSet;
@@ -83,7 +84,7 @@ public class Orbis {
 	//// degList: node -> deg 
 	public int dkTopoGen1k(Grph g, int[] degList, boolean accept_self, boolean accept_parallel, String stub_file) throws IOException{
 		
-		Map<Int2, Integer> adjacencyMap = new HashMap<Int2, Integer>();
+		Map<Long, Integer> adjacencyMap = new HashMap<Long, Integer>();
 		
 		// Update our adjacency map with the existing edges so far.  This
 		// in case someone wants to re-wire the graph and continue
@@ -92,8 +93,8 @@ public class Orbis {
 			int v1 = p.first;
 			int v2 = p.second;
 			
-			adjacencyMap.put(new Int2(v1, v2), 1);
-			adjacencyMap.put(new Int2(v2, v1), 1);
+			adjacencyMap.put(v1 * Const.BIG_VAL + v2, 1);
+			adjacencyMap.put(v2 * Const.BIG_VAL + v1, 1);
 		}
 		
 		List<Stub> freeStubList = new ArrayList<Stub>();
@@ -200,7 +201,7 @@ public class Orbis {
 	}
 	
 	////
-	public int dkTopoGen1k_stublist(Grph g, List<Stub> freeStubList, Map<Int2, Integer> adjacencyMap, boolean accept_self, boolean accept_parallel){
+	public int dkTopoGen1k_stublist(Grph g, List<Stub> freeStubList, Map<Long, Integer> adjacencyMap, boolean accept_self, boolean accept_parallel){
 		int needToRewire = 0;
 		
 		int nextStubIter = 0;
@@ -240,8 +241,8 @@ public class Orbis {
 			
 			count += 1;
 			g.addSimpleEdge(stub1.nodeid, stub_i.nodeid, false);
-			adjacencyMap.put(new Int2(stub1.nodeid, stub_i.nodeid), 1);
-			adjacencyMap.put(new Int2(stub_i.nodeid, stub1.nodeid), 1);
+			adjacencyMap.put(stub1.nodeid * Const.BIG_VAL + stub_i.nodeid, 1);
+			adjacencyMap.put(stub_i.nodeid * Const.BIG_VAL + stub1.nodeid, 1);
 			
 			
 //			freeStubList.remove(i);

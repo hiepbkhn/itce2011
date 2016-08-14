@@ -756,8 +756,8 @@ public class BatchGenerator {
 //			}
 //			bw.write("\n\n");
 //		}
-//		
-//		// 1k-Series
+		
+		// 1k-Series
 //		for (double eps : epsArr){
 //			String graph_name = dataname + "_1k_" + String.format("%.1f", eps);
 //			String cmd = "java dp.UtilityMeasure " + prefix + " " + dataname + " " + n_samples + " " + graph_name + " " + n_nodes +
@@ -1086,37 +1086,40 @@ public class BatchGenerator {
 //		}
 
 		// 1k-Series
+//		dataname_list = new String[]{"polbooks", "polblogs-wcc", "as20graph", "wiki-Vote-wcc", "ca-HepPh-wcc", "ca-AstroPh-wcc",
+//									"com_amazon_ungraph", "com_dblp_ungraph", "com_youtube_ungraph"};
+//		n_list = new int[]{105, 1222, 6474, 7066, 11204, 17903, 334863, 317080, 1134890};
 //		for (int i = 0; i < n_list.length; i++){
 //			String dataname = dataname_list[i];
 //			int n = n_list[i];
 //			
 //			//
-//			String batch_file = "_cmd/1k_" + dataname + ".cmd";		// _cmd2
+//			String batch_file = "_cmd2/1k_" + dataname + ".cmd";		// _cmd2
 //			double log_n = Math.log(n);
-//			double[] epsArr = new double[]{0.1*log_n, 0.2*log_n, 0.3*log_n, 0.4*log_n};	// 0.5*log_n
+//			double[] epsArr = new double[]{0.75*log_n, 1.25*log_n};	// 0.5*log_n
 //			
 //			generate1kSeries(batch_file, prefix, dataname, n_samples, epsArr);
 //			System.out.println("DONE.");
 //		}
 		
 		// HighPass1k
-		dataname_list = new String[]{"polbooks", "polblogs-wcc", "as20graph", "wiki-Vote-wcc", "ca-HepPh-wcc", "ca-AstroPh-wcc",
-									"com_amazon_ungraph", "com_dblp_ungraph", "com_youtube_ungraph"};
-		n_list = new int[]{105, 1222, 6474, 7066, 11204, 17903, 334863, 317080, 1134890};
-		for (int i = 0; i < n_list.length; i++){
-			String dataname = dataname_list[i];
-			int n = n_list[i];
-			
-			int k = (int)Math.pow(n, 1.0/3);
-			
-			//
-			String batch_file = "_cmd2/SG1k_" + dataname + ".cmd";		// _cmd2
-			double log_n = Math.log(n);
-			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, 0.75*log_n, log_n, 1.25*log_n, 1.5*log_n}; // 0.5*log_n
-			
-			generateHighPass1k(batch_file, prefix, dataname, n_samples, epsArr, k);
-			System.out.println("DONE.");
-		}
+//		dataname_list = new String[]{"polbooks", "polblogs-wcc", "as20graph", "wiki-Vote-wcc", "ca-HepPh-wcc", "ca-AstroPh-wcc",
+//									"com_amazon_ungraph", "com_dblp_ungraph", "com_youtube_ungraph"};
+//		n_list = new int[]{105, 1222, 6474, 7066, 11204, 17903, 334863, 317080, 1134890};
+//		for (int i = 0; i < n_list.length; i++){
+//			String dataname = dataname_list[i];
+//			int n = n_list[i];
+//			
+//			int k = (int)Math.pow(n, 1.0/3);
+//			
+//			//
+//			String batch_file = "_cmd2/SG1k_" + dataname + ".cmd";		// _cmd2
+//			double log_n = Math.log(n);
+//			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, 0.75*log_n, log_n, 1.25*log_n, 1.5*log_n}; // 0.5*log_n
+//			
+//			generateHighPass1k(batch_file, prefix, dataname, n_samples, epsArr, k);
+//			System.out.println("DONE.");
+//		}
 		
 		
 		//////////////// TODO: SAMPLE
@@ -1194,32 +1197,32 @@ public class BatchGenerator {
 		
 		
 		////////////////// TODO: UTILITY
-//		dataname_list = new String[]{"polbooks", "polblogs-wcc", "as20graph", "wiki-Vote-wcc", "ca-HepPh-wcc", "ca-AstroPh-wcc",
-//																"com_amazon_ungraph", "com_dblp_ungraph", "com_youtube_ungraph"};
-//		n_list = new int[]{105, 1222, 6474, 7066, 11204, 17903, 334863, 317080, 1134890};
-//		int[] max_level_list = new int[]{4, 6, 7, 7, 8, 8, 11, 11, 12};	// for HRGDivisiveFit
-//		int[] lower_size_list = new int[]{2, 2, 2, 2, 2, 2, 2, 2, 2};	// for HRGDivisiveFit
-//		double[] ratioArr = new double[]{2.0, 1.5, 1.0};				// for HRGDivisiveFit
-//		double[] epsArr2 = new double[]{4.0}; //1.0, 2.0, 4.0};
-//		double[][] ratioDER = new double[][]{{4,2,1}}; //{1,1,1}, {2,1,1}, {4,1,1}, {4,2,1}, {8,4,1}};
-//		
-//		
-//		for (int i = 0; i < n_list.length; i++){
-//			String dataname = dataname_list[i];
-//			int n = n_list[i];
-//			int max_level = max_level_list[i];
-//			int lower_size = lower_size_list[i];
-//			
-//			int[] kArr = new int[]{(int)Math.pow(n, 1.0/3)};
-//			
-//			//
-//			String batch_file = "_cmd2/utility_" + dataname + ".cmd";
-//			double log_n = Math.log(n);
-//			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, 0.75*log_n, log_n, 1.25*log_n, 1.5*log_n}; //, , 2*log_n, 3*log_n};	
-//			
-//			utilityByGraph(batch_file, prefix, dataname, n_samples, n, max_level, lower_size, epsArr, ratioArr, epsArr2, ratioDER, kArr);
-//			System.out.println("DONE.");
-//		}
+		dataname_list = new String[]{"polbooks", "polblogs-wcc", "as20graph", "wiki-Vote-wcc", "ca-HepPh-wcc", "ca-AstroPh-wcc",
+																"com_amazon_ungraph", "com_dblp_ungraph", "com_youtube_ungraph"};
+		n_list = new int[]{105, 1222, 6474, 7066, 11204, 17903, 334863, 317080, 1134890};
+		int[] max_level_list = new int[]{4, 6, 7, 7, 8, 8, 11, 11, 12};	// for HRGDivisiveFit
+		int[] lower_size_list = new int[]{2, 2, 2, 2, 2, 2, 2, 2, 2};	// for HRGDivisiveFit
+		double[] ratioArr = new double[]{2.0, 1.5, 1.0};				// for HRGDivisiveFit
+		double[] epsArr2 = new double[]{4.0}; //1.0, 2.0, 4.0};
+		double[][] ratioDER = new double[][]{{4,2,1}}; //{1,1,1}, {2,1,1}, {4,1,1}, {4,2,1}, {8,4,1}};
+		
+		
+		for (int i = 0; i < n_list.length; i++){
+			String dataname = dataname_list[i];
+			int n = n_list[i];
+			int max_level = max_level_list[i];
+			int lower_size = lower_size_list[i];
+			
+			int[] kArr = new int[]{(int)Math.pow(n, 1.0/3)};
+			
+			//
+			String batch_file = "_cmd2/utility_" + dataname + ".cmd";
+			double log_n = Math.log(n);
+			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, 0.75*log_n, log_n, 1.25*log_n, 1.5*log_n}; //, , 2*log_n, 3*log_n};	
+			
+			utilityByGraph(batch_file, prefix, dataname, n_samples, n, max_level, lower_size, epsArr, ratioArr, epsArr2, ratioDER, kArr);
+			System.out.println("DONE.");
+		}
 		
 		
 		//////////////////////////////// TODO: LOUVAIN

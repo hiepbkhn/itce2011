@@ -403,12 +403,12 @@ public class CommunityMeasure {
 //		System.out.println("k_org = " + k_org);
 //		System.out.println("k = " + k);
 		// n_ij, n_i, n_j
-		Map<Int2, Integer> n_ij = new HashMap<Int2, Integer>();
+		Map<Long, Integer> n_ij = new HashMap<Long, Integer>();
 		int[] n_i = new int[k_org];
 		int[] n_j = new int[k];
 		
 		for (int u = 0; u < n; u++){
-			Int2 key = new Int2(part_org[u], part[u]);
+			long key = part_org[u] * Const.BIG_VAL + part[u];
 			if (n_ij.containsKey(key))
 				n_ij.put(key, n_ij.get(key) + 1);
 			else
@@ -420,9 +420,9 @@ public class CommunityMeasure {
 
 		//
 		double nominator = 0.0;
-		for (Map.Entry<Int2, Integer> entry : n_ij.entrySet()){
-			int i = entry.getKey().val0;
-			int j = entry.getKey().val1;
+		for (Map.Entry<Long, Integer> entry : n_ij.entrySet()){
+			int i = (int)(entry.getKey()/Const.BIG_VAL);
+			int j = (int)(entry.getKey()% Const.BIG_VAL);
 			int n_ij_val = entry.getValue();
 			nominator += n_ij_val * Math.log((double)n_ij_val/n_i[i] * (double)n/n_j[j]);
 		}
@@ -603,12 +603,12 @@ public class CommunityMeasure {
 //		System.out.println("k_org = " + k_org);
 //		System.out.println("k = " + k);
 		
-		Map<Int2, Integer> inter = new HashMap<Int2, Integer>();
+		Map<Long, Integer> inter = new HashMap<Long, Integer>();
 		int[] sizeC1 = new int[k_org];
 		int[] sizeC2 = new int[k];
 		
 		for (int u = 0; u < n; u++){
-			Int2 key = new Int2(part_org[u], part[u]);
+			long key = part_org[u] * Const.BIG_VAL + part[u];
 			if (inter.containsKey(key))
 				inter.put(key, inter.get(key) + 1);
 			else
@@ -621,9 +621,9 @@ public class CommunityMeasure {
 		double[] F1 = new double[k_org];
 		double[] F2 = new double[k];
 		
-		for (Map.Entry<Int2, Integer> entry : inter.entrySet()){
-			int i = entry.getKey().val0;
-			int j = entry.getKey().val1;
+		for (Map.Entry<Long, Integer> entry : inter.entrySet()){
+			int i = (int)(entry.getKey()/Const.BIG_VAL);
+			int j = (int)(entry.getKey()% Const.BIG_VAL);
 			int inter_ij = entry.getValue();
 			double H_ij = 2*((double)inter_ij / sizeC1[i])*((double)inter_ij / sizeC2[j])/((double)inter_ij / sizeC1[i] + (double)inter_ij / sizeC2[j]);
 			if (F1[i] < H_ij)

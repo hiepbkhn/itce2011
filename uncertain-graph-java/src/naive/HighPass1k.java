@@ -16,6 +16,7 @@ import algs4.Edge;
 import algs4.EdgeIntGraph;
 import algs4.EdgeWeightedGraph;
 import dp.DPUtil;
+import dp.combined.Const;
 import dp.combined.LouvainDP;
 import dp.generator.Orbis;
 import dp.generator.Stub;
@@ -131,7 +132,7 @@ public class HighPass1k {
 			e.setWeight(0.0);		// reset weight
 		
 		// 1 - prepare and shuffle freeStubList
-		Map<Int2, Integer> adjacencyMap = new HashMap<Int2, Integer>();
+		Map<Long, Integer> adjacencyMap = new HashMap<Long, Integer>();
 		
 		List<Stub> freeStubList = new ArrayList<Stub>();
 		for (int nodeId = 0; nodeId < degSeq.length; nodeId++){
@@ -206,8 +207,8 @@ public class HighPass1k {
 			if (v2 != v1)
 				tempG.getEdge(v2,v1).incWeight(1);
 			
-			adjacencyMap.put(new Int2(stub1.nodeid, stub_i.nodeid), 1);
-			adjacencyMap.put(new Int2(stub_i.nodeid, stub1.nodeid), 1);
+			adjacencyMap.put(stub1.nodeid * Const.BIG_VAL + stub_i.nodeid, 1);
+			adjacencyMap.put(stub_i.nodeid * Const.BIG_VAL + stub1.nodeid, 1);
 //			freeStubList.remove(i);
 			mark[i] = true;
 			

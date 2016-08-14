@@ -48,7 +48,6 @@ import algs4.EdgeWeightedGraph;
 
 
 public class LouvainDP {
-	public static final long BIG_VAL = 1000000000;	// 10^9
 	
 	////return: map of <node to community>
 	// k: number of supernodes
@@ -171,7 +170,7 @@ public class LouvainDP {
 				v_com = temp;
 			}
 			
-			long key = u_com * BIG_VAL + v_com;
+			long key = u_com * Const.BIG_VAL + v_com;
 			int weight = 1;
 			if (comDict.containsKey(key))
 				comDict.put(key, comDict.get(key) + weight);
@@ -184,7 +183,7 @@ public class LouvainDP {
 		for (Map.Entry<Long, Integer> entry : comDict.entrySet()){
 			Long key = entry.getKey();
 			Integer value = entry.getValue();
-			graph_new.addEdge(new Edge((int)(key/BIG_VAL), (int)(key % BIG_VAL), value));
+			graph_new.addEdge(new Edge((int)(key/Const.BIG_VAL), (int)(key % Const.BIG_VAL), value));
 		}
 		
 		//

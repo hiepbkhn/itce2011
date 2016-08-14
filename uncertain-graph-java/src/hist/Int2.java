@@ -30,11 +30,11 @@ public class Int2 implements Comparable<Int2> {
 	}
 
 	// overflow for returned int !
-	// BUT required for HashMap (e.g. in LouvainDP)
-//	@Override
-//	public int hashCode() {
-//		return val0*10000000 + val1;
-//	}
+	// BUT required for HashMap (e.g. in LouvainDP, CommunityMeasure.. Search "Map<Int2")
+	@Override
+	public int hashCode() {
+		return val0*10000000 + val1;
+	}
 
 	@Override
 	public boolean equals(Object obj) {

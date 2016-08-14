@@ -168,7 +168,7 @@ public class NodeSetMod2 {
 			node2Set[(k-1)*(n/k) + j] = k-1;
 		
 		// comDict
-		Map<Int2, Integer> comDict = new HashMap<Int2, Integer>();		// (u_com, v_com) -> num edges
+		Map<Long, Integer> comDict = new HashMap<Long, Integer>();		// (u_com, v_com) -> num edges
 		for (VertexPair p : G.getEdgePairs()){
 			int u = p.first;
 			int v = p.second;
@@ -180,7 +180,7 @@ public class NodeSetMod2 {
 				v_com = temp;
 			}
 			
-			Int2 key = new Int2(u_com, v_com);
+			long key = u_com * Const.BIG_VAL + v_com;
 			if (comDict.containsKey(key))
 				comDict.put(key, comDict.get(key) + 1);
 			else
@@ -189,10 +189,10 @@ public class NodeSetMod2 {
 		}
 		//
 		EdgeIntGraph G_new = new EdgeIntGraph(k);
-		for (Map.Entry<Int2, Integer> entry : comDict.entrySet()){
-			Int2 key = entry.getKey();
+		for (Map.Entry<Long, Integer> entry : comDict.entrySet()){
+			Long key = entry.getKey();
 			Integer value = entry.getValue();
-			G_new.addEdge(new EdgeInt(key.val0, key.val1, value));
+			G_new.addEdge(new EdgeInt((int)(key/Const.BIG_VAL), (int)(key % Const.BIG_VAL), value));
 		}
 		
 		
