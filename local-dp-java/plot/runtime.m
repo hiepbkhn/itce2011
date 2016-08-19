@@ -6,8 +6,8 @@ dataname_list = {'pl_10000_5_01', 'er_10000_0001'};
 n = 10000;
 m_list = [49970, 50424];
 diam_list = [6, 7];
-alpha_list = [0.25, 0.5, 0.75, 1.0];
-beta_list = [0.5, 1.0];
+alpha_list = [0.5, 1.0]; %[0.25, 0.5, 0.75, 1.0];
+beta_list = [0.5]; %, 1.0];
 % fp_list = [0.1, 0.01, 0.001];   % false positive
 
 x0=400;
@@ -45,8 +45,8 @@ for k = 1:2
             BF_count = mean(countArr,2);
             % plot
             xAxis = 1:round;
-            h = plot(xAxis, BS_exchange, '-o', xAxis, BS_count, '--o', xAxis, BF_exchange, '-s', xAxis, BF_count, '--s');
-            
+%             h = plot(xAxis, BS_exchange, '-o', xAxis, BS_count, '--o', xAxis, BF_exchange, '-s', xAxis, BF_count, '--s');   % in millisecond
+            h = plot(xAxis, BS_exchange/1000, '-o', xAxis, BS_count/1000, '--o', xAxis, BF_exchange/1000, '-+', xAxis, BF_count/1000, '--+');   % in second
             xlabel('round');
             h_legend = legend('BS-exchange','BS-count','BF-exchange','BF-count', 'Location', 'NorthWest');
             set(h_legend,'FontSize', fontsize);

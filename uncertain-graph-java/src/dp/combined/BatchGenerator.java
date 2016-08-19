@@ -23,6 +23,8 @@
  * 	- add generateAllInOne()
  * Aug 12
  * 	- add generateHighPass1k()
+ * Aug 18
+ * 	- add generateHighPass1kPermutation()
  */
 
 package dp.combined;
@@ -631,13 +633,26 @@ public class BatchGenerator {
 	}
 	
 	//// HighPass1k
-	public static void generateHighPass1k(String batch_file, String prefix, String dataname, int n_samples, double[] epsArr, int k) 
+	public static void generateHighPass1k(String batch_file, String prefix, String dataname, int n_samples, double[] epsArr, int k, double r) 
 			throws IOException{
 		
 		BufferedWriter bw = new BufferedWriter(new FileWriter(batch_file));
 		for (double eps : epsArr){
-			String cmd = "java naive.HighPass1k " + prefix + " " + dataname + " " + n_samples + " " + String.format("%.2f", eps) + " " + k + 
-					" > ../_console/" + dataname + "_sg1k_" + String.format("%.1f", eps) + "_" + k + "-CONSOLE.txt";
+			String cmd = "java naive.HighPass1k " + prefix + " " + dataname + " " + n_samples + " " + String.format("%.2f", eps) + " " + k + " " + r + 
+					" > ../_console/" + dataname + "_sg1k_" + String.format("%.1f", eps) + "_" + k + "_" + String.format("%.2f", r) + "-CONSOLE.txt";
+			bw.write(cmd + "\n");
+		}
+		bw.close();
+	}
+	
+	//// HighPass1kPermutation
+	public static void generateHighPass1kPermutation(String batch_file, String prefix, String dataname, int n_samples, double[] epsArr, int k, double r) 
+			throws IOException{
+		
+		BufferedWriter bw = new BufferedWriter(new FileWriter(batch_file));
+		for (double eps : epsArr){
+			String cmd = "java naive.HighPass1k " + prefix + " " + dataname + " " + n_samples + " " + String.format("%.2f", eps) + " " + k + " " + r + 
+					" > ../_console/" + dataname + "_per1k_" + String.format("%.1f", eps) + "_" + k + "_" + String.format("%.2f", r) + "-CONSOLE.txt";
 			bw.write(cmd + "\n");
 		}
 		bw.close();
@@ -710,7 +725,7 @@ public class BatchGenerator {
 	
 	//// utilityByGraph
 	public static void utilityByGraph(String batch_file, String prefix, String dataname, int n_samples, int n_nodes,
-			int max_level, int lower_size, double[] epsArr, double[] ratioArr, double[] epsArr2, double[][] ratioDER, int[] kArr) throws IOException{
+			int max_level, int lower_size, double[] epsArr, double[] ratioArr, double[] epsArr2, double[][] ratioDER, int[] kArr, double r) throws IOException{
 		
 		double log_n = Math.log(n_nodes);
 		
@@ -758,7 +773,8 @@ public class BatchGenerator {
 //		}
 		
 		// 1k-Series
-//		for (double eps : epsArr){
+//		double[] epsArr1 = new double[]{epsArr[3], epsArr[5]};		// 0.75ln, 1.25 ln
+//		for (double eps : epsArr1){
 //			String graph_name = dataname + "_1k_" + String.format("%.1f", eps);
 //			String cmd = "java dp.UtilityMeasure " + prefix + " " + dataname + " " + n_samples + " " + graph_name + " " + n_nodes +
 //					" > ../_console/" + graph_name + "-UTIL.txt";
@@ -767,9 +783,19 @@ public class BatchGenerator {
 //		bw.write("\n\n");
 		
 		// HighPass1k
+//		for (double eps : epsArr)
+//			for (int k : kArr){
+//			String graph_name = dataname + "_sg1k_" + String.format("%.1f", eps) + "_" + k + "_" + String.format("%.2f", r);
+//			String cmd = "java dp.UtilityMeasure " + prefix + " " + dataname + " " + n_samples + " " + graph_name + " " + n_nodes +
+//					" > ../_console/" + graph_name + "-UTIL.txt";
+//			bw.write(cmd + "\n");
+//		}
+//		bw.write("\n\n");
+		
+		// HighPass1kPermutation
 		for (double eps : epsArr)
 			for (int k : kArr){
-			String graph_name = dataname + "_sg1k_" + String.format("%.1f", eps) + "_" + k;
+			String graph_name = dataname + "_per1k_" + String.format("%.1f", eps) + "_" + k + "_" + String.format("%.2f", r);
 			String cmd = "java dp.UtilityMeasure " + prefix + " " + dataname + " " + n_samples + " " + graph_name + " " + n_nodes +
 					" > ../_console/" + graph_name + "-UTIL.txt";
 			bw.write(cmd + "\n");
@@ -1106,6 +1132,7 @@ public class BatchGenerator {
 //		dataname_list = new String[]{"polbooks", "polblogs-wcc", "as20graph", "wiki-Vote-wcc", "ca-HepPh-wcc", "ca-AstroPh-wcc",
 //									"com_amazon_ungraph", "com_dblp_ungraph", "com_youtube_ungraph"};
 //		n_list = new int[]{105, 1222, 6474, 7066, 11204, 17903, 334863, 317080, 1134890};
+//		double r = 0.2;
 //		for (int i = 0; i < n_list.length; i++){
 //			String dataname = dataname_list[i];
 //			int n = n_list[i];
@@ -1117,7 +1144,27 @@ public class BatchGenerator {
 //			double log_n = Math.log(n);
 //			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, 0.75*log_n, log_n, 1.25*log_n, 1.5*log_n}; // 0.5*log_n
 //			
-//			generateHighPass1k(batch_file, prefix, dataname, n_samples, epsArr, k);
+//			generateHighPass1k(batch_file, prefix, dataname, n_samples, epsArr, k, r);
+//			System.out.println("DONE.");
+//		}
+		
+		// HighPass1kPermutation
+//		dataname_list = new String[]{"polbooks", "polblogs-wcc", "as20graph", "wiki-Vote-wcc", "ca-HepPh-wcc", "ca-AstroPh-wcc",
+//									"com_amazon_ungraph", "com_dblp_ungraph", "com_youtube_ungraph"};
+//		n_list = new int[]{105, 1222, 6474, 7066, 11204, 17903, 334863, 317080, 1134890};
+//		double r = 0.8;
+//		for (int i = 0; i < n_list.length; i++){
+//			String dataname = dataname_list[i];
+//			int n = n_list[i];
+//			
+//			int k = (int)Math.pow(n, 1.0/3);
+//			
+//			//
+//			String batch_file = "_cmd2/Per1k_" + dataname + ".cmd";		// _cmd2
+//			double log_n = Math.log(n);
+//			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, 0.75*log_n, log_n, 1.25*log_n, 1.5*log_n}; // 0.5*log_n
+//			
+//			generateHighPass1kPermutation(batch_file, prefix, dataname, n_samples, epsArr, k, r);
 //			System.out.println("DONE.");
 //		}
 		
@@ -1206,7 +1253,7 @@ public class BatchGenerator {
 		double[] epsArr2 = new double[]{4.0}; //1.0, 2.0, 4.0};
 		double[][] ratioDER = new double[][]{{4,2,1}}; //{1,1,1}, {2,1,1}, {4,1,1}, {4,2,1}, {8,4,1}};
 		
-		
+		double r = 0.8;
 		for (int i = 0; i < n_list.length; i++){
 			String dataname = dataname_list[i];
 			int n = n_list[i];
@@ -1220,7 +1267,7 @@ public class BatchGenerator {
 			double log_n = Math.log(n);
 			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, 0.75*log_n, log_n, 1.25*log_n, 1.5*log_n}; //, , 2*log_n, 3*log_n};	
 			
-			utilityByGraph(batch_file, prefix, dataname, n_samples, n, max_level, lower_size, epsArr, ratioArr, epsArr2, ratioDER, kArr);
+			utilityByGraph(batch_file, prefix, dataname, n_samples, n, max_level, lower_size, epsArr, ratioArr, epsArr2, ratioDER, kArr, r);
 			System.out.println("DONE.");
 		}
 		

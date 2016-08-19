@@ -55,6 +55,7 @@ for k = 1:2
                 h = plot(xAxis, total(1,subI), '.', xAxis, total(2,subI),  '+', xAxis, total(3,subI),  'o', ...
                     xAxis, total(4,subI),  's', xAxis, total(5,subI),  'd', xAxis, total(6,subI), '^', xAxis, total(7,subI), '*');
             end
+            set(gca,'FontSize', fontsize);
             
             % save
             eps_file = [dataname '_' sprintf('%.2f', alpha) '_' sprintf('%.2f', beta) '_deg.eps'];

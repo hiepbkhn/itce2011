@@ -100,7 +100,7 @@ for i = 1:length(list)
     file = list(i).name;
     
     load(['../../_runtime/' file]);
-    sum_t_fixed = sum_t_fixed + timeFit + mean(sampleArr);
+    sum_t_fixed = sum_t_fixed + timeFit + mean(sampleArr);    % 
 end
 t_fixed = sum_t_fixed/length(list);
 

@@ -1,6 +1,8 @@
 /*
  * Aug 12, 2016
- * 	- 
+ * 	- greedyReconstruct()
+ * Aug 18
+ * 	- greedyWithPermutation()
  */
 
 package naive;
@@ -25,7 +27,6 @@ import grph.VertexPair;
 import grph.in_memory.InMemoryGrph;
 import grph.io.EdgeListReader;
 import grph.io.EdgeListWriter;
-import hist.Int2;
 import toools.io.file.RegularFile;
 
 public class HighPass1k {
@@ -179,7 +180,7 @@ public class HighPass1k {
 						continue;
 				
 				if (!accept_parallel)
-					if (adjacencyMap.containsKey(new Int2(stub_i.nodeid, stub1.nodeid)))
+					if (adjacencyMap.containsKey(stub_i.nodeid * Const.BIG_VAL + stub1.nodeid))
 						continue;
 				
 				v2 = part_init.get(stub_i.nodeid);
@@ -234,21 +235,46 @@ public class HighPass1k {
 	}
 	
 	////
-	public static Grph greedyReconstruct(Grph G, double eps, int k, String seq_file) throws IOException{
+	public static Grph greedyReconstruct(Grph G, double eps, int k, String seq_file, double r) throws IOException{
 		int n_nodes = G.getNumberOfVertices();
-		double r = 0.5;
-		double eps1 = r*eps; 
-		double eps2 = (1-r)*eps;
+
+		double eps_1k = r*eps; 
+		double eps_sg = (1-r)*eps;
 		
 		// noisy 1K-series
-		Integer[] degSeq = Orbis.adjustDegreeSequence(G, eps1, seq_file + ".0.seq");
+		Integer[] degSeq = Orbis.adjustDegreeSequence(G, eps_1k, seq_file + ".0.seq");
 			
 		// super graph
 		EdgeWeightedGraph G2 = GreedyReconstruct.convertGraph(G);
 		
 		Map<Integer, Integer> part_init = LouvainDP.initEqualCommunity(n_nodes, n_nodes/k);
 		
-		EdgeWeightedGraph sG = publishEqualPrivate(G2, k, eps2, part_init);
+		EdgeWeightedGraph sG = publishEqualPrivate(G2, k, eps_sg, part_init);
+		
+		long start = System.currentTimeMillis();
+		Grph g = recoverGraph(degSeq, sG, part_init);
+		System.out.println("recoverGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
+		
+		//
+		return g;
+	}
+	
+	////
+	public static Grph greedyWithPermutation(Grph G, double eps, int k, String seq_file, double r) throws IOException{
+		int n_nodes = G.getNumberOfVertices();
+
+		double eps_1k = r*eps; 
+		double eps_sg = (1-r)*eps;
+		
+		// noisy 1K-series
+		Integer[] degSeq = Orbis.adjustDegreeSequence(G, eps_1k, seq_file + ".0.seq");
+			
+		// super graph
+		EdgeWeightedGraph G2 = GreedyReconstruct.convertGraph(G);
+		
+		Map<Integer, Integer> part_init = LouvainDP.randomEqualCommunity(n_nodes, k);		// use randomEqualCommunity()
+		
+		EdgeWeightedGraph sG = publishEqualPrivate(G2, k, eps_sg, part_init);
 		
 		long start = System.currentTimeMillis();
 		Grph g = recoverGraph(degSeq, sG, part_init);
@@ -276,11 +302,12 @@ public class HighPass1k {
 //		String dataname = "com_youtube_ungraph";	// (1134890,2987624) 	// k = n^1/3, recoverGraph: 86.2s	k = n^1/2, recoverGraph: 16.7s
 		//
 		
-		// COMMAND-LINE
+		// COMMAND-LINE <prefix> <dataname> <n_samples> <eps> <k> [<r>]
 		String prefix = "";
 	    int n_samples = 20;
 		double eps = 2.0;		
 		int k = 10;
+		double r = 0.5;		// ratio of eps_1k, eps_sg
 		
 		if(args.length >= 5){
 			prefix = args[0];
@@ -289,14 +316,52 @@ public class HighPass1k {
 			eps = Double.parseDouble(args[3]);
 			k = Integer.parseInt(args[4]);
 		}
+		if(args.length >= 6)
+			r = Double.parseDouble(args[5]);
 		System.out.println("dataname = " + dataname);
 		System.out.println("eps = " + eps);
 		System.out.println("k = " + k);
+		System.out.println("r = " + r);
 		
-		//
+		//// 1 - greedyReconstruct()
+//		String filename = prefix + "_data/" + dataname + ".gr";
+//		String seq_file = prefix + "_out/" + dataname + "_1k_" + String.format("%.1f",eps);
+//		String sample_file = prefix + "_sample/" + dataname + "_sg1k_" + String.format("%.1f", eps) + "_" + k;
+//		if(args.length >= 6)
+//			sample_file += "_" + String.format("%.2f", r);
+//	    System.out.println("seq_file = " + seq_file);
+//		
+//	    //
+//		Grph G;
+//		EdgeListReader reader = new EdgeListReader();
+//		RegularFile f = new RegularFile(filename);
+//		
+//		G = reader.readGraph(f);
+//		
+//		long start = System.currentTimeMillis();
+//		System.out.println("#nodes = " + G.getNumberOfVertices());
+//		System.out.println("#edges = " + G.getNumberOfEdges());
+//		System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
+//		
+//		//
+//		for (int i = 0; i < n_samples; i++){
+//	    	System.out.println("sample i = " + i);
+//	    	
+//	    	start = System.currentTimeMillis();
+//	    	Grph g = greedyReconstruct(G, eps, k, seq_file, r);
+//	    	System.out.println("greedyReconstruct - DONE, elapsed " + (System.currentTimeMillis() - start));
+//	    	
+//	    	f = new RegularFile(sample_file + "." + i);
+//			EdgeListWriter writer = new EdgeListWriter();
+//	    	writer.writeGraph(g, f);
+//		}
+		
+		//// 2 - greedyWithPermutation()
 		String filename = prefix + "_data/" + dataname + ".gr";
 		String seq_file = prefix + "_out/" + dataname + "_1k_" + String.format("%.1f",eps);
-		String sample_file = prefix + "_sample/" + dataname + "_sg1k_" + String.format("%.1f", eps) + "_" + k;
+		String sample_file = prefix + "_sample/" + dataname + "_per1k_" + String.format("%.1f", eps) + "_" + k;
+		if(args.length >= 6)
+			sample_file += "_" + String.format("%.2f", r);
 	    System.out.println("seq_file = " + seq_file);
 		
 	    //
@@ -312,26 +377,40 @@ public class HighPass1k {
 		System.out.println("readGraph - DONE, elapsed " + (System.currentTimeMillis() - start));
 		
 		//
-//		int n_nodes = G.getNumberOfVertices();	
-////		int k = (int)Math.sqrt(n_nodes);
-//		int k = (int)Math.pow(n_nodes, 1.0/3);
-////		int k = 8;
-//		System.out.println("k = " + k);
-		
-		//
 		for (int i = 0; i < n_samples; i++){
 	    	System.out.println("sample i = " + i);
 	    	
 	    	start = System.currentTimeMillis();
-	    	Grph g = greedyReconstruct(G, eps, k, seq_file);
-	    	System.out.println("greedyReconstruct - DONE, elapsed " + (System.currentTimeMillis() - start));
+	    	Grph g = greedyWithPermutation(G, eps, k, seq_file, r);
+	    	System.out.println("greedyWithPermutation - DONE, elapsed " + (System.currentTimeMillis() - start));
 	    	
 	    	f = new RegularFile(sample_file + "." + i);
 			EdgeListWriter writer = new EdgeListWriter();
 	    	writer.writeGraph(g, f);
 		}
 		
-		
+		//// TEST
+//		double eps = 2.0;
+//		
+//		String filename = "_data/" + dataname + ".gr";
+//		String seq_file = "_out/" + dataname + "_1k_" + String.format("%.1f",eps);
+//	    System.out.println("seq_file = " + seq_file);
+//		
+//	    //
+//		Grph G;
+//		EdgeListReader reader = new EdgeListReader();
+//		RegularFile f = new RegularFile(filename);
+//		
+//		G = reader.readGraph(f);
+//		
+//		System.out.println("#nodes = " + G.getNumberOfVertices());
+//		System.out.println("#edges = " + G.getNumberOfEdges());
+//		
+//		int n_nodes = G.getNumberOfVertices();
+//		int k = (int)Math.pow(n_nodes, 1.0/3);
+//		System.out.println("k = " + k);
+//		
+//		Grph g = greedyReconstruct(G, eps, k, seq_file);
 	}
 
 }

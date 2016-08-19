@@ -35,11 +35,11 @@ x0=400;
 y0=200;
 width=800;
 height=400;
-bar(1:9, log10([t_1k t_tmf t_ef t_der t_dendro t_hrgdiv t_fixed]));
+bar(1:9, log10([t_1k t_tmf t_ef t_der t_dendro    t_fixed]));   % t_hrgdiv
 axis([0 10 0 10]);
 % bar(1:9, [t_1k t_tmf t_ef t_der t_dendro t_hrgdiv t_fixed]);
 set(gcf,'units','points','position',[x0,y0,width,height])
-h_legend = legend('1K','TmF','EF', 'DER', 'HRG-MCMC', 'HRG-Div','HRG-Fixed','Location','northwest');
+h_legend = legend('1K','TmF','EF', 'DER', 'HRG-MCMC',   'HRG-Fixed','Location','northwest'); % 'HRG-Div',
 set(h_legend,'FontSize', 12)
 ylabel('runtime (ms) in log10 scale', 'FontSize', 12);
 set(gca,'XTickLabel',{'polbooks','polblogs','as20graph','wiki-Vote','ca-HepPh','ca-AstroPh','amazon','dblp','youtube'});

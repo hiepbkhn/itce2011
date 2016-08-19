@@ -1,5 +1,8 @@
 package dp;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -127,6 +130,37 @@ public class Test {
 		s = s * 2;
 	}
 	
+	////
+	public static void check1KSeries() throws IOException {
+		File folder = new File("_console");
+		File[] listOfFiles = folder.listFiles();
+
+		for (int i = 0; i < listOfFiles.length; i++) {
+			if (listOfFiles[i].isFile()){
+				String name = listOfFiles[i].getName();
+				if (name.contains("_1k_") && name.contains("CONSOLE")){ 
+					
+					
+					BufferedReader br = new BufferedReader(new FileReader(listOfFiles[i].getAbsolutePath()));
+					while (true){
+			        	String str = br.readLine();
+			        	if (str == null)
+			        		break;
+			        	
+			        	if (str.contains("n_ceil")){
+			        		int n_ceil = Integer.parseInt(str.substring(9));
+			        		if (n_ceil < 0)
+			        			System.out.println(listOfFiles[i].getName());
+			        	}
+			        	
+					}
+			    	br.close();
+					
+				}
+			} 
+		}
+
+	}
 	
 	///////////////////////////////////////////////
 	public static void main(String[] args) throws Exception{
@@ -269,20 +303,23 @@ public class Test {
 //		System.out.println("f1score = " + f1score);
 		
 		// test F1 score for first round Louvain
-//		int n_nodes = 334863;
-//		String dataname = "com_amazon_ungraph";
-		int n_nodes = 1134890;
-		String dataname = "com_youtube_ungraph";
-		
-		String louvain_file = "_data/" + dataname + ".louvain";
-		int[] louvain_part = CommunityMeasure.readPart(louvain_file, n_nodes);
-		String compare_file = "_out/" + dataname + ".f1";
-		int[] compare_part = CommunityMeasure.readPart(compare_file, n_nodes);
-//		String compare_file = "_out/com_amazon_ungraph.s1";
+////		int n_nodes = 334863;
+////		String dataname = "com_amazon_ungraph";
+//		int n_nodes = 1134890;
+//		String dataname = "com_youtube_ungraph";
+//		
+//		String louvain_file = "_data/" + dataname + ".louvain";
+//		int[] louvain_part = CommunityMeasure.readPart(louvain_file, n_nodes);
+//		String compare_file = "_out/" + dataname + ".f1";
 //		int[] compare_part = CommunityMeasure.readPart(compare_file, n_nodes);
+////		String compare_file = "_out/com_amazon_ungraph.s1";
+////		int[] compare_part = CommunityMeasure.readPart(compare_file, n_nodes);
+//		
+//		double f1score = CommunityMeasure.fastAvgF1Score(louvain_part, compare_part);
+//		System.out.println("f1score = " + f1score);
 		
-		double f1score = CommunityMeasure.fastAvgF1Score(louvain_part, compare_part);
-		System.out.println("f1score = " + f1score);
+		//
+		check1KSeries();
 		
 	}
 

@@ -19,7 +19,6 @@ import grph.algo.ConnectedComponentsAlgorithm;
 import grph.in_memory.InMemoryGrph;
 import grph.io.EdgeListReader;
 import grph.io.EdgeListWriter;
-import hist.Int2;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -224,7 +223,7 @@ public class Orbis {
 						continue;
 				
 				if (!accept_parallel)
-					if (adjacencyMap.containsKey(new Int2(stub_i.nodeid, stub1.nodeid)))
+					if (adjacencyMap.containsKey(stub_i.nodeid * Const.BIG_VAL + stub1.nodeid))
 						continue;
 
 				break;
