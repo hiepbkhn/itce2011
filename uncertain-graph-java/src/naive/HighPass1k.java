@@ -3,6 +3,8 @@
  * 	- greedyReconstruct()
  * Aug 18
  * 	- greedyWithPermutation()
+ * Aug 19
+ * 	- fix error in publishEqualPrivate(): G_new must contain all edges (n1^2/2)
  */
 
 package naive;
@@ -98,11 +100,58 @@ public class HighPass1k {
 		return G_final;
 	}	
 	
-	//// not use high-pass filter
+	
+	//// copied from LouvainDP, add ALL edges
+	public static EdgeWeightedGraph getGraphByPartition(EdgeWeightedGraph graph, Map<Integer, Integer> part_init){
+		int k = 0;
+		for (int val : part_init.values())
+			if (k < val)
+				k = val;
+		k += 1;
+		
+		// create new weighted graph from part_init
+		Map<Long, Integer> comDict = new HashMap<Long, Integer>();		// (u_com, v_com) -> num edges
+		for (Edge e : graph.edges()){
+			int u = e.either();
+			int v = e.other(u);
+			int u_com = part_init.get(u);
+			int v_com = part_init.get(v);
+			if (u_com > v_com){		// swap for comDict
+				int temp = u_com;
+				u_com = v_com;
+				v_com = temp;
+			}
+			
+			long key = u_com * Const.BIG_VAL + v_com;
+			int weight = 1;
+			if (comDict.containsKey(key))
+				comDict.put(key, comDict.get(key) + weight);
+			else
+				comDict.put(key, weight);
+		}
+		System.out.println("getGraphByPartition.comDict.size = " + comDict.size());
+		//
+		EdgeWeightedGraph graph_new = new EdgeWeightedGraph(k);
+		for (Map.Entry<Long, Integer> entry : comDict.entrySet()){
+			Long key = entry.getKey();
+			Integer value = entry.getValue();
+			graph_new.addEdge(new Edge((int)(key/Const.BIG_VAL), (int)(key % Const.BIG_VAL), value));
+		}
+		
+		// all remaining zero-edges
+		for (int i = 0; i < k; i++)
+			for (int j = i; j < k; j++)
+				if (!graph_new.areEdgesAdjacent(i, j))
+					graph_new.addEdge(new Edge(i, j, 0));
+		
+		//
+		return graph_new;
+	}
+	//// NOT use high-pass filter, use Geometric mechanism
 	public static EdgeWeightedGraph publishEqualPrivate(EdgeWeightedGraph G, int k, double eps, Map<Integer, Integer> part_init) {
 		int n = G.V();
 		
-		EdgeWeightedGraph G_new = LouvainDP.getGraphByPartition(G, part_init);
+		EdgeWeightedGraph G_new = getGraphByPartition(G, part_init);
 		int n_new = G_new.V();
 		System.out.println("G_new.V = " + G_new.V() + ", G_new.E = " + G_new.E() + ", G_new.totalWeight = " + G_new.totalWeight());
 		
@@ -290,12 +339,14 @@ public class HighPass1k {
 		// load graph
 //		String dataname = "polbooks";		// (105, 441)
 //		String dataname = "polblogs";		// (1224,16715) 
-		String dataname = "as20graph";		// (6474,12572)		
+//		String dataname = "as20graph";		// (6474,12572)		
 //		String dataname = "wiki-Vote";		// (7115,100762)
 //		String dataname = "ca-HepPh";		// (12006,118489) 		
 //		String dataname = "ca-AstroPh";		// (18771,198050) 	
 		//
+//		String dataname = "polblogs-wcc";		// (1222,16714) 
 //		String dataname = "wiki-Vote-wcc";	// (7066,100736)
+		String dataname = "ca-AstroPh-wcc";	// (17903,196972)
 		// LARGE
 //		String dataname = "com_amazon_ungraph";		// (334863,925872)		// k = n^1/3, recoverGraph: 8.4s	k = n^1/2, recoverGraph: 2.6s
 //		String dataname = "com_dblp_ungraph";		// (317080,1049866)	
@@ -307,7 +358,7 @@ public class HighPass1k {
 	    int n_samples = 20;
 		double eps = 2.0;		
 		int k = 10;
-		double r = 0.5;		// ratio of eps_1k, eps_sg
+		double r = 0.8;		// ratio of eps_1k vs. eps
 		
 		if(args.length >= 5){
 			prefix = args[0];
@@ -390,8 +441,6 @@ public class HighPass1k {
 		}
 		
 		//// TEST
-//		double eps = 2.0;
-//		
 //		String filename = "_data/" + dataname + ".gr";
 //		String seq_file = "_out/" + dataname + "_1k_" + String.format("%.1f",eps);
 //	    System.out.println("seq_file = " + seq_file);
@@ -407,10 +456,14 @@ public class HighPass1k {
 //		System.out.println("#edges = " + G.getNumberOfEdges());
 //		
 //		int n_nodes = G.getNumberOfVertices();
-//		int k = (int)Math.pow(n_nodes, 1.0/3);
+//		k = (int)Math.sqrt(n_nodes);
+////		k = (int)Math.pow(n_nodes, 1.0/3);
 //		System.out.println("k = " + k);
 //		
-//		Grph g = greedyReconstruct(G, eps, k, seq_file);
+//		Grph g = greedyReconstruct(G, eps, k, seq_file, r);
+//		System.out.println("#nodes = " + g.getNumberOfVertices());
+//		System.out.println("#edges = " + g.getNumberOfEdges());
+		
 	}
 
 }

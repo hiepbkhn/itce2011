@@ -1157,7 +1157,8 @@ public class BatchGenerator {
 //			String dataname = dataname_list[i];
 //			int n = n_list[i];
 //			
-//			int k = (int)Math.pow(n, 1.0/3);
+//			// int k = (int)Math.pow(n, 1.0/3);
+//			int k = (int)Math.sqrt(n);
 //			
 //			//
 //			String batch_file = "_cmd2/Per1k_" + dataname + ".cmd";		// _cmd2
@@ -1260,7 +1261,8 @@ public class BatchGenerator {
 			int max_level = max_level_list[i];
 			int lower_size = lower_size_list[i];
 			
-			int[] kArr = new int[]{(int)Math.pow(n, 1.0/3)};
+			// int[] kArr = new int[]{(int)Math.pow(n, 1.0/3)};
+			int[] kArr = new int[]{(int)Math.sqrt(n)};
 			
 			//
 			String batch_file = "_cmd2/utility_" + dataname + ".cmd";

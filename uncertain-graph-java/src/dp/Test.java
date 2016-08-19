@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,7 @@ import com.jmatio.types.MLDouble;
 import com.jmatio.types.MLInt32;
 
 import dp.combined.CommunityMeasure;
+import dp.combined.Const;
 import dp.combined.Louvain;
 import dp.combined.NodeSetLouvain;
 import dp.mcmc.Dendrogram;
@@ -319,7 +321,15 @@ public class Test {
 //		System.out.println("f1score = " + f1score);
 		
 		//
-		check1KSeries();
+//		check1KSeries();
+		
+		// test Map<Long,..>
+		Map<Long, Integer> map = new HashMap<Long, Integer>();
+		long key = 1*Const.BIG_VAL + 2;
+		map.put(key,1);
+		System.out.println(map.containsKey(key));
+		key = 3*Const.BIG_VAL + 2;
+		System.out.println(map.containsKey(key));
 		
 	}
 
