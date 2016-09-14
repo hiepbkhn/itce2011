@@ -79,8 +79,11 @@ mandelbrot-fractal:
 mandelbrot-fractal-no-mp:	
 	g++ openmp/mandelbrot-fractal.cpp -o out/mandelbrot-fractal-no-mp.exe		
 	
-	
-  
+#
+Item20PassByRef:
+	g++ effective/Item20PassByRef.cpp -o out/Item20PassByRef.exe	
+
+# 
 clean:	
 	@echo 'Cleaning...';
 	-$(RM) out/$(TEST_NAME).o out/$(TEST_NAME).exe;
