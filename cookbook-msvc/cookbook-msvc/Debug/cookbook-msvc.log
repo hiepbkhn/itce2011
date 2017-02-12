@@ -1,23 +1,27 @@
-﻿Build started 2/12/2017 6:16:11 PM.
-     1>Project "D:\git\itce2011\cookbook-msvc\cookbook-msvc\cookbook-msvc.vcxproj" on node 2 (Build target(s)).
-     1>Build:
+﻿Build started 2/12/2017 9:37:25 PM.
+     1>Project "D:\git\itce2011\cookbook-msvc\cookbook-msvc\cookbook-msvc.vcxproj" on node 2 (Rebuild target(s)).
+     1>Rebuild:
          nmake
          
          Microsoft (R) Program Maintenance Utility Version 12.00.21005.1
          Copyright (C) Microsoft Corporation.  All rights reserved.
          
-         	cl.exe /c ex_lambda.cpp /Foex_lambda.o	-I"E:\caidat\Cpp\boost_1_59_0"
-         Microsoft (R) C/C++ Optimizing Compiler Version 18.00.31101 for x86
+         	"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\amd64\cl.exe" /c map-test.cpp /Fomap-test.o
+         Microsoft (R) C/C++ Optimizing Compiler Version 18.00.31101 for x64
          Copyright (C) Microsoft Corporation.  All rights reserved.
          
-         ex_lambda.cpp
+         map-test.cpp
      1>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\xlocale(337): warning C4530: C++ exception handler used, but unwind semantics are not enabled. Specify /EHsc
-         	link.exe /OUT:app.exe ex_lambda.o
+         	"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\amd64\link.exe" /OUT:app.exe map-test.o
          Microsoft (R) Incremental Linker Version 12.00.31101.0
          Copyright (C) Microsoft Corporation.  All rights reserved.
          
-     1>Done Building Project "D:\git\itce2011\cookbook-msvc\cookbook-msvc\cookbook-msvc.vcxproj" (Build target(s)).
+     1>libcpmt.lib(concurrent_vector.obj) : fatal error LNK1112: module machine type 'X86' conflicts with target machine type 'x64'
+     1>NMAKE : fatal error U1077: '"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\amd64\link.exe"' : return code '0x458'
+         Stop.
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.MakeFile.Targets(43,5): error MSB3073: The command "nmake" exited with code 2.
+     1>Done Building Project "D:\git\itce2011\cookbook-msvc\cookbook-msvc\cookbook-msvc.vcxproj" (Rebuild target(s)) -- FAILED.
 
-Build succeeded.
+Build FAILED.
 
-Time Elapsed 00:00:01.11
+Time Elapsed 00:00:00.45
