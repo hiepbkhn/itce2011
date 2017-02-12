@@ -1,0 +1,23 @@
+﻿Build started 2/12/2017 6:16:11 PM.
+     1>Project "D:\git\itce2011\cookbook-msvc\cookbook-msvc\cookbook-msvc.vcxproj" on node 2 (Build target(s)).
+     1>Build:
+         nmake
+         
+         Microsoft (R) Program Maintenance Utility Version 12.00.21005.1
+         Copyright (C) Microsoft Corporation.  All rights reserved.
+         
+         	cl.exe /c ex_lambda.cpp /Foex_lambda.o	-I"E:\caidat\Cpp\boost_1_59_0"
+         Microsoft (R) C/C++ Optimizing Compiler Version 18.00.31101 for x86
+         Copyright (C) Microsoft Corporation.  All rights reserved.
+         
+         ex_lambda.cpp
+     1>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\xlocale(337): warning C4530: C++ exception handler used, but unwind semantics are not enabled. Specify /EHsc
+         	link.exe /OUT:app.exe ex_lambda.o
+         Microsoft (R) Incremental Linker Version 12.00.31101.0
+         Copyright (C) Microsoft Corporation.  All rights reserved.
+         
+     1>Done Building Project "D:\git\itce2011\cookbook-msvc\cookbook-msvc\cookbook-msvc.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.11
