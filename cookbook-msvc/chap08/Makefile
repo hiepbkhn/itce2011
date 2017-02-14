@@ -1,14 +1,10 @@
 
-#TEST_NAME = map-test
+TEST_NAME = class-template
 #TEST_NAME = stack-queue-test
-TEST_NAME = const-usage
 
 #TEST_NAME = ex_lambda
 #TEST_NAME = ex_filesize
 
-#
-BOOST_INCLUDE = E:\caidat\Cpp\boost_1_63_0
-BOOST_LIB = E:\caidat\Cpp\boost_1_63_0\lib64-msvc-12.0
 
 # Specify compiler
 CC=cl.exe
@@ -31,15 +27,6 @@ app : $(TEST_NAME).o
 $(TEST_NAME).o : $(TEST_NAME).cpp
 	$(CC) /c $(TEST_NAME).cpp /Fo$(TEST_NAME).o
 	
-#### BOOST	
-# Boost (WITH lib)
-#app : $(TEST_NAME).o
-#	$(LINK) /OUT:app.exe $(TEST_NAME).o /LIBPATH:"$(BOOST_LIB)" /DEFAULTLIB:libboost_filesystem-vc120-mt-s-1_63 
-
-# Boost ! 
-#$(TEST_NAME).o : $(TEST_NAME).cpp
-#	$(CC) /c $(TEST_NAME).cpp /Fo$(TEST_NAME).o	-I"$(BOOST_INCLUDE)"
-
 
 
 # Clean target

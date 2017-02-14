@@ -15,26 +15,25 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="readme.txt" />
+    <ClInclude Include="george.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="georgeringo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ringo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="map-test.cpp">
+    <ClCompile Include="george.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="stack-queue-test.cpp">
+    <ClCompile Include="georgeringo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ex_lambda.cpp">
+    <ClCompile Include="ringo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ex_filesize.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="const-usage.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Makefile" />
   </ItemGroup>
 </Project>

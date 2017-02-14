@@ -18,23 +18,46 @@
     <Text Include="readme.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="map-test.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="stack-queue-test.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ex_lambda.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ex_filesize.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="const-usage.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ClInclude Include="johnpaul\john.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="johnpaul\paul.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="johnpaul\johnpaul.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="georgeringo\george.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="georgeringo\ringo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="georgeringo\georgeringo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Makefile" />
+    <ClCompile Include="johnpaul\john.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="johnpaul\paul.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="johnpaul\johnpaul.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="georgeringo\george.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="georgeringo\ringo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="georgeringo\georgeringo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="hellobeatles\hellobeatles.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
