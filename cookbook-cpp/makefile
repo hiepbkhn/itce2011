@@ -1,8 +1,8 @@
 
 #SRC_DIR := src-container
 #SRC_DIR := src-algorithm
-SRC_DIR := src-other
-#SRC_DIR := boost
+#SRC_DIR := src-other
+SRC_DIR := boost
 
 INCLUDE_DIR := header
 
@@ -22,16 +22,26 @@ INCLUDE_DIR := header
 #TEST_NAME := binder-test
 #TEST_NAME := new-algo-test
 
-TEST_NAME := random-test
+#TEST_NAME := random-test
 
+# Boost
 #TEST_NAME := ex_lambda
+TEST_NAME := ex_filesize
+#TEST_NAME := ex_prog_options
 
 
 #BOOST_INCLUDE := E:/caidat/Cpp/boost_1_46_1
 #BOOST_LIB := E:/caidat/Cpp/boost_1_46_1/lib
 
-BOOST_INCLUDE := E:/caidat/Cpp/boost_1_57_0_mingw_x64/include/boost-1_57
-BOOST_LIB := E:/caidat/Cpp/boost_1_57_0_mingw_x64/
+#BOOST_INCLUDE := E:/caidat/Cpp/boost_1_57_0_mingw_x64/include/boost-1_57
+#BOOST_LIB := E:/caidat/Cpp/boost_1_57_0_mingw_x64/
+
+BOOST_INCLUDE := E:/caidat/Cpp/boost_1_63_0
+BOOST_LIB := E:/caidat/Cpp/boost_1_63_0/stage/lib
+
+#LIBS :=
+LIBS := -lboost_system-mgw51-mt-s-1_63 -lboost_filesystem-mgw51-mt-s-1_63
+#LIBS := -lboost_program_options-mgw51-mt-s-1_63
 
 RM := rm -f
 
@@ -42,12 +52,14 @@ all:
 #	g++ -o out/$(TEST_NAME).exe out/$(TEST_NAME).o;
 	
 	# for C++11
-	g++ -std=c++11 -Wall -c -DDEBUG -O0 -o out/$(TEST_NAME).o $(SRC_DIR)/$(TEST_NAME).cpp;
-	g++ -o out/$(TEST_NAME).exe out/$(TEST_NAME).o;
+#	g++ -std=c++11 -Wall -c -O0 -o out/$(TEST_NAME).o $(SRC_DIR)/$(TEST_NAME).cpp;
+#	g++ -o out/$(TEST_NAME).exe out/$(TEST_NAME).o;
 	
-	# for boost examples only
-#	g++ -I"$(BOOST_INCLUDE)" -Wall -c -DDEBUG -O0 -o out/$(TEST_NAME).o $(SRC_DIR)/$(TEST_NAME).cpp;
-#	g++ -L"$(BOOST_LIB)" -o out/$(TEST_NAME).exe out/$(TEST_NAME).o 
+	# for boost examples only (-DDEBUG)  -std=c++11 (program_options)
+	g++ -I"$(BOOST_INCLUDE)" -Wall -c -O0 -o out/$(TEST_NAME).o $(SRC_DIR)/$(TEST_NAME).cpp;
+#	g++ -std=c++11 -I"$(BOOST_INCLUDE)" -Wall -c -O0 -o out/$(TEST_NAME).o $(SRC_DIR)/$(TEST_NAME).cpp;
+
+	g++ -o out/$(TEST_NAME).exe out/$(TEST_NAME).o -L"$(BOOST_LIB)" ${LIBS}
 
 	@echo 'Done';
 	
