@@ -11,8 +11,6 @@
 #include <chrono>
 #include <random>
 
-#define __cplusplus 201103L
-
 int main(){
 
 //	cout<< RAND_MAX;	// 32767
