@@ -5,6 +5,12 @@
 
 package query_loader;
 
+import map_loader.MMBMap;
+
 public class QueryLog {
 
+	public MMBMap map_data;
+	
+	//
+	
 }

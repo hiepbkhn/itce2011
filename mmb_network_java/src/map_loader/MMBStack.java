@@ -5,6 +5,7 @@
 
 package map_loader;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
@@ -13,6 +14,13 @@ public class MMBStack {
 	public Stack<SegItem> stack;
 	public List<VisitedEdge> visited;	// list of visited edges 
 	public int max_size;
+	
+	//
+	public MMBStack(){
+		this.stack = new Stack<SegItem>();
+		this.visited = new ArrayList<VisitedEdge>();
+		this.max_size = 0;
+	}
 	
 	//
 	public SegItem get(){

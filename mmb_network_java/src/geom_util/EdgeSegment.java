@@ -7,15 +7,11 @@ package geom_util;
 
 public class EdgeSegment implements Comparable<EdgeSegment>{
 
-	
-	
 	public double start_x;
     public double start_y;
     public double end_x;
     public double end_y;
     public int cur_edge_id;
-    
-    
     
     //
 	public EdgeSegment(double start_x, double start_y, double end_x, double end_y, int cur_edge_id) {

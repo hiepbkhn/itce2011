@@ -12,13 +12,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import geom_util.Edge;
+import geom_util.EdgeSegment;
 import geom_util.GeomUtil;
+import geom_util.LineOperator;
 import geom_util.Node;
+import geom_util.Point;
+import geom_util.TripleDouble;
+import geom_util.TripleDoubleInt;
 
 public class MMBMap {
 
@@ -214,11 +220,342 @@ public class MMBMap {
     	
     }
     
+    //
+    public Map<Integer, Node> get_nodes(){
+    	return this.nodes;
+    }
+    
+    //
+    public Map<Integer, Edge> get_edges(){
+    	return this.edges;
+    }
+    
+    //
+    public Map<Integer, List<Integer>> get_node_to_edges(){
+    	return this.node_to_edges;
+    }
+    
+    //
+    public int get_next_node_id(int next_node_x, int next_node_y){
+    	if (this.xy_to_node_id.containsKey(new PairInt(next_node_x, next_node_y)) )
+    		return this.xy_to_node_id.get(new PairInt(next_node_x, next_node_y));
+    	else
+    		return -1;   //we may have node 0
+    }
+    
+    //
+    public boolean is_full_edge(EdgeSegment seg){
+        Edge edge = this.edges.get(seg.cur_edge_id);
+        Node start_node = this.nodes.get(edge.start_node_id);
+        Node end_node = this.nodes.get(edge.end_node_id);
+        if (seg.start_x == start_node.x && seg.start_y == start_node.y &&
+            seg.end_x == end_node.y & seg.end_y == end_node.y)
+            return true;
+        if (seg.start_x == end_node.x && seg.start_y == end_node.y &&
+            seg.end_x == start_node.y && seg.end_y == start_node.y)
+            return true;
+        return false;
+    }
+    
+    //
+    public int get_nearest_edge_id(int next_node_x, int next_node_y, int px, int py){
+        double min_distance = 100000000.0;
+        int nearest_edge_id = -1;
+        
+        int next_node_id = this.get_next_node_id(next_node_x, next_node_y);
+        
+        //print type(this.node_to_edges.get(next_node_id)) 
+        
+        for (int edge_id : this.node_to_edges.get(next_node_id)){
+            int start_node_id = this.edges.get(edge_id).start_node_id;
+            int end_node_id = this.edges.get(edge_id).end_node_id;
+            //
+            double length = LineOperator.distance_to(this.nodes.get(start_node_id).x, this.nodes.get(start_node_id).y,
+                this.nodes.get(end_node_id).x, this.nodes.get(end_node_id).y, px, py);
+            if (length < min_distance){
+                min_distance = length;
+                nearest_edge_id = edge_id;
+            }
+        }
+                
+//            print edge_id, length, px, py, this.nodes[start_node_id].x, this.nodes[start_node_id].y, \
+//                this.nodes[end_node_id].x, this.nodes[end_node_id].y
+                
+        return nearest_edge_id;
+    }
+    
+    //
+    public List<EdgeSegment> compute_fixed_expanding(int x, int y, int cur_edge_id, double length){
+        
+    	List<EdgeSegment>result = new ArrayList<EdgeSegment>();
+        
+    	MMBStack stack = new MMBStack();
+        //
+        boolean is_node = this.get_next_node_id(x, y) > -1;
+        
+        stack.push(new SegItem(x, y, -1, -1, length, cur_edge_id, is_node));
+        
+        while (stack.get_size() > 0){
+            // DEBUG
+//            stack.print_all()
+//            print "END OF LIST"
+            //
+        	SegItem item = stack.get();
+//            if item.length == 0:
+//                result.append(item)
+//                continue
+            
+            // case 1, is_node == True
+            if (item.is_node == true){
+                int node_id = this.get_next_node_id(item.x, item.y);
+                
+                for (int end_node_id : this.adj.get(node_id)){   //traverse adjacent edges...
+                    double edge_len = GeomUtil.get_edge_length(this.nodes.get(node_id), this.nodes.get(end_node_id));
+                    
+                    if (edge_len < item.length){
+                        double remaining_len = item.length - edge_len;
+                        //
+                        result.add(new EdgeSegment(this.nodes.get(node_id).x, this.nodes.get(node_id).y, 
+                                              this.nodes.get(end_node_id).x, this.nodes.get(end_node_id).y,
+                                              this.node_pair_to_edge.get(new PairInt(node_id, end_node_id)) ));
+                        //
+                        for (int edge_id : this.node_to_edges.get(end_node_id)) //one choice for each adjacent edge
+                            stack.push(new SegItem(this.nodes.get(end_node_id).x, this.nodes.get(end_node_id).y, 
+                                                 -1, -1,
+                                                 remaining_len, edge_id, true));
+                        
+                    }else{
+                        int end_x = (int) (item.x + item.length * (this.nodes.get(end_node_id).x - item.x) / edge_len);
+                        int end_y = (int) (item.y + item.length * (this.nodes.get(end_node_id).y - item.y) / edge_len);
+                        result.add(new EdgeSegment(this.nodes.get(node_id).x, this.nodes.get(node_id).y, 
+                                              end_x, end_y, 
+                                              this.node_pair_to_edge.get(new PairInt(node_id, end_node_id)) ));
+                    }
+                }
+            }
+            // case 2, is_node == False
+            else{
+            	int[] id_list = new int[]{this.edges.get(item.cur_edge_id).start_node_id, this.edges.get(item.cur_edge_id).end_node_id};
+            	for (int end_node_id : id_list){
+                    double segment_len = GeomUtil.get_segment_length(this.nodes.get(end_node_id), item.x, item.y);
+                    
+                    if (segment_len < item.length){
+                        double remaining_len = item.length - segment_len;
+                        // end_node_id.xy go first to comply with convention: first point always graph node !!
+                        result.add(new EdgeSegment(this.nodes.get(end_node_id).x, this.nodes.get(end_node_id).y,  
+                                              item.x, item.y,
+                                              item.cur_edge_id));
+                        //
+                        for (int edge_id : this.node_to_edges.get(end_node_id))
+                            stack.push(new SegItem(this.nodes.get(end_node_id).x, this.nodes.get(end_node_id).y, 
+                                             -1, -1,
+                                             remaining_len, edge_id, true));
+                    }    
+                    else{
+                        int end_x = (int) (item.x + item.length * (this.nodes.get(end_node_id).x - item.x) / segment_len);
+                        int end_y = (int) (item.y + item.length * (this.nodes.get(end_node_id).y - item.y) / segment_len);
+                        result.add(new EdgeSegment(item.x, item.y,
+                                              end_x, end_y, 
+                                              item.cur_edge_id));
+                    }
+                }
+            }
+        }
+        
+        // DEBUG
+//        print "stack.max_size", stack.max_size
+//        
+//        print "length(result) = ", length(result)
+//        for item in result:
+//            print "%15d %8.2f %10.2f %10.2f %10.2f %10.2f" % (item.cur_edge_id, EdgeSegment.length(item), \
+//                item.start_x, item.start_y, item.end_x, item.end_y)
+         
+        return result;
+	}
+    
+    //
+//    public List<EdgeSegment> compute_mesh_expanding(List<EdgeSegment> item_list, double length){   
+//        
+//    	List<EdgeSegment> result = item_list;
+//        //1. call find_boundary_points() 
+//        boundary_points = Map.find_boundary_points(item_list)
+//        
+//        //2. 
+//        for point in boundary_points:
+//            new_seg_set = this.compute_fixed_expanding(point[0], point[1], point[2], option.MAX_SPEED)
+//            // OLD
+////            new_seg_set = EdgeSegmentSet.clean_fixed_expanding(new_seg_set)
+////            result = EdgeSegmentSet.union(result, new_seg_set)
+//            // NEW
+//            result.extend(new_seg_set)
+//            
+//        result = EdgeSegmentSet.clean_fixed_expanding(result)
+//            
+//        return result
+//    }
+    
+    //
+    public boolean is_node_in_rec(double min_x, double min_y, double max_x, double max_y, Node node){
+        int p1_x = node.x;
+        int p1_y = node.y;
+        return (min_x <= p1_x) && (p1_x <= max_x) && (min_y <= p1_y) && (p1_y <= max_y);
+    }
+    
+    //
+    public boolean is_edge_in_rec(double min_x, double min_y, double max_x, double max_y, Edge edge){
+        return this.is_node_in_rec(min_x, min_y, max_x, max_y, this.nodes.get(edge.start_node_id)) && 
+            this.is_node_in_rec(min_x, min_y, max_x, max_y, this.nodes.get(edge.end_node_id));
+    }
+
+
+    //
+    public TripleDouble get_line_equation(double x1, double y1, double x2, double y2){
+        return new TripleDouble(y2-y1, x1-x2, y1*x2-y2*x1);
+    }
+    
+    //
+    public boolean is_edge_cut_rec(double min_x, double min_y, double max_x, double max_y, Edge edge){
+        int x1 = this.nodes.get(edge.start_node_id).x;
+        int y1 = this.nodes.get(edge.start_node_id).y;
+        int x2 = this.nodes.get(edge.end_node_id).x;
+        int y2 = this.nodes.get(edge.end_node_id).y;
+        TripleDouble coeff = this.get_line_equation(x1, y1, x2, y2);
+        double a1 = coeff.v0*min_x + coeff.v1*min_y + coeff.v2;
+        double a2 = coeff.v0*min_x + coeff.v1*max_y + coeff.v2;
+        double a3 = coeff.v0*max_x + coeff.v1*max_y + coeff.v2;
+        double a4 = coeff.v0*max_x + coeff.v1*min_y + coeff.v2;
+        
+        if  (this.is_node_in_rec(min_x, min_y, max_x, max_y, this.nodes.get(edge.start_node_id)) ||
+            this.is_node_in_rec(min_x, min_y, max_x, max_y, this.nodes.get(edge.end_node_id)))
+            return true;       
+        else
+        	if ((a1*a2 < 0 && (x1-min_x)*(x2-min_x) < 0) || (a2*a3 < 0 && (y1-max_y)*(y2-max_y) < 0) 
+            	|| (a3*a4 < 0 && (x1-max_x)*(x2-max_x) < 0) || (a4*a1 < 0 && (y1-min_y)*(y2-min_y) < 0))
+            return true;
+        
+        return false;
+    }
+            
+    //
+    //MBR: maximum boundary rectangle
+    //MUST use R-Tree !!!
+    //
+    public List<EdgeSegment> compute_mesh_mbr(List<Point> locations){
+    	List<EdgeSegment> result = new ArrayList<EdgeSegment>();
+        //
+    	double min_x = 100000000;
+    	double min_y = 100000000;
+    	double max_x = -100000000;
+        double max_y = -100000000;
+        for (Point point : locations){
+            if (min_x > point.x)
+                min_x = point.x;
+            if (min_y > point.y)
+                min_y = point.y;
+            if (max_x < point.x)
+                max_x = point.x;
+            if (max_y < point.y)
+                max_y = point.y;
+        }
+        
+//        print "compute_mesh_mbr - min,max (X,Y)", min_x, min_y, max_x, max_y
+                  
+        //Solution 1: linear scan
+//        start = time.clock()
+        for (Edge edge : this.edges.values())
+            if (this.is_edge_cut_rec(min_x, min_y, max_x, max_y, edge)){
+                double p1_x = this.nodes.get(edge.start_node_id).x;
+                double p1_y = this.nodes.get(edge.start_node_id).y;
+                double p2_x = this.nodes.get(edge.end_node_id).x;
+                double p2_y = this.nodes.get(edge.end_node_id).y;
+                result.add(new EdgeSegment(p1_x, p1_y, p2_x, p2_y, edge.edge_id));
+            }
+                
+//        print "Elapsed ", (time.clock() - start)        
+//        print "Solution 1: len=", len(result)
+//        for edge_seg in result:
+//            print edge_seg.cur_edge_id
+        
+                
+        //Solution 2: Interval Tree
+//        start = time.clock()
+//        set_x = set(this.interval_tree_x.findRange([min_x, max_x]))
+//        set_y = set(this.interval_tree_y.findRange([min_y, max_y]))
+//        print "set_x", set_x
+//        print "set_y", set_y
+//        
+//        cutting_edges = set_x & set_y
+//        print "cutting_edges", cutting_edges
+//        result = []
+//        for edge_id in cutting_edges:
+//            if this.is_edge_cut_rec(min_x, min_y, max_x, max_y, this.edges[edge_id]):
+//                p1_x = this.nodes[this.edges[edge_id].start_node_id].x
+//                p1_y = this.nodes[this.edges[edge_id].start_node_id].y
+//                p2_x = this.nodes[this.edges[edge_id].end_node_id].x
+//                p2_y = this.nodes[this.edges[edge_id].end_node_id].y
+//                result.append(EdgeSegment(p1_x, p1_y, p2_x, p2_y, edge_id))  
+//        print "Elapsed ", (time.clock() - start)         
+//        print "Solution 2: len=", len(result)
+//        for edge_seg in result:
+//            print edge_seg.cur_edge_id
+                  
+        return result;
+    }
+    
+    //
+    public static List<TripleDoubleInt> find_boundary_points(List<EdgeSegment> item_list){
+        
+//        print "length(item_list) = ", len(item_list)
+//        for item in item_list:
+//            print "%15d %8.2f %10.2f %10.2f %10.2f %10.2f" % (item.cur_edge_id, EdgeSegment.length(item), \
+//                item.start_x, item.start_y, item.end_x, item.end_y)
+            
+        // WAY-1    
+//        nodes = {}
+//        result = []
+//        
+//        for item in item_list:
+//            if not nodes.has_key((item.start_x, item.start_y, item.cur_edge_id)):
+//                nodes[(item.start_x, item.start_y, item.cur_edge_id)] = 1
+//            else:
+//                nodes[(item.start_x, item.start_y, item.cur_edge_id)] += 1
+//                
+//            if not nodes.has_key((item.end_x, item.end_y, item.cur_edge_id)):
+//                nodes[(item.end_x, item.end_y, item.cur_edge_id)] = 1   
+//            else:
+//                nodes[(item.end_x, item.end_y, item.cur_edge_id)] += 1   
+//        
+//        for (point, count) in nodes.iteritems():
+//            if count == 1:
+//                result.append(point)
+
+        // WAY-2
+        List<TripleDoubleInt> nodes = new ArrayList<TripleDoubleInt>();
+        List<TripleDoubleInt> result = new ArrayList<TripleDoubleInt>();
+        for (EdgeSegment item : item_list){
+            nodes.add(new TripleDoubleInt(item.start_x, item.start_y, item.cur_edge_id));   
+            nodes.add(new TripleDoubleInt(item.end_x, item.end_y, item.cur_edge_id));
+        }
+        
+        Collections.sort(nodes);
+        
+        for (int i = 0; i < nodes.size()-1; i++)
+            if ((nodes.get(i+1).v0 != nodes.get(i).v0) || (nodes.get(i+1).v1 != nodes.get(i).v1))
+                result.add(nodes.get(i));
+        if ((nodes.get(nodes.size()-1).v0 != nodes.get(nodes.size()-2).v0) || (nodes.get(nodes.size()-1).v1 != nodes.get(nodes.size()-2).v1))
+                result.add(nodes.get(nodes.size()-1));
+        
+                
+        return result;
+    }
+    
 	//////////
 	public static void main(String[] args) throws IOException {
 		
-		MMBMap map = new MMBMap();
-		map.read_map("data/", "oldenburgGen");
+		MMBMap map_data = new MMBMap();
+		map_data.read_map("data/", "oldenburgGen");
+		
+		
 		
 	}
 }
