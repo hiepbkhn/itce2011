@@ -6,17 +6,16 @@
 package geom_util;
 
 public class Node {
-	public int node_id;
-    public double x;
-    public double y;
+	public long node_id;
+    public int x;
+    public int y;
     
     //
-	public Node(int node_id, double x, double y) {
+	public Node(long node_id, int x, int y) {
 		super();
 		this.node_id = node_id;
 		this.x = x;
 		this.y = y;
 	}
-	
 	
 }

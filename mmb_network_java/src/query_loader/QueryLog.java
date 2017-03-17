@@ -5,6 +5,6 @@
 
 package query_loader;
 
-public class QueryLoad {
+public class QueryLog {
 
 }
