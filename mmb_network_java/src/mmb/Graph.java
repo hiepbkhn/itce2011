@@ -58,6 +58,14 @@ public class Graph {
 	
 	
     //////////////////////////
+    public Graph(int num_user, MMBMap map_data, QueryLog query_log){
+    	this.num_user = num_user;
+    	this.map_data = map_data;
+        this.query_log = query_log;
+    }
+    
+    
+    //
     public void reset(){
         this.num_user = 0;
         this.user_mc_set = new HashMap<Integer, Integer>();   //dict of sets
@@ -664,11 +672,11 @@ public class Graph {
 	    System.out.println("elapsed : " + (System.currentTimeMillis() - start_time));  
 	    
 	        
-	    Graph graph = new Graph(0, map_data, query_log, null);
+	    Graph graph = new Graph(0, map_data, query_log);
 	    
 	    //TEST
-	    graph.run_timestamps(0, timestep)
-	    print "graph.run_timestamps - DONE"
+	    graph.run_timestamps(0, timestep);
+	    System.out.println("graph.run_timestamps - DONE");
 		
 	}
 
