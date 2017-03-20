@@ -26,6 +26,11 @@ public class QueryLog {
     public Map<Integer, List<Query>> frames = new HashMap<Integer, List<Query>>();  //dict of lists
     
     public double max_speed = 0;
+    
+    //
+    public QueryLog(MMBMap map_data){
+    	this.map_data = map_data;
+    }
 	
     //
     public void read_query(String path, String log_file_name, int max_time_stamp) throws IOException{	// max_time_stamp = -1

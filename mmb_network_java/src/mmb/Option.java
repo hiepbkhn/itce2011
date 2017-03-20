@@ -2,6 +2,15 @@ package mmb;
 
 public class Option {
 
+	public static String QUERY_FILE = "cal_mod_10k_0.5_2_5_0005_002_2_10_20_80_10_20_events.txt";        //k-anom: 2-5, slow
+	
+	public static String RESULT_PATH = "out/";
+	
+	public static String MAP_PATH = "../../trace_generator/out/";
+	public static String MAP_FILE = "cal";
+			
+			
+	//
 	public static double MAX_SPEED = 600;
 	public static double INIT_DISTANCE = 1000;
 	public static double MAX_USER = 10000;

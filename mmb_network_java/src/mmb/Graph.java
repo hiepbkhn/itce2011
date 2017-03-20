@@ -49,11 +49,11 @@ public class Graph {
     //
     public List<Set<Integer>> cover_set;     // list of sets
     public List<List<EdgeSegment>> cover_mesh;   // list of meshes, 
-                            // checked agaist option.S_GLOBAL at the end of solve_new_queries() 
+                            // checked agaist Option.S_GLOBAL at the end of solve_new_queries() 
 //    public cover_mesh_mmb;
 //    //
     public List<Set<Integer>> new_cover_set;     // list of sets
-//    public new_cover_mesh;   // list of meshes, 
+    public List<List<EdgeSegment>> new_cover_mesh;   // list of meshes, 
 //    public new_cover_mesh_mmb;
 	
 	
@@ -364,7 +364,7 @@ public class Graph {
         long start_time = System.currentTimeMillis(); 
         for (Query query : query_list){
         	List<EdgeSegment> seg_list = this.map_data.compute_fixed_expanding(query.x, query.y, 
-                                            query.cur_edge_id, query.dist);  //old: option.DISTANCE_CONSTRAINT
+                                            query.cur_edge_id, query.dist);  //old: Option.DISTANCE_CONSTRAINT
             seg_list = EdgeSegmentSet.clean_fixed_expanding(seg_list);
             
             expanding_list.put(query.obj_id, seg_list);
@@ -378,7 +378,7 @@ public class Graph {
 //        for i in range(len(query_list)):
 //            for j in range(i+1,len(query_list)):
 //                if get_distance(query_list[i].x, query_list[i].y, query_list[j].x, query_list[j].y) > \
-//                    option.INIT_GRAPH_DISTANCE:
+//                    Option.INIT_GRAPH_DISTANCE:
 //                    continue
 //                
 //                if EdgeSegmentSet.is_set_cover(Point(query_list[i]), expanding_list[query_list[j].obj_id]) and \
@@ -471,75 +471,143 @@ public class Graph {
         System.out.println("compute cover_set - elapsed : " + (System.currentTimeMillis() - start_time)); 
         
         
-//        //5. compute CLOAKING MESH
-//        start_time = System.currentTimeMillis();   
-//        
-//        total_mesh_length = 0
-//        total_query = 0
-//        this.new_cover_mesh = []    // NEW
-//        for clique_id in range(len(this.new_cover_set)):
-//            clique = this.new_cover_set[clique_id]
-//            //compute length of mesh
-//            mesh = []
+        //5. compute CLOAKING MESH
+        start_time = System.currentTimeMillis();   
+        
+        double total_mesh_length = 0;
+        int total_query = 0;
+        this.new_cover_mesh = new ArrayList<List<EdgeSegment>>();    // NEW
+        for (int clique_id = 0; clique_id <this.new_cover_set.size(); clique_id++){
+            Set<Integer> clique = this.new_cover_set.get(clique_id);
+            //compute length of mesh
+            List<EdgeSegment> mesh = new ArrayList<EdgeSegment>();
+            for (int obj_id : clique)
+                mesh = EdgeSegmentSet.union(mesh, expanding_list.get(obj_id));
+            
+            this.new_cover_mesh.add(mesh);    //NEW           
+            
+            total_mesh_length += EdgeSegmentSet.length(mesh);
+            total_query += clique.size();    
+        }
+        
+        double average_mesh_query = total_mesh_length/total_query;
+        
+        System.out.println("total_mesh_length =" + total_mesh_length);    
+        System.out.println("average_mesh_query =" + average_mesh_query); 
+        System.out.println("Compute CLOAKING MBR - elapsed : " + (System.currentTimeMillis() - start_time)); 
+//        print "user_mesh = ", this.user_mesh
+                
+                
+        //5.2 Check MMB/MAB
+//        this.new_cover_mesh_mmb = this.compute_cover_mesh_mmb(this.new_cover_mesh, expanding_list)
+//            
+//        if timestamp > 0:
+//            start_time = System.currentTimeMillis(); 
+//            
+//            this.check_MMB_MAB(checking_pairs, this.cover_mesh, this.cover_mesh_mmb, this.new_cover_mesh, this.new_cover_mesh_mmb)
+//            
+//            print "check_MMB_MAB() - elapsed : ", (time.clock() - start_time)
+        
+        // UPDATE
+        this.cover_set = this.new_cover_set;
+        this.cover_mesh = this.new_cover_mesh;
+//        this.cover_mesh_mmb = this.new_cover_mesh_mmb        
+        
+        
+        //6. compute user_mc_set (max clique for each obj_id), replace this.positive_mc_set by this.cover_set
+        start_time = System.currentTimeMillis();   
+        this.user_mc_set = new HashMap<Integer, Integer>();
+        for (int clique_id = 0; clique_id < this.cover_set.size(); clique_id++){
+        	Set<Integer> clique = this.cover_set.get(clique_id);
+            
+            for (int obj_id : clique)
+                //
+                if (! this.user_mc_set.containsKey(obj_id))
+                    this.user_mc_set.put(obj_id, clique_id);            //use id
+                else if (this.cover_set.get(this.user_mc_set.get(obj_id)).size() < clique.size())
+                    this.user_mc_set.put(obj_id, clique_id);               //store the maximum
+            //
+            for (int obj_id : clique)
+                if (this.user_mc_set.get(obj_id) == clique_id)  //clique id comparison
+                    this.user_mesh.put(obj_id, this.cover_mesh.get(clique_id));        
+        }
+        System.out.println("Compute user_mc_set - elapsed : " + (System.currentTimeMillis() - start_time)); 
+//        print "user_mc_set = ", this.user_mc_set
+        
+                
+        //7. publish MBRs (write to file)   
+        start_time = System.currentTimeMillis();   
+        this.write_results_to_files(timestamp);
+        
+        System.out.println("write_results_to_files - elapsed : " + (System.currentTimeMillis() - start_time)); 
+    }
+    
+    //
+    public void write_results_to_files(int timestamp) throws IOException{
+        
+        String config_name = Option.QUERY_FILE.substring(Option.QUERY_FILE.length()-4) + "-" + 
+        			Option.DISTANCE_CONSTRAINT + "-" + Option.MAX_SPEED;
+        
+//        //0. this.positive_mc_set
+//        f = open(Option.RESULT_PATH + "/" + config_name + "_positive_mc_set" + "_" + str(timestamp) + ".out", "w")
+//        for clique in this.positive_mc_set:
 //            for obj_id in clique:
-//                mesh = EdgeSegmentSet.union(mesh, expanding_list[obj_id])
-//            
-//            this.new_cover_mesh.append(mesh)    //NEW           
-//            
-//            total_mesh_length += EdgeSegmentSet.length(mesh)
-//            total_query += len(clique)    
-//            
+//                f.write("%d,"%obj_id)
+//            f.write("\n")
+//        f.close()    
 //        
-//        average_mesh_query = total_mesh_length/total_query
-//        
-//        print "total_mesh_length =", total_mesh_length    
-//        print "average_mesh_query =", average_mesh_query    
-//        print "Compute CLOAKING MBR - elapsed : ", (time.clock() - start_time)  
-////        print "user_mesh = ", this.user_mesh
-//                
-//                
-//        //5.2 Check MMB/MAB
-////        this.new_cover_mesh_mmb = this.compute_cover_mesh_mmb(this.new_cover_mesh, expanding_list)
-////            
-////        if timestamp > 0:
-////            start_time = System.currentTimeMillis(); 
-////            
-////            this.check_MMB_MAB(checking_pairs, this.cover_mesh, this.cover_mesh_mmb, this.new_cover_mesh, this.new_cover_mesh_mmb)
-////            
-////            print "check_MMB_MAB() - elapsed : ", (time.clock() - start_time)
-//        
-//        // UPDATE
-//        this.cover_set = this.new_cover_set;
-//        this.cover_mesh = this.new_cover_mesh;
-////        this.cover_mesh_mmb = this.new_cover_mesh_mmb        
-//        
-//        
-//        //6. compute user_mc_set (max clique for each obj_id), replace this.positive_mc_set by this.cover_set
-//        start_time = System.currentTimeMillis();   
-//        this.user_mc_set = {}
-//        for clique_id in range(len(this.cover_set)):
-//            clique = this.cover_set[clique_id]
-//            
-//            for obj_id in clique:
-//                //
-//                if not this.user_mc_set.has_key(obj_id):
-//                    this.user_mc_set[obj_id] = clique_id            //use id
-//                elif len(this.cover_set[this.user_mc_set[obj_id]]) < len(clique):
-//                    this.user_mc_set[obj_id] = clique_id               //store the maximum
-//            //
-//            for obj_id in clique:
-//                if this.user_mc_set[obj_id] == clique_id:  //clique id comparison
-//                    this.user_mesh[obj_id] = this.cover_mesh[clique_id]        
-//        
-//        print "Compute user_mc_set - elapsed : ", (time.clock() - start_time)   
-////        print "user_mc_set = ", this.user_mc_set
-//        
-//                
-//        //7. publish MBRs (write to file)   
-//        start_time = System.currentTimeMillis();   
-//        this.write_results_to_files(timestamp);
-//        
-//        print "write_results_to_files - elapsed : ", (time.clock() - start_time)  
+        //1. this.cover_set
+        BufferedWriter f = new BufferedWriter(new FileWriter(Option.RESULT_PATH + config_name + "_" + Option.K_GLOBAL + "_" +
+                  Option.INIT_COVER_KEEP_RATIO + "_cover_set" + "_" + timestamp + ".out"));
+        for (Set<Integer> clique : this.cover_set){
+            for (int obj_id : clique)
+                f.write(obj_id + ",");
+            f.write("---");
+            for (int obj_id : clique)
+                f.write(this.query_log.trajs.get(obj_id).get(timestamp).k_anom + ",");    
+            f.write("\n");
+        }
+        f.close();    
+            
+        //2. this.user_mc_set
+//        f = open(Option.RESULT_PATH + "/" + config_name + "_user_mc_set" + "_" + str(timestamp) + ".out", "w")
+//        for (obj_id, clique_id) in this.user_mc_set.iteritems():
+//            f.write("%d %d\n"%(obj_id,clique_id))
+//        f.close()     
+        
+        //3. this.user_mesh
+//        f = open(Option.RESULT_PATH + "/" + config_name + "_user_mesh" + "_" + str(timestamp) + ".out", "w")
+//        for (obj_id, mesh) in this.user_mesh.iteritems():
+//            f.write("%d\n"%obj_id)
+//            for seg in mesh:
+//                f.write("%.2f,%.2f,%.2f,%.2f,%d:"%(seg.start_x, seg.start_y, seg.end_x, seg.end_y, seg.cur_edge_id))
+//            f.write("\n")            
+//        f.close()     
+
+        //4. this.cover_mesh
+//        f = open(Option.RESULT_PATH + "/" + config_name + "_cover_mesh" + "_" + str(timestamp) + ".out", "w")
+//        for mesh in this.cover_mesh:
+//            mbr = EdgeSegmentSet.compute_mbr(mesh)
+//            f.write("%.2f,%.2f,%.2f,%.2f,%.2f\n"%(mbr.area, mbr.min_x, mbr.min_y, mbr.max_x, mbr.max_y))
+//            for seg in mesh:
+//                f.write("%.2f,%.2f,%.2f,%.2f,%d:"%(seg.start_x, seg.start_y, seg.end_x, seg.end_y, seg.cur_edge_id))
+//            f.write("\n")            
+//        f.close()         
+        
+        //5. this.user_mesh (only print edge_id) for attacks (in trace_generator)
+        f = new BufferedWriter(new FileWriter(Option.RESULT_PATH + "/" + config_name + "_edge_cloaking_" + timestamp + ".out"));
+        for (Entry<Integer, List<EdgeSegment>> entry : this.user_mesh.entrySet()){
+        	int obj_id = entry.getKey(); 
+        	List<EdgeSegment> mesh = entry.getValue();
+        	
+            int cur_edge_id = this.query_log.trajs.get(obj_id).get(timestamp).cur_edge_id;
+            f.write(obj_id + "-" + cur_edge_id + "\n");
+            for (EdgeSegment seg : mesh)
+                f.write(seg.cur_edge_id + ",");
+            f.write("\n");
+        }
+        
+        f.close();
     }
     
     //
@@ -561,9 +629,47 @@ public class Graph {
 	    }
     }
     
-	//////////
-	public static void main(String[] args) {
+	//////////////////////////////////////////////////
+	public static void main(String[] args) throws Exception{
 
+		// COMMAND-LINE <query_file> <timestep> <distance_constraint> <k_global><INIT_COVER_KEEP_RATIO><NEXT_COVER_KEEP_RATIO>
+		int timestep = 3;
+		//    timestep = 40       // for lbs_attack
+		if(args.length >= 3){
+	        Option.QUERY_FILE = args[0];
+	        timestep = Integer.parseInt(args[1]);
+	        Option.DISTANCE_CONSTRAINT = Integer.parseInt(args[2]);
+		}
+		
+	    if (args.length >= 4)
+	        Option.K_GLOBAL = Integer.parseInt(args[3]);    
+	        
+	    if (args.length >= 5)
+	        Option.INIT_COVER_KEEP_RATIO = Double.parseDouble(args[4]);     
+	    
+	    if (args.length >= 6)
+	        Option.NEXT_COVER_KEEP_RATIO = Double.parseDouble(args[5]);     
+
+	    //    
+	    long start_time = System.currentTimeMillis();
+	        
+	    MMBMap map_data = new MMBMap();
+	    map_data.read_map(Option.MAP_PATH, Option.MAP_FILE);
+	    System.out.println("Load Map : DONE");
+	    QueryLog query_log = new QueryLog(map_data);
+	    query_log.read_query(Option.QUERY_PATH, Option.QUERY_FILE, 40);   // default: max_time_stamp = 10 (40: only for attack) 
+	    System.out.println("Load Query : DONE");
+	    
+	    System.out.println("max_speed = " + query_log.max_speed);
+	    System.out.println("elapsed : " + (System.currentTimeMillis() - start_time));  
+	    
+	        
+	    Graph graph = new Graph(0, map_data, query_log, null);
+	    
+	    //TEST
+	    graph.run_timestamps(0, timestep)
+	    print "graph.run_timestamps - DONE"
+		
 	}
 
 }
