@@ -22,7 +22,7 @@ package graph;
  *  @author Robert Sedgewick
  *  @author Kevin Wayne
  */
-public class Edge implements Comparable<Edge> { 
+public class WeightedEdge implements Comparable<WeightedEdge> { 
 
     private final int v;
     private final int w;
@@ -39,7 +39,7 @@ public class Edge implements Comparable<Edge> {
      *    is a negative integer
      * @throws IllegalArgumentException if <tt>weight</tt> is <tt>NaN</tt>
      */
-    public Edge(int v, int w, double weight) {
+    public WeightedEdge(int v, int w, double weight) {
         if (v < 0) throw new IndexOutOfBoundsException("Vertex name must be a nonnegative integer");
         if (w < 0) throw new IndexOutOfBoundsException("Vertex name must be a nonnegative integer");
         if (Double.isNaN(weight)) throw new IllegalArgumentException("Weight is NaN");
@@ -64,6 +64,14 @@ public class Edge implements Comparable<Edge> {
         return v;
     }
 
+    public int from() {
+        return v;
+    }
+    
+    public int to() {
+        return w;
+    }
+    
     /**
      * Returns the endpoint of the edge that is different from the given vertex
      * (unless the edge represents a self-loop in which case it returns the same vertex).
@@ -85,7 +93,7 @@ public class Edge implements Comparable<Edge> {
      * @return a negative integer, zero, or positive integer depending on whether
      *    this edge is less than, equal to, or greater than that edge
      */
-    public int compareTo(Edge that) {
+    public int compareTo(WeightedEdge that) {
         if      (this.weight() < that.weight()) return -1;
         else if (this.weight() > that.weight()) return +1;
         else                                    return  0;
@@ -117,7 +125,7 @@ public class Edge implements Comparable<Edge> {
      * Unit tests the <tt>Edge</tt> data type.
      */
     public static void main(String[] args) {
-        Edge e = new Edge(12, 23, 3.14);
+    	WeightedEdge e = new WeightedEdge(12, 23, 3.14);
         StdOut.println(e);
     }
 }

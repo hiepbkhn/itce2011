@@ -405,6 +405,8 @@ public class Orbis {
 		String prefix = "";
 	    int n_samples = 20;
 		double eps = 2.0;		
+		boolean accept_self = false;
+		boolean accept_parallel = false;
 		
 		if(args.length >= 4){
 			prefix = args[0];
@@ -458,7 +460,7 @@ public class Orbis {
 			start = System.currentTimeMillis();
 			Grph g = new InMemoryGrph();
 			g.addNVertices(n_nodes);
-			int need2Rewire = orbis.dkTopoGen1k(g, degList, true, true, "");
+			int need2Rewire = orbis.dkTopoGen1k(g, degList, accept_self, accept_parallel, "");
 			
 			f = new RegularFile(sample_file + "." + i);
 			EdgeListWriter writer = new EdgeListWriter();

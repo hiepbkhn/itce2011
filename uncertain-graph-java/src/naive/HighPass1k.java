@@ -235,7 +235,7 @@ public class HighPass1k {
 				v2 = part_init.get(stub_i.nodeid);
 				if (!tempG.areEdgesAdjacent(v1, v2))
 					continue;
-				if (tempG.getEdge(v1, v2).weight() > 1.1 * sG.getEdge(v1, v2).weight())			// NOTICE temp constant 1.1 !
+				if (tempG.getEdge(v1, v2).weight() > 1.0 * sG.getEdge(v1, v2).weight())			// NOTICE temp constant 1.1 !
 					continue;
 				
 				break;
@@ -358,7 +358,7 @@ public class HighPass1k {
 	    int n_samples = 20;
 		double eps = 2.0;		
 		int k = 10;
-		double r = 0.8;		// ratio of eps_1k vs. eps
+		double r = 0.5;		// 0.2, 0.5, 0.8 - ratio of eps_1k vs. eps
 		
 		if(args.length >= 5){
 			prefix = args[0];
@@ -410,7 +410,8 @@ public class HighPass1k {
 		//// 2 - greedyWithPermutation()
 		String filename = prefix + "_data/" + dataname + ".gr";
 		String seq_file = prefix + "_out/" + dataname + "_1k_" + String.format("%.1f",eps);
-		String sample_file = prefix + "_sample/" + dataname + "_per1k_" + String.format("%.1f", eps) + "_" + k;
+//		String sample_file = prefix + "_sample/" + dataname + "_per1k_" + String.format("%.1f", eps) + "_" + k;			 // 1.1 in recoverGraph
+		String sample_file = prefix + "_sample/" + dataname + "_per1k_" + String.format("%.1f", eps) + "_" + k + "_1.0"; // 1.0 in recoverGraph
 		if(args.length >= 6)
 			sample_file += "_" + String.format("%.2f", r);
 	    System.out.println("seq_file = " + seq_file);

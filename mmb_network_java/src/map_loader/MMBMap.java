@@ -190,8 +190,10 @@ public class MMBMap {
 //                print "ERROR (duplicate edge) at edge_id =", edge_id    
                 continue;
             
+            Edge edge = new Edge(edge_id, start_node_id, end_node_id, edge_class);
+            edge.edge_length = Edge.length(this.nodes.get(start_node_id), this.nodes.get(end_node_id));
             
-            this.edges.put(edge_id, new Edge(edge_id, start_node_id, end_node_id, edge_class));
+            this.edges.put(edge_id, edge);
             
             this.total_map_len += GeomUtil.get_edge_length(this.nodes.get(start_node_id), this.nodes.get(end_node_id));
             //

@@ -7,6 +7,7 @@ package trace;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -19,10 +20,12 @@ import geom_util.Edge;
 import geom_util.GeomUtil;
 import geom_util.Node;
 import graph.EdgeWeightedGraph;
+import graph.WeightedEdge;
 import map_loader.MMBMap;
 import map_loader.PairInt;
 import mmb.Option;
 import tuple.PairDouble;
+import tuple.TupleTrace;
 
 public class TraceGenerator {
 	
@@ -269,7 +272,7 @@ public class TraceGenerator {
 	        return new ArrayList<Event>(); 
 	    
 	    Random random = new Random();   
-	    Trace selected_trace = long_traces.get(random.nextInt(long_traces.size()-1));
+	    Trace selected_trace = long_traces.get(random.nextInt(long_traces.size()));
 	    
 	    List<Event> exposed_events = compute_exposed_events(map_data, selected_trace, p.user_id, p.user_speed);
 	    
@@ -370,61 +373,224 @@ public class TraceGenerator {
 	}
 	
 	//
-//	def generate_profiles(map_data):
-//	    
-//	    speed_classes = Option.SPEED_CLASSES
-//	    
-//	    list_node_ids = [node.node_id for node in map_data.nodes.itervalues()]
-//	    
-//	    // 2 - prepare weighted graph G for shortest paths in generate_profiles()
-//	    print "num of map_data.edges :", len(map_data.edges)
-//	    G = nx.Graph()
-//	    for edge in map_data.edges.itervalues():
-//	        G.add_edge(edge.start_node_id, edge.end_node_id, weight=edge.edge_length/speed_classes[edge.edge_class])
-//	    // DEBUG
-//	    print "graph G:" 
-//	    print "num of nodes :", len(G.nodes())
-//	    print "num of edges :", len(G.edges())
-//	    
-//	        
-//	    // 3 - generate transition matrix (trans_prob)
-//	    ////// TEST
-//	//    p = Profile()
-//	//    p.n_train_paths = 30
-//	//    p.train_paths = generate_paths(map_data, G, p.n_train_paths)
-//	//    
-//	//    print "p.n_groups =", len(p.train_paths)
-//	//    for path in p.train_paths:
-//	//        print path.source_node_id, path.target_node_id, " freq =", path.freq
-//	////        print path.node_list
-//	//        print path.edge_list
-//	        
-//	    
-//	    profile_list = []   // list of user Profiles
-//	    for i in range(Option.N_USERS):
-//	        p = Profile()
-//	        p.user_id = i
-//	        // assign a nominal speed
-//	        p.user_speed = Option.USER_NOMINAL_SPEEDS[random.randint(0,Option.NUM_NOMINAL_SPEEDS-1)] * Option.SPEED_PROFILE
-//	        
-//	        p.n_train_paths = random.randint(Option.MIN_N_TRAIN_PATH, Option.MAX_N_TRAIN_PATH)
-//	        p.train_paths = generate_paths(map_data, G, p.n_train_paths, list_node_ids)
-//	//        print "finish generate_paths"
-//	        
-//	        p.trans_prob, p.access_prob, p.trans_prob_e, p.access_prob_e, p.move_cdf =\
-//	                    compute_trans_prob_and_access_prob(map_data, p.train_paths, p.user_id, p.user_speed)
-//	//        print "finish compute_trans_prob_and_access_prob"
-//	        //
-//	        profile_list.append(p)
-//	        
-//	        if i % 500 == 0:
-//	            print "finished i =", i
-//
-//	    
-//	    // RETURN profile_list
-//	    return profile_list    
+	public List<Profile> generate_profiles(MMBMap map_data){
+	    
+	    double[] speed_classes = Option.SPEED_CLASSES;
+	    
+	    List<Integer> list_node_ids = new ArrayList<Integer>();
+	    for (Node node : map_data.nodes.values())
+	    	list_node_ids.add(node.node_id);
+	    
+	    // 2 - prepare weighted graph G for shortest paths in generate_profiles()
+	    System.out.println("num of map_data.edges :" + map_data.edges.size());
+	    int V = list_node_ids.size();
+	    EdgeWeightedGraph G = new EdgeWeightedGraph(V);
+	    for (Edge edge : map_data.edges.values())
+	        G.addEdge(new WeightedEdge(edge.start_node_id, edge.end_node_id, edge.edge_length/speed_classes[edge.edge_class]));
+	    // DEBUG
+	    System.out.println("graph G:");
+	    System.out.println("num of nodes :" + G.V());
+	    System.out.println("num of edges :" + G.E());
+	    
+	        
+	    // 3 - generate transition matrix (trans_prob)
+	    ////// TEST
+	//    p = Profile()
+	//    p.n_train_paths = 30
+	//    p.train_paths = generate_paths(map_data, G, p.n_train_paths)
+	//    
+	//    print "p.n_groups =", len(p.train_paths)
+	//    for path in p.train_paths:
+	//        print path.source_node_id, path.target_node_id, " freq =", path.freq
+	////        print path.node_list
+	//        print path.edge_list
+	        
+	    
+	    List<Profile> profile_list = new ArrayList<Profile>();   // list of user Profiles
+	    Random random = new Random();
+	    for (int i = 0; i < Option.N_USERS; i++){
+	    	Profile p = new Profile();
+	        p.user_id = i;
+	        // assign a nominal speed
+	        
+	        p.user_speed = Option.USER_NOMINAL_SPEEDS[random.nextInt(Option.NUM_NOMINAL_SPEEDS)] * Option.SPEED_PROFILE;
+	        
+	        p.n_train_paths = Option.MIN_N_TRAIN_PATH + random.nextInt(Option.MAX_N_TRAIN_PATH - Option.MIN_N_TRAIN_PATH);
+	        p.train_paths = generate_paths(map_data, G, p.n_train_paths, list_node_ids);
+	//        print "finish generate_paths"
+	        
+	        TupleTrace temp = compute_trans_prob_and_access_prob(map_data, p.train_paths, p.user_id, p.user_speed);
+	        p.trans_prob = temp.trans_prob;
+	        p.access_prob = temp.access_prob;
+	        p.trans_prob_e = temp.trans_prob_e;
+	        p.access_prob_e = temp.access_prob_e;
+	        p.move_cdf  = temp.move_cdf;
+	        
+	//        print "finish compute_trans_prob_and_access_prob"
+	        //
+	        profile_list.add(p);
+	        
+	        if (i % 500 == 0)
+	        	System.out.println("finished i = " + i);
+	    }
+	    
+	    // RETURN profile_list
+	    return profile_list;
+	}
 
-	
+	//
+	// return trans_prob, computed from train_paths
+	public TupleTrace compute_trans_prob_and_access_prob(MMBMap map_data, List<Path> train_paths, int user_id, double user_speed){
+		Map<Integer, Map<Integer, Double>> trans_prob = new HashMap<Integer, Map<Integer, Double>>();
+		Map<Integer, Double> access_prob = new HashMap<Integer, Double>();
+	    
+	    ////// PER NODE
+	    for (Path path : train_paths){
+	        // for trans_prob{}
+	        for (int i = 0; i < path.node_list.size() - 1; i++){
+	            int node1 = path.node_list.get(i);
+	            int node2 = path.node_list.get(i+1);
+	            if (!trans_prob.containsKey(node1))
+	                trans_prob.put(node1, new HashMap<Integer, Double>());      // dict: (node2, num of occurences)
+	            if (!trans_prob.get(node1).containsKey(node2))
+	                trans_prob.get(node1).put(node2, path.freq);
+	            else        
+	            	trans_prob.get(node1).put(node2, trans_prob.get(node1).get(node2) + path.freq);
+	        }
+	        
+	        // for access_prob{}
+	        for (int node : path.node_list)
+	            if (! access_prob.containsKey(node))
+	                access_prob.put(node, path.freq);
+	            else
+	                access_prob.put(node, access_prob.get(node) + path.freq);       
+	    }
+	//    print "finish PER NODE"
+
+	                
+	    // normalize to get prob. sum = 1
+	    // for trans_prob{}
+	    for (Entry<Integer, Map<Integer, Double>> entry : trans_prob.entrySet()){
+	    	int node1 = entry.getKey();
+	    	Map<Integer, Double> adj_dict = entry.getValue();
+	    	
+	        int total_occur = 0;
+	        for (Double n_occur : adj_dict.values())
+	            total_occur += n_occur;
+	        	
+	        for (int node2 : adj_dict.keySet())
+	            trans_prob.get(node1).put(node2, trans_prob.get(node1).get(node2)/total_occur);
+	    }
+	    
+	//    print "finish trans_prob"
+	            
+	    // for access_prob{}
+	    double total_occur = 0;
+	    for (Double n_occur : access_prob.values())
+	        total_occur += n_occur;
+	    
+	    for (int node : access_prob.keySet())
+	        access_prob.put(node, access_prob.get(node)/total_occur);         
+	//    print "finish access_prob"    
+	    
+	    ////// PER EDGE
+	    Map<Integer, Map<Integer, Double>> trans_prob_e = new HashMap<Integer, Map<Integer, Double>>();
+	    Map<Integer, Double> access_prob_e = new HashMap<Integer, Double>(); 
+	    
+	    for (Path path : train_paths){
+	        // for trans_prob_e{}
+	        for (int i = 0; i < path.edge_list.size() - 1; i++){
+	            int edge1 = path.edge_list.get(i);
+	            int edge2 = path.edge_list.get(i+1);
+	            if (! trans_prob_e.containsKey(edge1))
+	                trans_prob_e.put(edge1, new HashMap<Integer, Double>());      // new dict: (edge2, num of occurences)
+	            if (! trans_prob_e.get(edge1).containsKey(edge2))
+	                trans_prob_e.get(edge1).put(edge2, path.freq);
+	            else        
+	            	trans_prob_e.get(edge1).put(edge2, trans_prob_e.get(edge1).get(edge2) + path.freq);
+	        }
+	        
+	        // for access_prob_e{}
+	        for (int edge : path.edge_list)
+	            if (!access_prob_e.containsKey(edge))
+	                access_prob_e.put(edge, path.freq);
+	            else
+	                access_prob_e.put(edge, access_prob_e.get(edge) + path.freq);
+	    }              
+	                
+	    // normalize to get prob. sum = 1
+	    // for trans_prob_e{}
+	    for (Entry<Integer, Map<Integer, Double>> entry : trans_prob_e.entrySet()){
+	    	int edge1 = entry.getKey();
+	    	Map<Integer, Double> adj_dict = entry.getValue();
+	        total_occur = 0;
+	        for (double n_occur : adj_dict.values())
+	            total_occur += n_occur;
+	        for (int edge2 : adj_dict.keySet())
+	        	trans_prob.get(edge1).put(edge2, trans_prob.get(edge1).get(edge2)/total_occur);
+	    }
+	//    print "finish trans_prob_e"  
+	    
+	    // for access_prob_e{}
+	    total_occur = 0;
+	    for (double n_occur : access_prob_e.values())
+	        total_occur += n_occur;
+	    for (int edge : access_prob_e.keySet())
+	        access_prob_e.put(edge, access_prob_e.get(edge)/total_occur);    
+	//    print "finish access_prob_e" 
+	            
+	    
+	    // CHECK normalization condition (sum = 1)
+	    
+	    ////// MOVE_CDF
+	    Map<Integer, Map<Integer, List<Double>>> move_cdf = new HashMap<Integer, Map<Integer, List<Double>>>();
+	    
+	    for (Path path : train_paths){
+	        List<Event> exposed_events = compute_exposed_events(map_data, new Trace(path), user_id, user_speed);
+	        int n_events = exposed_events.size();
+	        for (int i = 0; i < n_events-1; i++){
+	            Event evt_i = exposed_events.get(i);
+	            if (! move_cdf.containsKey(evt_i.edge_id))   // initialize if not yet
+	                move_cdf.put(evt_i.edge_id, new HashMap<Integer, List<Double>>());
+	            for (int j = i+1; j < n_events; j++){
+	                if (j - i >= Option.N_TIMESTEPS)      // restrict length of k in S_ij(k)
+	                    continue;
+	                
+	                Event evt_j = exposed_events.get(j);
+	                if (!move_cdf.get(evt_i.edge_id).containsKey(evt_j.edge_id)){
+	                    List<Double> temp = new ArrayList<Double>();
+	                    for (int _t = 0; _t < Option.N_TIMESTEPS; _t++)
+	                    	temp.add(0.0);
+	                	move_cdf.get(evt_i.edge_id).put(evt_j.edge_id, temp);   // initialize if not yet
+	                    move_cdf.get(evt_i.edge_id).get(evt_j.edge_id).set(j-i, path.freq);
+	                }
+	                else{
+	                    double val = move_cdf.get(evt_i.edge_id).get(evt_j.edge_id).get(j-i) + path.freq;
+	                    move_cdf.get(evt_i.edge_id).get(evt_j.edge_id).set(j-i, val);
+	                }
+	            }
+	        }
+	    }
+
+	    //    print "finish move_cdf"
+	    // compute CDF
+	    for (Map<Integer, List<Double>> adj_dict : move_cdf.values())
+	        for (List<Double> freq_list : adj_dict.values()){
+	            double s = 0.0;
+	            for (double val : freq_list)
+	            	s += val;
+	            for (int i = 1; i < freq_list.size(); i++)
+	                freq_list.set(i, freq_list.get(i) + freq_list.get(i-1));
+	            for (int i = 0; i < freq_list.size(); i++)
+	                freq_list.set(i, freq_list.get(i)/s);
+	        }
+	//    print "finish compute cdf"             
+	    
+	    //
+	    return new TupleTrace(trans_prob, access_prob, trans_prob_e, access_prob_e, move_cdf);  
+	}
+	    
+	    
 	//////////////////////////////////////////////
 	public static void main(String[] args) throws IOException {
 	

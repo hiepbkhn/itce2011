@@ -13,6 +13,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,7 +66,7 @@ public class EdgeWeightedGraph {
 
     private final int V;
     private int E;
-    private List<Map<Integer, Edge>> adj;
+    private List<Map<Integer, WeightedEdge>> adj;
     
     /**
      * Initializes an empty edge-weighted graph with <tt>V</tt> vertices and 0 edges.
@@ -77,9 +78,9 @@ public class EdgeWeightedGraph {
         if (V < 0) throw new IllegalArgumentException("Number of vertices must be nonnegative");
         this.V = V;
         this.E = 0;
-        adj = new ArrayList<Map<Integer,Edge>>();
+        adj = new ArrayList<Map<Integer,WeightedEdge>>();
         for (int v = 0; v < V; v++) {
-            adj.add(new HashMap<Integer, Edge>());
+            adj.add(new HashMap<Integer, WeightedEdge>());
         }
     }
 
@@ -98,7 +99,7 @@ public class EdgeWeightedGraph {
             int v = StdRandom.uniform(V);
             int w = StdRandom.uniform(V);
             double weight = Math.round(100 * StdRandom.uniform()) / 100.0;
-            Edge e = new Edge(v, w, weight);
+            WeightedEdge e = new WeightedEdge(v, w, weight);
             addEdge(e);
         }
     }
@@ -134,14 +135,14 @@ public class EdgeWeightedGraph {
      * @param  e the edge
      * @throws IndexOutOfBoundsException unless both endpoints are between 0 and V-1
      */
-    public void addEdge(Edge e) {
+    public void addEdge(WeightedEdge e) {
         int v = e.either();
         int w = e.other(v);
         validateVertex(v);
         validateVertex(w);
         if (v != w){		// hiepnh fixed
         	adj.get(v).put(w, e);
-        	adj.get(w).put(v, e);
+        	adj.get(w).put(v, new WeightedEdge(w, v, e.weight()));
         }else
         	adj.get(v).put(v, e);
         E++;
@@ -154,7 +155,7 @@ public class EdgeWeightedGraph {
      * @return the edges incident on vertex <tt>v</tt> as an Iterable
      * @throws IndexOutOfBoundsException unless 0 <= v < V
      */
-    public Map<Integer, Edge> adj(int v) {
+    public Map<Integer, WeightedEdge> adj(int v) {
         validateVertex(v);
         return adj.get(v);
     }
@@ -178,19 +179,22 @@ public class EdgeWeightedGraph {
      *
      * @return all edges in this edge-weighted graph, as an iterable
      */
-    public Iterable<Edge> edges() {
-        List<Edge> list = new ArrayList<Edge>();
+    public Iterable<WeightedEdge> edges() {
+        List<WeightedEdge> list = new ArrayList<WeightedEdge>();
         for (int v = 0; v < V; v++) {
             int selfLoops = 0;
-            for (Edge e : adj.get(v).values()) {
-                if (e.other(v) > v) {
-                    list.add(e);
-                }
-                // only add one copy of each self loop (self loops will be consecutive)
-                else if (e.other(v) == v) {
-                    if (selfLoops % 2 == 0) list.add(e);
-                    selfLoops++;
-                }
+            for (WeightedEdge e : adj.get(v).values()) {
+            	
+            	list.add(e);
+            	
+//                if (e.other(v) > v) {
+//                    list.add(e);
+//                }
+//                // only add one copy of each self loop (self loops will be consecutive)
+//                else if (e.other(v) == v) {
+//                    if (selfLoops % 2 == 0) list.add(e);
+//                    selfLoops++;
+//                }
             }
         }
         return list;
@@ -208,7 +212,7 @@ public class EdgeWeightedGraph {
         s.append(V + " " + E + " " + totalWeight() + NEWLINE);
         for (int v = 0; v < V; v++) {
             s.append(v + ": ");
-            for (Edge e : adj.get(v).values()) {
+            for (WeightedEdge e : adj.get(v).values()) {
                 s.append(e + "  ");
             }
             s.append(NEWLINE);
@@ -220,7 +224,7 @@ public class EdgeWeightedGraph {
     // hiepnh - Sep 14, 2015
     public double totalWeight(){
     	double ret = 0.0;
-    	for (Edge e : edges())
+    	for (WeightedEdge e : edges())
     		ret += e.weight();
     	//
     	return ret;
@@ -228,7 +232,7 @@ public class EdgeWeightedGraph {
     
     public double adjWeight(int v){
     	double ret = 0.0;
-    	for (Edge e : adj.get(v).values()) {
+    	for (WeightedEdge e : adj.get(v).values()) {
     		if (e.other(v) != v)
     			ret += e.weight();
     		else
@@ -242,7 +246,7 @@ public class EdgeWeightedGraph {
     	return adj.get(u).containsKey(v);
     }
     
-    public Edge getEdge(int u, int v){
+    public WeightedEdge getEdge(int u, int v){
     	if (adj.get(u).containsKey(v))
     		return adj.get(u).get(v); 
     	return null;
@@ -252,7 +256,7 @@ public class EdgeWeightedGraph {
     	EdgeWeightedGraph ret = new EdgeWeightedGraph(this.V());
 //    	ret.E = this.E;	// ERROR !
     	ret.E = 0;
-    	for (Edge e : this.edges())
+    	for (WeightedEdge e : this.edges())
     		ret.addEdge(e);
     	//
     	return ret;
@@ -262,6 +266,13 @@ public class EdgeWeightedGraph {
     public static List<Integer> shortest_path(EdgeWeightedGraph G, int source_node_id, int target_node_id){
     	List<Integer> result = new ArrayList<Integer>();
     	
+    	DijkstraSP sp = new DijkstraSP(G, source_node_id);
+    	if (sp.hasPathTo(target_node_id))
+            for (WeightedEdge e : sp.pathTo(target_node_id))
+                result.add(e.from());
+    	result.add(target_node_id);
+    	
+    	Collections.reverse(result);
     	
     	//
     	return result;

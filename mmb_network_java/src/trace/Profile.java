@@ -20,7 +20,7 @@ public class Profile {
     
     // for attacks (e.g. Maximum Likelihood Tracking attack)
     public Map<Integer, Map<Integer, Double>> trans_prob_e = new HashMap<Integer, Map<Integer, Double>>();  // dict of dicts ( e1 -> {(e2,f2),(e3,f3),...} ) 
-    public Map<Integer, Double> access_prob_e = new HashMap<Integer, Double>() ;       // dict of edges (map access profile)
+    public Map<Integer, Double> access_prob_e = new HashMap<Integer, Double>();       // dict of edges (map access profile)
     public Map<Integer, Integer> edge_to_id = new HashMap<Integer, Integer>();          // edge_i -> i
     public Map<Integer, Integer> id_to_edge = new HashMap<Integer, Integer>();          // i -> edge_i
     

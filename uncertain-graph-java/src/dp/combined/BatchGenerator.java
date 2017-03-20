@@ -774,13 +774,13 @@ public class BatchGenerator {
 		
 		// 1k-Series
 //		double[] epsArr1 = new double[]{epsArr[3], epsArr[5]};		// 0.75ln, 1.25 ln
-//		for (double eps : epsArr1){
-//			String graph_name = dataname + "_1k_" + String.format("%.1f", eps);
-//			String cmd = "java dp.UtilityMeasure " + prefix + " " + dataname + " " + n_samples + " " + graph_name + " " + n_nodes +
-//					" > ../_console/" + graph_name + "-UTIL.txt";
-//			bw.write(cmd + "\n");
-//		}
-//		bw.write("\n\n");
+		for (double eps : epsArr){
+			String graph_name = dataname + "_1k_" + String.format("%.1f", eps);
+			String cmd = "java dp.UtilityMeasure " + prefix + " " + dataname + " " + n_samples + " " + graph_name + " " + n_nodes +
+					" > ../_console/" + graph_name + "-UTIL.txt";
+			bw.write(cmd + "\n");
+		}
+		bw.write("\n\n");
 		
 		// HighPass1k
 //		for (double eps : epsArr)
@@ -793,14 +793,14 @@ public class BatchGenerator {
 //		bw.write("\n\n");
 		
 		// HighPass1kPermutation
-		for (double eps : epsArr)
-			for (int k : kArr){
-			String graph_name = dataname + "_per1k_" + String.format("%.1f", eps) + "_" + k + "_" + String.format("%.2f", r);
-			String cmd = "java dp.UtilityMeasure " + prefix + " " + dataname + " " + n_samples + " " + graph_name + " " + n_nodes +
-					" > ../_console/" + graph_name + "-UTIL.txt";
-			bw.write(cmd + "\n");
-		}
-		bw.write("\n\n");
+//		for (double eps : epsArr)
+//			for (int k : kArr){
+//			String graph_name = dataname + "_per1k_" + String.format("%.1f", eps) + "_" + k + "_" + String.format("%.2f", r);
+//			String cmd = "java dp.UtilityMeasure " + prefix + " " + dataname + " " + n_samples + " " + graph_name + " " + n_nodes +
+//					" > ../_console/" + graph_name + "-UTIL.txt";
+//			bw.write(cmd + "\n");
+//		}
+//		bw.write("\n\n");
 		
 		// MCMCInference
 //		int burn_factor = 1000;
@@ -1122,7 +1122,7 @@ public class BatchGenerator {
 //			//
 //			String batch_file = "_cmd2/1k_" + dataname + ".cmd";		// _cmd2
 //			double log_n = Math.log(n);
-//			double[] epsArr = new double[]{0.75*log_n, 1.25*log_n};	// 0.5*log_n
+//			double[] epsArr = new double[]{2.0, 0.25*log_n, 0.5*log_n, 0.75*log_n, log_n, 1.25*log_n, 1.5*log_n};	// 0.5*log_n
 //			
 //			generate1kSeries(batch_file, prefix, dataname, n_samples, epsArr);
 //			System.out.println("DONE.");

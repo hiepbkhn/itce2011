@@ -11,6 +11,7 @@ public class Edge {
     public int start_node_id;
     public int end_node_id;
     public int edge_class;
+    public double edge_length = 0.0;
     
     public Edge(int edge_id, int start_node_id, int end_node_id, int edge_class) {
 		super();

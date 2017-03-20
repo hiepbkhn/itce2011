@@ -15,4 +15,14 @@ public class Trace {
 
 	public List<Integer> node_list = new ArrayList<Integer>();
     public List<Integer> edge_list = new ArrayList<Integer>();     // equivalent to self.node_list
+    
+    public Trace(){
+    	
+    	
+    }
+    
+    public Trace(Path path){
+    	this.node_list = path.node_list;
+    	this.edge_list = path.edge_list;
+    }
 }
