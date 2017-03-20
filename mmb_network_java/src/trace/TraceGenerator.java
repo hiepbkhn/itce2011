@@ -5,6 +5,8 @@
 
 package trace;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -310,7 +312,7 @@ public class TraceGenerator {
 	
 	//
 	// return a list of training Paths    
-	public List<Path> generate_paths(MMBMap map_data, EdgeWeightedGraph G, int n_train_paths, List<Integer> list_node_ids){    
+	public static List<Path> generate_paths(MMBMap map_data, EdgeWeightedGraph G, int n_train_paths, List<Integer> list_node_ids){    
 	    
 	    
 	    // number of train groups (sum = n_train_paths)
@@ -373,7 +375,7 @@ public class TraceGenerator {
 	}
 	
 	//
-	public List<Profile> generate_profiles(MMBMap map_data){
+	public static List<Profile> generate_profiles(MMBMap map_data){
 	    
 	    double[] speed_classes = Option.SPEED_CLASSES;
 	    
@@ -440,7 +442,7 @@ public class TraceGenerator {
 
 	//
 	// return trans_prob, computed from train_paths
-	public TupleTrace compute_trans_prob_and_access_prob(MMBMap map_data, List<Path> train_paths, int user_id, double user_speed){
+	public static TupleTrace compute_trans_prob_and_access_prob(MMBMap map_data, List<Path> train_paths, int user_id, double user_speed){
 		Map<Integer, Map<Integer, Double>> trans_prob = new HashMap<Integer, Map<Integer, Double>>();
 		Map<Integer, Double> access_prob = new HashMap<Integer, Double>();
 	    
@@ -589,6 +591,88 @@ public class TraceGenerator {
 	    //
 	    return new TupleTrace(trans_prob, access_prob, trans_prob_e, access_prob_e, move_cdf);  
 	}
+	
+	//
+	public static void save_profiles(List<Profile> profile_list) throws IOException{
+	    
+		BufferedWriter f = new BufferedWriter(new FileWriter("../out/" + Option.getProfileName() + "_profiles.txt"));
+	    // save p.trans_prob + p.access_prob
+	    for (Profile p : profile_list){
+	        f.write(p.user_id +"-" + p.user_speed + "\n");
+	        ////// NODE
+	        // trans_prob
+	        for (Entry<Integer, Map<Integer, Double>> entry : p.trans_prob.entrySet()){
+	        	int node1 = entry.getKey();
+	        	Map<Integer, Double> adj_dict = entry.getValue();
+	            
+	        	f.write(node1 + "-");
+	            for (Entry<Integer, Double> entry2 : adj_dict.entrySet()){
+	            	int node2 = entry2.getKey();
+	            	double freq = entry2.getValue();
+	                f.write(node2 + ":" + freq + ",");
+	            }
+	            f.write(";");
+	        }
+	        f.write("\n");
+	        
+	        // access_prob
+	        for (Entry<Integer, Double> entry2 : p.access_prob.entrySet()){ 
+	        	int node = entry2.getKey();
+            	double freq = entry2.getValue();
+	            f.write(node + ":" + freq + ",");
+	        }
+	            
+	        f.write("\n");
+	        
+	        ////// EDGE
+	        // trans_prob_e
+	        for (Entry<Integer, Map<Integer, Double>> entry : p.trans_prob_e.entrySet()){
+	        	int edge1 = entry.getKey();
+	        	Map<Integer, Double> adj_dict = entry.getValue();
+	            
+	        	f.write(edge1 + "-");
+	            for (Entry<Integer, Double> entry2 : adj_dict.entrySet()){
+	            	int edge2 = entry2.getKey();
+	            	double freq = entry2.getValue();
+	                f.write(edge2 + ":" + freq + ",");
+	            }
+	            f.write(";");
+	        }
+	        f.write("\n");
+	        
+	        // access_prob_e
+	        for (Entry<Integer, Double> entry2 : p.access_prob_e.entrySet()){ 
+	        	int edge = entry2.getKey();
+            	double freq = entry2.getValue();
+	            f.write(edge + ":" + freq + ",");
+	        }
+	        f.write("\n");
+	        
+	        ////// MOVE_CDF
+	        // move_cdf
+	        for (Entry<Integer, Map<Integer, List<Double>>> entry : p.move_cdf.entrySet()){
+	        	int edge1 = entry.getKey();
+	        	Map<Integer, List<Double>> adj_dict = entry.getValue();
+	            
+	        	f.write(edge1 + "-");
+	            for (Entry<Integer, List<Double>> entry2 : adj_dict.entrySet()){
+	            	int edge2 = entry2.getKey();
+	            	List<Double> freq_list = entry2.getValue();
+	                f.write(edge2 + ":");
+	                
+	                for (double freq : freq_list)
+	                    f.write(freq + ",");
+	                f.write("|");
+	            }
+	            f.write(";");
+	        }
+	        
+	        f.write("\n");
+	    }
+	        
+	        
+	    f.close();
+	}
 	    
 	    
 	//////////////////////////////////////////////
@@ -599,22 +683,22 @@ public class TraceGenerator {
 		
 		//
 		// TEST generate_profiles()
-//	    long start = System.currentTimeMillis();
-//	    
-//	    List<Profile> profile_list = generate_profiles(map_data);
-//	    System.out.println("generate_profiles - DONE !";
-//	    System.out.println("Elapsed " + (System.currentTimeMillis() - start));
+	    long start = System.currentTimeMillis();
+	    
+	    List<Profile> profile_list = generate_profiles(map_data);
+	    System.out.println("generate_profiles - DONE !");
+	    System.out.println("Elapsed " + (System.currentTimeMillis() - start));
 	    
 	//    p = profile_list[0]
 	//    print p.move_cdf
 	    
 	    
 	    // TEST save_profiles()
-	//    start = time.clock()
-	//    
-	//    save_profiles(profile_list)
-	//    print "save_profiles - DONE !"
-	//    print "Elapsed ", (time.clock() - start)
+	    start = System.currentTimeMillis();
+	    
+	    save_profiles(profile_list);
+	    System.out.println("save_profiles - DONE !");
+	    System.out.println("Elapsed " + (System.currentTimeMillis() - start));
 	    
 	    
 	    // TEST load_profiles()

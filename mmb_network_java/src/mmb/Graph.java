@@ -417,7 +417,7 @@ public class Graph {
         Runtime r = Runtime.getRuntime();
         Process p = r.exec(Option.MACE_EXECUTABLE + " M " + Option.MAXIMAL_CLIQUE_FILE_IN + " " + Option.MAXIMAL_CLIQUE_FILE_OUT);
         p.waitFor();
-        BufferedReader b = new BufferedReader(new InputStreamReader(p.getInputStream()));
+//        BufferedReader b = new BufferedReader(new InputStreamReader(p.getInputStream()));
         
         BufferedReader f = new BufferedReader(new FileReader(Option.MAXIMAL_CLIQUE_FILE_OUT));
         List<String> fstr = new ArrayList<String>();
