@@ -19,12 +19,15 @@ import java.util.Map;
 
 import geom_util.Edge;
 import geom_util.EdgeSegment;
+import geom_util.EdgeSegmentSet;
 import geom_util.GeomUtil;
 import geom_util.LineOperator;
 import geom_util.Node;
 import geom_util.Point;
-import geom_util.TripleDouble;
-import geom_util.TripleDoubleInt;
+import mmb.Option;
+import tuple.PairDouble;
+import tuple.TripleDouble;
+import tuple.TripleDoubleInt;
 
 public class MMBMap {
 
@@ -236,9 +239,9 @@ public class MMBMap {
     }
     
     //
-    public int get_next_node_id(int next_node_x, int next_node_y){
-    	if (this.xy_to_node_id.containsKey(new PairInt(next_node_x, next_node_y)) )
-    		return this.xy_to_node_id.get(new PairInt(next_node_x, next_node_y));
+    public int get_next_node_id(double next_node_x, double next_node_y){
+    	if (this.xy_to_node_id.containsKey(new PairDouble(next_node_x, next_node_y)) )
+    		return this.xy_to_node_id.get(new PairDouble(next_node_x, next_node_y));
     	else
     		return -1;   //we may have node 0
     }
@@ -258,7 +261,7 @@ public class MMBMap {
     }
     
     //
-    public int get_nearest_edge_id(int next_node_x, int next_node_y, int px, int py){
+    public int get_nearest_edge_id(double next_node_x, double next_node_y, double px, double py){
         double min_distance = 100000000.0;
         int nearest_edge_id = -1;
         
@@ -285,7 +288,7 @@ public class MMBMap {
     }
     
     //
-    public List<EdgeSegment> compute_fixed_expanding(int x, int y, int cur_edge_id, double length){
+    public List<EdgeSegment> compute_fixed_expanding(double x, double y, int cur_edge_id, double length){
         
     	List<EdgeSegment>result = new ArrayList<EdgeSegment>();
         
@@ -374,25 +377,26 @@ public class MMBMap {
 	}
     
     //
-//    public List<EdgeSegment> compute_mesh_expanding(List<EdgeSegment> item_list, double length){   
-//        
-//    	List<EdgeSegment> result = item_list;
-//        //1. call find_boundary_points() 
-//        boundary_points = Map.find_boundary_points(item_list)
-//        
-//        //2. 
-//        for point in boundary_points:
-//            new_seg_set = this.compute_fixed_expanding(point[0], point[1], point[2], option.MAX_SPEED)
-//            // OLD
-////            new_seg_set = EdgeSegmentSet.clean_fixed_expanding(new_seg_set)
-////            result = EdgeSegmentSet.union(result, new_seg_set)
-//            // NEW
-//            result.extend(new_seg_set)
-//            
-//        result = EdgeSegmentSet.clean_fixed_expanding(result)
-//            
-//        return result
-//    }
+    public List<EdgeSegment> compute_mesh_expanding(List<EdgeSegment> item_list, double length){   
+        
+    	List<EdgeSegment> result = item_list;
+        //1. call find_boundary_points() 
+    	List<TripleDoubleInt> boundary_points = MMBMap.find_boundary_points(item_list);
+        
+        //2. 
+        for (TripleDoubleInt point : boundary_points){
+            List<EdgeSegment> new_seg_set = this.compute_fixed_expanding(point.v0, point.v1, point.v2, Option.MAX_SPEED);
+            // OLD
+//            new_seg_set = EdgeSegmentSet.clean_fixed_expanding(new_seg_set)
+//            result = EdgeSegmentSet.union(result, new_seg_set)
+            // NEW
+            result.addAll(new_seg_set);
+        }
+        
+        result = EdgeSegmentSet.clean_fixed_expanding(result);
+            
+        return result;
+    }
     
     //
     public boolean is_node_in_rec(double min_x, double min_y, double max_x, double max_y, Node node){

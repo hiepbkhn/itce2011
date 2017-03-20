@@ -1,4 +1,4 @@
-package geom_util;
+package tuple;
 
 public class TripleDouble {
 	public double v0;

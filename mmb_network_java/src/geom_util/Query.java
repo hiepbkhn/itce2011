@@ -5,7 +5,7 @@
 
 package geom_util;
 
-public class Query {
+public class Query implements Comparable<Query>{
 	public int obj_id;
     public double x;
     public double y;
@@ -34,6 +34,15 @@ public class Query {
 		this.k_anom = k_anom;
 		this.min_length = min_length;
 		this.dist = dist;
+	}
+
+	@Override
+	public int compareTo(Query arg0) {
+		if (this.k_anom < arg0.k_anom)
+			return -1;
+		if (this.k_anom > arg0.k_anom)
+			return 1;
+		return 0;
 	}
     
     

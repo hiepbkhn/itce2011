@@ -101,9 +101,9 @@ public class EdgeSegmentSet {
         return result;
     }
     
-    public static double length(EdgeSegmentSet set_1){
+    public static double length(List<EdgeSegment> set_1){
     	double total_len = 0;
-        for (EdgeSegment item : set_1.set)
+        for (EdgeSegment item : set_1)
             total_len += EdgeSegment.length(item);
         
         return total_len;

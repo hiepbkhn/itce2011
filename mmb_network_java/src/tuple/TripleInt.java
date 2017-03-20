@@ -1,12 +1,12 @@
-package geom_util;
+package tuple;
 
-public class TripleDoubleInt implements Comparable<TripleDoubleInt>{
-	public double v0;
-	public double v1;
-	public double v2;
+public class TripleInt implements Comparable<TripleInt>{
+	public int v0;
+	public int v1;
+	public int v2;
 	
 	//
-	public TripleDoubleInt(double v0, double v1, double v2) {
+	public TripleInt(int v0, int v1, int v2) {
 		super();
 		this.v0 = v0;
 		this.v1 = v1;
@@ -14,7 +14,7 @@ public class TripleDoubleInt implements Comparable<TripleDoubleInt>{
 	}
 
 	@Override
-	public int compareTo(TripleDoubleInt arg0) {
+	public int compareTo(TripleInt arg0) {
 		if (this.v0 < arg0.v0)
 			return -1;
 		if (this.v1 < arg0.v1)
@@ -30,6 +30,5 @@ public class TripleDoubleInt implements Comparable<TripleDoubleInt>{
 		
 		return 0;
 	}
-	
 	
 }
