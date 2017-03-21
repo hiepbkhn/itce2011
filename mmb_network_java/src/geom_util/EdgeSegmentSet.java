@@ -22,6 +22,7 @@ public class EdgeSegmentSet {
             item.normalize();
         
         // 2. SORT by cur_edge_id
+//        System.out.println("new_result.size = " + new_result.size());
         Collections.sort(new_result);
         
         // DEBUG

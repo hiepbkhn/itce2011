@@ -10,8 +10,8 @@ public class Query implements Comparable<Query>{
     public double x;
     public double y;
     public int timestamp;
-    public double next_node_x;
-    public double next_node_y;
+    public int next_node_x;
+    public int next_node_y;
     public int next_node_id;
     public int cur_edge_id;
     //
@@ -20,7 +20,7 @@ public class Query implements Comparable<Query>{
     public double dist;    // distance constraint
     
     //
-	public Query(int obj_id, double x, double y, int timestamp, double next_node_x, double next_node_y,
+	public Query(int obj_id, double x, double y, int timestamp, int next_node_x, int next_node_y,
 			int next_node_id, int cur_edge_id, int k_anom, double min_length, double dist) {
 		super();
 		this.obj_id = obj_id;

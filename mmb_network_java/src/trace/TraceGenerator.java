@@ -388,7 +388,8 @@ public class TraceGenerator {
 	    	list_node_ids.add(node.node_id);
 	    
 	    // 2 - prepare weighted graph G for shortest paths in generate_profiles()
-	    System.out.println("num of map_data.edges :" + map_data.edges.size());
+	    System.out.println("num of map_data.nodes : " + map_data.nodes.size());
+	    System.out.println("num of map_data.edges : " + map_data.edges.size());
 	    int V = list_node_ids.size();
 	    EdgeWeightedGraph G = new EdgeWeightedGraph(V);
 	    for (Edge edge : map_data.edges.values())
@@ -533,7 +534,7 @@ public class TraceGenerator {
 	        for (double n_occur : adj_dict.values())
 	            total_occur += n_occur;
 	        for (int edge2 : adj_dict.keySet())
-	        	trans_prob.get(edge1).put(edge2, trans_prob.get(edge1).get(edge2)/total_occur);
+	        	trans_prob_e.get(edge1).put(edge2, trans_prob_e.get(edge1).get(edge2)/total_occur);
 	    }
 	//    print "finish trans_prob_e"  
 	    
@@ -597,12 +598,12 @@ public class TraceGenerator {
 	}
 	
 	//
-	public static void save_profiles(List<Profile> profile_list) throws IOException{
+	public static void save_profiles(List<Profile> profile_list, String filename) throws IOException{
 	    
-		BufferedWriter f = new BufferedWriter(new FileWriter("../out/" + Option.getProfileName() + "_profiles.txt"));
+		BufferedWriter f = new BufferedWriter(new FileWriter(filename));
 	    // save p.trans_prob + p.access_prob
 	    for (Profile p : profile_list){
-	        f.write(p.user_id +"-" + p.user_speed + "\n");
+	        f.write(p.user_id + "-" + p.user_speed + "\n");
 	        ////// NODE
 	        // trans_prob
 	        for (Entry<Integer, Map<Integer, Double>> entry : p.trans_prob.entrySet()){
@@ -697,8 +698,6 @@ public class TraceGenerator {
 //	    del adj_str_list[len(adj_str_list)-1]
 	    
 	    for (String adj_str : adj_str_list){
-	    	if (adj_str.length() == 0) 
-	    		continue;
 	        pos = adj_str.indexOf("-");
 	        int node1 = Integer.parseInt(adj_str.substring(0, pos));
 	        
@@ -707,8 +706,6 @@ public class TraceGenerator {
 	        
 	        Map<Integer, Double> adj_dict = new HashMap<Integer, Double>();
 	        for (String node2_str : node2_list){
-	        	if (node2_str.length() == 0)
-	        		continue;
 	            pos = node2_str.indexOf(":");
 	            int node2 = Integer.parseInt(node2_str.substring(0,pos));
 	            double freq = Double.parseDouble(node2_str.substring(pos+1));
@@ -724,8 +721,6 @@ public class TraceGenerator {
 	    String[] node_list = line.split(",");
 //	    del node_list[len(node_list)-1]
 	    for (String node_str : node_list){
-	    	if (node_str.length() == 0) 
-	    		continue;
 	        pos = node_str.indexOf(":");
 	        int node = Integer.parseInt(node_str.substring(0, pos));
 	        double freq = Double.parseDouble(node_str.substring(pos+1));
@@ -741,8 +736,6 @@ public class TraceGenerator {
 //	    del adj_str_list[len(adj_str_list)-1]
 	    
 	    for (String adj_str : adj_str_list){
-	    	if (adj_str.length() == 0) 
-	    		continue;
 	        pos = adj_str.indexOf("-");
 	        int edge1 = Integer.parseInt(adj_str.substring(0, pos));
 	        
@@ -751,8 +744,6 @@ public class TraceGenerator {
 	        
 	        Map<Integer, Double> adj_dict = new HashMap<Integer, Double>();
 	        for (String edge2_str : edge2_list){
-	        	if (edge2_str.length() == 0)
-	        		continue;
 	            pos = edge2_str.indexOf(":");
 	            int edge2 = Integer.parseInt(edge2_str.substring(0, pos));
 	            double freq = Double.parseDouble(edge2_str.substring(pos+1));
@@ -785,8 +776,6 @@ public class TraceGenerator {
 	    String[] edge_list = line.split(",");
 //	    del edge_list[len(edge_list)-1]
 	    for (String edge_str : edge_list){
-	    	if(edge_str.length() == 0)
-        		continue;
 	        pos = edge_str.indexOf(":");
 	        int edge = Integer.parseInt(edge_str.substring(0, pos));
 	        double freq = Double.parseDouble(edge_str.substring(pos+1));
@@ -802,18 +791,15 @@ public class TraceGenerator {
 //	    del adj_str_list[len(adj_str_list)-1]
 	    
 	    for (String adj_str : adj_str_list){
-	    	if(adj_str.length() == 0)
-        		continue;
+	    	if (adj_str.length() == 0)
+	    		continue;
 	        pos = adj_str.indexOf("-");
 	        int edge1 = Integer.parseInt(adj_str.substring(0, pos));
-	        
-	        String[] edge2_list = adj_str.substring(pos+1).split("|");
+	        String[] edge2_list = adj_str.substring(pos+1).split("\\|");	// | is a special character
 //	        del edge2_list[len(edge2_list)-1]
 	        
 	        Map<Integer, List<Double>> adj_dict = new HashMap<Integer, List<Double>>();
 	        for (String edge2_str : edge2_list){
-	        	if(edge2_str.length() == 0)
-	        		continue;
 	            pos = edge2_str.indexOf(":");
 	            int edge2 = Integer.parseInt(edge2_str.substring(0, pos));
 	            String[] freq_items = edge2_str.substring(pos+1).split(",");
@@ -822,10 +808,7 @@ public class TraceGenerator {
 	            List<Double> freq_list = new ArrayList<Double>();               // indexing from 1 --> see lbs_attack.compute_phi()
 	            freq_list.add(0.0);
 	            for (String freq : freq_items)
-	            	if(freq.length() == 0)
-		        		continue;
-	            	else
-	            		freq_list.add(Double.parseDouble(freq));
+	            	freq_list.add(Double.parseDouble(freq));
 	                
 	            adj_dict.put(edge2, freq_list);
 	        }
@@ -903,51 +886,59 @@ public class TraceGenerator {
 	    
 	//////////////////////////////////////////////
 	public static void main(String[] args) throws IOException {
-	
+
+		System.out.println("Map name = " + Option.MAP_NAME);
+		System.out.println("No.users = " + Option.N_USERS);
+		//
 		MMBMap map_data = new MMBMap();
 		map_data.read_map(Option.MAP_PATH, Option.MAP_NAME);
 		
 		//
+		long start = 0;
+		String filename;
+		List<Profile> profile_list;
+		
 		// TEST generate_profiles()
-	    long start = System.currentTimeMillis();
+//	    start = System.currentTimeMillis();
+//	    
+//	    profile_list = generate_profiles(map_data);
+//	    System.out.println("generate_profiles - DONE !");
+//	    System.out.println("Elapsed " + (System.currentTimeMillis() - start));
+//	    
+//	//    p = profile_list[0]
+//	//    print p.move_cdf
+//	    
+//	    
+//	    // TEST save_profiles()
+//	    start = System.currentTimeMillis();
+//	    String filename = "out/" + Option.getProfileName() + "_profiles.txt";
+//	    
+//	    save_profiles(profile_list, filename);
+//	    System.out.println("save_profiles - DONE !");
+//	    System.out.println("Elapsed " + (System.currentTimeMillis() - start));
 	    
-	    List<Profile> profile_list = generate_profiles(map_data);
-	    System.out.println("generate_profiles - DONE !");
-	    System.out.println("Elapsed " + (System.currentTimeMillis() - start));
-	    
-	//    p = profile_list[0]
-	//    print p.move_cdf
-	    
-	    
-	    // TEST save_profiles()
-	    start = System.currentTimeMillis();
-	    
-	    save_profiles(profile_list);
-	    System.out.println("save_profiles - DONE !");
-	    System.out.println("Elapsed " + (System.currentTimeMillis() - start));
-	    
-	    
+		
 	    // TEST load_profiles()
 	    start = System.currentTimeMillis();
 	    
-	    String filename = "out/" + Option.getProfileName() + "_profiles.txt";
+	    filename = "out/" + Option.getProfileName() + "_profiles.txt";
 	    profile_list = load_profiles(filename, Option.N_USERS, false);   // turn off/on loading move_cdf
 	    System.out.println("load_profiles - DONE !");
 	    System.out.println("Elapsed " + (System.currentTimeMillis() - start));
 	//    p = profile_list[0]
 	//    print p.move_cdf
 	    
-	    // assign deviation probabilitites
+	    // TEST assign_deviation_probs()
 	    assign_deviation_probs(profile_list);
 	    
-	    //
+	    // TEST generate_random_traces_and_events()
 	    start = System.currentTimeMillis();
 	    
 	    generate_random_traces_and_events(map_data, profile_list);
 	    System.out.println("generate_random_traces_and_events - DONE !");
 	    System.out.println("Elapsed " + (System.currentTimeMillis() - start));
 	
-	    // write events (inputs for MeshCloak, ICliqueCloak)
+	    // TEST write_events() (inputs for MeshCloak, ICliqueCloak)
 	    start = System.currentTimeMillis();
 	    
 	    filename = "out/" + Option.getProfileName() + "_events.txt";

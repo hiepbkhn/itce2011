@@ -141,6 +141,7 @@ public class EdgeSegment implements Comparable<EdgeSegment>{
 			return 1;
 		if (this.end_y > arg0.end_y)
 			return 1;
+		
 		return 0;
 	}
     

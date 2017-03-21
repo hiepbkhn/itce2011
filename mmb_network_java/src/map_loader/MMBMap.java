@@ -129,10 +129,10 @@ public class MMBMap {
         
         f.close();
         
-        System.out.println("min,max (X,Y)" + min_x + " " + min_y + " " + max_x + " " + max_y);
+        System.out.println("min,max (X,Y) " + min_x + " " + min_y + " " + max_x + " " + max_y);
         double dx = max_x - min_x;
         double dy = max_y - min_y;
-        System.out.println("dx, dy :" + " " + dx + " " + dy);
+        System.out.println("dx, dy : " + " " + dx + " " + dy);
         
         this.min_x = min_x;
         this.min_y = min_y;
@@ -141,7 +141,7 @@ public class MMBMap {
         this.dx = dx;
         this.dy = dy;
         this.area = this.dx * this.dy;
-        System.out.println("map.area" + " " + this.area);
+        System.out.println("map.area " + " " + this.area);
     	
     	// 2. EDGES
         inputFile = path + map_name + ".edge";
@@ -178,7 +178,7 @@ public class MMBMap {
             
             //print start_node_id, end_node_id, edge_name_len, edge_name, edge_id, edge_class
             // DEBUG
-            System.out.println(start_node_id + " " + end_node_id);
+//            System.out.println(start_node_id + " " + end_node_id);
             
             cur = cur + edge_name_len + 29;
             
@@ -216,12 +216,12 @@ public class MMBMap {
             
             //
             this.node_pair_to_edge.put(new PairInt(start_node_id, end_node_id), edge_id);
-            this.node_pair_to_edge.put(new PairInt(start_node_id, end_node_id), edge_id);
+            this.node_pair_to_edge.put(new PairInt(end_node_id, start_node_id), edge_id);
         }
         
         f.close();
         
-        System.out.println("total_map_len =" + this.total_map_len);
+        System.out.println("total_map_len = " + this.total_map_len);
     	
     }
     
@@ -241,9 +241,9 @@ public class MMBMap {
     }
     
     //
-    public int get_next_node_id(double next_node_x, double next_node_y){
-    	if (this.xy_to_node_id.containsKey(new PairDouble(next_node_x, next_node_y)) )
-    		return this.xy_to_node_id.get(new PairDouble(next_node_x, next_node_y));
+    public int get_next_node_id(int next_node_x, int next_node_y){
+    	if (this.xy_to_node_id.containsKey(new PairInt(next_node_x, next_node_y)) )
+    		return this.xy_to_node_id.get(new PairInt(next_node_x, next_node_y));
     	else
     		return -1;   //we may have node 0
     }
@@ -263,7 +263,7 @@ public class MMBMap {
     }
     
     //
-    public int get_nearest_edge_id(double next_node_x, double next_node_y, double px, double py){
+    public int get_nearest_edge_id(int next_node_x, int next_node_y, double px, double py){
         double min_distance = 100000000.0;
         int nearest_edge_id = -1;
         
@@ -296,7 +296,7 @@ public class MMBMap {
         
     	MMBStack stack = new MMBStack();
         //
-        boolean is_node = this.get_next_node_id(x, y) > -1;
+        boolean is_node = this.get_next_node_id((int)x, (int)y) > -1;
         
         stack.push(new SegItem(x, y, -1, -1, length, cur_edge_id, is_node));
         
@@ -312,11 +312,10 @@ public class MMBMap {
             
             // case 1, is_node == True
             if (item.is_node == true){
-                int node_id = this.get_next_node_id(item.x, item.y);
+                int node_id = this.get_next_node_id((int)item.x, (int)item.y);
                 
                 for (int end_node_id : this.adj.get(node_id)){   //traverse adjacent edges...
-                    double edge_len = GeomUtil.get_edge_length(this.nodes.get(node_id), this.nodes.get(end_node_id));
-                    
+                	double edge_len = GeomUtil.get_edge_length(this.nodes.get(node_id), this.nodes.get(end_node_id));
                     if (edge_len < item.length){
                         double remaining_len = item.length - edge_len;
                         //
@@ -343,7 +342,6 @@ public class MMBMap {
             	int[] id_list = new int[]{this.edges.get(item.cur_edge_id).start_node_id, this.edges.get(item.cur_edge_id).end_node_id};
             	for (int end_node_id : id_list){
                     double segment_len = GeomUtil.get_segment_length(this.nodes.get(end_node_id), item.x, item.y);
-                    
                     if (segment_len < item.length){
                         double remaining_len = item.length - segment_len;
                         // end_node_id.xy go first to comply with convention: first point always graph node !!

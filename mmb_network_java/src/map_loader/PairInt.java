@@ -24,6 +24,20 @@ public class PairInt implements Comparable<PairInt>{
 			return 1;
 		return 0;
 	}
+
+	@Override
+	public int hashCode() {
+		
+		return x * 100000 + y;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+
+		PairInt temp = (PairInt)obj;
+		return (this.x == temp.x && this.y == temp.y);
+	}
+	
 	
 	
 }

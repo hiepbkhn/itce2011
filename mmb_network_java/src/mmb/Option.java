@@ -6,13 +6,24 @@ import java.util.Map;
 public class Option {
 
 	public static String QUERY_PATH = "query/";
-	public static String QUERY_FILE = "cal_mod_10k_0.5_2_5_0005_002_2_10_20_80_10_20_events.txt";        //k-anom: 2-5, slow
+	
+//	public static String QUERY_FILE = "cal_mod_10k_0.5_2_5_0005_0002_2_10_20_80_10_20_events.txt";      	//k-anom: 2-5, slow
+	
+	public static String QUERY_FILE = "oldenburgGen_5000_0_0_0_20_20_1_1000_250_2_5_0005_002.txt";    		//k-anom: 2-5, slow	
+//	public static String QUERY_FILE = "oldenburgGen_mod_10k_0.5_2_5_0005_0020_2_10_20_80_10_20_events.txt";
 	
 	//
 	public static String RESULT_PATH = "out/";
 	
-	public static String MAP_PATH = "../../trace_generator/out/";
-	public static String MAP_FILE = "cal";
+	public static String MAP_PATH = "data/";
+	
+	//public static String MAP_NAME = "synthetic_24_30_30_40";
+	//public static String MAP_NAME = "synthetic_12_15_20_20";
+	//public static String MAP_NAME = "delaunay_12_15_396_1150";
+	public static String MAP_NAME = "oldenburgGen";
+//	public static String MAP_NAME = "oldenburgGen_mod";
+	//public static String MAP_NAME = "cal";     
+	//public static String MAP_NAME = "cal_mod";
 			
 			
 	//
@@ -20,8 +31,8 @@ public class Option {
 	public static double INIT_DISTANCE = 1000;
 	public static double MAX_USER = 10000;
 	
-//	public static double DISTANCE_CONSTRAINT = 500; // oldenburgGen
-	public static double DISTANCE_CONSTRAINT = 15000; // cal
+	public static double DISTANCE_CONSTRAINT = 500; // oldenburgGen
+//	public static double DISTANCE_CONSTRAINT = 15000; // cal
 	
 	
 	public static double MAP_RATIO = 0.2;
@@ -58,14 +69,6 @@ public class Option {
 	public static int NUM_NODE_WIDTH = 20;
 	public static int NUM_NODE_HEIGHT = 20;
 
-	//MAP_NAME = "synthetic_24_30_30_40"
-	//MAP_NAME = "synthetic_12_15_20_20"
-	//MAP_NAME = "delaunay_12_15_396_1150"
-	//MAP_NAME = "oldenburgGen"
-	//MAP_NAME = "oldenburgGen_mod"
-	//MAP_NAME = "cal"     
-	public static String MAP_NAME = "cal_mod";
-
 	public static String PROFILE_PATH = "../out/deviation/";
 
 	//PROFILE_NAME = "synthetic_12_15_20_20_5k_2_10"     //k-anom: 2-10
@@ -95,8 +98,8 @@ public class Option {
 	public static double[] EDGE_CLASSES = new double[]{0.5, 0.7, 0.8, 0.9, 1.0};    // CDF
 
 	//SPEED_CLASSES = [1.0, 0.8, 1.2, 1.5, 2.0]
-	//SPEED_CLASSES = [1.0, 0.8, 1.2, 1.4, 1.6, 1.8, 2.0]   // oldenburgGen, 7 classes
-	public static double[] SPEED_CLASSES = new double[]{1.0};   // cal, 1 class
+	public static double[] SPEED_CLASSES = new double[]{1.0, 0.8, 1.2, 1.4, 1.6, 1.8, 2.0};   // oldenburgGen, 7 classes
+//	public static double[] SPEED_CLASSES = new double[]{1.0};   // cal, 1 class
 
 	public static String[] EDGE_COLORS = new String[]{"black", "blue", "green", "cyan", "red", "yellow", "white"};
 
@@ -150,7 +153,7 @@ public class Option {
 		num_user_dict.put(20000, "20k");
 		
 		String PROFILE_NAME = MAP_NAME + "_" + num_user_dict.get(N_USERS) + "_" + SPEED_PROFILE + "_" + K_MIN + "_" + K_MAX + "_" +
-	                String.format(".4f", MIN_LENGTH_LOW) + "_" + String.format(".4f", MIN_LENGTH_HIGH) + "_" + 
+	                String.format("%.4f", MIN_LENGTH_LOW).substring(2) + "_" + String.format("%.4f", MIN_LENGTH_HIGH).substring(2) + "_" + 
 	                MIN_TRAIN_GROUP + "_" + MAX_TRAIN_GROUP + "_" +
 	                MIN_N_TRAIN_PATH + "_" + MAX_N_TRAIN_PATH + "_" + MIN_N_RANDOM_TRACE + "_" + MAX_N_RANDOM_TRACE;
 	return PROFILE_NAME;

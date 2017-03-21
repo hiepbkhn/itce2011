@@ -172,7 +172,7 @@ public class Graph {
         return false;
     }
     
-    //
+    // build the Constraint Graph
     public PairIntList compute_edge_list(Map<Integer, List<EdgeSegment>> expanding_list, List<Query> query_list){
         int num_edges = 0;
         List<PairInt> list_edges = new ArrayList<PairInt>();
@@ -254,9 +254,10 @@ public class Graph {
         //    
         BufferedWriter f = new BufferedWriter(new FileWriter(Option.MAXIMAL_CLIQUE_FILE_IN));
         for (int u = 0; u < max_edge_id+1; u++){
-            if (list_adj.get(u).size() > 0)
+            if (list_adj.get(u).size() > 0){
                 for (int v : list_adj.get(u))
                     f.write(v + ",");
+            }
             f.write("\n");    
         }
         
@@ -624,7 +625,7 @@ public class Graph {
 	        long start_time = System.currentTimeMillis();
 	        System.out.println("--------->>");
 	    	System.out.println("TIMESTAMP : " + timestamp);
-	    	System.out.println("this.num_user = " + this.query_log.frames.get(timestamp).size());
+	    	System.out.println("self.num_user = " + this.query_log.frames.get(timestamp).size());
 	        
 	        solve_new_queries(timestamp);
 	        
@@ -643,6 +644,7 @@ public class Graph {
 		// COMMAND-LINE <query_file> <timestep> <distance_constraint> <k_global><INIT_COVER_KEEP_RATIO><NEXT_COVER_KEEP_RATIO>
 		int timestep = 3;
 		//    timestep = 40       // for lbs_attack
+		
 		if(args.length >= 3){
 	        Option.QUERY_FILE = args[0];
 	        timestep = Integer.parseInt(args[1]);
@@ -658,14 +660,21 @@ public class Graph {
 	    if (args.length >= 6)
 	        Option.NEXT_COVER_KEEP_RATIO = Double.parseDouble(args[5]);     
 
+	    //
+	    System.out.println("MAP_FILE = " + Option.MAP_NAME);
+		System.out.println("timestep = " + timestep);
+		System.out.println("QUERY_FILE = " + Option.QUERY_FILE);
+		System.out.println("DISTANCE_CONSTRAINT = " + Option.DISTANCE_CONSTRAINT);
+	    
 	    //    
 	    long start_time = System.currentTimeMillis();
 	        
 	    MMBMap map_data = new MMBMap();
-	    map_data.read_map(Option.MAP_PATH, Option.MAP_FILE);
+	    map_data.read_map(Option.MAP_PATH, Option.MAP_NAME);
 	    System.out.println("Load Map : DONE");
+	    
 	    QueryLog query_log = new QueryLog(map_data);
-	    query_log.read_query(Option.QUERY_PATH, Option.QUERY_FILE, 40);   // default: max_time_stamp = 10 (40: only for attack) 
+	    query_log.read_query(Option.QUERY_PATH, Option.QUERY_FILE, timestep);   // default: max_time_stamp = 10 (40: only for attack) 
 	    System.out.println("Load Query : DONE");
 	    
 	    System.out.println("max_speed = " + query_log.max_speed);
@@ -676,6 +685,7 @@ public class Graph {
 	    
 	    //TEST
 	    graph.run_timestamps(0, timestep);
+	    
 	    System.out.println("graph.run_timestamps - DONE");
 		
 	}

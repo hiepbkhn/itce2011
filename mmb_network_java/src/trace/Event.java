@@ -13,8 +13,8 @@ public class Event {
     public int edge_id = 0;
     public int ts = 0;         // time step
     public double speed = 0.0;
-    public double next_x = 0;
-    public double next_y = 0; 
+    public int next_x = 0;
+    public int next_y = 0; 
     public int k_anom = 0;
     public double min_length = 0.0;
     
@@ -24,7 +24,7 @@ public class Event {
     }
     
     //
-	public Event(int user_id, double x, double y, int edge_id, int ts, double speed, double next_x, double next_y,
+	public Event(int user_id, double x, double y, int edge_id, int ts, double speed, int next_x, int next_y,
 			int k_anom, double min_length) {
 		super();
 		this.user_id = user_id;

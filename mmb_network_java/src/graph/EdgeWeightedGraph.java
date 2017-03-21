@@ -266,12 +266,15 @@ public class EdgeWeightedGraph {
     public static List<Integer> shortest_path(EdgeWeightedGraph G, int source_node_id, int target_node_id){
     	List<Integer> result = new ArrayList<Integer>();
     	
+    	
+    	
     	DijkstraSP sp = new DijkstraSP(G, source_node_id);
     	if (sp.hasPathTo(target_node_id))
             for (WeightedEdge e : sp.pathTo(target_node_id))
-                result.add(e.from());
-    	result.add(target_node_id);
+                result.add(e.to());
+    	result.add(source_node_id);
     	
+    	// reverse the nodes in result
     	Collections.reverse(result);
     	
     	//
@@ -282,6 +285,23 @@ public class EdgeWeightedGraph {
      * Unit tests the <tt>EdgeWeightedGraph</tt> data type.
      */
     public static void main(String[] args) {
+    	
+    	int V = 5;
+    	EdgeWeightedGraph G = new EdgeWeightedGraph(V);
+    	G.addEdge(new WeightedEdge(0,1, 1));
+    	G.addEdge(new WeightedEdge(0,3, 4));
+    	G.addEdge(new WeightedEdge(1,2, 3));
+    	G.addEdge(new WeightedEdge(1,3, 5));
+    	G.addEdge(new WeightedEdge(1,4, 1));
+    	G.addEdge(new WeightedEdge(2,3, 3));
+    	G.addEdge(new WeightedEdge(3,4, 1));
+    	
+    	int s = 0;
+    	int t = 3;
+    	
+    	List<Integer> ret = shortest_path(G,s,t);
+    	for (int v : ret)
+    		System.out.print(v + " ");
     }
 
 }
