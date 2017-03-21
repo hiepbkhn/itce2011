@@ -394,6 +394,7 @@ class EdgeSegmentSet:
             item.normalize()
         
         # 2. SORT by cur_edge_id
+#         print "new_result.size =", len(new_result)
         new_result = sorted(new_result, key=lambda edge_segment: (edge_segment.cur_edge_id, 
             edge_segment.start_x, edge_segment.start_y, edge_segment.end_x, edge_segment.end_y)) 
         

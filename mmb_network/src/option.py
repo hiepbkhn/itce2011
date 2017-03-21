@@ -8,23 +8,24 @@ Created on Oct 24, 2012
 #MAP_PATH = "F:/Tailieu/Paper-code/Network-based-Generator-of-Moving-Objects/DataFiles/"
 #MAP_PATH = "C:/Tailieu/My Box Files/Default Sync Folder/oldenburgGen/"
 #MAP_PATH = "C:/Tailieu/My Box Files/Default Sync Folder/California/"
-#MAP_PATH = "../data/"
+MAP_PATH = "../data/"
 #MAP_PATH = "C:/"
-MAP_PATH = "../../trace_generator/out/"
+# MAP_PATH = "../../trace_generator/out/"
 
 #MAP_FILE = "busan_highway"
 #MAP_FILE = "illinois2"
-#MAP_FILE = "oldenburgGen"
-#MAP_FILE = "oldenburgGen_mod"
+MAP_FILE = "oldenburgGen"
+# MAP_FILE = "oldenburgGen_mod"
 #MAP_FILE = "SanJoaquin"
 #MAP_FILE = "cal"
-MAP_FILE = "cal_mod"
+# MAP_FILE = "cal_mod"
 #MAP_FILE = "synthetic_24_30_30_40"
 
 #QUERY_PATH = "C:/Tailieu/My Box Files/Default Sync Folder/oldenburgGen/"
 #QUERY_PATH = "C:/Tailieu/My Box Files/Default Sync Folder/California/"
 #QUERY_PATH = "../data/"
-QUERY_PATH = "../../trace_generator/out/"
+QUERY_PATH = "../query/"
+# QUERY_PATH = "../../trace_generator/out/"
 
 #RESULT_PATH = "C:/"
 RESULT_PATH = "../out/"
@@ -44,7 +45,7 @@ RESULT_PATH = "../out/"
 #QUERY_FILE = "oldenburgGen_2000_0_0_0_20_20_1_1000_250_2_10_0005_002.txt"    #k-anom: 2-10, slow
 #QUERY_FILE = "oldenburgGen_2000_0_0_0_20_20_1_1000_250_2_15_0005_002.txt"    #k-anom: 2-15, slow
 
-#QUERY_FILE = "oldenburgGen_5000_0_0_0_20_20_1_1000_250_2_5_0005_002.txt"    #k-anom: 2-5, slow
+QUERY_FILE = "oldenburgGen_5000_0_0_0_20_20_1_1000_250_2_5_0005_002.txt"    #k-anom: 2-5, slow
 #QUERY_FILE = "oldenburgGen_5000_0_0_0_20_20_1_1000_250_2_10_0005_002.txt"    #k-anom: 2-10, slow
 #QUERY_FILE = "oldenburgGen_5000_0_0_0_20_20_1_1000_250_2_15_0005_002.txt"    #k-anom: 2-15, slow
 
@@ -74,18 +75,19 @@ RESULT_PATH = "../out/"
 #QUERY_FILE = "oldenburgGen_mod_5k_0.5_2_5_0005_002_5_15_20_80_10_20_events.txt"    #k-anom: 2-5, slow
 #QUERY_FILE = "oldenburgGen_mod_10k_0.5_2_5_0005_002_5_15_20_80_10_20_events.txt"        #k-anom: 2-5, slow
 #QUERY_FILE = "oldenburgGen_mod_10k_0.5_2_5_0005_002_2_10_20_80_10_20_events.txt"        #k-anom: 2-5, slow
+# QUERY_FILE = "oldenburgGen_mod_10k_0.5_2_5_0005_0020_2_10_20_80_10_20_events.txt"
 
 #QUERY_FILE = "cal_mod_10k_0.5_2_5_0005_002_5_15_20_80_10_20_events.txt"        #k-anom: 2-5, slow
 #QUERY_FILE = "cal_mod_10k_0.5_2_5_0005_002_2_10_20_80_10_20_events_1.txt"        #k-anom: 2-5, slow
-QUERY_FILE = "cal_mod_10k_0.5_2_5_0005_002_2_10_20_80_10_20_events.txt"        #k-anom: 2-5, slow
+# QUERY_FILE = "cal_mod_10k_0.5_2_5_0005_002_2_10_20_80_10_20_events.txt"        #k-anom: 2-5, slow
 
 MAX_SPEED = 300
 #MAX_SPEED = 6000
 INIT_DISTANCE = 1000
 MAX_USER = 10000
 
-#DISTANCE_CONSTRAINT = 500        # oldenburgGen
-DISTANCE_CONSTRAINT = 15000     # cal  
+DISTANCE_CONSTRAINT = 500        # oldenburgGen
+# DISTANCE_CONSTRAINT = 15000     # cal  
 #DISTANCE_CONSTRAINT = 1500      # for synthetic_24_30_30_40_events (trace_generator)
 
 MAP_RATIO = 0.2

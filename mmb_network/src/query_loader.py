@@ -36,30 +36,30 @@ class QueryLog:
             items = line.split("\t")
             
             ### 1 - FOR Brinkhoff generator
-#            obj_id = int(items[1])
-#            maxNodeId = max( obj_id, maxNodeId)
-#
-#            x = float(items[5])
-#            y = float(items[6])
-#            timestamp = int(items[4])
-#            speed = float(items[7])
-#            next_node_x = int(items[8])
-#            next_node_y = int(items[9])
-#            k_anom = int(items[10])
-#            min_length = float(items[11])
-            
-            ### 2 - FOR TraceGenerator
-            obj_id = int(items[0])
+            obj_id = int(items[1])
             maxNodeId = max( obj_id, maxNodeId)
 
-            x = float(items[2])
-            y = float(items[3])
-            timestamp = int(items[1])
-            speed = float(items[4])
-            next_node_x = int(items[5])
-            next_node_y = int(items[6])
-            k_anom = int(items[7])
-            min_length = float(items[8])     
+            x = float(items[5])
+            y = float(items[6])
+            timestamp = int(items[4])
+            speed = float(items[7])
+            next_node_x = int(items[8])
+            next_node_y = int(items[9])
+            k_anom = int(items[10])
+            min_length = float(items[11])
+            
+            ### 2 - FOR TraceGenerator
+#             obj_id = int(items[0])
+#             maxNodeId = max( obj_id, maxNodeId)
+# 
+#             x = float(items[2])
+#             y = float(items[3])
+#             timestamp = int(items[1])
+#             speed = float(items[4])
+#             next_node_x = int(items[5])
+#             next_node_y = int(items[6])
+#             k_anom = int(items[7])
+#             min_length = float(items[8])     
             # (End) 2 - FOR TraceGenerator       
             
             #

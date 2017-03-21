@@ -714,6 +714,7 @@ class Graph:
         return False    
     
     #######################################################    
+    # build the Constraint Graph
     def compute_edge_list(self, expanding_list, query_list):
         num_edges = 0 
         list_edges = []
@@ -865,6 +866,11 @@ if __name__ == "__main__":
     if len(sys.argv) > 6:
         option.NEXT_COVER_KEEP_RATIO = float(sys.argv[6])       
 
+    print "MAP_FILE =", option.MAP_FILE
+    print "timestep =", timestep
+    print "QUERY_FILE =", option.QUERY_FILE
+    print "DISTANCE_CONSTRAINT =", option.DISTANCE_CONSTRAINT
+    
     #    
     start_time = time.clock()
         
@@ -872,7 +878,7 @@ if __name__ == "__main__":
     map_data.read_map(option.MAP_PATH, option.MAP_FILE)
     print "Load Map : DONE"
     query_log = QueryLog(map_data)
-    query_log.read_query(option.QUERY_PATH, option.QUERY_FILE, max_time_stamp = 40)   # default: max_time_stamp = 10 (40: only for attack) 
+    query_log.read_query(option.QUERY_PATH, option.QUERY_FILE, max_time_stamp = timestep)   # default: max_time_stamp = 10 (40: only for attack) 
     print "Load Query : DONE"
     
     print "max_speed = ", query_log.max_speed
