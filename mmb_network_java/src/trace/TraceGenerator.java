@@ -5,7 +5,10 @@
 
 package trace;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,6 +24,7 @@ import java.util.Set;
 import geom_util.Edge;
 import geom_util.GeomUtil;
 import geom_util.Node;
+import geom_util.Query;
 import graph.EdgeWeightedGraph;
 import graph.WeightedEdge;
 import map_loader.MMBMap;
@@ -673,7 +677,229 @@ public class TraceGenerator {
 	        
 	    f.close();
 	}
+	
+	//
+	// file f, Profile p
+	public static void parse_one_profile(BufferedReader f, Profile p) throws IOException{
 	    
+	    // user_id, user_speed
+	    String line = f.readLine();
+	    int pos = line.indexOf("-");
+	    p.user_id = Integer.parseInt(line.substring(0, pos));
+	    p.user_speed = Double.parseDouble(line.substring(pos+1));
+	    
+	    ////// NODE
+	    // trans_prob
+	    line = f.readLine();
+//	    p.trans_prob = {}
+	    
+	    String[] adj_str_list = line.split(";");
+//	    del adj_str_list[len(adj_str_list)-1]
+	    
+	    for (String adj_str : adj_str_list){
+	    	if (adj_str.length() == 0) 
+	    		continue;
+	        pos = adj_str.indexOf("-");
+	        int node1 = Integer.parseInt(adj_str.substring(0, pos));
+	        
+	        String[] node2_list = adj_str.substring(pos+1).split(",");
+//	        del node2_list[len(node2_list)-1]
+	        
+	        Map<Integer, Double> adj_dict = new HashMap<Integer, Double>();
+	        for (String node2_str : node2_list){
+	        	if (node2_str.length() == 0)
+	        		continue;
+	            pos = node2_str.indexOf(":");
+	            int node2 = Integer.parseInt(node2_str.substring(0,pos));
+	            double freq = Double.parseDouble(node2_str.substring(pos+1));
+	            adj_dict.put(node2, freq);
+	        }
+	    
+	        p.trans_prob.put(node1, adj_dict);    
+	    }
+	    
+	    // access_prob
+	    line = f.readLine();
+//	    p.access_prob = {}
+	    String[] node_list = line.split(",");
+//	    del node_list[len(node_list)-1]
+	    for (String node_str : node_list){
+	    	if (node_str.length() == 0) 
+	    		continue;
+	        pos = node_str.indexOf(":");
+	        int node = Integer.parseInt(node_str.substring(0, pos));
+	        double freq = Double.parseDouble(node_str.substring(pos+1));
+	        p.access_prob.put(node, freq);
+	    }
+	    
+	    ////// EDGE
+	    // trans_prob_e
+	    line = f.readLine();
+//	    p.trans_prob_e = {}
+	    
+	    adj_str_list = line.split(";");
+//	    del adj_str_list[len(adj_str_list)-1]
+	    
+	    for (String adj_str : adj_str_list){
+	    	if (adj_str.length() == 0) 
+	    		continue;
+	        pos = adj_str.indexOf("-");
+	        int edge1 = Integer.parseInt(adj_str.substring(0, pos));
+	        
+	        String[] edge2_list = adj_str.substring(pos+1).split(",");
+//	        del edge2_list[len(edge2_list)-1]
+	        
+	        Map<Integer, Double> adj_dict = new HashMap<Integer, Double>();
+	        for (String edge2_str : edge2_list){
+	        	if (edge2_str.length() == 0)
+	        		continue;
+	            pos = edge2_str.indexOf(":");
+	            int edge2 = Integer.parseInt(edge2_str.substring(0, pos));
+	            double freq = Double.parseDouble(edge2_str.substring(pos+1));
+	            adj_dict.put(edge2, freq);
+	        }
+	        
+	        p.trans_prob_e.put(edge1, adj_dict);    
+	    }
+	    // compute p.edge_map
+//	    p.edge_to_id = {}
+//	    p.id_to_edge = {}
+	    Map<Integer, Integer> marked_edges = new HashMap<Integer, Integer>();
+	    for (Entry<Integer,Map<Integer,Double>> entry : p.trans_prob_e.entrySet()){
+	    	int edge1 = entry.getKey();
+	    	Map<Integer, Double> adj_dict = entry.getValue();
+	        marked_edges.put(edge1, 1);
+	        for (int edge2 : adj_dict.keySet())
+	            marked_edges.put(edge2, 1);
+	    }
+	    int _id = 0;
+	    for (int edge : marked_edges.keySet()){
+	        _id += 1;
+	        p.edge_to_id.put(edge, _id);
+	        p.id_to_edge.put(_id, edge);
+	    }
+	    
+	    // access_prob_e
+	    line = f.readLine();
+//	    p.access_prob_e = {}
+	    String[] edge_list = line.split(",");
+//	    del edge_list[len(edge_list)-1]
+	    for (String edge_str : edge_list){
+	    	if(edge_str.length() == 0)
+        		continue;
+	        pos = edge_str.indexOf(":");
+	        int edge = Integer.parseInt(edge_str.substring(0, pos));
+	        double freq = Double.parseDouble(edge_str.substring(pos+1));
+	        p.access_prob_e.put(edge, freq);
+	    }
+	    
+	    
+	    ////// MOVE_CDF
+	    line = f.readLine();
+//	    p.move_cdf = {}
+	    
+	    adj_str_list = line.split(";");
+//	    del adj_str_list[len(adj_str_list)-1]
+	    
+	    for (String adj_str : adj_str_list){
+	    	if(adj_str.length() == 0)
+        		continue;
+	        pos = adj_str.indexOf("-");
+	        int edge1 = Integer.parseInt(adj_str.substring(0, pos));
+	        
+	        String[] edge2_list = adj_str.substring(pos+1).split("|");
+//	        del edge2_list[len(edge2_list)-1]
+	        
+	        Map<Integer, List<Double>> adj_dict = new HashMap<Integer, List<Double>>();
+	        for (String edge2_str : edge2_list){
+	        	if(edge2_str.length() == 0)
+	        		continue;
+	            pos = edge2_str.indexOf(":");
+	            int edge2 = Integer.parseInt(edge2_str.substring(0, pos));
+	            String[] freq_items = edge2_str.substring(pos+1).split(",");
+//	            del freq_items[len(freq_items)-1]
+	            
+	            List<Double> freq_list = new ArrayList<Double>();               // indexing from 1 --> see lbs_attack.compute_phi()
+	            freq_list.add(0.0);
+	            for (String freq : freq_items)
+	            	if(freq.length() == 0)
+		        		continue;
+	            	else
+	            		freq_list.add(Double.parseDouble(freq));
+	                
+	            adj_dict.put(edge2, freq_list);
+	        }
+	        
+	        p.move_cdf.put(edge1, adj_dict);
+	    }
+	}
+	
+	//
+	public static List<Profile> load_profiles(String filename, int num_users, boolean load_move_cdf) throws IOException{ // load_move_cdf = False
+	    List<Profile> profile_list = new ArrayList<Profile>();
+	    
+	    BufferedReader f = new BufferedReader(new FileReader(filename));
+	    
+	    int count = 0;
+	    while (true){
+	        Profile p = new Profile();
+	        parse_one_profile(f, p);
+	        
+	        //
+	        profile_list.add(p);
+	        
+	        count += 1;
+	        if (count == num_users)
+	            break;
+	    }
+	    //    
+	    f.close();
+	    //
+	    return profile_list;
+	}
+	
+	// SEE ALSO: query_loader.py (mmb_network)
+	public static void write_events(List<Profile> profile_list, String filename) throws IOException{
+//		Map<Integer, Map<Integer, Query>> trajs = new HashMap<Integer, Map<Integer, Query>>();     //dict of dicts [node][timestamp]
+		Map<Integer, List<Event>> frames = new HashMap<Integer, List<Event>>();     //dict of lists
+	    
+	    //
+	    for (Profile p : profile_list)
+//	        trajs[p.user_id] = p.exposed_events
+	        
+	        for (Event evt : p.exposed_events){
+	            if (!frames.containsKey(evt.ts))
+	                frames.put(evt.ts, new ArrayList<Event>());
+	            frames.get(evt.ts).add(evt);
+	        }
+	    
+	    //        
+	    BufferedWriter f = new BufferedWriter(new FileWriter(filename));
+	    for (int ts : frames.keySet())
+	        if (ts < Option.MAX_OUTPUT_TIMESTEP)
+	            for (Event evt : frames.get(ts))
+	                f.write(evt.user_id + "\t" + ts + "\t" + evt.x + "\t" + evt.y + "\t" + evt.speed + "\t" + 
+	                        evt.next_x + "\t" + evt.next_y + "\t" + evt.k_anom + "\t" + evt.min_length + "\n");
+	    
+	    f.close();
+	}
+
+	//
+	public static void assign_deviation_probs(List<Profile> profile_list){
+	    // 50% have deviation = 0.0
+	    // 10% have deviation = 0.1,..,0.5
+	    int n_users = profile_list.size()/10;
+	    
+	    for (int i = 0; i < n_users*5; i++)
+	        profile_list.get(i).deviation = 0.0;
+	    for (int i = 0; i < n_users; i++){
+	        profile_list.get(n_users*5 + i).deviation = 0.1;
+	        profile_list.get(n_users*6 + i).deviation = 0.2;
+	        profile_list.get(n_users*7 + i).deviation = 0.3;
+	        profile_list.get(n_users*8 + i).deviation = 0.4;
+	        profile_list.get(n_users*9 + i).deviation = 0.5;
+	    }
+	}
 	    
 	//////////////////////////////////////////////
 	public static void main(String[] args) throws IOException {
@@ -702,32 +928,32 @@ public class TraceGenerator {
 	    
 	    
 	    // TEST load_profiles()
-	//    start = time.clock()
-	//    
-	//    filename = "../out/" + Option.PROFILE_NAME + "_profiles.txt"
-	//    profile_list = load_profiles(filename, Option.N_USERS, False)   // turn off/on loading move_cdf
-	//    print "load_profiles - DONE !"
-	//    print "Elapsed ", (time.clock() - start)
-	////    p = profile_list[0]
-	////    print p.move_cdf
-	//    
-	//    // assign deviation probabilitites
-	//    assign_deviation_probs(profile_list)
-	//    
-	//    //
-	//    start = time.clock()
-	//    
-	//    profile_list = generate_random_traces_and_events(map_data, profile_list)
-	//    print "generate_random_traces_and_events - DONE !"
-	//    print "Elapsed ", (time.clock() - start)
-	//
-	//    // write events (inputs for MeshCloak, ICliqueCloak)
-	//    start = time.clock()
-	//    
-	//    filename = "../out/" + Option.PROFILE_NAME + "_events.txt"
-	//    write_events(profile_list, filename)
-	//    print "write_events - DONE !"
-	//    print "Elapsed ", (time.clock() - start)
+	    start = System.currentTimeMillis();
+	    
+	    String filename = "out/" + Option.getProfileName() + "_profiles.txt";
+	    profile_list = load_profiles(filename, Option.N_USERS, false);   // turn off/on loading move_cdf
+	    System.out.println("load_profiles - DONE !");
+	    System.out.println("Elapsed " + (System.currentTimeMillis() - start));
+	//    p = profile_list[0]
+	//    print p.move_cdf
+	    
+	    // assign deviation probabilitites
+	    assign_deviation_probs(profile_list);
+	    
+	    //
+	    start = System.currentTimeMillis();
+	    
+	    generate_random_traces_and_events(map_data, profile_list);
+	    System.out.println("generate_random_traces_and_events - DONE !");
+	    System.out.println("Elapsed " + (System.currentTimeMillis() - start));
+	
+	    // write events (inputs for MeshCloak, ICliqueCloak)
+	    start = System.currentTimeMillis();
+	    
+	    filename = "out/" + Option.getProfileName() + "_events.txt";
+	    write_events(profile_list, filename);
+	    System.out.println("write_events - DONE !");
+	    System.out.println("Elapsed " + (System.currentTimeMillis() - start));
 		
 	}
 }
