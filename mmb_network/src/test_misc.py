@@ -7,6 +7,13 @@ import sys
 import pprint
 from subprocess import call
 import option
+import time
+
+from query_loader import QueryLog
+from map_loader import Map 
+from geom_util import EdgeSegment, EdgeSegmentSet, Point, Query, CloakingSet, MBR, get_distance
+from map_visualizer import MapVisualizer
+from weighted_set_cover import find_init_cover, find_next_cover
 
 ########################################################
 class Node: pass
@@ -559,13 +566,62 @@ if __name__ == '__main__':
 #            listoflists.append((list(a_list), a_list[0]))
 #    print listoflists
     
-    ac_events = []
-    for i in range(5):
-        ac_events.append(list([]))
-    print ac_events   
+#     ac_events = []
+#     for i in range(5):
+#         ac_events.append(list([]))
+#     print ac_events   
+#     
+#     ac_events[0].append(2)
+#     ac_events[0].append(3)
+#     ac_events[3].append([1,4,3])
+#     print ac_events
     
-    ac_events[0].append(2)
-    ac_events[0].append(3)
-    ac_events[3].append([1,4,3])
-    print ac_events
+    # TEST Map.compute_fixed_expanding(), EdgeSegmentSet.clean_fixed_expanding()
+    timestep = 3
+    print "MAP_FILE =", option.MAP_FILE
+    print "timestep =", timestep
+    print "QUERY_FILE =", option.QUERY_FILE
+    print "DISTANCE_CONSTRAINT =", option.DISTANCE_CONSTRAINT
+     
+    #    
+    start_time = time.clock()
+         
+    map_data = Map()
+    map_data.read_map(option.MAP_PATH, option.MAP_FILE)
+    print "Load Map : DONE"
+    query_log = QueryLog(map_data)
+    query_log.read_query(option.QUERY_PATH, option.QUERY_FILE, timestep, option.QUERY_TYPE)   # default: max_time_stamp = 10 (40: only for attack) 
+    print "Load Query : DONE"
+     
+    print "max_speed = ", query_log.max_speed
+    print "elapsed : ", (time.clock() - start_time)  
+    
+    #
+    timestamp = 0;
+    expanding_list = {}                                 #dict of lists
+    query_list = query_log.frames[timestamp]       # timestamp
+    
+    
+    #1. compute expanding_list
+    start_time = time.clock()    
+    print "#users =", len(query_list)
+    count = 0
+    for query in query_list:
+        seg_list = map_data.compute_fixed_expanding(query.x, query.y, 
+                                        query.cur_edge_id, query.dist)  #old: option.DISTANCE_CONSTRAINT
+        
+        seg_list_length = 0.0
+        for seg in seg_list:
+            seg_list_length += EdgeSegment.length(seg);
+        print "seg_list.size = %d - %f" %(len(seg_list), seg_list_length)
+        
+        seg_list = EdgeSegmentSet.clean_fixed_expanding(seg_list)
+        print "AFTER seg_list.size =", len(seg_list)
+        
+        expanding_list[query.obj_id] = seg_list
+        
+        count += 1
+        if count == 10:
+            break;
+    print "expanding_list - elapsed : ", (time.clock() - start_time)   
     

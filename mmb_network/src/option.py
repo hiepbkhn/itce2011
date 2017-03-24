@@ -19,7 +19,7 @@ MAP_FILE = "oldenburgGen"
 #MAP_FILE = "SanJoaquin"
 #MAP_FILE = "cal"
 # MAP_FILE = "cal_mod"
-#MAP_FILE = "synthetic_24_30_30_40"
+# MAP_FILE = "synthetic_24_30_30_40"
 
 #QUERY_PATH = "C:/Tailieu/My Box Files/Default Sync Folder/oldenburgGen/"
 #QUERY_PATH = "C:/Tailieu/My Box Files/Default Sync Folder/California/"
@@ -30,6 +30,7 @@ QUERY_PATH = "../query/"
 #RESULT_PATH = "C:/"
 RESULT_PATH = "../out/"
 
+QUERY_TYPE = 0;     # QUERY_TYPE = 0 (Brinkhoff), 1 (TraceGenerator)
 
 #QUERY_FILE = "oldenburgGen_500_0_50_0_60_20_3_1000_50.txt"
 #QUERY_FILE = "oldenburgGen_1000_0_20_0_1000_20_0_1000_50.txt"
@@ -70,7 +71,7 @@ QUERY_FILE = "oldenburgGen_5000_0_0_0_20_20_1_1000_250_2_5_0005_002.txt"    #k-a
 #QUERY_FILE = "cal_10000_0_5_0_20_20_1_1000_250_2_5_00005_0001.txt"
 
 ######
-#QUERY_FILE = "synthetic_24_30_30_40_events.txt"    #k-anom: 2-10
+# QUERY_FILE = "synthetic_24_30_30_40_events.txt"    #k-anom: 2-10
 #QUERY_FILE = "oldenburgGen_mod_5k_1.0_2_5_0005_002_5_15_20_80_10_20_events.txt"    #k-anom: 2-5, medium
 #QUERY_FILE = "oldenburgGen_mod_5k_0.5_2_5_0005_002_5_15_20_80_10_20_events.txt"    #k-anom: 2-5, slow
 #QUERY_FILE = "oldenburgGen_mod_10k_0.5_2_5_0005_002_5_15_20_80_10_20_events.txt"        #k-anom: 2-5, slow
@@ -88,7 +89,7 @@ MAX_USER = 10000
 
 DISTANCE_CONSTRAINT = 500        # oldenburgGen
 # DISTANCE_CONSTRAINT = 15000     # cal  
-#DISTANCE_CONSTRAINT = 1500      # for synthetic_24_30_30_40_events (trace_generator)
+# DISTANCE_CONSTRAINT = 1500      # for synthetic_24_30_30_40_events (trace_generator)
 
 MAP_RATIO = 0.2
 

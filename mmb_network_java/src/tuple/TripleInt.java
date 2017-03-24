@@ -17,15 +17,17 @@ public class TripleInt implements Comparable<TripleInt>{
 	public int compareTo(TripleInt arg0) {
 		if (this.v0 < arg0.v0)
 			return -1;
-		if (this.v1 < arg0.v1)
-			return -1;
-		if (this.v2 < arg0.v2)
-			return -1;
 		if (this.v0 > arg0.v0)
 			return 1;
-		if (this.v1 > arg0.v1)
+		
+		if (this.v1 < arg0.v1)
+			return -1;
+		else if (this.v1 > arg0.v1)
 			return 1;
-		if (this.v2 > arg0.v2)
+		
+		if (this.v2 < arg0.v2)
+			return -1;
+		else if (this.v2 > arg0.v2)
 			return 1;
 		
 		return 0;

@@ -32,8 +32,8 @@ public class QueryLog {
     	this.map_data = map_data;
     }
 	
-    //
-    public void read_query(String path, String log_file_name, int max_time_stamp) throws IOException{	// max_time_stamp = -1
+    // query_type = 0 (Brinkhoff), 1 (TraceGenerator)
+    public void read_query(String path, String log_file_name, int max_time_stamp, int query_type) throws IOException{	// max_time_stamp = -1
         
 //        f = open(path + log_file_name, "r")
 //        fstr = f.read()
@@ -53,32 +53,43 @@ public class QueryLog {
         for (String line : fstr){
             String[] items = line.split("\t");
             
+            int obj_id;
+            double x;
+            double y;
+            int timestamp;
+            double speed;
+            int next_node_x;
+            int next_node_y;
+            int k_anom;
+            double min_length;
             ////// 1 - FOR Brinkhoff generator
-            int obj_id = Integer.parseInt(items[1]);
-            maxNodeId = obj_id > maxNodeId ? obj_id : maxNodeId;
+            if (query_type == 0){
+            	obj_id = Integer.parseInt(items[1]);
+            	maxNodeId = obj_id > maxNodeId ? obj_id : maxNodeId;
 
-            double x = Double.parseDouble(items[5]);
-            double y = Double.parseDouble(items[6]);
-            int timestamp = Integer.parseInt(items[4]);
-            double speed = Double.parseDouble(items[7]);
-            int next_node_x = Integer.parseInt(items[8]);
-            int next_node_y = Integer.parseInt(items[9]);
-            int k_anom = Integer.parseInt(items[10]);
-            double min_length = Double.parseDouble(items[11]);
-            
+            	x = Double.parseDouble(items[5]);
+	            y = Double.parseDouble(items[6]);
+	            timestamp = Integer.parseInt(items[4]);
+	            speed = Double.parseDouble(items[7]);
+	            next_node_x = Integer.parseInt(items[8]);
+	            next_node_y = Integer.parseInt(items[9]);
+	            k_anom = Integer.parseInt(items[10]);
+	            min_length = Double.parseDouble(items[11]);
+            }else{
             ////// 2 - FOR TraceGenerator
-//            int obj_id = Integer.parseInt(items[0]);
-//            maxNodeId = obj_id > maxNodeId ? obj_id : maxNodeId;
-//
-//            double x = Double.parseDouble(items[2]);
-//            double y = Double.parseDouble(items[3]);
-//            int timestamp = Integer.parseInt(items[1]);
-//            double speed = Double.parseDouble(items[4]);
-//            int next_node_x = (int)Double.parseDouble(items[5]);
-//            int next_node_y = (int)Double.parseDouble(items[6]);
-//            int k_anom = Integer.parseInt(items[7]);
-//            double min_length = Double.parseDouble(items[8]);     
-            // (End) 2 - FOR TraceGenerator       
+	            obj_id = Integer.parseInt(items[0]);
+	            maxNodeId = obj_id > maxNodeId ? obj_id : maxNodeId;
+	
+	            x = Double.parseDouble(items[2]);
+	            y = Double.parseDouble(items[3]);
+	            timestamp = Integer.parseInt(items[1]);
+	            speed = Double.parseDouble(items[4]);
+	            next_node_x = (int)Double.parseDouble(items[5]);
+	            next_node_y = (int)Double.parseDouble(items[6]);
+	            k_anom = Integer.parseInt(items[7]);
+	            min_length = Double.parseDouble(items[8]);     
+	            // (End) 2 - FOR TraceGenerator       
+            }
             
             //
             if (max_time_stamp != -1 && timestamp > max_time_stamp)

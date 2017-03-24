@@ -330,8 +330,8 @@ class Map:
         elapsed = (time.clock() - start)
         print "Elapsed ", elapsed
         
-        print len(self.nodes)
-        print len(self.edges)
+        print "Map.nodes =", len(self.nodes)
+        print "Map.edges =", len(self.edges)
         
         # 3. Interval Trees (X,Y)
 #        features_x = []
@@ -409,7 +409,7 @@ class Map:
     #######################################################
     def compute_fixed_expanding(self, x, y, cur_edge_id, length):
         
-        result = []
+        result = [] # list of EdgeSegment
         
         stack = Stack()
         #

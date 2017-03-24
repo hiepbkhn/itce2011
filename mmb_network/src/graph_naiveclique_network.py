@@ -18,6 +18,7 @@ import time
 import math
 import option
 from subprocess import call
+from Tkinter import *
 
 
 from query_loader import QueryLog
@@ -856,60 +857,60 @@ if __name__ == "__main__":
         option.QUERY_FILE = sys.argv[1]
         timestep = int(sys.argv[2])
         option.DISTANCE_CONSTRAINT = int(sys.argv[3])
-
+ 
     if len(sys.argv) > 4:
         option.K_GLOBAL = int(sys.argv[4])    
-        
+         
     if len(sys.argv) > 5:
         option.INIT_COVER_KEEP_RATIO = float(sys.argv[5])     
-    
+     
     if len(sys.argv) > 6:
         option.NEXT_COVER_KEEP_RATIO = float(sys.argv[6])       
-
+ 
     print "MAP_FILE =", option.MAP_FILE
     print "timestep =", timestep
     print "QUERY_FILE =", option.QUERY_FILE
     print "DISTANCE_CONSTRAINT =", option.DISTANCE_CONSTRAINT
-    
+     
     #    
     start_time = time.clock()
-        
+         
     map_data = Map()
     map_data.read_map(option.MAP_PATH, option.MAP_FILE)
     print "Load Map : DONE"
     query_log = QueryLog(map_data)
-    query_log.read_query(option.QUERY_PATH, option.QUERY_FILE, max_time_stamp = timestep)   # default: max_time_stamp = 10 (40: only for attack) 
+    query_log.read_query(option.QUERY_PATH, option.QUERY_FILE, timestep, option.QUERY_TYPE)   # default: max_time_stamp = 10 (40: only for attack) 
     print "Load Query : DONE"
-    
+     
     print "max_speed = ", query_log.max_speed
     print "elapsed : ", (time.clock() - start_time)   
-    
-        
+     
+         
     graph = Graph(0, map_data, query_log, None)
-    
+     
     #TEST
     graph.run_timestamps(0, timestep)
     print "graph.run_timestamps - DONE"
         
         
-    
-#    master = Tk()
-#    
-#    
-#    width = 700
-#    map_visualizer = MapVisualizer(map_data, query_log, width)
-#    
-#    w = Canvas(master, width=map_visualizer.width, height=map_visualizer.height)
-#    w.pack()
-#    
-#    map_visualizer.draw_map(w)
-#    
-#    #
-#    graph = Graph(0, map_data, query_log, map_visualizer)
-#    
-#    graph.run_timestamps(0,0)
-#    
-#    mainloop()
+    # TEST MapVisualizer.draw_map()
+#     master = Tk()
+#     
+#     
+#     width = 700
+#     map_visualizer = MapVisualizer(map_data, query_log, width)
+#     
+#     w = Canvas(master, width=map_visualizer.width, height=map_visualizer.height)
+#     w.pack()
+#     
+#     map_visualizer.draw_map(w)
+#     
+#     #
+# #     graph = Graph(0, map_data, query_log, map_visualizer)
+# #     
+# #     graph.run_timestamps(0,0)
+#     
+#     mainloop()
     
     
 

@@ -145,7 +145,7 @@ def find_init_cover(S, num_element):
         R = R.difference(S_i)
         del S[max_inter_id]
     
-    print "find_max_uncovered - elapsed :", (time.clock() - start)
+    print "find_init_cover - elapsed :", (time.clock() - start)
     print "len(R) =", len(R)
     print "Cover.len: ", len(C_0)
     num_cloaked_users = len(U) - len(R)

@@ -3,8 +3,6 @@ package tuple;
 import java.util.ArrayList;
 import java.util.List;
 
-import map_loader.PairInt;
-
 public class PairIntList {
 
 	public int num_edges;

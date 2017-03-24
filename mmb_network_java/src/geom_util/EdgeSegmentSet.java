@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import tuple.PairBoolSeg;
+
 public class EdgeSegmentSet {
 	
 	public List<EdgeSegment> set = new ArrayList<EdgeSegment>();
@@ -26,10 +28,11 @@ public class EdgeSegmentSet {
         Collections.sort(new_result);
         
         // DEBUG
-//        print "length(new_result) = ", length(new_result)
-//        for item in new_result:
-//            print "%15d %8.2f %10.2f %10.2f %10.2f %10.2f" % (item.cur_edge_id, EdgeSegment.length(item), \
-//                item.start_x, item.start_y, item.end_x, item.end_y)
+//        System.out.println("AFTER sorting");
+//        System.out.println("length(new_result) = " + new_result.size());
+//        for (EdgeSegment item : new_result)
+//        	System.out.println(String.format("%15d %8.2f %10.2f %10.2f %10.2f %10.2f", item.cur_edge_id, EdgeSegment.length(item), 
+//                item.start_x, item.start_y, item.end_x, item.end_y));
          
         // 3. REMOVE duplicates
         int cur = 0;
@@ -46,10 +49,12 @@ public class EdgeSegmentSet {
                 cur += 1;
         }
                 
-//        print "length(new_result) = ", length(new_result)
-//        for item in new_result:
-//            print "%15d %8.2f %10.2f %10.2f %10.2f %10.2f" % (item.cur_edge_id, EdgeSegment.length(item), \
-//                item.start_x, item.start_y, item.end_x, item.end_y)
+        // DEBUG
+//        System.out.println("AFTER removing duplicates");   
+//        System.out.println("length(new_result) = " + new_result.size());
+//        for (EdgeSegment item : new_result)
+//        	System.out.println(String.format("%15d %8.2f %10.2f %10.2f %10.2f %10.2f", item.cur_edge_id, EdgeSegment.length(item), 
+//                item.start_x, item.start_y, item.end_x, item.end_y));
         
         // 4. UNION
         cur = 0;

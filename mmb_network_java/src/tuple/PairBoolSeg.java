@@ -1,4 +1,6 @@
-package geom_util;
+package tuple;
+
+import geom_util.EdgeSegment;
 
 public class PairBoolSeg {
 

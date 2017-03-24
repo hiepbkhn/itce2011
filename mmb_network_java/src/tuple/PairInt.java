@@ -1,4 +1,4 @@
-package map_loader;
+package tuple;
 
 public class PairInt implements Comparable<PairInt>{
 
@@ -16,11 +16,12 @@ public class PairInt implements Comparable<PairInt>{
 	public int compareTo(PairInt arg0) {
 		if (this.x < arg0.x)
 			return -1;
+		else if (this.x > arg0.x)
+			return 1;
+		
 		if (this.y < arg0.y)
 			return -1;
-		if (this.x > arg0.x)
-			return 1;
-		if (this.y > arg0.y)
+		else if (this.y > arg0.y)
 			return 1;
 		return 0;
 	}

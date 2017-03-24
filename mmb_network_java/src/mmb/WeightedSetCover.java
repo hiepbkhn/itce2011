@@ -55,7 +55,7 @@ public class WeightedSetCover {
 	    System.out.println("len(S) =" + S.size());
 	    System.out.println("len(U) =" + U.size());
 	    
-	    Set<Integer> R = U;
+	    Set<Integer> R = new HashSet<Integer>(U);	// deep copy
 	    
 	    List<Set<Integer>> C_0 = new ArrayList<Set<Integer>>();
 	    
@@ -84,10 +84,11 @@ public class WeightedSetCover {
 	        S.remove(max_inter_id);
 	    }
 	    
-	    System.out.println("find_max_uncovered - elapsed :" + (System.currentTimeMillis() - start));
+	    System.out.println("find_init_cover - elapsed :" + (System.currentTimeMillis() - start));
 	    System.out.println("len(R) =" + R.size());
 	    System.out.println("Cover.len: " + C_0.size());
 	    int num_cloaked_users = U.size() - R.size();
+	    
 	    int total_C_0 = 0;
 	    for (Set<Integer> a_set : C_0)
 	    	total_C_0 += a_set.size();
@@ -112,7 +113,7 @@ public class WeightedSetCover {
 	    System.out.println("len(S) =" + S.size());
 	    System.out.println("len(U) =" + U.size());
 	    
-	    Set<Integer> R = U;
+	    Set<Integer> R = new HashSet<Integer>(U);	// deep copy
 	        
 	    // result
 	    List<Set<Integer>> C_1 = new ArrayList<Set<Integer>>();
@@ -126,12 +127,15 @@ public class WeightedSetCover {
 	    List<Integer> W = new ArrayList<Integer>();
 	    		
 	    for (int i = 0; i < S.size(); i++){
-	    	Set<Integer> s_set = new HashSet<Integer>(S.get(i));	// copy constructor
+	    	
 	        W.add(0);
 	        list_pairs.add(new ArrayList<Integer>());   		//have list_pairs[i]
 	        for (int j = 0; j < C_0.size(); j++){
 	        	Set<Integer> c_set = C_0.get(j);
-	        	s_set.retainAll(c_set);
+	        	
+	        	Set<Integer> s_set = new HashSet<Integer>(S.get(i));	// copy constructor (moved to here)
+	        	s_set.retainAll(c_set);				// intersection
+	        	
 	            int inter_len = s_set.size();
 	            if (inter_len > 0 && inter_len < k_global)
 	                W.set(i, W.get(i) + 1);
@@ -155,7 +159,7 @@ public class WeightedSetCover {
 		List<List<Integer>> list_pairs_temp = new ArrayList<List<Integer>>();
 		for (int id = 0; id < idx.length; id++){
 			W_temp.add(W.get(idx[id]));
-			S_temp.add(S.get(idx[id]));
+			S_temp.add(new HashSet<Integer>(S.get(idx[id])));	// copy constructor
 			list_pairs_temp.add(list_pairs.get(idx[id]));
 		}
 		
@@ -167,12 +171,20 @@ public class WeightedSetCover {
 	    
 	    W.clear();
 	    S.clear();
-	    list_pairs.clear();
-	    for (int id = 0; id < i; id++){
-	    	W.add(W_temp.get(id));
-	    	S.add(S_temp.get(id));
-	    	list_pairs.add(list_pairs.get(id));
-	    }
+//	    System.out.println("W_temp.size = " + W_temp.size());
+//	    System.out.println("W_temp[last] = " + W_temp.get(W_temp.size()-1));
+//	    System.out.println("S_temp.size = " + S_temp.size());
+	    
+////	    list_pairs.clear();		// WRONG !
+//	    for (int id = 0; id < i; id++){
+//	    	W.add(W_temp.get(id));
+//	    	S.add(S_temp.get(id));
+//	    	list_pairs.add(list_pairs.get(id));
+//	    }
+	    
+	    W = W_temp.subList(0, i);
+	    S = S_temp.subList(0, i);
+	    list_pairs = list_pairs_temp.subList(0, i);
 	    
 	    
 		System.out.println("Sorting - elapsed :" + (System.currentTimeMillis() - start));    

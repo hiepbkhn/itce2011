@@ -7,17 +7,21 @@ public class Option {
 
 	public static String QUERY_PATH = "query/";
 	
+	public static int QUERY_TYPE = 0;	//QUERY_TYPE = 0 (Brinkhoff), 1 (TraceGenerator)
+	
 //	public static String QUERY_FILE = "cal_mod_10k_0.5_2_5_0005_0002_2_10_20_80_10_20_events.txt";      	//k-anom: 2-5, slow
 	
 	public static String QUERY_FILE = "oldenburgGen_5000_0_0_0_20_20_1_1000_250_2_5_0005_002.txt";    		//k-anom: 2-5, slow	
 //	public static String QUERY_FILE = "oldenburgGen_mod_10k_0.5_2_5_0005_0020_2_10_20_80_10_20_events.txt";
+
+//	public static String QUERY_FILE = "synthetic_24_30_30_40_events.txt";
 	
 	//
 	public static String RESULT_PATH = "out/";
 	
 	public static String MAP_PATH = "data/";
 	
-	//public static String MAP_NAME = "synthetic_24_30_30_40";
+//	public static String MAP_NAME = "synthetic_24_30_30_40";
 	//public static String MAP_NAME = "synthetic_12_15_20_20";
 	//public static String MAP_NAME = "delaunay_12_15_396_1150";
 	public static String MAP_NAME = "oldenburgGen";
@@ -31,8 +35,9 @@ public class Option {
 	public static double INIT_DISTANCE = 1000;
 	public static double MAX_USER = 10000;
 	
-	public static double DISTANCE_CONSTRAINT = 500; // oldenburgGen
-//	public static double DISTANCE_CONSTRAINT = 15000; // cal
+	public static double DISTANCE_CONSTRAINT = 500; 	// oldenburgGen
+//	public static double DISTANCE_CONSTRAINT = 15000; 	// cal
+//	public static double DISTANCE_CONSTRAINT = 1500;      // for synthetic_24_30_30_40_events (trace_generator)
 	
 	
 	public static double MAP_RATIO = 0.2;

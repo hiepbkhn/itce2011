@@ -25,9 +25,9 @@ import geom_util.EdgeSegmentSet;
 import geom_util.Point;
 import geom_util.Query;
 import map_loader.MMBMap;
-import map_loader.PairInt;
 import query_loader.QueryLog;
 import tuple.PairEdgeSegInt;
+import tuple.PairInt;
 import tuple.PairIntList;
 import tuple.PairSetListInt;
 
@@ -476,7 +476,7 @@ public class Graph {
             num_cloaked_users = _temp.i; 
         }
         
-        System.out.println("Success rate =" + (double)num_cloaked_users/query_list.size());    
+        System.out.println("Success rate =" + ((double)num_cloaked_users)/query_list.size());    
         System.out.println("compute cover_set - elapsed : " + (System.currentTimeMillis() - start_time)); 
         
         
@@ -674,7 +674,7 @@ public class Graph {
 	    System.out.println("Load Map : DONE");
 	    
 	    QueryLog query_log = new QueryLog(map_data);
-	    query_log.read_query(Option.QUERY_PATH, Option.QUERY_FILE, timestep);   // default: max_time_stamp = 10 (40: only for attack) 
+	    query_log.read_query(Option.QUERY_PATH, Option.QUERY_FILE, timestep, Option.QUERY_TYPE);   // default: max_time_stamp = 10 (40: only for attack) 
 	    System.out.println("Load Query : DONE");
 	    
 	    System.out.println("max_speed = " + query_log.max_speed);

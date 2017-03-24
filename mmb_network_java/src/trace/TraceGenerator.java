@@ -28,9 +28,9 @@ import geom_util.Query;
 import graph.EdgeWeightedGraph;
 import graph.WeightedEdge;
 import map_loader.MMBMap;
-import map_loader.PairInt;
 import mmb.Option;
 import tuple.PairDouble;
+import tuple.PairInt;
 import tuple.TupleTrace;
 
 public class TraceGenerator {

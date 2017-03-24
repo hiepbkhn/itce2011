@@ -399,10 +399,11 @@ class EdgeSegmentSet:
             edge_segment.start_x, edge_segment.start_y, edge_segment.end_x, edge_segment.end_y)) 
         
         # DEBUG
-#        print "length(new_result) = ", length(new_result)
-#        for item in new_result:
-#            print "%15d %8.2f %10.2f %10.2f %10.2f %10.2f" % (item.cur_edge_id, EdgeSegment.length(item), \
-#                item.start_x, item.start_y, item.end_x, item.end_y)
+#         print "AFTER sorting"
+#         print "length(new_result) = ", len(new_result)
+#         for item in new_result:
+#             print "%15d %8.2f %10.2f %10.2f %10.2f %10.2f" % (item.cur_edge_id, EdgeSegment.length(item), \
+#                 item.start_x, item.start_y, item.end_x, item.end_y)
          
         # 3. REMOVE duplicates
         cur = 0
@@ -417,10 +418,12 @@ class EdgeSegmentSet:
             else:
                 cur += 1
                 
-#        print "length(new_result) = ", length(new_result)
-#        for item in new_result:
-#            print "%15d %8.2f %10.2f %10.2f %10.2f %10.2f" % (item.cur_edge_id, EdgeSegment.length(item), \
-#                item.start_x, item.start_y, item.end_x, item.end_y)
+        # DEBUG     
+#         print "AFTER removing duplicates"   
+#         print "length(new_result) = ", len(new_result)
+#         for item in new_result:
+#             print "%15d %8.2f %10.2f %10.2f %10.2f %10.2f" % (item.cur_edge_id, EdgeSegment.length(item), \
+#                 item.start_x, item.start_y, item.end_x, item.end_y)
         
         # 4. UNION
         cur = 0

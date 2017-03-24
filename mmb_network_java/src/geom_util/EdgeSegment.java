@@ -5,6 +5,8 @@
 
 package geom_util;
 
+import tuple.PairBoolSeg;
+
 public class EdgeSegment implements Comparable<EdgeSegment>{
 
 	public double start_x;
@@ -122,24 +124,27 @@ public class EdgeSegment implements Comparable<EdgeSegment>{
 	public int compareTo(EdgeSegment arg0) {
 		if (this.cur_edge_id < arg0.cur_edge_id)
 			return -1;
+		else if (this.cur_edge_id > arg0.cur_edge_id)
+			return 1;
+		
 		if (this.start_x < arg0.start_x)
 			return -1;
+		else if (this.start_x > arg0.start_x)
+			return 1;
+		
 		if (this.start_y < arg0.start_y)
 			return -1;
+		else if (this.start_y > arg0.start_y)
+			return 1;
+		
 		if (this.end_x < arg0.end_x)
 			return -1;
+		else if (this.end_x > arg0.end_x)
+			return 1;
+		
 		if (this.end_y < arg0.end_y)
 			return -1;
-		
-		if (this.cur_edge_id > arg0.cur_edge_id)
-			return 1;
-		if (this.start_x > arg0.start_x)
-			return 1;
-		if (this.start_y > arg0.start_y)
-			return 1;
-		if (this.end_x > arg0.end_x)
-			return 1;
-		if (this.end_y > arg0.end_y)
+		else if (this.end_y > arg0.end_y)
 			return 1;
 		
 		return 0;
