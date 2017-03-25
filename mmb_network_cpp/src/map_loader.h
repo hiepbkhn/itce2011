@@ -15,9 +15,11 @@
 #include <list>
 #include <vector>
 #include <map>
+#include <algorithm>
 
 #include "geom_util.h"
 #include "tuple.h"
+#include "helper.h"
 
 using namespace std;
 
@@ -150,13 +152,13 @@ public:
 
 	//
 	void print_all(){
-//		cout<<"STACK"<<endl;
-//		for (deque<SegItem>::iterator seg = stack.begin(); seg < stack.end(); seg++)
-//			cout<<*seg->cur_edge_id << " " <<  *seg->x << " " <<  *seg->y << " " <<  *seg->end_x << " " <<  *seg->end_y << " " <<
-//					*seg->is_node << " " << *seg->length << "\n";
-//		cout<<"VISITED"<<endl;
-//		for (vector<VisitedEdge>::iterator edge = visited.begin(); edge < visited.end(); edge++)
-//			cout<< *edge->cur_edge_id << " " <<  *edge->start_x << " " <<  *edge->start_y<<"\n";
+		cout<<"STACK"<<endl;
+		for (deque<SegItem>::iterator seg = stack.begin(); seg != stack.end(); seg++)
+			cout<<(*seg).cur_edge_id << " " <<  (*seg).x << " " <<  (*seg).y << " " <<  (*seg).end_x << " " <<  (*seg).end_y << " " <<
+					(*seg).is_node << " " << (*seg).length << "\n";
+		cout<<"VISITED"<<endl;
+		for (vector<VisitedEdge>::iterator edge = visited.begin(); edge != visited.end(); edge++)
+			cout<< (*edge).cur_edge_id << " " <<  (*edge).start_x << " " <<  (*edge).start_y<<"\n";
 	}
 };
 
@@ -184,6 +186,127 @@ public:
 
 	//
 	void read_map(string path, string map_name);
+
+	int get_next_node_id(int next_node_x, int next_node_y){
+		if (xy_to_node_id.count(PairInt(next_node_x, next_node_y)) > 0 )
+			return xy_to_node_id[PairInt(next_node_x, next_node_y)];
+		else
+			return -1;
+	}
+
+	bool is_full_edge(EdgeSegment seg){
+		Edge edge = edges[seg.cur_edge_id];
+		Node start_node = nodes[edge.start_node_id];
+		Node end_node = nodes[edge.end_node_id];
+		if (seg.start_x == start_node.x && seg.start_y == start_node.y &&
+			seg.end_x == end_node.y && seg.end_y == end_node.y)
+			return true;
+		if (seg.start_x == end_node.x && seg.start_y == end_node.y &&
+			seg.end_x == start_node.y && seg.end_y == start_node.y)
+			return true;
+		return false;
+	}
+
+	int get_nearest_edge_id(int next_node_x, int next_node_y, double px, double py);
+	vector<EdgeSegment> compute_fixed_expanding(double x, double y, int cur_edge_id, double length);
+	vector<EdgeSegment> compute_mesh_expanding(vector<EdgeSegment> item_list, double length){};
+	//
+	bool is_node_in_rec(double min_x, double min_y, double max_x, double max_y, Node node){
+		int p1_x = node.x;
+		int p1_y = node.y;
+		return (min_x <= p1_x) && (p1_x <= max_x) && (min_y <= p1_y) && (p1_y <= max_y);
+	}
+	//
+	bool is_edge_in_rec(double min_x, double min_y, double max_x, double max_y, Edge edge){
+		return is_node_in_rec(min_x, min_y, max_x, max_y, nodes[edge.start_node_id]) &&
+				is_node_in_rec(min_x, min_y, max_x, max_y, nodes[edge.end_node_id]);
+	}
+	//
+	TripleDouble get_line_equation(double x1, double y1, double x2, double y2){
+		return TripleDouble(y2-y1, x1-x2, y1*x2-y2*x1);
+	}
+	//
+	bool is_edge_cut_rec(double min_x, double min_y, double max_x, double max_y, Edge edge){
+		int x1 = nodes[edge.start_node_id].x;
+		int y1 = nodes[edge.start_node_id].y;
+		int x2 = nodes[edge.end_node_id].x;
+		int y2 = nodes[edge.end_node_id].y;
+		TripleDouble coeff = get_line_equation(x1, y1, x2, y2);
+		double a1 = coeff.v0*min_x + coeff.v1*min_y + coeff.v2;
+		double a2 = coeff.v0*min_x + coeff.v1*max_y + coeff.v2;
+		double a3 = coeff.v0*max_x + coeff.v1*max_y + coeff.v2;
+		double a4 = coeff.v0*max_x + coeff.v1*min_y + coeff.v2;
+
+		if  (is_node_in_rec(min_x, min_y, max_x, max_y, nodes[edge.start_node_id]) ||
+			is_node_in_rec(min_x, min_y, max_x, max_y, nodes[edge.end_node_id]))
+			return true;
+		else
+			if ((a1*a2 < 0 && (x1-min_x)*(x2-min_x) < 0) || (a2*a3 < 0 && (y1-max_y)*(y2-max_y) < 0)
+				|| (a3*a4 < 0 && (x1-max_x)*(x2-max_x) < 0) || (a4*a1 < 0 && (y1-min_y)*(y2-min_y) < 0))
+			return true;
+
+		return false;
+	}
+	//
+	vector<EdgeSegment> compute_mesh_mbr(vector<Point> locations){
+		vector<EdgeSegment> result;
+		//
+		double min_x = 100000000;
+		double min_y = 100000000;
+		double max_x = -100000000;
+		double max_y = -100000000;
+		for (Point point : locations){
+			if (min_x > point.x)
+				min_x = point.x;
+			if (min_y > point.y)
+				min_y = point.y;
+			if (max_x < point.x)
+				max_x = point.x;
+			if (max_y < point.y)
+				max_y = point.y;
+		}
+
+//        print "compute_mesh_mbr - min,max (X,Y)", min_x, min_y, max_x, max_y
+
+		//Solution 1: linear scan
+//        start = time.clock()
+		for (map<int, Edge>::iterator it = edges.begin(); it != edges.end(); it++)
+			if (is_edge_cut_rec(min_x, min_y, max_x, max_y, it->second)){
+				double p1_x = nodes[it->second.start_node_id].x;
+				double p1_y = nodes[it->second.start_node_id].y;
+				double p2_x = nodes[it->second.end_node_id].x;
+				double p2_y = nodes[it->second.end_node_id].y;
+				result.push_back(EdgeSegment(p1_x, p1_y, p2_x, p2_y, it->second.edge_id));
+			}
+
+
+		return result;
+	}
+	static vector<TripleDoubleInt> find_boundary_points(vector<EdgeSegment> item_list){
+		// WAY-2
+		vector<TripleDoubleInt> nodes;
+		vector<TripleDoubleInt> result;
+		for (EdgeSegment item : item_list){
+			nodes.push_back(TripleDoubleInt(item.start_x, item.start_y, item.cur_edge_id));
+			nodes.push_back(TripleDoubleInt(item.end_x, item.end_y, item.cur_edge_id));
+		}
+
+		// sort
+		sort(nodes.begin(), nodes.end());
+
+		for (int i = 0; i < nodes.size()-1; i++)
+			if ((nodes[i+1].v0 != nodes[i].v0) || (nodes[i+1].v1 != nodes[i].v1))
+				result.push_back(nodes[i]);
+
+		if ((nodes[nodes.size()-1].v0 != nodes[nodes.size()-2].v0) || (nodes[nodes.size()-1].v1 != nodes[nodes.size()-2].v1))
+			result.push_back(nodes[nodes.size()-1]);
+
+
+		return result;
+
+
+	}
+
 
 };
 

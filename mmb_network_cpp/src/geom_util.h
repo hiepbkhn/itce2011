@@ -11,8 +11,6 @@
 #include <string>
 #include <cmath>
 
-#include "tuple.h"
-
 using namespace std;
 
 
@@ -99,34 +97,111 @@ public:
 };
 
 
+
 ////
-class GeomUtil{
+class LineOperator{
 public:
-	static double get_edge_length(Node node1, Node node2){
-	    return sqrt((node1.x - node2.x)*(node1.x - node2.x) + (node1.y - node2.y)*(node1.y - node2.y));
+	static double distance_to(double x1, double y1, double x2, double y2, double px, double py){
+		double normalLength = sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1));
+		return abs((px-x1)*(y2-y1)-(py-y1)*(x2-x1))/normalLength;
+	}
+};
+
+
+////
+class EdgeSegment{
+public:
+	double start_x;
+	double start_y;
+	double end_x;
+	double end_y;
+	int cur_edge_id;
+
+	EdgeSegment(){
+		start_x = 0;
+		start_y = 0;
+		end_x = 0;
+		end_y = 0;
+		cur_edge_id = -1;
 	}
 
-	static double get_segment_length(Node node, double x, double y){
-	    return sqrt((node.x - x)*(node.x - x) + (node.y - y)*(node.y - y));
+	//
+	EdgeSegment(double _start_x, double _start_y, double _end_x, double _end_y, int _cur_edge_id) {
+		start_x = _start_x;
+		start_y = _start_y;
+		end_x = _end_x;
+		end_y = _end_y;
+		cur_edge_id = _cur_edge_id;
 	}
 
-	static double get_distance(double x1, double y1, double x2, double y2){
-	    return sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2));
+	//
+	void normalize(){
+		if (start_x > end_x || (start_x == end_x && start_y > end_y)){
+			double temp = start_x;
+			start_x = end_x;
+			end_x = temp;
+			temp = start_y;
+			start_y = end_y;
+			end_y = temp;
+		}
 	}
 
-	static PairDouble get_point_on_line(double x1, double y1, double x2, double y2, double length){
-	    double vector_len = sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2));
-	    double x = x1 + (x2-x1)*length/vector_len;
-	    double y = y1 + (y2-y1)*length/vector_len;
-	    return PairDouble(x, y);
+	//
+	static double square_length(EdgeSegment seg){
+		return (seg.start_x - seg.end_x)*(seg.start_x - seg.end_x) + (seg.start_y - seg.end_y)*(seg.start_y - seg.end_y);
 	}
 
-	static PairDouble get_point_between(double x1, double y1, double x2, double y2, double ratio){
-	    double x = x1 + (x2-x1)*ratio;
-		double y = y1 + (y2-y1)*ratio;
-	    return PairDouble(x, y);
+	static double length(EdgeSegment seg){
+		return sqrt((seg.start_x - seg.end_x)*(seg.start_x - seg.end_x) + (seg.start_y - seg.end_y)*(seg.start_y - seg.end_y));
 	}
+
+	static bool is_line_cover(Point point, EdgeSegment line){
+		if ((point.x == line.start_x && point.y == line.start_y) ||
+			(point.x == line.end_x && point.y == line.end_y))
+			return true;
+		if (line.start_x == line.end_x)
+			return (point.y - line.start_y)*(point.y - line.end_y) < 0;
+		if (line.start_y == line.end_y)
+			return (point.x - line.start_x)*(point.x - line.end_x) < 0;
+
+		return (point.y - line.start_y)*(point.y - line.end_y) < 0;
+	}
+
+
+
+//	int compareTo(EdgeSegment arg0) {
+//		if (cur_edge_id < arg0.cur_edge_id)
+//			return -1;
+//		else if (cur_edge_id > arg0.cur_edge_id)
+//			return 1;
+//
+//		if (start_x < arg0.start_x)
+//			return -1;
+//		else if (start_x > arg0.start_x)
+//			return 1;
+//
+//		if (start_y < arg0.start_y)
+//			return -1;
+//		else if (start_y > arg0.start_y)
+//			return 1;
+//
+//		if (end_x < arg0.end_x)
+//			return -1;
+//		else if (end_x > arg0.end_x)
+//			return 1;
+//
+//		if (end_y < arg0.end_y)
+//			return -1;
+//		else if (end_y > arg0.end_y)
+//			return 1;
+//
+//		return 0;
+//	}
 
 };
+
+
+
+
 
 #endif /* GEOM_UTIL_H_ */

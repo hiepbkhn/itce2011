@@ -95,9 +95,6 @@ void MMBMap::read_map(string path, string map_name){
 		edge.edge_length = Edge::length(nodes[start_node_id], nodes[end_node_id]);
 		edges[edge_id] = edge;
 
-//		edges[edge_id] = Edge(edge_id, start_node_id, end_node_id, edge_class);
-//		edges[edge_id].edge_length = Edge::length(nodes[start_node_id], nodes[end_node_id]);
-
 		total_map_len += GeomUtil::get_edge_length(nodes[start_node_id], nodes[end_node_id]);
 
 		//
@@ -108,8 +105,130 @@ void MMBMap::read_map(string path, string map_name){
 //		if (!node_to_edges.count(end_node_id) == 0)
 //			node_to_edges[end_node_id] = vector<int>;
 		node_to_edges[end_node_id].push_back(edge_id);
+
+		//
+//		if (!adj.containsKey(start_node_id))
+//			adj.put(start_node_id, new ArrayList<Integer>());
+		adj[start_node_id].push_back(end_node_id);
+
+//		if (!adj.containsKey(end_node_id))
+//			adj.put(end_node_id, new ArrayList<Integer>());
+		adj[end_node_id].push_back(start_node_id);
+
+		//
+		node_pair_to_edge[PairInt(start_node_id, end_node_id)] = edge_id;
+		node_pair_to_edge[PairInt(end_node_id, start_node_id)] = edge_id;
 	}
+
 }
 
+int MMBMap::get_nearest_edge_id(int next_node_x, int next_node_y, double px, double py){
+	double min_distance = 100000000.0;
+	int nearest_edge_id = -1;
+
+	int next_node_id = get_next_node_id(next_node_x, next_node_y);
+
+	//print type(node_to_edges[next_node_id])
+
+	for (int edge_id : node_to_edges[next_node_id]){
+		int start_node_id = edges[edge_id].start_node_id;
+		int end_node_id = edges[edge_id].end_node_id;
+		//
+		double length = LineOperator::distance_to(nodes[start_node_id].x, nodes[start_node_id].y,
+			nodes[end_node_id].x, nodes[end_node_id].y, px, py);
+		if (length < min_distance){
+			min_distance = length;
+			nearest_edge_id = edge_id;
+		}
+	}
+
+	return nearest_edge_id;
+}
+
+vector<EdgeSegment> MMBMap::compute_fixed_expanding(double x, double y, int cur_edge_id, double length){
+
+	vector<EdgeSegment>result;
+
+	MMBStack stack;
+	//
+	bool is_node = get_next_node_id((int)x, (int)y) > -1;
+
+	stack.push(SegItem(x, y, -1, -1, length, cur_edge_id, is_node));
+
+	while (stack.get_size() > 0){
+		// DEBUG
+//            stack.print_all()
+//            print "END OF LIST"
+		//
+		SegItem item = stack.get();
+//            if item.length == 0:
+//                result.append(item)
+//                continue
+
+		// case 1, is_node == True
+		if (item.is_node == true){
+			int node_id = get_next_node_id((int)item.x, (int)item.y);
+
+			for (int end_node_id : adj[node_id]){   //traverse adjacent edges...
+				double edge_len = GeomUtil::get_edge_length(nodes[node_id], nodes[end_node_id]);
+				if (edge_len < item.length){
+					double remaining_len = item.length - edge_len;
+					//
+					result.push_back(EdgeSegment(nodes[node_id].x, nodes[node_id].y,
+										  nodes[end_node_id].x, nodes[end_node_id].y,
+										  node_pair_to_edge[PairInt(node_id, end_node_id)] ));
+					//
+					for (int edge_id : node_to_edges[end_node_id]) //one choice for each adjacent edge
+						stack.push(SegItem(nodes[end_node_id].x, nodes[end_node_id].y,
+											 -1, -1,
+											 remaining_len, edge_id, true));
+
+				}else{
+					int end_x = (int) (item.x + item.length * (nodes[end_node_id].x - item.x) / edge_len);
+					int end_y = (int) (item.y + item.length * (nodes[end_node_id].y - item.y) / edge_len);
+					result.push_back(EdgeSegment(nodes[node_id].x, nodes[node_id].y,
+										  end_x, end_y,
+										  node_pair_to_edge[PairInt(node_id, end_node_id)] ));
+				}
+			}
+		}
+		// case 2, is_node == False
+		else{
+			int id_list[2] = {edges[item.cur_edge_id].start_node_id, edges[item.cur_edge_id].end_node_id};
+			for (int end_node_id : id_list){
+				double segment_len = GeomUtil::get_segment_length(nodes[end_node_id], item.x, item.y);
+				if (segment_len < item.length){
+					double remaining_len = item.length - segment_len;
+					// end_node_id.xy go first to comply with convention: first point always graph node !!
+					result.push_back(EdgeSegment(nodes[end_node_id].x, nodes[end_node_id].y,
+										  item.x, item.y,
+										  item.cur_edge_id));
+					//
+					for (int edge_id : node_to_edges[end_node_id])
+						stack.push(SegItem(nodes[end_node_id].x, nodes[end_node_id].y,
+										 -1, -1,
+										 remaining_len, edge_id, true));
+				}
+				else{
+					int end_x = (int) (item.x + item.length * (nodes[end_node_id].x - item.x) / segment_len);
+					int end_y = (int) (item.y + item.length * (nodes[end_node_id].y - item.y) / segment_len);
+					result.push_back(EdgeSegment(item.x, item.y,
+										  end_x, end_y,
+										  item.cur_edge_id));
+				}
+			}
+		}
+	}
+
+	// DEBUG
+//        print "stack.max_size", stack.max_size
+//
+//        print "length(result) = ", length(result)
+//        for item in result:
+//            print "%15d %8.2f %10.2f %10.2f %10.2f %10.2f" % (item.cur_edge_id, EdgeSegment.length(item), \
+//                item.start_x, item.start_y, item.end_x, item.end_y)
+
+	return result;
+}
 
 
