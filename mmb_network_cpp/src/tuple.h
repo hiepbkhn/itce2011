@@ -110,5 +110,38 @@ public:
 	};
 };
 
+////
+class PairEdgeSegInt{
+public:
+	EdgeSegment e;
+	int obj_id;
+
+	//
+	PairEdgeSegInt(EdgeSegment _e, int _obj_id) {
+		e = _e;
+		obj_id = _obj_id;
+	}
+
+	bool operator < (const PairEdgeSegInt& arg0) const
+	{
+		if (e.cur_edge_id < arg0.e.cur_edge_id)
+			return -1;
+		if (e.cur_edge_id > arg0.e.cur_edge_id)
+			return 1;
+		return 0;
+	}
+};
+
+////
+class PairIntList {
+public:
+	int num_edges;
+	vector<PairInt> list_edges;
+	//
+	PairIntList(int _num_edges, vector<PairInt> _list_edges) {
+		num_edges = _num_edges;
+		list_edges = _list_edges;
+	}
+};
 
 #endif /* TUPLE_H_ */

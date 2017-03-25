@@ -26,6 +26,10 @@ public:
 	double max_speed = 0;
 
 	//
+	QueryLog(){
+
+	}
+	//
 	QueryLog(MMBMap _map_data){
 		map_data = _map_data;
 	}

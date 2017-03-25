@@ -14,8 +14,6 @@
 using namespace std;
 
 
-
-
 ////
 class Node{
 public:
@@ -96,6 +94,28 @@ public:
 
 };
 
+class MBR {
+public:
+	double area;
+    double min_x;
+    double min_y;
+    double max_x;
+    double max_y;
+
+
+
+    MBR(double _area, double _min_x, double _min_y, double _max_x, double _max_y) {
+		area = _area;
+		min_x = _min_x;
+		min_y = _min_y;
+		max_x = _max_x;
+		max_y = _max_y;
+	}
+
+
+
+
+};
 
 
 ////
@@ -169,38 +189,133 @@ public:
 
 
 
-//	int compareTo(EdgeSegment arg0) {
-//		if (cur_edge_id < arg0.cur_edge_id)
-//			return -1;
-//		else if (cur_edge_id > arg0.cur_edge_id)
-//			return 1;
-//
-//		if (start_x < arg0.start_x)
-//			return -1;
-//		else if (start_x > arg0.start_x)
-//			return 1;
-//
-//		if (start_y < arg0.start_y)
-//			return -1;
-//		else if (start_y > arg0.start_y)
-//			return 1;
-//
-//		if (end_x < arg0.end_x)
-//			return -1;
-//		else if (end_x > arg0.end_x)
-//			return 1;
-//
-//		if (end_y < arg0.end_y)
-//			return -1;
-//		else if (end_y > arg0.end_y)
-//			return 1;
-//
-//		return 0;
-//	}
+	bool operator < (const EdgeSegment& arg0) const
+	{
+		if (cur_edge_id < arg0.cur_edge_id)
+			return -1;
+		else if (cur_edge_id > arg0.cur_edge_id)
+			return 1;
+
+		if (start_x < arg0.start_x)
+			return -1;
+		else if (start_x > arg0.start_x)
+			return 1;
+
+		if (start_y < arg0.start_y)
+			return -1;
+		else if (start_y > arg0.start_y)
+			return 1;
+
+		if (end_x < arg0.end_x)
+			return -1;
+		else if (end_x > arg0.end_x)
+			return 1;
+
+		if (end_y < arg0.end_y)
+			return -1;
+		else if (end_y > arg0.end_y)
+			return 1;
+
+		return 0;
+	}
 
 };
 
 
+////
+class EdgeSegmentSet {
+public:
+	vector<EdgeSegment> set;
+
+
+
+    static double length(vector<EdgeSegment> set_1){
+    	double total_len = 0;
+        for (EdgeSegment item : set_1)
+            total_len += EdgeSegment::length(item);
+
+        return total_len;
+    }
+
+    //
+    static bool is_set_cover(Point point, vector<EdgeSegment> line_set){
+        if (line_set.size() == 0)
+            return false;
+
+        //binary search
+        int lo = 0;
+        int hi = line_set.size() - 1;
+        int mid = (lo + hi) / 2;
+        bool found = false;
+        while (true){
+            if (line_set[mid].cur_edge_id == point.cur_edge_id){
+                found = true;
+                break;
+            }
+
+            if (line_set[mid].cur_edge_id > point.cur_edge_id){
+                hi = mid - 1;
+                if (hi < lo)
+                    break;
+            }
+            else{
+                lo = mid + 1;
+                if (lo > hi)
+                    break;
+            }
+            mid = (lo + hi) / 2;
+        }
+
+        if (found == false)
+            return false;
+
+//        print found, mid
+
+        //
+        lo = mid;
+        while (lo-1 > 0 && line_set[lo-1].cur_edge_id == point.cur_edge_id)
+            lo = lo - 1;
+        hi = mid;
+        while (hi+1 < line_set.size() && line_set[hi+1].cur_edge_id == point.cur_edge_id)
+            hi = hi + 1;
+
+        for (int i = lo; i < hi+1; i++){
+        	EdgeSegment item = line_set[i];
+            if (EdgeSegment::is_line_cover(point, item) == true)
+                return true;
+        }
+
+        return false;
+    }
+
+    static MBR compute_mbr(EdgeSegmentSet mesh){
+        double min_x = 100000000;
+        double min_y = 100000000;
+        double max_x = -100000000;
+        double max_y = -100000000;
+        for (EdgeSegment seg : mesh.set){
+            if (min_x > seg.start_x)
+                min_x = seg.start_x;
+            if (min_y > seg.start_y)
+                min_y = seg.start_y;
+            if (max_x < seg.start_x)
+                max_x = seg.start_x;
+            if (max_y < seg.start_y)
+                max_y = seg.start_y;
+            if (min_x > seg.end_x)
+                min_x = seg.end_x;
+            if (min_y > seg.end_y)
+                min_y = seg.end_y;
+            if (max_x < seg.end_x)
+                max_x = seg.end_x;
+            if (max_y < seg.end_y)
+                max_y = seg.end_y;
+        }
+        return MBR((max_x-min_x)*(max_y-min_y), min_x, max_x, min_y, max_y);
+    }
+
+
+};
 
 
 

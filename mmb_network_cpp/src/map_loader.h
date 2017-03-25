@@ -20,8 +20,11 @@
 #include "geom_util.h"
 #include "tuple.h"
 #include "helper.h"
+#include "option.h"
 
 using namespace std;
+
+extern Option option;
 
 ////
 class SegItem{
@@ -209,7 +212,27 @@ public:
 
 	int get_nearest_edge_id(int next_node_x, int next_node_y, double px, double py);
 	vector<EdgeSegment> compute_fixed_expanding(double x, double y, int cur_edge_id, double length);
-	vector<EdgeSegment> compute_mesh_expanding(vector<EdgeSegment> item_list, double length){};
+
+	//
+	vector<EdgeSegment> compute_mesh_expanding(vector<EdgeSegment> item_list, double length){
+		vector<EdgeSegment> result = item_list;
+		//1. call find_boundary_points()
+		vector<TripleDoubleInt> boundary_points = MMBMap::find_boundary_points(item_list);
+
+		//2.
+		for (TripleDoubleInt point : boundary_points){
+			vector<EdgeSegment> new_seg_set = compute_fixed_expanding(point.v0, point.v1, point.v2, option.MAX_SPEED);
+			// OLD
+//            new_seg_set = EdgeSegmentSet.clean_fixed_expanding(new_seg_set)
+//            result = EdgeSegmentSet.union(result, new_seg_set)
+			// NEW
+			result.insert(result.end(), new_seg_set.begin(), new_seg_set.end());
+		}
+
+		result = GeomUtil::clean_fixed_expanding(result);
+
+		return result;
+	}
 	//
 	bool is_node_in_rec(double min_x, double min_y, double max_x, double max_y, Node node){
 		int p1_x = node.x;
