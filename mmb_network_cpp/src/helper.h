@@ -8,8 +8,17 @@
 #ifndef HELPER_H_
 #define HELPER_H_
 
+#include <iostream>
+#include <set>
+#include <vector>
+#include <algorithm>
+#include <chrono>
+
 #include "geom_util.h"
 #include "tuple.h"
+
+using namespace std;
+using namespace std::chrono;
 
 ////
 class GeomUtil{
@@ -226,6 +235,236 @@ public:
 	}
 
 
+};
+
+class Timer{
+public:
+	static __int64 get_millisec(){
+		__int64 now = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+		return now;
+	}
+};
+
+////
+class WeightedSetCover {
+public:
+
+	//
+	static set<int> set_intersect(set<int> s1, set<int> s2){
+		set<int> ret;
+		set_intersection(s1.begin(),s1.end(),s2.begin(),s2.end(), inserter(ret, ret.begin()));
+		return ret;
+	}
+
+	//
+	static set<int> set_differ(set<int> s1, set<int> s2){
+		set<int> ret;
+		set_difference(s1.begin(),s1.end(),s2.begin(),s2.end(), inserter(ret, ret.begin()));
+		return ret;
+	}
+
+	// UNWEIGHTED
+	static PairSetInt find_max_uncovered(vector<set<int>> S, set<int> R){
+	    int max_inter_len = 0;
+	    int max_inter_id = -1;
+	    for (int i = 0; i < S.size(); i++){
+	    	// don't need copy constructor
+	    	set<int> s = set_intersect (S[i], R);	// itersection
+	        int inter_len = s.size();
+	        if (max_inter_len < inter_len){
+	            max_inter_len = inter_len;
+	            max_inter_id = i;
+	        }
+	    }
+
+	    if (max_inter_id == -1)
+	        return PairSetInt(set<int>(), -1);
+	    else
+	        return PairSetInt(S[max_inter_id], max_inter_id);
+	}
+
+	// (FOR PUBLIC USE)
+	// timestamp = 0, S: positive sets, U:universe (compute from S)
+	static PairSetListInt find_init_cover(vector<set<int>> S, int num_element){
+	    // compute U
+	    int marked[num_element] = {0};
+	    for (set<int> a_set : S)
+	        for (int item : a_set)
+	            marked[item] = 1;
+
+	    set<int> U;
+	    for (int item = 0; item < num_element; item++)
+	    	if (marked[item] == 1)
+	    		U.insert(item);
+	    cout<<"len(S) = " << S.size()<<endl;
+	    cout<<"len(U) = " << U.size()<<endl;
+
+	    set<int> R;	// = new Hashset<int>(U); // deep copy
+
+	    vector<set<int>> C_0;
+
+	    // NON-BOOTSTRAP
+	    // sort S
+	    __int64 start = Timer::get_millisec();
+
+	    sort(S.begin(), S.end());	// sort decending by .size()
+
+	    cout<<"Sorting - elapsed : " << (Timer::get_millisec() - start) <<endl;
+
+	    start = Timer::get_millisec();
+	    while (R.size() != 0){
+	        PairSetInt temp = find_max_uncovered(S, R);
+	        set<int> S_i = temp.s;
+	        int max_inter_id = temp.i;
+	        if (max_inter_id == -1)
+	            break;
+
+	        C_0.push_back(S_i);
+//	        R.removeAll(S_i);			// set difference
+	        R = set_differ(U, S_i);		//
+
+	        S.erase(S.begin() + max_inter_id);
+	    }
+
+	    cout<<"find_init_cover - elapsed : " << (Timer::get_millisec() - start) <<endl;
+	    cout<<"len(R) = " << R.size() <<endl;
+	    cout<<"Cover.len: " << C_0.size()<<endl;
+	    int num_cloaked_users = U.size() - R.size();
+
+	    int total_C_0 = 0;
+	    for (set<int> a_set : C_0)
+	    	total_C_0 += a_set.size();
+	    cout<<"Total elements in C_0 = " << total_C_0<<endl;
+
+	    return new PairSetListInt(C_0, num_cloaked_users);
+	}
+
+	// (FOR PUBLIC USE)
+	// timestamp > 0, S: positive sets, U:universe (compute from S), C_0: cover_set from prev.step
+	static PairSetListInt find_next_cover(vector<set<int>> S, int num_element, vector<set<int>> C_0, int k_global){
+	    // compute U
+		int marked[num_element] = {0};
+	    for (set<int> a_set : S)
+	        for (int item : a_set)
+	            marked[item] = 1;
+
+	    set<int> U;
+	    for (int item = 0; item < num_element; item++)
+	    	if (marked[item] == 1)
+	    		U.insert(item);
+	    cout<<"len(S) = " << S.size()<<endl;
+	    cout<<"len(U) = " << U.size()<<endl;
+
+	    set<int> R; // = new Hashset<int>(U);	// deep copy
+
+	    // result
+	    vector<set<int>> C_1;
+	    int total_W = 0;
+
+	    // compute weights
+	    __int64 start = Timer::get_millisec();
+
+	    vector<vector<int>> list_pairs;     // list of lists, for MMB/MAB checking
+
+	    vector<int> W;
+
+	    for (int i = 0; i < S.size(); i++){
+
+	        W.push_back(0);
+//	        list_pairs.add(new Arrayvector<int>());   		//have list_pairs[i]
+	        for (int j = 0; j < C_0.size(); j++){
+	        	set<int> c_set;
+
+	        	set<int> s_set = S[i];	// copy constructor (moved to here)
+	        	c_set = set_intersect(s_set, C_0[j]);				// intersection
+
+	            int inter_len = s_set.size();
+	            if (inter_len > 0 && inter_len < k_global)
+	                W[i] = W[i] + 1;
+	            if (inter_len >= k_global)
+	                list_pairs[i].push_back(j);
+	        }
+	    }
+	    cout<<"Computing W - elapsed : " << (Timer::get_millisec() - start) <<endl;
+
+	    // sort W
+	    start = Timer::get_millisec();
+
+//	    z = sorted(zip(W,S,list_pairs))     //ZIP: simultaneous sorting --> index sort (by W)
+	    IndexSorter<int> is = new IndexSorter<int>(W);
+		is.sort();
+		int[] idx = is.getIndexes();
+
+//		W_temp, S_temp, list_pairs_temp = zip(*z)
+		vector<int> W_temp = new Arrayvector<int>();
+		vector<set<int>> S_temp = new Arrayvector<set<int>>();
+		vector<vector<int>> list_pairs_temp = new Arrayvector<vector<int>>();
+		for (int id = 0; id < idx.length; id++){
+			W_temp.add(W[idx[id]));
+			S_temp.add(new Hashset<int>(S[idx[id])));	// copy constructor
+			list_pairs_temp.add(list_pairs[idx[id]));
+		}
+
+
+	    int i = 0;
+	    while (W_temp[i) == 0 && i < W_temp.size())
+	        i = i + 1;
+	    System.out.println("i = " + i);
+
+	    W.clear();
+	    S.clear();
+//	    System.out.println("W_temp.size = " + W_temp.size());
+//	    System.out.println("W_temp[last] = " + W_temp[W_temp.size()-1));
+//	    System.out.println("S_temp.size = " + S_temp.size());
+
+////	    list_pairs.clear();		// WRONG !
+//	    for (int id = 0; id < i; id++){
+//	    	W.add(W_temp[id));
+//	    	S.add(S_temp[id));
+//	    	list_pairs.add(list_pairs[id));
+//	    }
+
+	    W = W_temp.subList(0, i);
+	    S = S_temp.subList(0, i);
+	    list_pairs = list_pairs_temp.subList(0, i);
+
+
+		System.out.println("Sorting - elapsed :" + (System.currentTimeMillis() - start));
+
+	    // compute C_1
+		start = System.currentTimeMillis();
+
+//	    checking_pairs = []
+	    while (R.size() != 0){
+	    	PairSetInt temp = find_max_uncovered(S, R);
+	        set<int> S_i = temp.s;
+	        int min_element = temp.i;
+	        if (min_element == -1)
+	            break;
+
+	        C_1.add(S_i);
+	        total_W = total_W + W[min_element);
+	        R.removeAll(S_i);		// set difference
+
+	        S.remove(min_element);
+	        W.remove(min_element);
+//	        checking_pairs.append(list_pairs[min_element])  // synchronized with C_1 !
+//	        del list_pairs[min_element]
+	    }
+
+	    System.out.println("find_next_cover - elapsed :" + (System.currentTimeMillis() - start));
+	    System.out.println("len(R) =" + R.size());
+	    System.out.println("Cover.len: " + C_1.size());
+//	    System.out.println("checking_pairs.len: " + checking_pairs.size());
+	    int num_cloaked_users = U.size() - R.size();
+	    int total_C_1 = 0;
+	    for (set<int> a_set : C_1)
+	    	total_C_1 += a_set.size();
+	    System.out.println("Total elements in C_0 =" + total_C_1);
+	    System.out.println("Total weight = " + total_W);
+
+	    return new PairSetListInt(C_1, num_cloaked_users);		//, checking_pairs
+	}
 };
 
 #endif /* HELPER_H_ */

@@ -10,6 +10,7 @@
 #include <map>
 #include <vector>
 #include <set>
+#include <stdlib.h>     /* system, NULL, EXIT_FAILURE */
 
 #include "map_loader.h"
 #include "query_loader.h"
@@ -177,7 +178,7 @@ public:
 			for (EdgeSegment e : mesh){
 				if (map_data.is_full_edge(e) == true){   // FULL edge
 //					if (! full_edge_meshes.containsKey(e.cur_edge_id))
-//						full_edge_meshes.put(e.cur_edge_id, new Arrayvector<Integer>());
+//						full_edge_meshes.put(e.cur_edge_id, new Arrayvector<int>());
 					full_edge_meshes[e.cur_edge_id].push_back(obj_id);
 				}
 				else                                       // PARTIAL edge
@@ -250,6 +251,101 @@ public:
 		}
 
 		f.close();
+	}
+
+	//
+	void find_cloaking_sets(int timestamp, map<int, vector<EdgeSegment>> expanding_list){
+
+		//1. find positive and negative cliques
+//		positive_mc_set = new Arrayvector<set<int>>();
+		vector<set<int>> negative_mc_set;
+		for (set<int> clique : mc_set){
+			if (clique.size() == 1)
+				continue;
+			//
+			double max_min_length = 0;
+			int max_k_anom = 0;
+			vector<Query> query_list;
+			for (int obj_id : clique){
+				Query query = query_log.trajs[obj_id][timestamp];
+				query_list.push_back(query);
+				if (max_min_length < query.min_length)
+					max_min_length = query.min_length;
+				if (max_k_anom < query.k_anom)
+					max_k_anom = query.k_anom;
+			}
+			//compute length of mesh
+			vector<EdgeSegment> mesh;
+			for (int obj_id : clique){
+//                mesh = EdgeSegmentSet.union(mesh, expanding_list[obj_id])
+				// NEW (trial)
+				mesh.insert(mesh.end(), expanding_list[obj_id].begin(), expanding_list[obj_id].end());
+			}
+			// NEW (trial)
+			mesh = GeomUtil::clean_fixed_expanding(mesh);
+
+			double clique_len = EdgeSegmentSet::length(mesh);
+
+			//
+			if (clique.size() >= max_k_anom &&
+					clique_len >= max_min_length * map_data.total_map_len)
+				positive_mc_set.push_back(clique);
+			else if (clique.size() > 2)
+				negative_mc_set.push_back(clique);
+		}
+
+		//2.convert negative cliques (heuristically)
+		vector<set<int>> new_negative_mc_set;
+
+		for (set<int> clique : negative_mc_set){
+			vector<Query >query_list;
+			for (int obj_id : clique){
+				Query query = query_log.trajs[obj_id][timestamp];
+				query_list.push_back(query);
+			}
+			//sort
+			sort(query_list.begin(), query_list.end());	// sort by .k_anom
+
+			while (true){
+				query_list.pop_back();    //remove the last
+				if (query_list.size() == 0)
+					break;
+				double max_min_length = 0;
+				for (Query query : query_list)
+					if (max_min_length < query.min_length)
+						max_min_length = query.min_length;
+				//compute length of mesh
+				vector<EdgeSegment> mesh;
+				for (Query query : query_list){
+//                    mesh = EdgeSegmentSet.union(mesh, expanding_list[query.obj_id])
+					// NEW (trial)
+					mesh.insert(mesh.end(), expanding_list[query.obj_id].begin(), expanding_list[query.obj_id].end());
+				}
+				// NEW (trial)
+				mesh = GeomUtil::clean_fixed_expanding(mesh);
+
+
+				double clique_len = EdgeSegmentSet::length(mesh);
+
+				//
+				if (query_list.size() >= query_list[query_list.size()-1].k_anom &&
+						clique_len >= max_min_length * map_data.total_map_len)
+					break;
+			}
+
+			//
+			if (query_list.size() > 1){
+				set<int> set;
+				for (Query query : query_list)
+					set.insert(query.obj_id);
+				new_negative_mc_set.push_back(set);
+			}
+		}
+		//3.
+//        print "positive_mc_set =", positive_mc_set
+//        print "new_negative_mc_set =", new_negative_mc_set
+
+		positive_mc_set.insert(positive_mc_set.end(), new_negative_mc_set.begin(), new_negative_mc_set.end());
 	}
 
 };

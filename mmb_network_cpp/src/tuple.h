@@ -8,6 +8,9 @@
 #ifndef TUPLE_H_
 #define TUPLE_H_
 
+#include <vector>
+#include <set>
+
 #include "geom_util.h"
 
 ////
@@ -143,5 +146,35 @@ public:
 		list_edges = _list_edges;
 	}
 };
+
+////
+class PairSetInt {
+public:
+	set<int> s;
+	int i;
+
+	//
+	PairSetInt(set<int> _s, int _i) {
+		s = _s;
+		i = _i;
+	}
+
+
+};
+
+////
+class PairSetListInt {
+public:
+	vector<set<int>> set_list;
+	int i;
+
+	//
+	PairSetListInt(vector<set<int>> _set_list, int _i) {
+		set_list = _set_list;
+		i = _i;
+	}
+};
+
+
 
 #endif /* TUPLE_H_ */

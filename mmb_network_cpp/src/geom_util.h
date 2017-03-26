@@ -73,7 +73,14 @@ public:
 	double dist = 0.0;
 
 	//
-
+	bool operator < (const Query& arg0) const
+	{
+		if (k_anom < arg0.k_anom)
+			return -1;
+		if (k_anom > arg0.k_anom)
+			return 1;
+		return 0;
+	}
 
 };
 
