@@ -12,9 +12,25 @@
 #include <set>
 
 using namespace std;
+
+struct TSetComparator {
+	bool operator()(set<int> s1, set<int> s2) {
+		return (s1.size() < s2.size());
+	}
+} SetComparator;
+
+vector<int> index_sort(vector<int> x){
+	vector<int> y(x.size());
+	iota(y.begin(), y.end(), 0);
+	auto comparator = [&x](int a, int b){ return x[a] < x[b]; };
+	sort(y.begin(), y.end(), comparator);
+
+	return y;
+}
+
 int main() {
 
-	////
+	//// TEST set intersection/difference over vectors
 //	int first[] = { 5, 10, 15, 20, 25 };
 //	int second[] = { 50, 40, 30, 20, 10 };
 //	std::vector<int> v(10);                      // 0  0  0  0  0  0  0  0  0  0
@@ -32,7 +48,7 @@ int main() {
 //		std::cout << ' ' << *it;
 //	std::cout << '\n';
 
-	/////////// intersection/difference
+/////////// TEST set intersection/difference
 //	set<int> s1;
 //	set<int> s2;
 //
@@ -60,31 +76,37 @@ int main() {
 //	for (set<int>::iterator it = difference.begin(); it != difference.end(); ++it)
 //		std::cout << ' ' << *it;
 
-	//// sort list of sets by size
+	//// TEST sort list of sets by size
+//	set<int> s1;
+//	set<int> s2;
+//	set<int> s3;
+//
+//	s1.insert(1);
+//	s1.insert(2);
+//	s1.insert(3);
+//	s1.insert(4);
+//
+//	s2.insert(1);
+//	s2.insert(6);
+//
+//	s3.insert(1);
+//	s3.insert(6);
+//	s3.insert(5);
+//	vector<set<int>> set_list;
+//	set_list.push_back(s1);
+//	set_list.push_back(s2);
+//	set_list.push_back(s3);
+//
+////	sort(set_list.begin(), set_list.end();		// descending
+//	sort(set_list.begin(), set_list.end(), SetComparator);	// ascending
+//	for (set<int> s : set_list)
+//		cout << s.size() << " ";
 
-	set<int> s1;
-	set<int> s2;
-	set<int> s3;
-
-	s1.insert(1);
-	s1.insert(2);
-	s1.insert(3);
-	s1.insert(4);
-
-	s2.insert(1);
-	s2.insert(6);
-
-	s3.insert(1);
-	s3.insert(6);
-	s3.insert(5);
-	vector<set<int>> set_list;
-	set_list.push_back(s1);
-	set_list.push_back(s2);
-	set_list.push_back(s3);
-
-	sort(set_list.begin(), set_list.end());
-	for(set<int> s : set_list)
-		cout<<s.size() << " ";
+	//// TEST index sort
+	vector<int> x = {15, 3, 0, 20};
+	vector<int> y = index_sort(x);
+	for (int v : y)
+		cout << v << ' ';
 
 	return 0;
 }

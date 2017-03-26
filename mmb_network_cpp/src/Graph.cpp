@@ -21,7 +21,7 @@
 
 using namespace std;
 
-Option option = Option("mmb.conf");
+Option option = Option("mmb.conf");		// read config
 
 class Graph{
 public:
@@ -41,7 +41,7 @@ public:
 	//
 	vector<set<int>> cover_set;     // list of sets
 	vector<vector<EdgeSegment>> cover_mesh;   // list of meshes,
-							// checked agaist Option.S_GLOBAL at the end of solve_new_queries()
+							// checked agaist option.S_GLOBAL at the end of solve_new_queries()
 //    cover_mesh_mmb;
 //    //
 	vector<set<int>> new_cover_set;     // list of sets
@@ -348,6 +348,44 @@ public:
 		positive_mc_set.insert(positive_mc_set.end(), new_negative_mc_set.begin(), new_negative_mc_set.end());
 	}
 
+	//
+	void write_results_to_files(int timestamp){
+
+		string config_name = option.QUERY_FILE.substr(0, option.QUERY_FILE.length()-4) + "-" +
+				Formatter::formatDouble("%.1f", option.DISTANCE_CONSTRAINT) + "-" + Formatter::formatDouble("%.1f", option.MAX_SPEED);
+
+		//1. this.cover_set
+		string filename = option.RESULT_PATH + config_name + "_" + to_string(option.K_GLOBAL) + "_" +
+				  Formatter::formatDouble("%.2f", option.INIT_COVER_KEEP_RATIO) + "_cover_set" + "_" + to_string(timestamp) + ".out";
+		ofstream f(filename, ofstream::out);
+		for (set<int> clique : cover_set){
+			for (int obj_id : clique)
+				f << obj_id << ",";
+			f << "---";
+			for (int obj_id : clique)
+				f << query_log.trajs[obj_id][timestamp].k_anom << ",";
+			f << "\n";
+		}
+		f.close();
+
+
+		//5. this.user_mesh (only print edge_id) for attacks (in trace_generator)
+		filename = option.RESULT_PATH + "/" + config_name + "_edge_cloaking_" + to_string(timestamp) + ".out";
+		f = ofstream(filename);
+		for (map<int, vector<EdgeSegment>>::iterator it = user_mesh.begin(); it != user_mesh.end(); it++){
+			int obj_id = it->first;
+			vector<EdgeSegment> mesh = it->second;
+
+			int cur_edge_id = query_log.trajs[obj_id][timestamp].cur_edge_id;
+			f << obj_id << "-" << cur_edge_id << "\n";
+			for (EdgeSegment seg : mesh)
+				f << seg.cur_edge_id << ",";
+			f << "\n";
+		}
+
+		f.close();
+	}
+
 };
 
 int main(){
@@ -389,7 +427,7 @@ int main(){
 //	cout<< seg.start_x << " "<< seg.start_y << " "<< seg.end_x << " "<< seg.end_y <<endl;
 
 
-	// TEST Option
+	// TEST option
 
 
 

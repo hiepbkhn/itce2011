@@ -13,6 +13,8 @@
 #include <iostream>
 #include <fstream>
 
+#include "helper.h"
+
 //#include <boost/format.hpp>
 
 using namespace std;
@@ -179,7 +181,7 @@ public:
 	}
 
 	//
-	static string getProfileName(){
+	static string getProfileName(Option option){
 		map<int, string> num_user_dict;
 		num_user_dict[1000] =  "1k";
 		num_user_dict[2000] =  "2k";
@@ -187,14 +189,21 @@ public:
 		num_user_dict[10000] =  "10k";
 		num_user_dict[20000] =  "20k";
 
+		string s_MIN_LENGTH_LOW = Formatter::formatDouble("%.4f", option.MIN_LENGTH_LOW);
+		s_MIN_LENGTH_LOW = s_MIN_LENGTH_LOW.substr(2, s_MIN_LENGTH_LOW.size()-2);
 
-//		string PROFILE_NAME = MAP_NAME + "_" + num_user_dict[N_USERS] + "_" + SPEED_PROFILE + "_" + K_MIN + "_" + K_MAX + "_" +
-//	                string.format("%.4f", MIN_LENGTH_LOW).substring(2) + "_" + string.format("%.4f", MIN_LENGTH_HIGH).substring(2) + "_" +
-//	                MIN_TRAIN_GROUP + "_" + MAX_TRAIN_GROUP + "_" +
-//	                MIN_N_TRAIN_PATH + "_" + MAX_N_TRAIN_PATH + "_" + MIN_N_RANDOM_TRACE + "_" + MAX_N_RANDOM_TRACE;
-//		return PROFILE_NAME;
+		string s_MIN_LENGTH_HIGH = Formatter::formatDouble("%.4f", option.MIN_LENGTH_HIGH);
+		s_MIN_LENGTH_HIGH = s_MIN_LENGTH_HIGH.substr(2, s_MIN_LENGTH_HIGH.size()-2);
 
-		return "abc";
+		string PROFILE_NAME = option.MAP_NAME + "_" + num_user_dict[option.N_USERS] + "_" +
+					Formatter::formatDouble("%.1f", option.SPEED_PROFILE) + "_" +
+					to_string(option.K_MIN) + "_" + to_string(option.K_MAX) + "_" +
+					s_MIN_LENGTH_LOW + "_" + s_MIN_LENGTH_HIGH + "_" +
+	                to_string(option.MIN_TRAIN_GROUP) + "_" + to_string(option.MAX_TRAIN_GROUP) + "_" +
+					to_string(option.MIN_N_TRAIN_PATH) + "_" + to_string(option.MAX_N_TRAIN_PATH) + "_" +
+					to_string(option.MIN_N_RANDOM_TRACE) + "_" + to_string(option.MAX_N_RANDOM_TRACE);
+		return PROFILE_NAME;
+
 	}
 };
 

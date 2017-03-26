@@ -13,12 +13,33 @@
 #include <vector>
 #include <algorithm>
 #include <chrono>
+#include <stdio.h>
 
 #include "geom_util.h"
 #include "tuple.h"
 
 using namespace std;
 using namespace std::chrono;
+
+
+////
+class Formatter{
+public:
+	static string formatDouble(const char *format, double value){
+		char buff[20];
+		snprintf(buff, sizeof(buff), format, value);
+		string ret = buff;
+		return ret;
+	}
+
+};
+
+////
+struct TSetComparator {
+	bool operator()(set<int> s1, set<int> s2) {
+		return (s1.size() < s2.size());
+	}
+};
 
 ////
 class GeomUtil{
@@ -263,6 +284,16 @@ public:
 		return ret;
 	}
 
+	//
+	static vector<int> index_sort(vector<int> x){
+		vector<int> y(x.size());
+		iota(y.begin(), y.end(), 0);
+		auto comparator = [&x](int a, int b){ return x[a] < x[b]; };
+		sort(y.begin(), y.end(), comparator);
+
+		return y;
+	}
+
 	// UNWEIGHTED
 	static PairSetInt find_max_uncovered(vector<set<int>> S, set<int> R){
 	    int max_inter_len = 0;
@@ -299,7 +330,7 @@ public:
 	    cout<<"len(S) = " << S.size()<<endl;
 	    cout<<"len(U) = " << U.size()<<endl;
 
-	    set<int> R;	// = new Hashset<int>(U); // deep copy
+	    set<int> R(U);	// = new Hashset<int>(U); // deep copy
 
 	    vector<set<int>> C_0;
 
@@ -307,7 +338,8 @@ public:
 	    // sort S
 	    __int64 start = Timer::get_millisec();
 
-	    sort(S.begin(), S.end());	// sort decending by .size()
+	    TSetComparator SetComparator;
+	    sort(S.begin(), S.end(), SetComparator);	// sort ascending by .size()
 
 	    cout<<"Sorting - elapsed : " << (Timer::get_millisec() - start) <<endl;
 
@@ -321,7 +353,7 @@ public:
 
 	        C_0.push_back(S_i);
 //	        R.removeAll(S_i);			// set difference
-	        R = set_differ(U, S_i);		//
+	        R = set_differ(R, S_i);		//
 
 	        S.erase(S.begin() + max_inter_id);
 	    }
@@ -336,7 +368,7 @@ public:
 	    	total_C_0 += a_set.size();
 	    cout<<"Total elements in C_0 = " << total_C_0<<endl;
 
-	    return new PairSetListInt(C_0, num_cloaked_users);
+	    return PairSetListInt(C_0, num_cloaked_users);
 	}
 
 	// (FOR PUBLIC USE)
@@ -355,7 +387,7 @@ public:
 	    cout<<"len(S) = " << S.size()<<endl;
 	    cout<<"len(U) = " << U.size()<<endl;
 
-	    set<int> R; // = new Hashset<int>(U);	// deep copy
+	    set<int> R(U); // = new Hashset<int>(U);	// deep copy
 
 	    // result
 	    vector<set<int>> C_1;
@@ -375,7 +407,7 @@ public:
 	        for (int j = 0; j < C_0.size(); j++){
 	        	set<int> c_set;
 
-	        	set<int> s_set = S[i];	// copy constructor (moved to here)
+	        	set<int> s_set = S[i];					// Java: copy constructor (moved to here)
 	        	c_set = set_intersect(s_set, C_0[j]);				// intersection
 
 	            int inter_len = s_set.size();
@@ -390,49 +422,32 @@ public:
 	    // sort W
 	    start = Timer::get_millisec();
 
-//	    z = sorted(zip(W,S,list_pairs))     //ZIP: simultaneous sorting --> index sort (by W)
-	    IndexSorter<int> is = new IndexSorter<int>(W);
-		is.sort();
-		int[] idx = is.getIndexes();
+		vector<int> idx = index_sort(W);	// index sort (ascending)
 
-//		W_temp, S_temp, list_pairs_temp = zip(*z)
-		vector<int> W_temp = new Arrayvector<int>();
-		vector<set<int>> S_temp = new Arrayvector<set<int>>();
-		vector<vector<int>> list_pairs_temp = new Arrayvector<vector<int>>();
-		for (int id = 0; id < idx.length; id++){
-			W_temp.add(W[idx[id]));
-			S_temp.add(new Hashset<int>(S[idx[id])));	// copy constructor
-			list_pairs_temp.add(list_pairs[idx[id]));
+		vector<int> W_temp;
+		vector<set<int>> S_temp;
+		vector<vector<int>> list_pairs_temp;
+		for (int id = 0; id < idx.size(); id++){
+			W_temp.push_back(W[idx[id]]);
+			S_temp.push_back(S[idx[id]]);	// copy constructor
+			list_pairs_temp.push_back(list_pairs[idx[id]]);
 		}
 
 
 	    int i = 0;
-	    while (W_temp[i) == 0 && i < W_temp.size())
+	    while (W_temp[i] == 0 && i < W_temp.size())
 	        i = i + 1;
-	    System.out.println("i = " + i);
+	    cout<<"i = " << i;
 
-	    W.clear();
-	    S.clear();
-//	    System.out.println("W_temp.size = " + W_temp.size());
-//	    System.out.println("W_temp[last] = " + W_temp[W_temp.size()-1));
-//	    System.out.println("S_temp.size = " + S_temp.size());
-
-////	    list_pairs.clear();		// WRONG !
-//	    for (int id = 0; id < i; id++){
-//	    	W.add(W_temp[id));
-//	    	S.add(S_temp[id));
-//	    	list_pairs.add(list_pairs[id));
-//	    }
-
-	    W = W_temp.subList(0, i);
-	    S = S_temp.subList(0, i);
-	    list_pairs = list_pairs_temp.subList(0, i);
+	    W = vector<int>(W_temp.begin(), W_temp.begin() + i);
+	    S = vector<set<int>>(S_temp.begin(), S_temp.begin() + i);
+	    list_pairs = vector<vector<int>>(list_pairs_temp.begin(), list_pairs_temp.begin() + i);
 
 
-		System.out.println("Sorting - elapsed :" + (System.currentTimeMillis() - start));
+		cout<<"Sorting - elapsed : " + (Timer::get_millisec() - start) <<endl;
 
 	    // compute C_1
-		start = System.currentTimeMillis();
+		start = Timer::get_millisec();
 
 //	    checking_pairs = []
 	    while (R.size() != 0){
@@ -442,28 +457,29 @@ public:
 	        if (min_element == -1)
 	            break;
 
-	        C_1.add(S_i);
-	        total_W = total_W + W[min_element);
-	        R.removeAll(S_i);		// set difference
+	        C_1.push_back(S_i);
+	        total_W = total_W + W[min_element];
+//	        R.removeAll(S_i);		// set difference
+	        R = set_differ(R, S_i);
 
-	        S.remove(min_element);
-	        W.remove(min_element);
+	        S.erase(S.begin() + min_element);
+	        W.erase(W.begin() + min_element);
 //	        checking_pairs.append(list_pairs[min_element])  // synchronized with C_1 !
 //	        del list_pairs[min_element]
 	    }
 
-	    System.out.println("find_next_cover - elapsed :" + (System.currentTimeMillis() - start));
-	    System.out.println("len(R) =" + R.size());
-	    System.out.println("Cover.len: " + C_1.size());
+	    cout<<"find_next_cover - elapsed : " + (Timer::get_millisec() - start) <<endl;
+	    cout<<"len(R) = " << R.size()<<endl;
+	    cout<<"Cover.len: " << C_1.size()<<endl;
 //	    System.out.println("checking_pairs.len: " + checking_pairs.size());
 	    int num_cloaked_users = U.size() - R.size();
 	    int total_C_1 = 0;
 	    for (set<int> a_set : C_1)
 	    	total_C_1 += a_set.size();
-	    System.out.println("Total elements in C_0 =" + total_C_1);
-	    System.out.println("Total weight = " + total_W);
+	    cout<<"Total elements in C_0 = " << total_C_1<<endl;
+	    cout<<"Total weight = " << total_W<<endl;
 
-	    return new PairSetListInt(C_1, num_cloaked_users);		//, checking_pairs
+	    return PairSetListInt(C_1, num_cloaked_users);		//, checking_pairs
 	}
 };
 
