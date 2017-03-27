@@ -68,7 +68,7 @@ public:
 
     //
     // copied from EdgeSegmentSet.is_set_cover()
-    vector<int> find_partial_coverage(vector<PairEdgeSegInt> part_edges, Query query){
+    vector<int> find_partial_coverage(vector<PairEdgeSegInt>& part_edges, Query query){
         if (part_edges.size() == 0)
             return vector<int>();
 
@@ -82,6 +82,7 @@ public:
                 found = true;
                 break;
             }
+
             if (part_edges[mid].e.cur_edge_id > query.cur_edge_id){
                 hi = mid - 1;
                 if (hi < lo)
@@ -92,6 +93,7 @@ public:
                 if (lo > hi)
                     break;
             }
+
             mid = (lo + hi) / 2;
         }
 
@@ -105,6 +107,8 @@ public:
         hi = mid;
         while ((hi+1 < part_edges.size()) && (part_edges[hi+1].e.cur_edge_id == query.cur_edge_id))
             hi = hi + 1;
+        // DEBUG
+//        cout<<"hi-lo = "<<(hi-lo)<<endl;
 
         vector<int> result;
         for (int i = lo; i < hi+1; i++){
@@ -121,7 +125,7 @@ public:
     }
 
     //
-    bool is_reverse_existed(int u, int v, vector<PairInt> directed_edges){     //check (v,u) in directed_edges
+    bool is_reverse_existed(int u, int v, vector<PairInt>& directed_edges){     //check (v,u) in directed_edges
         //binary search
         int lo = 0;
         int hi = directed_edges.size() - 1;
@@ -165,7 +169,7 @@ public:
     }
 
     // build the Constraint Graph
-	PairIntList compute_edge_list(map<int, vector<EdgeSegment>> expanding_list, vector<Query> query_list){
+	PairIntList compute_edge_list(map<int, vector<EdgeSegment>>& expanding_list, vector<Query>& query_list){
 		int num_edges = 0;
 		vector<PairInt> list_edges;
 
@@ -196,6 +200,7 @@ public:
 		start = Timer::get_millisec();
 		sort(part_edges.begin(), part_edges.end());
 		cout<<"sort - elapsed : " << (Timer::get_millisec() - start) <<endl;
+		cout<<"part_edges.size = " << part_edges.size()<<endl;
 
 		//2.
 		start = Timer::get_millisec();
@@ -209,11 +214,12 @@ public:
 			}
 			//
 			vector<int> list_part = find_partial_coverage(part_edges, query);		// sorted_part_edges -> part_edges
-			for (int v : list_part)
-				directed_edges.push_back(PairInt(u, v));    //NOTE: maybe v = u
+			for (vector<int>::iterator v = list_part.begin(); v != list_part.end(); v++)
+				directed_edges.push_back(PairInt(u, (*v)));    //NOTE: maybe v = u
 		}
 
 		cout<<"directed_edges.len = " <<directed_edges.size() <<endl;
+//		cout<<"part_edges.size = " << part_edges.size()<<endl;				// same as before
 		cout<<"step 2 - elapsed : " << (Timer::get_millisec() - start) <<endl;
 
 		//sort
@@ -234,7 +240,7 @@ public:
 	}
 
 	// for mace_go.exe
-	void write_list_edges(vector<PairInt> list_edges){
+	void write_list_edges(vector<PairInt>& list_edges){
 		//
 		int max_edge_id = -1;
 		for (PairInt e : list_edges){
@@ -265,7 +271,7 @@ public:
 	}
 
 	//
-	void find_cloaking_sets(int timestamp, map<int, vector<EdgeSegment>> expanding_list){
+	void find_cloaking_sets(int timestamp, map<int, vector<EdgeSegment>>& expanding_list){
 
 		//1. find positive and negative cliques
 //		positive_mc_set = new Arrayvector<set<int>>();
@@ -402,17 +408,9 @@ public:
 		printf("The value returned was: %d.\n", ret);
 
 		ifstream f(option.MAXIMAL_CLIQUE_FILE_OUT);
-		vector<string> fstr;
-		while (!f.eof()){
-			string str;
-			f >> str;
-			if (str.size() == 0)
-				break;
-			fstr.push_back(str);
-		}
-		f.close();
 
-		for (string line : fstr){
+		string line;
+		while (getline(f, line)){
 			vector<string> node_list = Formatter::split(line, ' ');
 			if (node_list.size() < 2)
 				continue;
@@ -421,6 +419,7 @@ public:
 				set.insert(stoi(node));
 			mc_set.push_back(set);
 		}
+		f.close();
 
 		cout<<mc_set.size()<<endl;
 

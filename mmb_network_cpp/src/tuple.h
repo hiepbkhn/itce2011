@@ -134,7 +134,7 @@ public:
 	int num_edges;
 	vector<PairInt> list_edges;
 	//
-	PairIntList(int _num_edges, vector<PairInt> _list_edges) {
+	PairIntList(int _num_edges, vector<PairInt>& _list_edges) {
 		num_edges = _num_edges;
 		list_edges = _list_edges;
 	}
@@ -162,7 +162,7 @@ public:
 	int i;
 
 	//
-	PairSetListInt(vector<set<int>> _set_list, int _i) {
+	PairSetListInt(vector<set<int>>& _set_list, int _i) {
 		set_list = _set_list;
 		i = _i;
 	}

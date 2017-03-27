@@ -261,7 +261,7 @@ public:
     }
 
     //
-    static bool is_set_cover(Point point, vector<EdgeSegment> line_set){
+    static bool is_set_cover(Point point, vector<EdgeSegment>& line_set){
         if (line_set.size() == 0)
             return false;
 

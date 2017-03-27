@@ -226,7 +226,7 @@ public:
 	vector<EdgeSegment> compute_fixed_expanding(double x, double y, int cur_edge_id, double length);
 
 	//
-	vector<EdgeSegment> compute_mesh_expanding(vector<EdgeSegment> item_list, double length){
+	vector<EdgeSegment> compute_mesh_expanding(vector<EdgeSegment>& item_list, double length){
 		vector<EdgeSegment> result = item_list;
 		//1. call find_boundary_points()
 		vector<TripleDoubleInt> boundary_points = MMBMap::find_boundary_points(item_list);
@@ -283,7 +283,7 @@ public:
 		return false;
 	}
 	//
-	vector<EdgeSegment> compute_mesh_mbr(vector<Point> locations){
+	vector<EdgeSegment> compute_mesh_mbr(vector<Point>& locations){
 		vector<EdgeSegment> result;
 		//
 		double min_x = 100000000;
@@ -317,7 +317,7 @@ public:
 
 		return result;
 	}
-	static vector<TripleDoubleInt> find_boundary_points(vector<EdgeSegment> item_list){
+	static vector<TripleDoubleInt> find_boundary_points(vector<EdgeSegment>& item_list){
 		// WAY-2
 		vector<TripleDoubleInt> nodes;
 		vector<TripleDoubleInt> result;

@@ -184,7 +184,7 @@ public:
 
     //
 	static vector<EdgeSegment> clean_fixed_expanding(vector<EdgeSegment> result){
-		vector<EdgeSegment> new_result = result;
+		vector<EdgeSegment> new_result = result;	// copy
 
 		// 1. NORMALIZE each edge (left_low_x first)
 		for (vector<EdgeSegment>::iterator item = new_result.begin(); item != new_result.end(); item++)
@@ -263,14 +263,14 @@ public:
 
 
 	//
-	static vector<EdgeSegment> union_set(vector<EdgeSegment> set_1, vector<EdgeSegment> set_2){
+	static vector<EdgeSegment> union_set(vector<EdgeSegment>& set_1, vector<EdgeSegment>& set_2){
 		vector<EdgeSegment> result = set_1;
 		result.insert(result.end(), set_2.begin(), set_2.end());
 
 		return clean_fixed_expanding(result);
 	}
 
-	static vector<EdgeSegment> intersect_set(vector<EdgeSegment> set_1, vector<EdgeSegment> set_2){        //Note: set_1, set_2 are already sorted by (cur_edge_id, start_x,...)
+	static vector<EdgeSegment> intersect_set(vector<EdgeSegment>& set_1, vector<EdgeSegment>& set_2){        //Note: set_1, set_2 are already sorted by (cur_edge_id, start_x,...)
 		vector<EdgeSegment> result;
 		for (EdgeSegment item_1 : set_1)
 			for (EdgeSegment item_2 : set_2)
@@ -301,21 +301,21 @@ class WeightedSetCover {
 public:
 
 	//
-	static set<int> set_intersect(set<int> s1, set<int> s2){
+	static set<int> set_intersect(set<int>& s1, set<int>& s2){
 		set<int> ret;
 		set_intersection(s1.begin(),s1.end(),s2.begin(),s2.end(), inserter(ret, ret.begin()));
 		return ret;
 	}
 
 	//
-	static set<int> set_differ(set<int> s1, set<int> s2){
+	static set<int> set_differ(set<int>& s1, set<int>& s2){
 		set<int> ret;
 		set_difference(s1.begin(),s1.end(),s2.begin(),s2.end(), inserter(ret, ret.begin()));
 		return ret;
 	}
 
 	//
-	static vector<int> index_sort(vector<int> x){
+	static vector<int> index_sort(vector<int>& x){
 		vector<int> y(x.size());
 		iota(y.begin(), y.end(), 0);
 		auto comparator = [&x](int a, int b){ return x[a] < x[b]; };
@@ -325,7 +325,7 @@ public:
 	}
 
 	// UNWEIGHTED
-	static PairSetInt find_max_uncovered(vector<set<int>> S, set<int> R){
+	static PairSetInt find_max_uncovered(vector<set<int>>& S, set<int>& R){
 	    int max_inter_len = 0;
 	    int max_inter_id = -1;
 	    for (int i = 0; i < S.size(); i++){
@@ -346,7 +346,7 @@ public:
 
 	// (FOR PUBLIC USE)
 	// timestamp = 0, S: positive sets, U:universe (compute from S)
-	static PairSetListInt find_init_cover(vector<set<int>> S, int num_element){
+	static PairSetListInt find_init_cover(vector<set<int>>& S, int num_element){
 	    // compute U
 	    int marked[num_element] = {0};
 	    for (set<int> a_set : S)
@@ -360,7 +360,7 @@ public:
 	    cout<<"len(S) = " << S.size()<<endl;
 	    cout<<"len(U) = " << U.size()<<endl;
 
-	    set<int> R(U);	// = new Hashset<int>(U); // deep copy
+	    set<int> R = U;	// = new Hashset<int>(U); // deep copy
 
 	    vector<set<int>> C_0;
 
@@ -403,7 +403,7 @@ public:
 
 	// (FOR PUBLIC USE)
 	// timestamp > 0, S: positive sets, U:universe (compute from S), C_0: cover_set from prev.step
-	static PairSetListInt find_next_cover(vector<set<int>> S, int num_element, vector<set<int>> C_0, int k_global){
+	static PairSetListInt find_next_cover(vector<set<int>>& S, int num_element, vector<set<int>>& C_0, int k_global){
 	    // compute U
 		int marked[num_element] = {0};
 	    for (set<int> a_set : S)
@@ -417,7 +417,7 @@ public:
 	    cout<<"len(S) = " << S.size()<<endl;
 	    cout<<"len(U) = " << U.size()<<endl;
 
-	    set<int> R(U); // = new Hashset<int>(U);	// deep copy
+	    set<int> R = U; // = new Hashset<int>(U);	// deep copy
 
 	    // result
 	    vector<set<int>> C_1;
