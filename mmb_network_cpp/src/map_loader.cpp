@@ -29,16 +29,13 @@ void MMBMap::read_map(string path, string map_name){
 	max_x = -1000000000;
 	max_y = -1000000000;
 
-	while (!fin.eof()){
-		int node_id = 0;
-		int node_x;
-		int node_y;
-		string temp;
+	string line;
+	while (getline(fin, line)){
 
-		fin >> node_id;
-		fin >> node_x;
-		fin >> node_y;
-		fin >> temp;
+		vector<string> items = Formatter::split(line, ' ');
+		int node_id = stoi(items[0]);
+		int node_x = stoi(items[1]);
+		int node_y = stoi(items[2]);
 
 		nodes[node_id] = Node(node_id, node_x, node_y);
 		xy_to_node_id[PairInt(node_x, node_y)] = node_id;
@@ -72,18 +69,13 @@ void MMBMap::read_map(string path, string map_name){
 	cout<< "edgeFile = " << inputFile <<endl;
 	fin = ifstream(inputFile);
 
-	while (!fin.eof()){
-		int edge_id;
-		int edge_class;
-		int start_node_id;
-		int end_node_id;
-		string temp;
+	while (getline(fin, line)){
 
-		fin >> edge_id;
-		fin >> edge_class;
-		fin >> start_node_id;
-		fin >> end_node_id;
-		fin >> temp;
+		vector<string> items = Formatter::split(line, ' ');
+		int edge_id = stoi(items[0]);
+		int edge_class = stoi(items[1]);
+		int start_node_id = stoi(items[2]);
+		int end_node_id = stoi(items[3]);
 
 		// DEBUG
 //		cout<< edge_id << " " << start_node_id << " " << end_node_id <<endl;
@@ -161,17 +153,12 @@ vector<EdgeSegment> MMBMap::compute_fixed_expanding(double x, double y, int cur_
 	stack.push(SegItem(x, y, -1, -1, length, cur_edge_id, is_node));
 
 	while (stack.get_size() > 0){
-		// DEBUG
-//            stack.print_all()
-//            print "END OF LIST"
-		//
+
 		SegItem item = stack.get();
-//            if item.length == 0:
-//                result.append(item)
-//                continue
 
 		// case 1, is_node == True
 		if (item.is_node == true){
+
 			int node_id = get_next_node_id((int)item.x, (int)item.y);
 
 			for (int end_node_id : adj[node_id]){   //traverse adjacent edges...

@@ -241,7 +241,7 @@ public:
 			result.insert(result.end(), new_seg_set.begin(), new_seg_set.end());
 		}
 
-		result = GeomUtil::clean_fixed_expanding(result);
+		GeomUtil::clean_fixed_expanding(result);
 
 		return result;
 	}

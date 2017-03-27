@@ -187,11 +187,10 @@ public:
 		vector<EdgeSegment> new_result = result;
 
 		// 1. NORMALIZE each edge (left_low_x first)
-		for (EdgeSegment item : new_result)
-			item.normalize();
-		cout<<"step 1 - DONE.\n";
-		for(EdgeSegment e : new_result)
-				cout<<e.cur_edge_id<<"\t"<<e.start_x << "\t" << e.start_y << "\t" << e.end_x << "\t" << e.end_y<<endl;
+		for (vector<EdgeSegment>::iterator item = new_result.begin(); item != new_result.end(); item++)
+			(*item).normalize();
+
+//		cout<<"step 1 - DONE.\n";
 
 		// 2. SORT by cur_edge_id
 //        System.out.println("new_result.size = " + new_result.size());
@@ -204,7 +203,9 @@ public:
 //        	System.out.println(String.format("%15d %8.2f %10.2f %10.2f %10.2f %10.2f", item.cur_edge_id, EdgeSegment.length(item),
 //                item.start_x, item.start_y, item.end_x, item.end_y));
 
-		cout<<"step 2 - DONE.\n";
+//		cout<<"step 2 - DONE.\n";
+//		for(EdgeSegment e : new_result)
+//			cout<<e.cur_edge_id<<"\t"<<e.start_x << "\t" << e.start_y << "\t" << e.end_x << "\t" << e.end_y<<endl;
 
 		// 3. REMOVE duplicates
 		int cur = 0;
@@ -221,7 +222,8 @@ public:
 				cur += 1;
 		}
 
-		cout<<"step 3 - DONE.\n";
+//		cout<<"step 3 - DONE.\n";
+//		cout<<"new_result.size() = " <<new_result.size()<<endl;
 
 		// DEBUG
 //        System.out.println("AFTER removing duplicates");
@@ -243,7 +245,8 @@ public:
 			else
 				cur += 1;
 		}
-		cout<<"step 4 - DONE.\n";
+//		cout<<"step 4 - DONE.\n";
+//		cout<<"new_result.size() = " <<new_result.size()<<endl;
 
 		// DEBUG
 //        print "length(new_result) = ", length(new_result)

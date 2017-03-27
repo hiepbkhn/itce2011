@@ -22,7 +22,7 @@ public:
 	MMBMap map_data;
 
 	map<int, map<int, Query>> trajs;     //dict of dicts [node][timestamp]
-	map<int, vector<Query>> frames;  //dict of lists
+	map<int, vector<Query>> frames;  //dict of lists [timestamp]
 
 	double max_speed = 0;
 
@@ -109,8 +109,8 @@ public:
 					k_anom, min_length, option.DISTANCE_CONSTRAINT));
 
 			// DEBUG
-			if (obj_id == 0 && timestamp == 0)
-				cout<<obj_id<<" "<< x<<" "<< y<<" "<< timestamp<<" "<< next_node_x<<" "<< next_node_y<<" "<<k_anom<<" "<< min_length<<endl;
+//			if (obj_id == 0 && timestamp == 0)
+//				cout<<obj_id<<" "<< x<<" "<< y<<" "<< timestamp<<" "<< next_node_x<<" "<< next_node_y<<" "<<k_anom<<" "<< min_length<<endl;
 
 			//
 			if (max_speed < speed)
