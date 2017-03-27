@@ -15,7 +15,7 @@ void MMBMap::read_map(string path, string map_name){
 
 	// 1. NODES
 	string inputFile = path + map_name + ".node.txt";
-	cout<< "inputFile = " << inputFile <<endl;
+	cout<< "nodeFile = " << inputFile <<endl;
 	ifstream fin(inputFile);
 
 	// Verify that the file has been successfully opened.
@@ -23,6 +23,11 @@ void MMBMap::read_map(string path, string map_name){
 		cout << "Cannot open file.\n";
 		return;
 	}
+
+	min_x = 1000000000;
+	min_y = 1000000000;
+	max_x = -1000000000;
+	max_y = -1000000000;
 
 	while (!fin.eof()){
 		int node_id = 0;
@@ -39,7 +44,7 @@ void MMBMap::read_map(string path, string map_name){
 		xy_to_node_id[PairInt(node_x, node_y)] = node_id;
 
 		// DEBUG
-        cout<< node_id << " " << node_x << " " << node_y << " " << temp <<endl;
+//        cout<< node_id << " " << node_x << " " << node_y << " " << temp <<endl;
 
 		//
 		if (min_x > node_x)
@@ -64,7 +69,7 @@ void MMBMap::read_map(string path, string map_name){
 
 	// 2. EDGES
 	inputFile = path + map_name + ".edge.txt";
-	cout<< "inputFile = " << inputFile <<endl;
+	cout<< "edgeFile = " << inputFile <<endl;
 	fin = ifstream(inputFile);
 
 	while (!fin.eof()){
@@ -81,7 +86,7 @@ void MMBMap::read_map(string path, string map_name){
 		fin >> temp;
 
 		// DEBUG
-		cout<< edge_id << " " << start_node_id << " " << end_node_id <<endl;
+//		cout<< edge_id << " " << start_node_id << " " << end_node_id <<endl;
 
 		// CHECK
 		if (start_node_id == end_node_id)
@@ -184,8 +189,8 @@ vector<EdgeSegment> MMBMap::compute_fixed_expanding(double x, double y, int cur_
 											 remaining_len, edge_id, true));
 
 				}else{
-					int end_x = (int) (item.x + item.length * (nodes[end_node_id].x - item.x) / edge_len);
-					int end_y = (int) (item.y + item.length * (nodes[end_node_id].y - item.y) / edge_len);
+					double end_x = item.x + item.length * (nodes[end_node_id].x - item.x) / edge_len;
+					double end_y = item.y + item.length * (nodes[end_node_id].y - item.y) / edge_len;
 					result.push_back(EdgeSegment(nodes[node_id].x, nodes[node_id].y,
 										  end_x, end_y,
 										  node_pair_to_edge[PairInt(node_id, end_node_id)] ));
@@ -210,8 +215,8 @@ vector<EdgeSegment> MMBMap::compute_fixed_expanding(double x, double y, int cur_
 										 remaining_len, edge_id, true));
 				}
 				else{
-					int end_x = (int) (item.x + item.length * (nodes[end_node_id].x - item.x) / segment_len);
-					int end_y = (int) (item.y + item.length * (nodes[end_node_id].y - item.y) / segment_len);
+					double end_x = item.x + item.length * (nodes[end_node_id].x - item.x) / segment_len;
+					double end_y = item.y + item.length * (nodes[end_node_id].y - item.y) / segment_len;
 					result.push_back(EdgeSegment(item.x, item.y,
 										  end_x, end_y,
 										  item.cur_edge_id));
@@ -220,13 +225,6 @@ vector<EdgeSegment> MMBMap::compute_fixed_expanding(double x, double y, int cur_
 		}
 	}
 
-	// DEBUG
-//        print "stack.max_size", stack.max_size
-//
-//        print "length(result) = ", length(result)
-//        for item in result:
-//            print "%15d %8.2f %10.2f %10.2f %10.2f %10.2f" % (item.cur_edge_id, EdgeSegment.length(item), \
-//                item.start_x, item.start_y, item.end_x, item.end_y)
 
 	return result;
 }

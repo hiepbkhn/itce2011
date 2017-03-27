@@ -14,12 +14,18 @@
 #include <algorithm>
 #include <chrono>
 #include <stdio.h>
+#include <string>
+#include <sstream>
+#include <vector>
+#include <iterator>
 
 #include "geom_util.h"
 #include "tuple.h"
 
 using namespace std;
-using namespace std::chrono;
+using namespace chrono;
+
+
 
 
 ////
@@ -30,6 +36,19 @@ public:
 		snprintf(buff, sizeof(buff), format, value);
 		string ret = buff;
 		return ret;
+	}
+
+	//
+	static vector<string> split(const string &s, char delim) {
+	    vector<string> elems;
+
+	    stringstream ss;
+		ss.str(s);
+		string item;
+		while (getline(ss, item, delim))
+			elems.push_back(item);
+
+	    return elems;
 	}
 
 };
@@ -170,6 +189,9 @@ public:
 		// 1. NORMALIZE each edge (left_low_x first)
 		for (EdgeSegment item : new_result)
 			item.normalize();
+		cout<<"step 1 - DONE.\n";
+		for(EdgeSegment e : new_result)
+				cout<<e.cur_edge_id<<"\t"<<e.start_x << "\t" << e.start_y << "\t" << e.end_x << "\t" << e.end_y<<endl;
 
 		// 2. SORT by cur_edge_id
 //        System.out.println("new_result.size = " + new_result.size());
@@ -181,6 +203,8 @@ public:
 //        for (EdgeSegment item : new_result)
 //        	System.out.println(String.format("%15d %8.2f %10.2f %10.2f %10.2f %10.2f", item.cur_edge_id, EdgeSegment.length(item),
 //                item.start_x, item.start_y, item.end_x, item.end_y));
+
+		cout<<"step 2 - DONE.\n";
 
 		// 3. REMOVE duplicates
 		int cur = 0;
@@ -196,6 +220,8 @@ public:
 			else
 				cur += 1;
 		}
+
+		cout<<"step 3 - DONE.\n";
 
 		// DEBUG
 //        System.out.println("AFTER removing duplicates");
@@ -217,6 +243,7 @@ public:
 			else
 				cur += 1;
 		}
+		cout<<"step 4 - DONE.\n";
 
 		// DEBUG
 //        print "length(new_result) = ", length(new_result)

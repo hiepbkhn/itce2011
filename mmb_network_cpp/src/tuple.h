@@ -44,7 +44,7 @@ public:
 	}
 
 	// for map<PairDouble,..>
-	bool operator <(const PairInt& rhs) const{
+	bool operator <(const PairDouble& rhs) const{
 		return x * 1E10 + y < rhs.x * 1E10 + rhs.y;
 	}
 
@@ -83,21 +83,18 @@ public:
 	bool operator < (const TripleDoubleInt& rhs) const
 	{
 		if (v0 < rhs.v0)
-			return -1;
-		else if (v0 > rhs.v0)
-			return 1;
+			return true;
+		else if (v0 == rhs.v0){
 
-		if (v1 < rhs.v1)
-			return -1;
-		else if (v1 > rhs.v1)
-			return 1;
+			if (v1 < rhs.v1)
+				return true;
+			else if (v1 == rhs.v1){
 
-		if (v2 < rhs.v2)
-			return -1;
-		else if (v2 > rhs.v2)
-			return 1;
-
-		return 0;
+				if (v2 < rhs.v2)
+					return true;
+			}
+		}
+		return false;
 	}
 };
 
@@ -127,11 +124,7 @@ public:
 
 	bool operator < (const PairEdgeSegInt& arg0) const
 	{
-		if (e.cur_edge_id < arg0.e.cur_edge_id)
-			return -1;
-		if (e.cur_edge_id > arg0.e.cur_edge_id)
-			return 1;
-		return 0;
+		return e.cur_edge_id < arg0.e.cur_edge_id;
 	}
 };
 

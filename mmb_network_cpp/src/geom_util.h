@@ -70,16 +70,33 @@ public:
 	//
 	int k_anom = 0;
 	double min_length = 0.0;
-	double dist = 0.0;
+	double dist = 0.0;			// distance constraint
+
+	//
+	Query(){
+
+	}
+
+	//
+	Query(int _obj_id, double _x, double _y, int _timestamp, int _next_node_x, int _next_node_y,
+			int _next_node_id, int _cur_edge_id, int _k_anom, double _min_length, double _dist) {
+		obj_id = _obj_id;
+		x = _x;
+		y = _y;
+		timestamp = _timestamp;
+		next_node_x = _next_node_x;
+		next_node_y = _next_node_y;
+		next_node_id = _next_node_id;
+		cur_edge_id = _cur_edge_id;
+		k_anom = _k_anom;
+		min_length = _min_length;
+		dist = _dist;
+	}
 
 	//
 	bool operator < (const Query& arg0) const
 	{
-		if (k_anom < arg0.k_anom)
-			return -1;
-		if (k_anom > arg0.k_anom)
-			return 1;
-		return 0;
+		return k_anom < arg0.k_anom;
 	}
 
 };
@@ -167,6 +184,7 @@ public:
 			double temp = start_x;
 			start_x = end_x;
 			end_x = temp;
+
 			temp = start_y;
 			start_y = end_y;
 			end_y = temp;
@@ -199,31 +217,29 @@ public:
 	bool operator < (const EdgeSegment& arg0) const
 	{
 		if (cur_edge_id < arg0.cur_edge_id)
-			return -1;
-		else if (cur_edge_id > arg0.cur_edge_id)
-			return 1;
+			return true;
+		else if (cur_edge_id == arg0.cur_edge_id){
 
-		if (start_x < arg0.start_x)
-			return -1;
-		else if (start_x > arg0.start_x)
-			return 1;
+			if (start_x < arg0.start_x)
+				return true;
+			else if (start_x == arg0.start_x){
 
-		if (start_y < arg0.start_y)
-			return -1;
-		else if (start_y > arg0.start_y)
-			return 1;
+				if (start_y < arg0.start_y)
+					return true;
+				else if (start_y == arg0.start_y){
 
-		if (end_x < arg0.end_x)
-			return -1;
-		else if (end_x > arg0.end_x)
-			return 1;
+					if (end_x < arg0.end_x)
+						return true;
+					else if (end_x == arg0.end_x){
 
-		if (end_y < arg0.end_y)
-			return -1;
-		else if (end_y > arg0.end_y)
-			return 1;
+						if (end_y < arg0.end_y)
+							return true;
+					}
+				}
+			}
+		}
 
-		return 0;
+		return false;
 	}
 
 };

@@ -15,6 +15,7 @@
 #include <fstream>
 
 #include "geom_util.h"
+#include "helper.h"
 
 class QueryLog{
 public:
@@ -45,7 +46,10 @@ public:
 		}
 
 		int maxNodeId = -1;
-		while (!f.eof()){
+		string line;
+		while (getline(f, line)){
+
+			vector<string> items = Formatter::split(line, '\t');
 
 			int obj_id;
 			double x;
@@ -58,30 +62,29 @@ public:
 			double min_length;
 			////// 1 - FOR Brinkhoff generator
 			if (query_type == 0){
-				f >> obj_id;
+				obj_id = stoi(items[1]);
+				x = stod(items[5]);
+				y = stod(items[6]);
+				timestamp = stoi(items[4]);
+				speed = stod(items[7]);
+				next_node_x = stoi(items[8]);
+				next_node_y = stoi(items[9]);
+				k_anom = stoi(items[10]);
+				min_length = stod(items[11]);
+
 				maxNodeId = obj_id > maxNodeId ? obj_id : maxNodeId;
 
-				f >> x;
-				f >> y;
-				f >> timestamp;
-				f >> speed;
-				f >> next_node_x;
-				f >> next_node_y;
-				f >> k_anom;
-				f >> min_length;
 			}else{
 			////// 2 - FOR TraceGenerator
-				f >> obj_id;
-				maxNodeId = obj_id > maxNodeId ? obj_id : maxNodeId;
-
-				f >> x;
-				f >> y;
-				f >> timestamp;
-				f >> speed;
-				f >> next_node_x;
-				f >> next_node_y;
-				f >> k_anom;
-				f >> min_length;
+				obj_id = stoi(items[0]);
+				x = stod(items[2]);
+				y = stod(items[3]);
+				timestamp = stoi(items[1]);
+				speed = stod(items[4]);
+				next_node_x = stoi(items[5]);
+				next_node_y = stoi(items[6]);
+				k_anom = stoi(items[7]);
+				min_length = stod(items[8]);
 				// (End) 2 - FOR TraceGenerator
 			}
 
@@ -96,15 +99,18 @@ public:
 			// Trajectories
 //			if (!trajs.containsKey(obj_id))
 //				trajs.put(obj_id, new HashMap<Integer, Query>());
-//			trajs.get(obj_id).put(timestamp, new Query(obj_id, x, y, timestamp, next_node_x, next_node_y, next_node_id, cur_edge_id,
-//					k_anom, min_length, Option.DISTANCE_CONSTRAINT));
-//
-//
+			trajs[obj_id][timestamp] = Query(obj_id, x, y, timestamp, next_node_x, next_node_y, next_node_id, cur_edge_id,
+					k_anom, min_length, option.DISTANCE_CONSTRAINT);
+
+
 //			if (!frames.containsKey(timestamp))
 //				frames.put(timestamp, new ArrayList<Query>());
-//			frames.get(timestamp).add(new Query(obj_id, x, y, timestamp, next_node_x, next_node_y, next_node_id, cur_edge_id,
-//					k_anom, min_length, Option.DISTANCE_CONSTRAINT));
+			frames[timestamp].push_back(Query(obj_id, x, y, timestamp, next_node_x, next_node_y, next_node_id, cur_edge_id,
+					k_anom, min_length, option.DISTANCE_CONSTRAINT));
 
+			// DEBUG
+			if (obj_id == 0 && timestamp == 0)
+				cout<<obj_id<<" "<< x<<" "<< y<<" "<< timestamp<<" "<< next_node_x<<" "<< next_node_y<<" "<<k_anom<<" "<< min_length<<endl;
 
 			//
 			if (max_speed < speed)

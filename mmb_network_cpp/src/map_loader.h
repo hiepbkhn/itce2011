@@ -37,6 +37,16 @@ public:
 	int cur_edge_id = -1;	// = -1 if is_node = true
 	bool is_node = false;
 
+	SegItem(const SegItem& other){	// copy constructor
+		x = other.x;
+		y = other.y;
+		end_x = other.end_x;
+		end_y = other.end_y;
+		length = other.length;
+		cur_edge_id = other.cur_edge_id;
+		is_node = other.is_node;
+
+	}
 	//
 	SegItem(double _x, double _y, double _end_x, double _end_y, double _length, int _cur_edge_id, bool _is_node) {
 		x = _x;
@@ -67,13 +77,15 @@ public:
 ////
 class MMBStack {
 public:
-	deque<SegItem> stack;
+	deque<SegItem> queue;
 	vector<VisitedEdge> visited;	// list of visited edges
 	int max_size = 0;
 
 	//
 	SegItem get(){
-		return stack.front();
+		SegItem ret = SegItem(queue.front());	// copy constructor
+		queue.pop_front();
+		return ret;
 	}
 
 	//
@@ -137,26 +149,26 @@ public:
 		}
 
 		// check if seg_item.xy exist
-		if (stack.size() == 0){
-			stack.push_front(seg_item);
+		if (queue.size() == 0){
+			queue.push_front(seg_item);
 			visited.push_back(edge);
 			return;
 		}
 
 		// insert to the head (queue !)
-		stack.push_front(seg_item);
+		queue.push_back(seg_item);
 		visited.insert(visited.begin() + insert_visited_loc, edge);
 	}
 
 	//
 	int get_size(){
-		return stack.size();
+		return queue.size();
 	}
 
 	//
 	void print_all(){
 		cout<<"STACK"<<endl;
-		for (deque<SegItem>::iterator seg = stack.begin(); seg != stack.end(); seg++)
+		for (deque<SegItem>::iterator seg = queue.begin(); seg != queue.end(); seg++)
 			cout<<(*seg).cur_edge_id << " " <<  (*seg).x << " " <<  (*seg).y << " " <<  (*seg).end_x << " " <<  (*seg).end_y << " " <<
 					(*seg).is_node << " " << (*seg).length << "\n";
 		cout<<"VISITED"<<endl;

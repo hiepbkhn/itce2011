@@ -177,6 +177,25 @@ public:
 
 		MAP_RATIO = getDouble(opt["MAP_RATIO"]);
 
+		K_ANONYMITY = getInt(opt["K_ANONYMITY"]);
+		//report prob.=0.2 --> 5 timestamps
+		DELAY_MAX = getInt(opt["DELAY_MAX"]);
+
+		K_GLOBAL = getInt(opt["K_GLOBAL"]);
+		S_GLOBAL = getInt(opt["S_GLOBAL"]);
+
+		//0.8, 0.85, 0.9, 0.95, 1.0 (for K_GLOBAL=2)
+		INIT_COVER_KEEP_RATIO = getDouble(opt["INIT_COVER_KEEP_RATIO"]);
+		NEXT_COVER_KEEP_RATIO = getDouble(opt["NEXT_COVER_KEEP_RATIO"]);
+
+		MAX_MESH_LENGTH=5*INIT_DISTANCE;
+		MIN_MESH_LENGTH=1.5*INIT_DISTANCE;
+
+		MACE_EXECUTABLE = getString(opt["MACE_EXECUTABLE"]);
+
+		MAXIMAL_CLIQUE_FILE_IN = getString(opt["MAXIMAL_CLIQUE_FILE_IN"]);
+		MAXIMAL_CLIQUE_FILE_OUT = getString(opt["MAXIMAL_CLIQUE_FILE_OUT"]);
+
 
 	}
 

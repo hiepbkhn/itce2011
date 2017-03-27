@@ -178,7 +178,7 @@ public:
 			for (EdgeSegment e : mesh){
 				if (map_data.is_full_edge(e) == true){   // FULL edge
 //					if (! full_edge_meshes.containsKey(e.cur_edge_id))
-//						full_edge_meshes.put(e.cur_edge_id, new Arrayvector<int>());
+//						full_edge_meshes[e.cur_edge_id, new Arrayvector<int>());
 					full_edge_meshes[e.cur_edge_id].push_back(obj_id);
 				}
 				else                                       // PARTIAL edge
@@ -349,12 +349,186 @@ public:
 	}
 
 	//
+	void solve_new_queries(int timestamp){
+
+		map<int, vector<EdgeSegment>> expanding_list;       //dict of lists
+		vector<Query> query_list = query_log.frames[timestamp];       // timestamp
+
+
+		//0. reset
+		reset();
+
+		//1. compute expanding_list
+		__int64 start = Timer::get_millisec();
+		for (Query query : query_list){
+			vector<EdgeSegment> seg_list = map_data.compute_fixed_expanding(query.x, query.y,
+											query.cur_edge_id, query.dist);  //old: Option.DISTANCE_CONSTRAINT
+			seg_list = GeomUtil::clean_fixed_expanding(seg_list);
+
+			expanding_list[query.obj_id] = seg_list;
+		}
+		cout<<"expanding_list - elapsed : " << (Timer::get_millisec() - start) <<endl;
+
+		//2. compute mc_set
+		start = Timer::get_millisec();
+		PairIntList temp = compute_edge_list(expanding_list, query_list);
+		int num_edges = temp.num_edges;
+		vector<PairInt> list_edges = temp.list_edges;
+
+		cout<<"num_edges= " << num_edges<<endl;
+		cout<<"list_edges NEW - elapsed : " << (Timer::get_millisec() - start) <<endl;
+
+		// write list_edges[] to file
+		write_list_edges(list_edges);
+		//
+
+		start = Timer::get_millisec();
+//        // (OLD)
+//        graph.add_to_mc_set(list_edges)
+
+		// (NEW) call mace_go.exe
+		int ret = system("mace_go.exe M mesh.grh mesh.out");
+		printf("The value returned was: %d.\n", ret);
+
+		ifstream f(option.MAXIMAL_CLIQUE_FILE_OUT);
+		vector<string> fstr;
+		while (!f.eof()){
+			string str;
+			f >> str;
+			if (str.size() == 0)
+				break;
+			fstr.push_back(str);
+		}
+		f.close();
+
+		for (string line : fstr){
+			vector<string> node_list = Formatter::split(line, ' ');
+			if (node_list.size() < 2)
+				continue;
+			set<int> set;
+			for (string node : node_list)
+				set.insert(stoi(node));
+			mc_set.push_back(set);
+		}
+
+		cout<<mc_set.size();
+
+		cout<<"add_to_mc_set - elapsed : " << (Timer::get_millisec() - start) <<endl;
+//        print "mc_set =", mc_set
+
+		//3.
+		start = Timer::get_millisec();
+		find_cloaking_sets(timestamp, expanding_list);
+
+		cout<<"find_cloaking_sets - elapsed : " << (Timer::get_millisec() - start) <<endl;
+
+
+		//4. 'Set Cover Problem' (from weighted_set_cover.py)
+		start = Timer::get_millisec();
+
+		int num_element = -1;
+		for (Query query: query_list)
+			if (num_element < query.obj_id)
+				num_element = query.obj_id;
+		num_element += 1;  // avoid out of range
+
+		int num_cloaked_users = 0;
+		if (timestamp == 0){
+			PairSetListInt _temp = WeightedSetCover::find_init_cover(positive_mc_set, num_element);
+
+			cover_set = _temp.set_list;
+			num_cloaked_users = _temp.i;
+
+			new_cover_set = cover_set;     // for compute CLOAKING MESH
+		}
+		else{
+			PairSetListInt _temp = WeightedSetCover::find_next_cover(positive_mc_set, num_element, cover_set, option.K_GLOBAL);
+			new_cover_set = _temp.set_list;
+			num_cloaked_users = _temp.i;
+		}
+
+		cout<<"Success rate =" << (double)num_cloaked_users/query_list.size() <<endl;
+		cout<<"compute cover_set - elapsed : " << (Timer::get_millisec() - start) <<endl;
+
+
+		//5. compute CLOAKING MESH
+		start = Timer::get_millisec();
+
+		double total_mesh_length = 0;
+		int total_query = 0;
+//		new_cover_mesh = new Arrayvector<vector<EdgeSegment>>();    // NEW
+		for (int clique_id = 0; clique_id <new_cover_set.size(); clique_id++){
+			set<int> clique = new_cover_set[clique_id];
+			//compute length of mesh
+			vector<EdgeSegment> mesh;
+			for (int obj_id : clique)
+				mesh = GeomUtil::union_set(mesh, expanding_list[obj_id]);
+
+			new_cover_mesh.push_back(mesh);    //NEW
+
+			total_mesh_length += EdgeSegmentSet::length(mesh);
+			total_query += clique.size();
+		}
+
+		double average_mesh_query = total_mesh_length/total_query;
+
+		cout<<"total_mesh_length = " << total_mesh_length <<endl;
+		cout<<"average_mesh_query = " << average_mesh_query <<endl;
+		cout<<"Compute CLOAKING MBR - elapsed : " << (Timer::get_millisec() - start) <<endl;
+//        print "user_mesh = ", user_mesh
+
+
+		//5.2 Check MMB/MAB
+//        new_cover_mesh_mmb = compute_cover_mesh_mmb(new_cover_mesh, expanding_list)
+//
+//        if timestamp > 0:
+//            start_time = System.currentTimeMillis();
+//
+//            check_MMB_MAB(checking_pairs, cover_mesh, cover_mesh_mmb, new_cover_mesh, new_cover_mesh_mmb)
+//
+//            print "check_MMB_MAB() - elapsed : ", (time.clock() - start_time)
+
+		// UPDATE
+		cover_set = new_cover_set;
+		cover_mesh = new_cover_mesh;
+//        cover_mesh_mmb = new_cover_mesh_mmb
+
+
+		//6. compute user_mc_set (max clique for each obj_id), replace positive_mc_set by cover_set
+		start = Timer::get_millisec();
+//		user_mc_set = new HashMap<int, int>();
+		for (int clique_id = 0; clique_id < cover_set.size(); clique_id++){
+			set<int> clique = cover_set[clique_id];
+
+			for (int obj_id : clique)
+				//
+				if (user_mc_set.count(obj_id) == 0)
+					user_mc_set[obj_id] = clique_id;            //use id
+				else if (cover_set[user_mc_set[obj_id]].size() < clique.size())
+					user_mc_set[obj_id] = clique_id;               //store the maximum
+			//
+			for (int obj_id : clique)
+				if (user_mc_set[obj_id] == clique_id)  //clique id comparison
+					user_mesh[obj_id] = cover_mesh[clique_id];
+		}
+		cout<<"Compute user_mc_set - elapsed : " << (Timer::get_millisec() - start) <<endl;
+//        print "user_mc_set = ", user_mc_set
+
+
+		//7. publish MBRs (write to file)
+		start = Timer::get_millisec();
+		write_results_to_files(timestamp);
+
+		cout<<"write_results_to_files - elapsed : " << (Timer::get_millisec() - start) <<endl;
+	}
+
+	//
 	void write_results_to_files(int timestamp){
 
 		string config_name = option.QUERY_FILE.substr(0, option.QUERY_FILE.length()-4) + "-" +
 				Formatter::formatDouble("%.1f", option.DISTANCE_CONSTRAINT) + "-" + Formatter::formatDouble("%.1f", option.MAX_SPEED);
 
-		//1. this.cover_set
+		//1. cover_set
 		string filename = option.RESULT_PATH + config_name + "_" + to_string(option.K_GLOBAL) + "_" +
 				  Formatter::formatDouble("%.2f", option.INIT_COVER_KEEP_RATIO) + "_cover_set" + "_" + to_string(timestamp) + ".out";
 		ofstream f(filename, ofstream::out);
@@ -369,7 +543,7 @@ public:
 		f.close();
 
 
-		//5. this.user_mesh (only print edge_id) for attacks (in trace_generator)
+		//5. user_mesh (only print edge_id) for attacks (in trace_generator)
 		filename = option.RESULT_PATH + "/" + config_name + "_edge_cloaking_" + to_string(timestamp) + ".out";
 		f = ofstream(filename);
 		for (map<int, vector<EdgeSegment>>::iterator it = user_mesh.begin(); it != user_mesh.end(); it++){
@@ -386,9 +560,28 @@ public:
 		f.close();
 	}
 
+	//
+	void run_timestamps(int start_timestamp, int end_timestamp){
+		for (int timestamp = start_timestamp; timestamp < end_timestamp+1; timestamp++){
+			__int64 start = Timer::get_millisec();
+			cout<<"--------->>"<<endl;
+			cout<<"TIMESTAMP : " << timestamp<<endl;
+			cout<<"self.num_user = " << query_log.frames[timestamp].size()<<endl;
+
+			solve_new_queries(timestamp);
+
+			cout<<"Total time elapsed :" << (Timer::get_millisec() - start) <<endl;
+	//            print "check_published_mcset_mbr", \
+	//                this.check_published_mcset_mesh(this.user_mc_set, this.user_mesh, timestamp)
+
+				//print "len(graph.mc_set) = ", len(graph.mc_set)
+			//print graph.mc_set
+		}
+	}
+
 };
 
-int main(){
+int main(int argc, char* args[]){
 
 //	Node a = Node(1,2,3);
 //	Edge b;
@@ -436,6 +629,86 @@ int main(){
 //	map_data.read_map("data/", "oldenburgGen");
 //
 //	cout<<map_data.adj[3700].size() <<endl;
+
+	///////////////////////////////
+	// COMMAND-LINE <query_file> <timestep> <distance_constraint> <k_global><INIT_COVER_KEEP_RATIO><NEXT_COVER_KEEP_RATIO>
+	int timestep = 5;
+	//    timestep = 40       // for lbs_attack
+
+	if(argc > 3){
+		option.QUERY_FILE = args[1];
+		timestep = stoi(args[2]);
+		option.DISTANCE_CONSTRAINT = stoi(args[3]);
+	}
+
+	if (argc > 4)
+		option.K_GLOBAL = stoi(args[4]);
+
+	if (argc > 5)
+		option.INIT_COVER_KEEP_RATIO = stod(args[5]);
+
+	if (argc > 6)
+		option.NEXT_COVER_KEEP_RATIO = stod(args[6]);
+
+	//
+	cout<<"MAP_FILE = " << option.MAP_NAME<<endl;
+	cout<<"timestep = " << timestep<<endl;
+	cout<<"QUERY_FILE = " << option.QUERY_FILE<<endl;
+	cout<<"DISTANCE_CONSTRAINT = " << option.DISTANCE_CONSTRAINT<<endl;
+
+	//
+//	EdgeSegment e = EdgeSegment(11551,	13789,	11315,	13916, 81100852);
+//	cout<<e.cur_edge_id<<"\t"<<e.start_x << "\t" << e.start_y << "\t" << e.end_x << "\t" << e.end_y<<endl;
+//
+////	vector<EdgeSegment> list = {e};		//copy constructor?
+//	cout<<"address :"<<&e<<endl;
+//	vector<EdgeSegment*> list;
+//	list.push_back(&e);
+//	cout<<"address :"<<&(list[0])<<endl;
+//	cout<<"list.size = "<<list.size()<<endl;
+//
+//	for(EdgeSegment* a_e : list){
+//		a_e->normalize();
+//		cout<<"address :"<<&a_e<<endl;
+//	}
+//
+//	cout<<e.cur_edge_id<<"\t"<<e.start_x << "\t" << e.start_y << "\t" << e.end_x << "\t" << e.end_y<<endl;
+//	e.normalize();
+//	cout<<e.cur_edge_id<<"\t"<<e.start_x << "\t" << e.start_y << "\t" << e.end_x << "\t" << e.end_y<<endl;
+
+	//
+	__int64 start = Timer::get_millisec();
+
+	MMBMap map_data = MMBMap();
+	map_data.read_map(option.MAP_PATH, option.MAP_NAME);
+	cout<<"Load Map : DONE"<<endl;
+
+	QueryLog query_log(map_data);
+	query_log.read_query(option.QUERY_PATH, option.QUERY_FILE, timestep, option.QUERY_TYPE);   // default: max_time_stamp = 10 (40: only for attack)
+	cout<<"Load Query : DONE"<<endl;
+
+	cout<<"max_speed = " << query_log.max_speed<<endl;
+	cout<<"elapsed : " << (Timer::get_millisec() - start) <<endl;
+
+
+	Graph graph = Graph(0, map_data, query_log);
+
+	// TEST MMBMap.compute_fixed_expanding()
+	Query query = query_log.frames[0][0];
+	vector<EdgeSegment> seg_list = map_data.compute_fixed_expanding(query.x, query.y, query.cur_edge_id, query.dist);
+	for(EdgeSegment e : seg_list)
+		cout<<e.cur_edge_id<<"\t"<<e.start_x << "\t" << e.start_y << "\t" << e.end_x << "\t" << e.end_y <<endl;
+
+	// clean_fixed_expanding()
+	seg_list = GeomUtil::clean_fixed_expanding(seg_list);
+	cout<<"AFTER clean_fixed_expanding: len " << seg_list.size()<<endl;
+	for(EdgeSegment e : seg_list)
+		cout<<e.cur_edge_id<<"\t"<<e.start_x << "\t" << e.start_y << "\t" << e.end_x << "\t" << e.end_y<<endl;
+
+	//
+//	graph.run_timestamps(0, timestep);
+//
+//	cout<<"graph.run_timestamps - DONE"<<endl;
 
 
 
