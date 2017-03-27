@@ -116,6 +116,8 @@ public class Graph {
         hi = mid;
         while (hi+1 < part_edges.size() && part_edges.get(hi+1).e.cur_edge_id == query.cur_edge_id)
             hi = hi + 1;
+        //DEBUG
+        System.out.println("hi-lo = " + (hi-lo));
         
         List<Integer> result = new ArrayList<Integer>();
         for (int i = lo; i < hi+1; i++){
@@ -199,6 +201,7 @@ public class Graph {
         
         //sort part_edges by e.cur_edge_id
         Collections.sort(part_edges);
+        System.out.println("part_edges.size = " + part_edges.size());
                     
         //2.
         for (Query query : query_list){
@@ -642,7 +645,7 @@ public class Graph {
 	public static void main(String[] args) throws Exception{
 
 		// COMMAND-LINE <query_file> <timestep> <distance_constraint> <k_global><INIT_COVER_KEEP_RATIO><NEXT_COVER_KEEP_RATIO>
-		int timestep = 5;
+		int timestep = 0;
 		//    timestep = 40       // for lbs_attack
 		
 		System.out.println("mmb_network - Java");
@@ -687,23 +690,23 @@ public class Graph {
 	    Graph graph = new Graph(0, map_data, query_log);
 	    
 	    // TEST MMBMap.compute_fixed_expanding() --> OK
-	    Query query = query_log.frames.get(0).get(754);
-	    List<EdgeSegment> seg_list = map_data.compute_fixed_expanding(query.x, query.y, query.cur_edge_id, query.dist);
-	    for(EdgeSegment e : seg_list)
-	    	System.out.println(e.cur_edge_id + "\t" + String.format("%.1f", e.start_x) + "\t" + String.format("%.1f", e.start_y) + "\t" + 
-	    			String.format("%.1f", e.end_x) + "\t" + String.format("%.1f", e.end_y));
-	    
-	    // clean_fixed_expanding()
-	    seg_list = EdgeSegmentSet.clean_fixed_expanding(seg_list);
-	    System.out.println("AFTER clean_fixed_expanding: len " + seg_list.size());
-	    for(EdgeSegment e : seg_list)
-	    	System.out.println(e.cur_edge_id + "\t" + String.format("%.1f", e.start_x) + "\t" + String.format("%.1f", e.start_y) + "\t" + 
-	    			String.format("%.1f", e.end_x) + "\t" + String.format("%.1f", e.end_y));
+//	    Query query = query_log.frames.get(0).get(754);
+//	    List<EdgeSegment> seg_list = map_data.compute_fixed_expanding(query.x, query.y, query.cur_edge_id, query.dist);
+//	    for(EdgeSegment e : seg_list)
+//	    	System.out.println(e.cur_edge_id + "\t" + String.format("%.1f", e.start_x) + "\t" + String.format("%.1f", e.start_y) + "\t" + 
+//	    			String.format("%.1f", e.end_x) + "\t" + String.format("%.1f", e.end_y));
+//	    
+//	    // clean_fixed_expanding()
+//	    seg_list = EdgeSegmentSet.clean_fixed_expanding(seg_list);
+//	    System.out.println("AFTER clean_fixed_expanding: len " + seg_list.size());
+//	    for(EdgeSegment e : seg_list)
+//	    	System.out.println(e.cur_edge_id + "\t" + String.format("%.1f", e.start_x) + "\t" + String.format("%.1f", e.start_y) + "\t" + 
+//	    			String.format("%.1f", e.end_x) + "\t" + String.format("%.1f", e.end_y));
 	    
 	    //
-//	    graph.run_timestamps(0, timestep);
-//	    
-//	    System.out.println("graph.run_timestamps - DONE");
+	    graph.run_timestamps(0, timestep);
+	    
+	    System.out.println("graph.run_timestamps - DONE");
 		
 	}
 
