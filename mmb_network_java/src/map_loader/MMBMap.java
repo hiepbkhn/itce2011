@@ -255,7 +255,7 @@ public class MMBMap {
         Node start_node = this.nodes.get(edge.start_node_id);
         Node end_node = this.nodes.get(edge.end_node_id);
         if (seg.start_x == start_node.x && seg.start_y == start_node.y &&
-            seg.end_x == end_node.y & seg.end_y == end_node.y)
+            seg.end_x == end_node.y && seg.end_y == end_node.y)
             return true;
         if (seg.start_x == end_node.x && seg.start_y == end_node.y &&
             seg.end_x == start_node.y && seg.end_y == start_node.y)
@@ -330,8 +330,8 @@ public class MMBMap {
                                                  remaining_len, edge_id, true));
                         
                     }else{
-                        int end_x = (int) (item.x + item.length * (this.nodes.get(end_node_id).x - item.x) / edge_len);
-                        int end_y = (int) (item.y + item.length * (this.nodes.get(end_node_id).y - item.y) / edge_len);
+                        double end_x = item.x + item.length * (this.nodes.get(end_node_id).x - item.x) / edge_len;
+                        double end_y = item.y + item.length * (this.nodes.get(end_node_id).y - item.y) / edge_len;
                         result.add(new EdgeSegment(this.nodes.get(node_id).x, this.nodes.get(node_id).y, 
                                               end_x, end_y, 
                                               this.node_pair_to_edge.get(new PairInt(node_id, end_node_id)) ));
@@ -356,8 +356,8 @@ public class MMBMap {
                                              remaining_len, edge_id, true));
                     }    
                     else{
-                        int end_x = (int) (item.x + item.length * (this.nodes.get(end_node_id).x - item.x) / segment_len);
-                        int end_y = (int) (item.y + item.length * (this.nodes.get(end_node_id).y - item.y) / segment_len);
+                    	double end_x = item.x + item.length * (this.nodes.get(end_node_id).x - item.x) / segment_len;
+                    	double end_y = item.y + item.length * (this.nodes.get(end_node_id).y - item.y) / segment_len;
                         result.add(new EdgeSegment(item.x, item.y,
                                               end_x, end_y, 
                                               item.cur_edge_id));

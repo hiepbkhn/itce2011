@@ -6,25 +6,27 @@
 package map_loader;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Stack;
 
 public class MMBStack {
 
-	public Stack<SegItem> stack;
+	public Queue<SegItem> queue;
 	public List<VisitedEdge> visited;	// list of visited edges 
 	public int max_size;
 	
 	//
 	public MMBStack(){
-		this.stack = new Stack<SegItem>();
+		this.queue = new LinkedList<SegItem>();
 		this.visited = new ArrayList<VisitedEdge>();
 		this.max_size = 0;
 	}
 	
 	//
 	public SegItem get(){
-		return stack.pop();
+		return queue.remove();
 	}
 	
 	//
@@ -89,26 +91,26 @@ public class MMBStack {
         }
         
         // check if seg_item.xy exist
-        if (this.stack.size() == 0){
-            this.stack.add(seg_item);
+        if (this.queue.size() == 0){
+            this.queue.add(seg_item);
             this.visited.add(edge);
             return;
         }
         
         // insert to the head (queue !)
-        this.stack.add(seg_item);
+        this.queue.add(seg_item);
         this.visited.add(insert_visited_loc, edge);
     }
     
     //
     public int get_size(){
-    	return this.stack.size();
+    	return this.queue.size();
     }
     
     //
     public void print_all(){
     	System.out.println("STACK");
-        for (SegItem seg : this.stack)
+        for (SegItem seg : this.queue)
         	System.out.println(seg.cur_edge_id + " " +  seg.x + " " +  seg.y + " " +  seg.end_x + " " +  seg.end_y + " " +  
         			seg.is_node + " " +  seg.length);
         System.out.println("VISITED");

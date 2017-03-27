@@ -22,6 +22,10 @@ public class EdgeSegmentSet {
         // 1. NORMALIZE each edge (left_low_x first)
         for (EdgeSegment item : new_result)
             item.normalize();
+        System.out.println("step 1 - DONE.");
+        for(EdgeSegment e : new_result)
+        	System.out.println(e.cur_edge_id + "\t" + String.format("%.1f", e.start_x) + "\t" + String.format("%.1f", e.start_y) + "\t" + 
+	    			String.format("%.1f", e.end_x) + "\t" + String.format("%.1f", e.end_y));
         
         // 2. SORT by cur_edge_id
 //        System.out.println("new_result.size = " + new_result.size());

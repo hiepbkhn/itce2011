@@ -6,18 +6,19 @@
 package geom_util;
 
 import java.util.List;
+import java.util.Set;
 
 public class CloakingSet{
 
-	public clique = clique
+	public Set<Integer> clique;
     public List<Query> query_list;
     public MBR mbr;
 	
 	//
-	public CloakingSet(clique, query_list){
-        self.clique = clique
-        self.query_list = query_list
-        self.mbr = CloakingSet.compute_mbr(query_list)
+	public CloakingSet(Set<Integer> clique, List<Query> query_list){
+        this.clique = clique;
+        this.query_list = query_list;
+        this.mbr = CloakingSet.compute_mbr(query_list);
 	}
     
     

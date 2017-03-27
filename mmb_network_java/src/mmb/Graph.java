@@ -642,9 +642,10 @@ public class Graph {
 	public static void main(String[] args) throws Exception{
 
 		// COMMAND-LINE <query_file> <timestep> <distance_constraint> <k_global><INIT_COVER_KEEP_RATIO><NEXT_COVER_KEEP_RATIO>
-		int timestep = 3;
+		int timestep = 5;
 		//    timestep = 40       // for lbs_attack
 		
+		System.out.println("mmb_network - Java");
 		if(args.length >= 3){
 	        Option.QUERY_FILE = args[0];
 	        timestep = Integer.parseInt(args[1]);
@@ -665,6 +666,8 @@ public class Graph {
 		System.out.println("timestep = " + timestep);
 		System.out.println("QUERY_FILE = " + Option.QUERY_FILE);
 		System.out.println("DISTANCE_CONSTRAINT = " + Option.DISTANCE_CONSTRAINT);
+		
+//		System.in.read();		// ATTENTION: pause until <Enter> is pressed, set Affinitiy in Task Manager to 1 core
 	    
 	    //    
 	    long start_time = System.currentTimeMillis();
@@ -683,10 +686,24 @@ public class Graph {
 	        
 	    Graph graph = new Graph(0, map_data, query_log);
 	    
-	    //TEST
-	    graph.run_timestamps(0, timestep);
+	    // TEST MMBMap.compute_fixed_expanding() --> OK
+	    Query query = query_log.frames.get(0).get(754);
+	    List<EdgeSegment> seg_list = map_data.compute_fixed_expanding(query.x, query.y, query.cur_edge_id, query.dist);
+	    for(EdgeSegment e : seg_list)
+	    	System.out.println(e.cur_edge_id + "\t" + String.format("%.1f", e.start_x) + "\t" + String.format("%.1f", e.start_y) + "\t" + 
+	    			String.format("%.1f", e.end_x) + "\t" + String.format("%.1f", e.end_y));
 	    
-	    System.out.println("graph.run_timestamps - DONE");
+	    // clean_fixed_expanding()
+	    seg_list = EdgeSegmentSet.clean_fixed_expanding(seg_list);
+	    System.out.println("AFTER clean_fixed_expanding: len " + seg_list.size());
+	    for(EdgeSegment e : seg_list)
+	    	System.out.println(e.cur_edge_id + "\t" + String.format("%.1f", e.start_x) + "\t" + String.format("%.1f", e.start_y) + "\t" + 
+	    			String.format("%.1f", e.end_x) + "\t" + String.format("%.1f", e.end_y));
+	    
+	    //
+//	    graph.run_timestamps(0, timestep);
+//	    
+//	    System.out.println("graph.run_timestamps - DONE");
 		
 	}
 
