@@ -643,7 +643,7 @@ int main(int argc, char* args[]){
 	///////////////////////////////
 	// COMMAND-LINE <query_file> <timestep> <distance_constraint> <k_global><INIT_COVER_KEEP_RATIO><NEXT_COVER_KEEP_RATIO>
 	cout<<"mmb_network - C++\n";
-	int timestep = 0;
+	int timestep = 3;
 	//    timestep = 40       // for lbs_attack
 
 	if(argc > 3){

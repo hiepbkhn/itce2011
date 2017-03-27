@@ -329,6 +329,10 @@ public:
 	    int max_inter_len = 0;
 	    int max_inter_id = -1;
 	    for (int i = 0; i < S.size(); i++){
+	    	// branch and bound
+	    	if (S[i].size() <= max_inter_len)
+	    		continue;
+
 	    	// don't need copy constructor
 	    	set<int> s = set_intersect (S[i], R);	// itersection
 	        int inter_len = s.size();
