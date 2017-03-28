@@ -10,6 +10,7 @@
 
 #include <iostream>
 #include <set>
+#include <unordered_set>
 #include <vector>
 #include <algorithm>
 #include <chrono>
@@ -26,6 +27,14 @@ using namespace std;
 using namespace chrono;
 
 
+////
+class Timer{
+public:
+	static __int64 get_millisec(){
+		__int64 now = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+		return now;
+	}
+};
 
 
 ////
@@ -55,7 +64,7 @@ public:
 
 ////
 struct TSetComparator {
-	bool operator()(set<int> s1, set<int> s2) {
+	bool operator()(unordered_set<int> s1, unordered_set<int> s2) {
 		return (s1.size() < s2.size());
 	}
 };
@@ -288,29 +297,34 @@ public:
 
 };
 
-class Timer{
-public:
-	static __int64 get_millisec(){
-		__int64 now = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
-		return now;
-	}
-};
+
 
 ////
 class WeightedSetCover {
 public:
 
 	//
-	static set<int> set_intersect(set<int>& s1, set<int>& s2){
-		set<int> ret;
-		set_intersection(s1.begin(),s1.end(),s2.begin(),s2.end(), inserter(ret, ret.begin()));
+	static unordered_set<int> set_intersect(unordered_set<int>& s1, unordered_set<int>& s2){
+		unordered_set<int> ret;
+		// FOR set<int>
+//		set_intersection(s1.begin(),s1.end(),s2.begin(),s2.end(), inserter(ret, ret.begin()));
+		// FOR unordered_set<int>
+		for(int u : s1)
+			if (s2.count(u) > 0)
+				ret.insert(ret.end(), u);
+
 		return ret;
 	}
 
 	//
-	static set<int> set_differ(set<int>& s1, set<int>& s2){
-		set<int> ret;
-		set_difference(s1.begin(),s1.end(),s2.begin(),s2.end(), inserter(ret, ret.begin()));
+	static unordered_set<int> set_differ(unordered_set<int>& s1, unordered_set<int>& s2){
+		unordered_set<int> ret;
+		// FOR set<int>
+//		set_difference(s1.begin(),s1.end(),s2.begin(),s2.end(), inserter(ret, ret.begin()));
+		// FOR unordered_set<int>
+		for(int u : s1)
+			if (s2.count(u) == 0)
+				ret.insert(ret.end(), u);
 		return ret;
 	}
 
@@ -318,6 +332,7 @@ public:
 	static vector<int> index_sort(vector<int>& x){
 		vector<int> y(x.size());
 		iota(y.begin(), y.end(), 0);
+
 		auto comparator = [&x](int a, int b){ return x[a] < x[b]; };
 		sort(y.begin(), y.end(), comparator);
 
@@ -325,17 +340,20 @@ public:
 	}
 
 	// UNWEIGHTED
-	static PairSetInt find_max_uncovered(vector<set<int>>& S, set<int>& R){
+	static PairSetInt find_max_uncovered(vector<unordered_set<int>>& S, int S_size, unordered_set<int>& R){
 	    int max_inter_len = 0;
 	    int max_inter_id = -1;
-	    for (int i = 0; i < S.size(); i++){
+	    for (int i = 0; i < S_size; i++){	// OLD: S.size()
 	    	// branch and bound
 	    	if (S[i].size() <= max_inter_len)
 	    		continue;
 
 	    	// don't need copy constructor
-	    	set<int> s = set_intersect (S[i], R);	// itersection
-	        int inter_len = s.size();
+//	    	unordered_set<int> s = set_intersect (S[i], R);	// itersection
+//	        int inter_len = s.size();
+
+	    	int inter_len = set_intersect (S[i], R).size();
+
 	        if (max_inter_len < inter_len){
 	            max_inter_len = inter_len;
 	            max_inter_id = i;
@@ -343,44 +361,51 @@ public:
 	    }
 
 	    if (max_inter_id == -1)
-	        return PairSetInt(set<int>(), -1);
+	        return PairSetInt(unordered_set<int>(), -1);
 	    else
 	        return PairSetInt(S[max_inter_id], max_inter_id);
 	}
 
 	// (FOR PUBLIC USE)
 	// timestamp = 0, S: positive sets, U:universe (compute from S)
-	static PairSetListInt find_init_cover(vector<set<int>>& S, int num_element){
+	static PairSetListInt find_init_cover(vector<unordered_set<int>>& S, int num_element){
 	    // compute U
+		__int64 start = Timer::get_millisec();
 	    int marked[num_element] = {0};
-	    for (set<int> a_set : S)
+	    for (unordered_set<int> a_set : S)
 	        for (int item : a_set)
 	            marked[item] = 1;
 
-	    set<int> U;
+	    unordered_set<int> U;
 	    for (int item = 0; item < num_element; item++)
 	    	if (marked[item] == 1)
 	    		U.insert(item);
 	    cout<<"len(S) = " << S.size()<<endl;
 	    cout<<"len(U) = " << U.size()<<endl;
+	    cout<<"Compute U - elapsed : " << (Timer::get_millisec() - start) <<endl;
 
-	    set<int> R = U;	// = new Hashset<int>(U); // deep copy
+	    //
+	    unordered_set<int> R = U;	// = new Hashunordered_set<int>(U); // deep copy
 
-	    vector<set<int>> C_0;
+	    vector<unordered_set<int>> C_0;
 
 	    // NON-BOOTSTRAP
 	    // sort S
-	    __int64 start = Timer::get_millisec();
+	    start = Timer::get_millisec();
 
+	    //
 	    TSetComparator SetComparator;
 	    sort(S.begin(), S.end(), SetComparator);	// sort ascending by .size()
 
 	    cout<<"Sorting - elapsed : " << (Timer::get_millisec() - start) <<endl;
 
+	    //
 	    start = Timer::get_millisec();
+
+	    int S_size = S.size();				// we consider only sets with id from 0->S_size-1
 	    while (R.size() != 0){
-	        PairSetInt temp = find_max_uncovered(S, R);
-	        set<int> S_i = temp.s;
+	        PairSetInt temp = find_max_uncovered(S, S_size, R);		// 10: S_size
+	        unordered_set<int> S_i = temp.s;
 	        int max_inter_id = temp.i;
 	        if (max_inter_id == -1)
 	            break;
@@ -389,7 +414,12 @@ public:
 //	        R.removeAll(S_i);			// set difference
 	        R = set_differ(R, S_i);		//
 
-	        S.erase(S.begin() + max_inter_id);
+//	        S.erase(S.begin() + max_inter_id);		// COSTLY ?
+
+	        unordered_set<int> tmp_set = S[max_inter_id];
+	        S[max_inter_id] = S[S_size-1];
+	        S[S_size-1] = tmp_set;
+	        S_size = S_size - 1;
 	    }
 
 	    cout<<"find_init_cover - elapsed : " << (Timer::get_millisec() - start) <<endl;
@@ -398,7 +428,7 @@ public:
 	    int num_cloaked_users = U.size() - R.size();
 
 	    int total_C_0 = 0;
-	    for (set<int> a_set : C_0)
+	    for (unordered_set<int> a_set : C_0)
 	    	total_C_0 += a_set.size();
 	    cout<<"Total elements in C_0 = " << total_C_0<<endl;
 
@@ -407,24 +437,24 @@ public:
 
 	// (FOR PUBLIC USE)
 	// timestamp > 0, S: positive sets, U:universe (compute from S), C_0: cover_set from prev.step
-	static PairSetListInt find_next_cover(vector<set<int>>& S, int num_element, vector<set<int>>& C_0, int k_global){
+	static PairSetListInt find_next_cover(vector<unordered_set<int>>& S, int num_element, vector<unordered_set<int>>& C_0, int k_global){
 	    // compute U
 		int marked[num_element] = {0};
-	    for (set<int> a_set : S)
+	    for (unordered_set<int> a_set : S)
 	        for (int item : a_set)
 	            marked[item] = 1;
 
-	    set<int> U;
+	    unordered_set<int> U;
 	    for (int item = 0; item < num_element; item++)
 	    	if (marked[item] == 1)
 	    		U.insert(item);
 	    cout<<"len(S) = " << S.size()<<endl;
 	    cout<<"len(U) = " << U.size()<<endl;
 
-	    set<int> R = U; // = new Hashset<int>(U);	// deep copy
+	    unordered_set<int> R = U; // = new Hashunordered_set<int>(U);	// deep copy
 
 	    // result
-	    vector<set<int>> C_1;
+	    vector<unordered_set<int>> C_1;
 	    int total_W = 0;
 
 	    // compute weights
@@ -435,16 +465,13 @@ public:
 	    vector<int> W;
 
 	    for (int i = 0; i < S.size(); i++){
-
 	        W.push_back(0);
-//	        list_pairs.add(new Arrayvector<int>());   		//have list_pairs[i]
+	        list_pairs.push_back(vector<int>());
+
 	        for (int j = 0; j < C_0.size(); j++){
-	        	set<int> c_set;
+	        	unordered_set<int> c_set = set_intersect(S[i], C_0[j]);				// intersection
 
-	        	set<int> s_set = S[i];					// Java: copy constructor (moved to here)
-	        	c_set = set_intersect(s_set, C_0[j]);				// intersection
-
-	            int inter_len = s_set.size();
+	            int inter_len = c_set.size();
 	            if (inter_len > 0 && inter_len < k_global)
 	                W[i] = W[i] + 1;
 	            if (inter_len >= k_global)
@@ -459,7 +486,7 @@ public:
 		vector<int> idx = index_sort(W);	// index sort (ascending)
 
 		vector<int> W_temp;
-		vector<set<int>> S_temp;
+		vector<unordered_set<int>> S_temp;
 		vector<vector<int>> list_pairs_temp;
 		for (int id = 0; id < idx.size(); id++){
 			W_temp.push_back(W[idx[id]]);
@@ -474,7 +501,7 @@ public:
 	    cout<<"i = " << i;
 
 	    W = vector<int>(W_temp.begin(), W_temp.begin() + i);
-	    S = vector<set<int>>(S_temp.begin(), S_temp.begin() + i);
+	    S = vector<unordered_set<int>>(S_temp.begin(), S_temp.begin() + i);
 	    list_pairs = vector<vector<int>>(list_pairs_temp.begin(), list_pairs_temp.begin() + i);
 
 
@@ -484,9 +511,10 @@ public:
 		start = Timer::get_millisec();
 
 //	    checking_pairs = []
+		int S_size = S.size();				// we consider only sets with id from 0->S_size-1
 	    while (R.size() != 0){
-	    	PairSetInt temp = find_max_uncovered(S, R);
-	        set<int> S_i = temp.s;
+	    	PairSetInt temp = find_max_uncovered(S, S_size, R);
+	        unordered_set<int> S_i = temp.s;
 	        int min_element = temp.i;
 	        if (min_element == -1)
 	            break;
@@ -498,8 +526,6 @@ public:
 
 	        S.erase(S.begin() + min_element);
 	        W.erase(W.begin() + min_element);
-//	        checking_pairs.append(list_pairs[min_element])  // synchronized with C_1 !
-//	        del list_pairs[min_element]
 	    }
 
 	    cout<<"find_next_cover - elapsed : " + (Timer::get_millisec() - start) <<endl;
@@ -508,7 +534,7 @@ public:
 //	    System.out.println("checking_pairs.len: " + checking_pairs.size());
 	    int num_cloaked_users = U.size() - R.size();
 	    int total_C_1 = 0;
-	    for (set<int> a_set : C_1)
+	    for (unordered_set<int> a_set : C_1)
 	    	total_C_1 += a_set.size();
 	    cout<<"Total elements in C_0 = " << total_C_1<<endl;
 	    cout<<"Total weight = " << total_W<<endl;

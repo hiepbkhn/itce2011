@@ -10,6 +10,7 @@
 #include <map>
 #include <vector>
 #include <set>
+#include <unordered_set>
 #include <stdlib.h>     /* system, NULL, EXIT_FAILURE */
 
 #include "map_loader.h"
@@ -30,21 +31,21 @@ public:
 	QueryLog query_log;
 
 	map<int, int> user_mc_set;  //dict of clique_id, e.g. user_mc_set[1] = 2 (clique_id = 2)
-	vector<set<int>> mc_set;        //maximal clique set, list of sets
+	vector<unordered_set<int>> mc_set;        //maximal clique set, list of sets
 	map<PairInt, int> graph_edges;   //dict of pair (u,w)
 	map<int, Query>last_query;    //dict of (user, last query)
 	map<int, vector<EdgeSegment>> user_mesh;      //last cloaked (published) region
 	//
-	vector<set<int>> positive_mc_set;   //list of sets
+	vector<unordered_set<int>> positive_mc_set;   //list of sets
 	map<int, int> old_user_mc_set;
 	map<int, vector<EdgeSegment>> old_user_mesh;
 	//
-	vector<set<int>> cover_set;     // list of sets
+	vector<unordered_set<int>> cover_set;     // list of sets
 	vector<vector<EdgeSegment>> cover_mesh;   // list of meshes,
 							// checked agaist option.S_GLOBAL at the end of solve_new_queries()
 //    cover_mesh_mmb;
 //    //
-	vector<set<int>> new_cover_set;     // list of sets
+	vector<unordered_set<int>> new_cover_set;     // list of sets
 	vector<vector<EdgeSegment>> new_cover_mesh;   // list of meshes,
 
 	///////////
@@ -193,7 +194,7 @@ public:
 					part_edges.push_back(PairEdgeSegInt(e, obj_id));          // "list" of only one point mesh(obj_id) covers e
 			}
 		}
-		cout<<"step 1 - elapsed : " << (Timer::get_millisec() - start) <<endl;
+//		cout<<"step 1 - elapsed : " << (Timer::get_millisec() - start) <<endl;
 
 
 		//sort part_edges by e.cur_edge_id
@@ -219,8 +220,7 @@ public:
 		}
 
 		cout<<"directed_edges.len = " <<directed_edges.size() <<endl;
-//		cout<<"part_edges.size = " << part_edges.size()<<endl;				// same as before
-		cout<<"step 2 - elapsed : " << (Timer::get_millisec() - start) <<endl;
+//		cout<<"step 2 - elapsed : " << (Timer::get_millisec() - start) <<endl;
 
 		//sort
 		sort(directed_edges.begin(), directed_edges.end());
@@ -274,9 +274,10 @@ public:
 	void find_cloaking_sets(int timestamp, map<int, vector<EdgeSegment>>& expanding_list){
 
 		//1. find positive and negative cliques
-//		positive_mc_set = new Arrayvector<set<int>>();
-		vector<set<int>> negative_mc_set;
-		for (set<int> clique : mc_set){
+		positive_mc_set = vector<unordered_set<int>>();	// reset
+
+		vector<unordered_set<int>> negative_mc_set;
+		for (unordered_set<int> clique : mc_set){
 			if (clique.size() == 1)
 				continue;
 			//
@@ -312,9 +313,9 @@ public:
 		}
 
 		//2.convert negative cliques (heuristically)
-		vector<set<int>> new_negative_mc_set;
+		vector<unordered_set<int>> new_negative_mc_set;
 
-		for (set<int> clique : negative_mc_set){
+		for (unordered_set<int> clique : negative_mc_set){
 			vector<Query >query_list;
 			for (int obj_id : clique){
 				Query query = query_log.trajs[obj_id][timestamp];
@@ -352,7 +353,7 @@ public:
 
 			//
 			if (query_list.size() > 1){
-				set<int> set;
+				unordered_set<int> set;
 				for (Query query : query_list)
 					set.insert(query.obj_id);
 				new_negative_mc_set.push_back(set);
@@ -363,6 +364,19 @@ public:
 //        print "new_negative_mc_set =", new_negative_mc_set
 
 		positive_mc_set.insert(positive_mc_set.end(), new_negative_mc_set.begin(), new_negative_mc_set.end());
+	}
+
+	//
+	void write_positive_mc_set(string filename){
+		ofstream f(filename, ofstream::out);
+		for (vector<unordered_set<int>>::iterator s = positive_mc_set.begin(); s != positive_mc_set.end(); s++){
+			for(int u : (*s))
+				f << u << " ";
+			f << "\n";
+		}
+
+		f.close();
+
 	}
 
 	//
@@ -414,7 +428,7 @@ public:
 			vector<string> node_list = Formatter::split(line, ' ');
 			if (node_list.size() < 2)
 				continue;
-			set<int> set;
+			unordered_set<int> set;
 			for (string node : node_list)
 				set.insert(stoi(node));
 			mc_set.push_back(set);
@@ -428,9 +442,11 @@ public:
 
 		//3.
 		start = Timer::get_millisec();
-		find_cloaking_sets(timestamp, expanding_list);
+		find_cloaking_sets(timestamp, expanding_list);		// compute positive_mc_set
 
 		cout<<"find_cloaking_sets - elapsed : " << (Timer::get_millisec() - start) <<endl;
+		// DEBUG
+//		write_positive_mc_set("positive_mc_set.0");
 
 
 		//4. 'Set Cover Problem' (from weighted_set_cover.py)
@@ -468,7 +484,7 @@ public:
 		int total_query = 0;
 //		new_cover_mesh = new Arrayvector<vector<EdgeSegment>>();    // NEW
 		for (int clique_id = 0; clique_id <new_cover_set.size(); clique_id++){
-			set<int> clique = new_cover_set[clique_id];
+			unordered_set<int> clique = new_cover_set[clique_id];
 			//compute length of mesh
 			vector<EdgeSegment> mesh;
 			for (int obj_id : clique)
@@ -508,7 +524,7 @@ public:
 		start = Timer::get_millisec();
 //		user_mc_set = new HashMap<int, int>();
 		for (int clique_id = 0; clique_id < cover_set.size(); clique_id++){
-			set<int> clique = cover_set[clique_id];
+			unordered_set<int> clique = cover_set[clique_id];
 
 			for (int obj_id : clique)
 				//
@@ -542,7 +558,7 @@ public:
 		string filename = option.RESULT_PATH + config_name + "_" + to_string(option.K_GLOBAL) + "_" +
 				  Formatter::formatDouble("%.2f", option.INIT_COVER_KEEP_RATIO) + "_cover_set" + "_" + to_string(timestamp) + ".out";
 		ofstream f(filename, ofstream::out);
-		for (set<int> clique : cover_set){
+		for (unordered_set<int> clique : cover_set){
 			for (int obj_id : clique)
 				f << obj_id << ",";
 			f << "---";

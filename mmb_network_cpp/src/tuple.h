@@ -10,6 +10,7 @@
 
 #include <vector>
 #include <set>
+#include <unordered_set>
 
 #include "geom_util.h"
 
@@ -143,11 +144,11 @@ public:
 ////
 class PairSetInt {
 public:
-	set<int> s;
+	unordered_set<int> s;
 	int i;
 
 	//
-	PairSetInt(set<int> _s, int _i) {
+	PairSetInt(unordered_set<int> _s, int _i) {
 		s = _s;
 		i = _i;
 	}
@@ -158,11 +159,11 @@ public:
 ////
 class PairSetListInt {
 public:
-	vector<set<int>> set_list;
+	vector<unordered_set<int>> set_list;
 	int i;
 
 	//
-	PairSetListInt(vector<set<int>>& _set_list, int _i) {
+	PairSetListInt(vector<unordered_set<int>>& _set_list, int _i) {
 		set_list = _set_list;
 		i = _i;
 	}
