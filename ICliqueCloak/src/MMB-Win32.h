@@ -8,7 +8,7 @@
 
 using namespace std;
 
-#define LoadMoNumber 500//80313//57454//50000
+#define LoadMoNumber 50000 //500//80313//57454//50000
 //#define MONumber 50
 //#define MaxPrivacyLevel 15
 #define MaxTolerantTime 1.0//Can tolerate the maximum time
