@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?eclipse-pydev version="1.0"?><pydev_project>
+<pydev_pathproperty name="org.python.pydev.PROJECT_SOURCE_PATH">
+<path>/StandardLib</path>
+<path>/StandardLib/src</path>
+<path>/StandardLib/networkx</path>
+<path>/StandardLib/cvxopt</path>
+<path>/StandardLib/sklearn</path>
+<path>/StandardLib/misc</path>
+<path>/${PROJECT_DIR_NAME}/numba</path>
+</pydev_pathproperty>
+<pydev_property name="org.python.pydev.PYTHON_PROJECT_VERSION">python 3.0</pydev_property>
+<pydev_property name="org.python.pydev.PYTHON_PROJECT_INTERPRETER">Python 3.5 (anaconda)</pydev_property>
+</pydev_project>
