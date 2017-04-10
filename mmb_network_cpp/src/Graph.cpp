@@ -3,6 +3,9 @@
  *
  *  Created on: Mar 25, 2017
  *      Author: Administrator
+ *  Apr 10:
+ *  	- find_cloaking_sets(): remove the computation of clique_len
+ *		- call find_next_unweighted_cover() in place of find_next_cover()
  */
 
 #include <iostream>
@@ -32,6 +35,7 @@ public:
 
 	map<int, int> user_mc_set;  //dict of clique_id, e.g. user_mc_set[1] = 2 (clique_id = 2)
 	vector<unordered_set<int>> mc_set;        //maximal clique set, list of sets
+	int mc_set_t0 = 0;
 	map<PairInt, int> graph_edges;   //dict of pair (u,w)
 	map<int, Query>last_query;    //dict of (user, last query)
 	map<int, vector<EdgeSegment>> user_mesh;      //last cloaked (published) region
@@ -277,44 +281,48 @@ public:
 		positive_mc_set = vector<unordered_set<int>>();	// reset
 
 		vector<unordered_set<int>> negative_mc_set;
+
+		__int64 start = Timer::get_millisec();
 		for (unordered_set<int> clique : mc_set){
 			if (clique.size() == 1)
 				continue;
 			//
 			double max_min_length = 0;
 			int max_k_anom = 0;
-			vector<Query> query_list;
+//			vector<Query> query_list;
 			for (int obj_id : clique){
 				Query query = query_log.trajs[obj_id][timestamp];
-				query_list.push_back(query);
+//				query_list.push_back(query);
 				if (max_min_length < query.min_length)
 					max_min_length = query.min_length;
 				if (max_k_anom < query.k_anom)
 					max_k_anom = query.k_anom;
 			}
-			//compute length of mesh
-			vector<EdgeSegment> mesh;
-			for (int obj_id : clique){
-//                mesh = EdgeSegmentSet.union(mesh, expanding_list[obj_id])
-				// NEW (trial)
-				mesh.insert(mesh.end(), expanding_list[obj_id].begin(), expanding_list[obj_id].end());
-			}
-			// NEW (trial)
-			mesh = GeomUtil::clean_fixed_expanding(mesh);
 
-			double clique_len = EdgeSegmentSet::length(mesh);
+			//compute mesh length --> REMOVED
+//			vector<EdgeSegment> mesh;
+//			for (int obj_id : clique){
+////                mesh = EdgeSegmentSet.union(mesh, expanding_list[obj_id])
+//				// NEW (trial)
+//				mesh.insert(mesh.end(), expanding_list[obj_id].begin(), expanding_list[obj_id].end());
+//			}
+//			// NEW (trial)
+//			mesh = GeomUtil::clean_fixed_expanding(mesh);
+//			double clique_len = EdgeSegmentSet::length(mesh);
 
 			//
-			if (clique.size() >= max_k_anom &&
-					clique_len >= max_min_length * map_data.total_map_len)
+			if (clique.size() >= max_k_anom)
+//			if (clique.size() >= max_k_anom && clique_len >= max_min_length * map_data.total_map_len)
 				positive_mc_set.push_back(clique);
 			else if (clique.size() > 2)
 				negative_mc_set.push_back(clique);
 		}
+		cout<<"process positive MC - elapsed : " << (Timer::get_millisec() - start) <<endl;
 
 		//2.convert negative cliques (heuristically)
 		vector<unordered_set<int>> new_negative_mc_set;
 
+		start = Timer::get_millisec();
 		for (unordered_set<int> clique : negative_mc_set){
 			vector<Query >query_list;
 			for (int obj_id : clique){
@@ -359,6 +367,8 @@ public:
 				new_negative_mc_set.push_back(set);
 			}
 		}
+		cout<<"process negative MC - elapsed : " << (Timer::get_millisec() - start) <<endl;
+
 		//3.
 //        print "positive_mc_set =", positive_mc_set
 //        print "new_negative_mc_set =", new_negative_mc_set
@@ -421,9 +431,11 @@ public:
 		int ret = system("mace_go.exe M mesh.grh mesh.out");
 		printf("The value returned was: %d.\n", ret);
 
+		// read "mesh.out"
 		ifstream f(option.MAXIMAL_CLIQUE_FILE_OUT);
 
 		string line;
+		int mc_set_len = 0;
 		while (getline(f, line)){
 			vector<string> node_list = Formatter::split(line, ' ');
 			if (node_list.size() < 2)
@@ -432,13 +444,32 @@ public:
 			for (string node : node_list)
 				set.insert(stoi(node));
 			mc_set.push_back(set);
+			mc_set_len += set.size();
 		}
 		f.close();
 
-		cout<<mc_set.size()<<endl;
+		cout<<"mc_set.size = " <<mc_set.size()<<endl;
+		cout<<"mc_set_len = " <<mc_set_len<<endl;
 
 		cout<<"add_to_mc_set - elapsed : " << (Timer::get_millisec() - start) <<endl;
 //        print "mc_set =", mc_set
+
+		// sort and truncate mc_set --> REDUCE Success rate to 0.56
+//		if (timestamp == 0)
+//			mc_set_t0 = mc_set.size();
+//		else{
+//			TSetCompDescend setCompDescend;
+//			sort(mc_set.begin(), mc_set.end(), setCompDescend);
+//
+//			mc_set.erase(mc_set.begin() + mc_set_t0, mc_set.end());
+//
+//			int mc_set_len2 = 0;
+//			for (vector<unordered_set<int>>::iterator it = mc_set.begin(); it != mc_set.end(); it++)
+//				mc_set_len2 += (*it).size();
+//			cout<<"AFTER truncation"<<endl;
+//			cout<<"mc_set.size2 = " <<mc_set.size()<<endl;
+//			cout<<"mc_set_len2 = " <<mc_set_len2<<endl;
+//		}
 
 		//3.
 		start = Timer::get_millisec();
@@ -465,7 +496,7 @@ public:
 			cover_set = _temp.set_list;
 			num_cloaked_users = _temp.i;
 
-			new_cover_set = cover_set;     // for compute CLOAKING MESH
+			new_cover_set = cover_set;     // for computing CLOAKING MESH
 		}
 		else{
 			PairSetListInt _temp = WeightedSetCover::find_next_cover(positive_mc_set, num_element, cover_set, option.K_GLOBAL);
@@ -659,7 +690,7 @@ int main(int argc, char* args[]){
 	///////////////////////////////
 	// COMMAND-LINE <query_file> <timestep> <distance_constraint> <k_global><INIT_COVER_KEEP_RATIO><NEXT_COVER_KEEP_RATIO>
 	cout<<"mmb_network - C++\n";
-	int timestep = 3;
+	int timestep = option.TIME_STEP;
 	//    timestep = 40       // for lbs_attack
 
 	if(argc > 3){

@@ -1,22 +1,11 @@
 
 SRC_DIR := src
+TEST_DIR := test
 
-TEST_NAME := Graph
+MAIN_PROG := Graph
 
-# Boost
-#TEST_NAME := ex_lambda
-#TEST_NAME := ex_filesize
-#TEST_NAME := ex_prog_options
+TEST_NAME := set-cover
 
-# GMP
-#TEST_NAME := gmp-demo
-
-
-#BOOST_INCLUDE := E:/caidat/Cpp/boost_1_46_1
-#BOOST_LIB := E:/caidat/Cpp/boost_1_46_1/lib
-
-#BOOST_INCLUDE := E:/caidat/Cpp/boost_1_57_0_mingw_x64/include/boost-1_57
-#BOOST_LIB := E:/caidat/Cpp/boost_1_57_0_mingw_x64/
 
 BOOST_INCLUDE := E:/caidat/Cpp/boost_1_63_0
 BOOST_LIB := E:/caidat/Cpp/boost_1_63_0/stage/lib
@@ -24,26 +13,25 @@ BOOST_LIB := E:/caidat/Cpp/boost_1_63_0/stage/lib
 BOOST_LIBS := -lboost_system-mgw51-mt-s-1_63 -lboost_filesystem-mgw51-mt-s-1_63
 #BOOST_LIBS := -lboost_program_options-mgw51-mt-s-1_63
 
-# GMP
-GMP_INCLUDE := F:/caidat/Cpp/gmp-5.1.3
-GMP_LIB := F:/caidat/Cpp/gmp-5.1.3/.libs
-GMP_LIBS := -lgmp
-
 RM := rm -f
 
 all: 	
-	@echo 'Compiling $(TEST_NAME) program...';
+	@echo 'Compiling $(MAIN_PROG) program...';
 
-#	g++ -Wall -c -DDEBUG -O0 -o out/$(TEST_NAME).o $(SRC_DIR)/$(TEST_NAME).cpp;
-#	g++ -o out/$(TEST_NAME).exe out/$(TEST_NAME).o;
-	
 	# for C++11 (Debug: -O0) (Release: -O2 -s -DNDEBUG)
 	g++ -std=c++11 -Wall -c -O2 -s -DNDEBUG $(SRC_DIR)/*.cpp;
-	g++ -o bin/$(TEST_NAME).exe *.o;
+	g++ -o bin/$(MAIN_PROG).exe map_loader.o geom_util.o tuple.o $(MAIN_PROG).o;
 	
 
 	@echo 'Done';
 	
+exp:
+	@echo 'Compiling $(TEST_NAME) program...';
+	# for C++11 (Debug: -O0) (Release: -O2 -s -DNDEBUG)
+	g++ -std=c++11 -Wall -c -O2 -s -DNDEBUG $(TEST_DIR)/$(TEST_NAME).cpp;
+	g++ -o bin/$(TEST_NAME).exe $(TEST_NAME).o;
+	
+	@echo 'Done';
 
 # 
 clean:	

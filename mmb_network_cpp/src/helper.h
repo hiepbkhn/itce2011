@@ -3,6 +3,9 @@
  *
  *  Created on: Mar 25, 2017
  *      Author: Nguyen Huu Hiep
+ *  Apr 10:
+ *  	- TSetComparator -> TSetCompAscend, TsetCompDescend
+ *  	- find_next_cover(): faster computation of W
  */
 
 #ifndef HELPER_H_
@@ -63,9 +66,15 @@ public:
 };
 
 ////
-struct TSetComparator {
+struct TSetCompAscend {
 	bool operator()(unordered_set<int> s1, unordered_set<int> s2) {
 		return (s1.size() < s2.size());
+	}
+};
+
+struct TSetCompDescend {
+	bool operator()(unordered_set<int> s1, unordered_set<int> s2) {
+		return (s1.size() > s2.size());
 	}
 };
 
@@ -311,7 +320,7 @@ public:
 		// FOR unordered_set<int>
 		for(int u : s1)
 			if (s2.count(u) > 0)
-				ret.insert(ret.end(), u);
+				ret.insert(u);
 
 		return ret;
 	}
@@ -324,7 +333,7 @@ public:
 		// FOR unordered_set<int>
 		for(int u : s1)
 			if (s2.count(u) == 0)
-				ret.insert(ret.end(), u);
+				ret.insert(u);
 		return ret;
 	}
 
@@ -394,8 +403,8 @@ public:
 	    start = Timer::get_millisec();
 
 	    //
-	    TSetComparator SetComparator;
-	    sort(S.begin(), S.end(), SetComparator);	// sort ascending by .size()
+	    TSetCompAscend setCompAscend;
+	    sort(S.begin(), S.end(), setCompAscend);	// sort ascending by .size()
 
 	    cout<<"Sorting - elapsed : " << (Timer::get_millisec() - start) <<endl;
 
@@ -457,27 +466,46 @@ public:
 	    vector<unordered_set<int>> C_1;
 	    int total_W = 0;
 
-	    // compute weights
+	    // 1 - compute weights
 	    __int64 start = Timer::get_millisec();
 
-	    vector<vector<int>> list_pairs;     // list of lists, for MMB/MAB checking
 
+	    //
+	    vector<vector<int>> list_pairs;     // list of lists, for MMB/MAB checking
 	    vector<int> W;
 
-	    for (int i = 0; i < S.size(); i++){
-	        W.push_back(0);
-	        list_pairs.push_back(vector<int>());
-
-	        for (int j = 0; j < C_0.size(); j++){
-	        	unordered_set<int> c_set = set_intersect(S[i], C_0[j]);				// intersection
-
-	            int inter_len = c_set.size();
-	            if (inter_len > 0 && inter_len < k_global)
-	                W[i] = W[i] + 1;
-	            if (inter_len >= k_global)
-	                list_pairs[i].push_back(j);
-	        }
+	    // FASTER: call set_intersect(S[i], C_0[j]) only if set_intersect(S[i], C_0[j]) > 0
+	    vector<unordered_set<int>> U_S;
+	    vector<unordered_set<int>> U_C;
+	    for (int u = 0; u < num_element; u++){
+	    	U_S.push_back(unordered_set<int>());
+	    	U_C.push_back(unordered_set<int>());
 	    }
+	    for (int i = 0; i < S.size(); i++){
+	    	W.push_back(0);
+	    	list_pairs.push_back(vector<int>());
+
+	    	for (int u : S[i])
+	    		U_S[u].insert(i);
+	    }
+	    for (int i = 0; i < C_0.size(); i++){
+			for (int u : C_0[i])
+				U_C[u].insert(i);
+		}
+	    for (int u = 0; u < num_element; u++)
+	    	if (U_S[u].size() > 0 && U_C[u].size() > 0){
+	    		for (int i: U_S[u])
+	    			for (int j: U_C[u]){
+						unordered_set<int> c_set = set_intersect(S[i], C_0[j]);				// intersection
+
+						int inter_len = c_set.size();
+						if (inter_len >= k_global)
+							list_pairs[i].push_back(j);
+						if (inter_len > 0 && inter_len < k_global)
+							W[i] = W[i] + 1;
+	    			}
+	    	}
+
 	    cout<<"Computing W - elapsed : " << (Timer::get_millisec() - start) <<endl;
 
 	    // sort W
@@ -494,41 +522,65 @@ public:
 			list_pairs_temp.push_back(list_pairs[idx[id]]);
 		}
 
-
-	    int i = 0;
+		// only consider W[i] == 0
+		int i = 0;
 	    while (W_temp[i] == 0 && i < W_temp.size())
 	        i = i + 1;
-	    cout<<"i = " << i;
+	    cout<<"i = " << i <<endl;
 
 	    W = vector<int>(W_temp.begin(), W_temp.begin() + i);
 	    S = vector<unordered_set<int>>(S_temp.begin(), S_temp.begin() + i);
 	    list_pairs = vector<vector<int>>(list_pairs_temp.begin(), list_pairs_temp.begin() + i);
 
+		cout<<"Sorting - elapsed " + (Timer::get_millisec() - start) <<endl;
 
-		cout<<"Sorting - elapsed : " + (Timer::get_millisec() - start) <<endl;
-
-	    // compute C_1
+	    // 2 - compute C_1
 		start = Timer::get_millisec();
 
 //	    checking_pairs = []
-		int S_size = S.size();				// we consider only sets with id from 0->S_size-1
+		vector<unordered_set<int>> tempS;
+		for (unordered_set<int> a_set : S)
+		    	tempS.push_back(a_set);
+
+		int S_size = tempS.size();				// we consider only sets with id from 0->S_size-1
 	    while (R.size() != 0){
-	    	PairSetInt temp = find_max_uncovered(S, S_size, R);
-	        unordered_set<int> S_i = temp.s;
-	        int min_element = temp.i;
-	        if (min_element == -1)
-	            break;
+	    	int max_inter_id = -1;
+			int max_set_size = 0;
+			for (int i = 0; i < S_size; i++){
+				if (max_set_size < tempS[i].size()){
+					max_set_size = tempS[i].size();
+					max_inter_id = i;
+				}
+			}
 
-	        C_1.push_back(S_i);
-	        total_W = total_W + W[min_element];
-//	        R.removeAll(S_i);		// set difference
-	        R = set_differ(R, S_i);
+			if (max_set_size == 0)
+				break;
 
-	        S.erase(S.begin() + min_element);
-	        W.erase(W.begin() + min_element);
+	        C_1.push_back(S[max_inter_id]);
+	        total_W = total_W + W[max_inter_id];
+
+	        unordered_set<int> removed = WeightedSetCover::set_intersect(R, tempS[max_inter_id]);
+	        R = WeightedSetCover::set_differ(R, removed);
+
+	        //
+	        unordered_set<int> tmp_set = tempS[max_inter_id];
+	        tempS[max_inter_id] = tempS[S_size-1];
+	        tempS[S_size-1] = tmp_set;
+
+			tmp_set = S[max_inter_id];
+			S[max_inter_id] = S[S_size-1];
+			S[S_size-1] = tmp_set;
+
+			int tmp_int = W[max_inter_id];
+			W[max_inter_id] = W[S_size-1];
+			W[S_size - 1] = tmp_int;
+			S_size = S_size - 1;
+
+			for (int i = 0; i < S_size; i++)
+				tempS[i] = WeightedSetCover::set_differ(tempS[i], removed);
 	    }
 
-	    cout<<"find_next_cover - elapsed : " + (Timer::get_millisec() - start) <<endl;
+	    cout<<"find_next_cover - elapsed " + (Timer::get_millisec() - start) <<endl;
 	    cout<<"len(R) = " << R.size()<<endl;
 	    cout<<"Cover.len: " << C_1.size()<<endl;
 //	    System.out.println("checking_pairs.len: " + checking_pairs.size());
@@ -541,6 +593,7 @@ public:
 
 	    return PairSetListInt(C_1, num_cloaked_users);		//, checking_pairs
 	}
+
 };
 
 #endif /* HELPER_H_ */

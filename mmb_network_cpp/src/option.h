@@ -3,6 +3,8 @@
  *
  *  Created on: Mar 25, 2017
  *      Author: Nguyen Huu Hiep
+ *  Apr 10:
+ *  	- add TIME_STEP
  */
 #ifndef OPTION_H_
 #define OPTION_H_
@@ -21,6 +23,7 @@ using namespace std;
 
 class Option {
 public:
+	int TIME_STEP = -1;
 	string QUERY_PATH = "";
 
 	int QUERY_TYPE = 0;	//QUERY_TYPE = 0 (Brinkhoff), 1 (TraceGenerator)
@@ -162,6 +165,7 @@ public:
 		f.close();
 
 		//
+		TIME_STEP = getInt(opt["TIME_STEP"]);
 		QUERY_TYPE = getInt(opt["QUERY_TYPE"]);
 		QUERY_PATH = getString(opt["QUERY_PATH"]);
 		QUERY_FILE = getString(opt["QUERY_FILE"]);
