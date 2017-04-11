@@ -378,12 +378,16 @@ public:
 	// (FOR PUBLIC USE)
 	// timestamp = 0, S: positive sets, U:universe (compute from S)
 	static PairSetListInt find_init_cover(vector<unordered_set<int>>& S, int num_element){
+		vector<unordered_set<int>> tempS;
+
 	    // compute U
 		__int64 start = Timer::get_millisec();
 	    int marked[num_element] = {0};
-	    for (unordered_set<int> a_set : S)
+	    for (unordered_set<int> a_set : S){
+	    	tempS.push_back(a_set);
 	        for (int item : a_set)
 	            marked[item] = 1;
+	    }
 
 	    unordered_set<int> U;
 	    for (int item = 0; item < num_element; item++)
@@ -393,43 +397,49 @@ public:
 	    cout<<"len(U) = " << U.size()<<endl;
 	    cout<<"Compute U - elapsed : " << (Timer::get_millisec() - start) <<endl;
 
+	    // U_S[u] = set of S_i containing u
+		vector<unordered_set<int>> U_S;
+		for (int u = 0; u < num_element; u++)
+			U_S.push_back(unordered_set<int>());
+		for (int i = 0; i < S.size(); i++)
+			for (int u : S[i])
+				U_S[u].insert(i);
+
 	    //
 	    unordered_set<int> R = U;	// = new Hashunordered_set<int>(U); // deep copy
 
 	    vector<unordered_set<int>> C_0;
 
-	    // NON-BOOTSTRAP
-	    // sort S
-	    start = Timer::get_millisec();
-
-	    //
-	    TSetCompAscend setCompAscend;
-	    sort(S.begin(), S.end(), setCompAscend);	// sort ascending by .size()
-
-	    cout<<"Sorting - elapsed : " << (Timer::get_millisec() - start) <<endl;
-
 	    //
 	    start = Timer::get_millisec();
 
-	    int S_size = S.size();				// we consider only sets with id from 0->S_size-1
-	    while (R.size() != 0){
-	        PairSetInt temp = find_max_uncovered(S, S_size, R);		// 10: S_size
-	        unordered_set<int> S_i = temp.s;
-	        int max_inter_id = temp.i;
-	        if (max_inter_id == -1)
-	            break;
+	    int S_size = S.size();
+		while (R.size() != 0){
+			int max_inter_id = -1;
+			int max_set_size = 0;
+			for (int i = 0; i < S_size; i++){
+				if (max_set_size < tempS[i].size()){
+					max_set_size = tempS[i].size();
+					max_inter_id = i;
+				}
+			}
 
-	        C_0.push_back(S_i);
-//	        R.removeAll(S_i);			// set difference
-	        R = set_differ(R, S_i);		//
+			if (max_set_size == 0)
+				break;
 
-//	        S.erase(S.begin() + max_inter_id);		// COSTLY ?
+			C_0.push_back(S[max_inter_id]);
 
-	        unordered_set<int> tmp_set = S[max_inter_id];
-	        S[max_inter_id] = S[S_size-1];
-	        S[S_size-1] = tmp_set;
-	        S_size = S_size - 1;
-	    }
+			unordered_set<int> removed = set_intersect(R, tempS[max_inter_id]);
+
+			R = set_differ(R, removed);		//
+
+			for (int u : removed)
+				for (int i : U_S[u])
+	//        		if (tempS[i].size() > 0)
+						tempS[i] = set_differ(tempS[i], removed);
+
+
+		}
 
 	    cout<<"find_init_cover - elapsed : " << (Timer::get_millisec() - start) <<endl;
 	    cout<<"len(R) = " << R.size() <<endl;
@@ -535,6 +545,13 @@ public:
 		cout<<"Sorting - elapsed " + (Timer::get_millisec() - start) <<endl;
 
 	    // 2 - compute C_1
+		U_S.clear();			// here U_S[u] = set of S_i containing u
+		for (int u = 0; u < num_element; u++)
+			U_S.push_back(unordered_set<int>());
+		for (int i = 0; i < S.size(); i++)
+			for (int u : S[i])
+				U_S[u].insert(i);
+
 		start = Timer::get_millisec();
 
 //	    checking_pairs = []
@@ -542,7 +559,7 @@ public:
 		for (unordered_set<int> a_set : S)
 		    	tempS.push_back(a_set);
 
-		int S_size = tempS.size();				// we consider only sets with id from 0->S_size-1
+		int S_size = S.size();
 	    while (R.size() != 0){
 	    	int max_inter_id = -1;
 			int max_set_size = 0;
@@ -562,22 +579,9 @@ public:
 	        unordered_set<int> removed = WeightedSetCover::set_intersect(R, tempS[max_inter_id]);
 	        R = WeightedSetCover::set_differ(R, removed);
 
-	        //
-	        unordered_set<int> tmp_set = tempS[max_inter_id];
-	        tempS[max_inter_id] = tempS[S_size-1];
-	        tempS[S_size-1] = tmp_set;
-
-			tmp_set = S[max_inter_id];
-			S[max_inter_id] = S[S_size-1];
-			S[S_size-1] = tmp_set;
-
-			int tmp_int = W[max_inter_id];
-			W[max_inter_id] = W[S_size-1];
-			W[S_size - 1] = tmp_int;
-			S_size = S_size - 1;
-
-			for (int i = 0; i < S_size; i++)
-				tempS[i] = WeightedSetCover::set_differ(tempS[i], removed);
+	        for (int u : removed)
+				for (int i : U_S[u])
+					tempS[i] = WeightedSetCover::set_differ(tempS[i], removed);
 	    }
 
 	    cout<<"find_next_cover - elapsed " + (Timer::get_millisec() - start) <<endl;
