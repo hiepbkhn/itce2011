@@ -1,0 +1,6 @@
+[package]
+name = "phrases"
+version = "0.1.0"
+authors = ["Hiep H. Nguyen <hiepnh.vtt@gmail.com>"]
+
+[dependencies]
