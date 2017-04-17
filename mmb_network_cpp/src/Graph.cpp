@@ -318,6 +318,7 @@ public:
 				negative_mc_set.push_back(clique);
 		}
 		cout<<"process positive MC - elapsed : " << (Timer::get_millisec() - start) <<endl;
+		cout<<"negative_mc_set.size = "<<negative_mc_set.size()<<endl;
 
 		//2.convert negative cliques (heuristically)
 		vector<unordered_set<int>> new_negative_mc_set;
@@ -428,7 +429,7 @@ public:
 //        graph.add_to_mc_set(list_edges)
 
 		// (NEW) call mace_go.exe
-		int ret = system("mace_go.exe M mesh.grh mesh.out");
+		int ret = system(option.MACE_EXECUTABLE.c_str());
 		printf("The value returned was: %d.\n", ret);
 
 		// read "mesh.out"

@@ -433,12 +433,13 @@ public:
 
 			R = set_differ(R, removed);		//
 
+			unordered_set<int> updated;
 			for (int u : removed)
 				for (int i : U_S[u])
-	//        		if (tempS[i].size() > 0)
-						tempS[i] = set_differ(tempS[i], removed);
+					updated.insert(i);
 
-
+			for (int i : updated)
+				tempS[i] = set_differ(tempS[i], removed);
 		}
 
 	    cout<<"find_init_cover - elapsed : " << (Timer::get_millisec() - start) <<endl;
@@ -474,7 +475,7 @@ public:
 
 	    // result
 	    vector<unordered_set<int>> C_1;
-	    int total_W = 0;
+	    long total_W = 0;
 
 	    // 1 - compute weights
 	    __int64 start = Timer::get_millisec();
@@ -542,7 +543,7 @@ public:
 	    S = vector<unordered_set<int>>(S_temp.begin(), S_temp.begin() + i);
 	    list_pairs = vector<vector<int>>(list_pairs_temp.begin(), list_pairs_temp.begin() + i);
 
-		cout<<"Sorting - elapsed " + (Timer::get_millisec() - start) <<endl;
+		cout<<"Sorting - elapsed " << (Timer::get_millisec() - start) <<endl;
 
 	    // 2 - compute C_1
 		U_S.clear();			// here U_S[u] = set of S_i containing u
@@ -579,12 +580,16 @@ public:
 	        unordered_set<int> removed = WeightedSetCover::set_intersect(R, tempS[max_inter_id]);
 	        R = WeightedSetCover::set_differ(R, removed);
 
-	        for (int u : removed)
+	        unordered_set<int> updated;
+			for (int u : removed)
 				for (int i : U_S[u])
-					tempS[i] = WeightedSetCover::set_differ(tempS[i], removed);
+					updated.insert(i);
+
+			for (int i : updated)
+				tempS[i] = WeightedSetCover::set_differ(tempS[i], removed);
 	    }
 
-	    cout<<"find_next_cover - elapsed " + (Timer::get_millisec() - start) <<endl;
+	    cout<<"find_next_cover - elapsed " << (Timer::get_millisec() - start) <<endl;
 	    cout<<"len(R) = " << R.size()<<endl;
 	    cout<<"Cover.len: " << C_1.size()<<endl;
 //	    System.out.println("checking_pairs.len: " + checking_pairs.size());
