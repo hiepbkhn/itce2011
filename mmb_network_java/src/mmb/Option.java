@@ -5,14 +5,16 @@ import java.util.Map;
 
 public class Option {
 
-	public static String QUERY_PATH = "query/";
+//	public static String QUERY_PATH = "query/";
+	public static String QUERY_PATH = "D:/github/itce2011/mmb_network_cpp/query/";
 	
 	public static int QUERY_TYPE = 0;	//QUERY_TYPE = 0 (Brinkhoff), 1 (TraceGenerator)
 	
 //	public static String QUERY_FILE = "cal_mod_10k_0.5_2_5_0005_0002_2_10_20_80_10_20_events.txt";      	//k-anom: 2-5, slow
 	
-	public static String QUERY_FILE = "oldenburgGen_5000_0_0_0_20_20_1_1000_250_2_5_0005_002.txt";    		//k-anom: 2-5, slow	
+//	public static String QUERY_FILE = "oldenburgGen_5000_0_0_0_20_20_1_1000_250_2_5_0005_002.txt";    		//k-anom: 2-5, slow	
 //	public static String QUERY_FILE = "oldenburgGen_mod_10k_0.5_2_5_0005_0020_2_10_20_80_10_20_events.txt";
+	public static String QUERY_FILE = "oldenburgGen_5000_0_0_0_50_20_1_1000_250_2_10.txt";
 
 //	public static String QUERY_FILE = "synthetic_24_30_30_40_events.txt";
 	

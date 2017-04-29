@@ -18,6 +18,8 @@ public class Query implements Comparable<Query>{
     public int k_anom;
     public double min_length;
     public double dist;    // distance constraint
+    //
+    public double speed;
     
     //
 	public Query(int obj_id, double x, double y, int timestamp, int next_node_x, int next_node_y,
@@ -35,6 +37,25 @@ public class Query implements Comparable<Query>{
 		this.min_length = min_length;
 		this.dist = dist;
 	}
+	
+
+	public Query(int obj_id, double x, double y, int timestamp, int next_node_x, int next_node_y, int next_node_id,
+			int cur_edge_id, int k_anom, double min_length, double dist, double speed) {
+		super();
+		this.obj_id = obj_id;
+		this.x = x;
+		this.y = y;
+		this.timestamp = timestamp;
+		this.next_node_x = next_node_x;
+		this.next_node_y = next_node_y;
+		this.next_node_id = next_node_id;
+		this.cur_edge_id = cur_edge_id;
+		this.k_anom = k_anom;
+		this.min_length = min_length;
+		this.dist = dist;
+		this.speed = speed;
+	}
+
 
 	@Override
 	public int compareTo(Query arg0) {

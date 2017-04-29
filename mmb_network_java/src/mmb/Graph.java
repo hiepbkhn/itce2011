@@ -117,7 +117,7 @@ public class Graph {
         while (hi+1 < part_edges.size() && part_edges.get(hi+1).e.cur_edge_id == query.cur_edge_id)
             hi = hi + 1;
         //DEBUG
-        System.out.println("hi-lo = " + (hi-lo));
+//        System.out.println("hi-lo = " + (hi-lo));
         
         List<Integer> result = new ArrayList<Integer>();
         for (int i = lo; i < hi+1; i++){
@@ -645,7 +645,7 @@ public class Graph {
 	public static void main(String[] args) throws Exception{
 
 		// COMMAND-LINE <query_file> <timestep> <distance_constraint> <k_global><INIT_COVER_KEEP_RATIO><NEXT_COVER_KEEP_RATIO>
-		int timestep = 0;
+		int timestep = 3;
 		//    timestep = 40       // for lbs_attack
 		
 		System.out.println("mmb_network - Java");

@@ -57,7 +57,8 @@ public class MeshCloakData {
 	//////////////////////////////////////////////////
 	public static void main(String[] args) throws Exception{
 		
-		String inName = "SanJoaquin_50000_0_0_0_20_20_1_1000_50";
+//		String inName = "SanJoaquin_100000_0_0_0_20_20_1_1000_50";
+		String inName = "SanJoaquin_100000_0_0_0_20_20_1_1000_250";
 		int k_anom = 5;
 		String outName = inName + "_2_" + k_anom;
 		String inputFile = "F:\\Tailieu\\Paper-code\\Location Privacy\\Thomas Brinkhoff\\RunTime21\\query\\" + inName + ".txt"; 
