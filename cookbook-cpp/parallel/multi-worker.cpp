@@ -23,7 +23,7 @@ std::mutex coutmutex;
 
 std::vector<uint64_t *> part_sums;
 const int max_sum_item = 1000000000;
-const int threads_to_use = 3;
+const int threads_to_use = 2;
 
 __int64 get_millisec() {
 	__int64 now = std::chrono::duration_cast < std::chrono::milliseconds

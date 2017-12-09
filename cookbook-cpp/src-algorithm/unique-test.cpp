@@ -27,7 +27,10 @@ int main() {
 	myvector.resize(it - myvector.begin()); // 10 20 30 20 10
 
 	// using predicate comparison:
-	unique(myvector.begin(), myvector.end(), myfunction); // (no changes)
+	sort(begin(myvector), end(myvector));
+
+	it = unique(myvector.begin(), myvector.end(), myfunction); // (no changes)
+	myvector.resize(it - myvector.begin());
 
 	// print out content:
 	cout << "myvector contains:";
